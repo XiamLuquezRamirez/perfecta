@@ -90,7 +90,7 @@
                                     <a class="nav-link d-flex disabled" id="account-pill-citas" data-toggle="pill"
                                         href="#account-vertical-citas" aria-expanded="false">
                                         <i class="fa fa-calendar-check-o"></i>
-                                        Historias de Citas
+                                        Citas
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -194,7 +194,7 @@
                                                                     <label for="account-username">Identificación</label>
                                                                     <input type="text" class="form-control"
                                                                         id="identificacion" name="identificacion"
-                                                                        placeholder="" value="" required
+                                                                        placeholder="" onchange="$.validaIdentificacion(this.value);" value="" required
                                                                         data-validation-required-message="This username field is required">
                                                                 </div>
                                                             </div>
@@ -570,6 +570,12 @@
             </div>
         </div>
 
+        <div id="loader" class="loader-spinner" style="display: none;">
+            <img src="{{ asset('app-assets/images/mujer.gif') }}" width="150" />
+            <h2 class="parpadeo" style="color: #FC4F00; font-weight: bold;">Cargando...</h2>
+
+        </div>
+
     </div>
 
     <form action="{{ url('/AdminPacientes/CargarPacientes') }}" id="formCargarPacientes" method="POST">
@@ -578,6 +584,10 @@
     </form>
 
     <form action="{{ url('/AdminPacientes/CargarPacientes') }}" id="formCargarPacientes" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/AdminPacientes/ValidarPacientes') }}" id="formValidarPacientes" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
@@ -681,6 +691,10 @@
                         }
                     });
                 },
+                validaIdentificacion: function(valida){
+                    var form = $("#formValidarPacientes");
+                    var url = form.attr("action");
+                },
                 addPaciente: function() {
                     $('#cont-crear').show();
                     $('#cont-lista').hide();
@@ -750,6 +764,9 @@
                         return;
                     }
 
+                    var loader = document.getElementById('loader');
+                    loader.style.display = 'block';
+
 
                     var form = $("#formGuardar");
                     var url = form.attr("action");
@@ -778,6 +795,20 @@
                                     timer: 1500,
                                     buttonsStyling: false
                                 });
+
+                                $("accion").val("editar");
+
+                                
+                                //habilitar procesos pacientes
+                                var citas = document.getElementById("account-pill-citas");
+                                var tratamiento = document.getElementById("account-pill-tratamiento");
+                                var recaudos = document.getElementById("account-pill-recaudos");
+
+                                citas.classList.remove("disabled");
+                                tratamiento.classList.remove("disabled");
+                                recaudos.classList.remove("disabled");
+
+
                                 $("#btnGuardar").hide();
                                 $("#btnNuevo").show();
                                 var loader = document.getElementById('loader');

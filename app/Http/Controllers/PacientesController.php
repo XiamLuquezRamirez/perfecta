@@ -20,6 +20,15 @@ class PacientesController extends Controller
         }
     }
 
+    public function ValidarPacientes(){
+        $idPac = request()->get('idPac');
+
+        $pacientes = DB::connection('mysql')
+        ->table('pacientes')
+        ->where('identificacion', $idPac)
+        ->where('estado', 'ACTIVO');
+    }
+
     public function CargarPacientes()
     {
 

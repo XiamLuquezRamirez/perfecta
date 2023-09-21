@@ -29,3 +29,4 @@ Route::get('/AdminPacientes/Pacientes', [PacientesController::class,'Pacientes']
 Route::post('/AdminPacientes/CargarPacientes', [PacientesController::class,'CargarPacientes']);
 Route::post('/AdminPacientes/GuardarPaciente', [PacientesController::class,'GuardarPaciente']);
 Route::get('/AdminPacientes/municipios', [PacientesController::class,'CargarMunicipios']);
+Route::get('/AdminPacientes/ValidarPacientes', [PacientesController::class,'ValidarPacientes']);
