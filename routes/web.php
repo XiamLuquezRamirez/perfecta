@@ -26,3 +26,6 @@ Route::get('/Administracion', [UsuariosController::class,'Administracion']);
 
 ///GESTION PACIENTES
 Route::get('/AdminPacientes/Pacientes', [PacientesController::class,'Pacientes']);
+Route::post('/AdminPacientes/CargarPacientes', [PacientesController::class,'CargarPacientes']);
+Route::post('/AdminPacientes/GuardarPaciente', [PacientesController::class,'GuardarPaciente']);
+Route::get('/AdminPacientes/municipios', [PacientesController::class,'CargarMunicipios']);

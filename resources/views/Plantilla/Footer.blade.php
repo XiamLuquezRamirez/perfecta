@@ -13,12 +13,15 @@
 <script src="{{ asset('app-assets/vendors/js/ui/jquery.sticky.js') }}"></script>
 <script src="{{ asset('app-assets/vendors/js/charts/jquery.sparkline.min.js') }}"></script>
 <script src="{{ asset('app-assets/vendors/js/extensions/moment.min.js') }}"></script>
+<script src="{{ asset('app-assets/vendors/js/pickers/daterange/daterangepicker.js') }}"></script>
 <script src="{{ asset('app-assets/vendors/js/extensions/fullcalendar.min.js') }}"></script>
 <script src="{{ asset('app-assets/vendors/js/extensions/daygrid.min.js') }}"></script>
 <script src="{{ asset('app-assets/vendors/js/extensions/timegrid.min.js') }}"></script>
 <script src="{{ asset('app-assets/vendors/js/extensions/interactions.min.js') }}"></script>
 <script src="{{ asset('app-assets/js/core/libraries/jquery_ui/jquery-ui.min.js') }}"></script>
 <script src="{{ asset('app-assets/vendors/js/forms/select/select2.full.min.js') }}"></script>
+<script src="{{ asset('app-assets/vendors/js/extensions/sweetalert2.all.min.js') }}"></script>
+
 <!-- END: Page Vendor JS-->
 
 <!-- BEGIN: Theme JS-->

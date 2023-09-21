@@ -12,10 +12,13 @@
 
     <!-- BEGIN: Vendor CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/vendors.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/pickers/daterange/daterangepicker.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/calendars/fullcalendar.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/calendars/daygrid.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/calendars/timegrid.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/forms/selects/select2.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/extensions/sweetalert2.min.css') }}">
+
 
     <!-- END: Vendor CSS-->
 
