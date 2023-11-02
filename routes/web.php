@@ -3,6 +3,8 @@
 use App\Http\Controllers\PacientesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuariosController;
+use App\Http\Controllers\AdminitraccionController;
+use App\Http\Controllers\CitasController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,4 +31,21 @@ Route::get('/AdminPacientes/Pacientes', [PacientesController::class,'Pacientes']
 Route::post('/AdminPacientes/CargarPacientes', [PacientesController::class,'CargarPacientes']);
 Route::post('/AdminPacientes/GuardarPaciente', [PacientesController::class,'GuardarPaciente']);
 Route::get('/AdminPacientes/municipios', [PacientesController::class,'CargarMunicipios']);
-Route::get('/AdminPacientes/ValidarPacientes', [PacientesController::class,'ValidarPacientes']);
+Route::post('/AdminPacientes/ValidarPacientes', [PacientesController::class,'ValidarPacientes']);
+Route::post('/AdminPacientes/BuscarPacientes', [PacientesController::class,'BuscarPacientes']);
+Route::post('/AdminPacientes/AllProfesionales', [PacientesController::class,'AllProfesionales']);
+
+
+//GESTIOAR ADMINISTRACCION
+Route::get('/Administracion/Profesionales', [AdminitraccionController::class,'Profesionales']);
+Route::post('/Administracion/CargarProfesionales', [AdminitraccionController::class,'CargarProfesionales']);
+Route::post('/Administracion/GuardarProfesional', [AdminitraccionController::class,'GuardarProfesional']);
+Route::post('/Administracion/ValidarProfesional', [AdminitraccionController::class,'ValidarProfesional']);
+Route::post('/Administracion/BuscarProfesional', [AdminitraccionController::class,'BuscarProfesional']);
+Route::post('/Administracion/BuscarUsuario', [AdminitraccionController::class,'BuscarUsuario']);
+Route::post('/Administracion/EliminarProfesional', [AdminitraccionController::class,'EliminarProfesional']);
+
+
+//GESTIONAR CITAS
+
+Route::post('/AdminCitas/CargarDisponibilidad', [CitasController::class,'CargarDisponibilidad']);

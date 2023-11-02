@@ -17,7 +17,7 @@
                     </li>
                     <li  id="MenAdminServicios"  data-menu=""><a class="dropdown-item" href="app-chat.html" data-i18n="Chat Application" data-toggle="dropdown">Gestión de Servicios</a>
                     </li>
-                    <li id="MenAdminProesional"  data-menu=""><a class="dropdown-item" href="app-todo.html" data-i18n="Todo Application" data-toggle="dropdown">Gestión de Profesionales</a>
+                    <li id="MenAdminProesional"  data-menu=""><a class="dropdown-item" href="{{ url('/Administracion/Profesionales') }}" data-i18n="Todo Application" data-toggle="dropdown">Gestión de Profesionales</a>
                     </li>
                     <li id="MenAdminInventario"  data-menu=""><a class="dropdown-item" href="app-kanban.html" data-i18n="Kanban Application" data-toggle="dropdown">Gestión de Inventario</a>
                     </li>

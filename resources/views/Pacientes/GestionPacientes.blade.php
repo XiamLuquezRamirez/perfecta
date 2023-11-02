@@ -2,6 +2,7 @@
 @section('title', 'Gestionar Pacientes')
 @section('Contenido')
     <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
+    <input type="hidden" id="Ruta" data-ruta="{{ asset('/app-assets/') }}" />
     <div class="content-header row">
         <div class="content-header-left col-md-6 col-12 mb-2">
             <h3 class="content-header-title mb-0">Gestionar Pacientes</h3>
@@ -121,10 +122,12 @@
                                                 <form class="form" method="post" id="formGuardar"
                                                     action="{{ url('/') }}/AdminPacientes/GuardarPaciente">
 
-
-                                                    <input type="hidden" name="idPac" id="idPac" value="">
+                                                    <input type="hidden" name="idPaciente" id="idPaciente"
+                                                        value="">
                                                     <input type="hidden" name="accion" id="accion" value="">
-                                                    <div class="media">
+                                                    <input type="hidden" name="fotoCargada" id="fotoCargada"
+                                                        value="">
+                                                    <div id='div-media' class="media">
                                                         <a href="javascript: void(0);">
                                                             <img src="../../../app-assets/images/FotosPacientes/avatar-s-1.png"
                                                                 class="rounded mr-75" id="previewImage"
@@ -194,7 +197,9 @@
                                                                     <label for="account-username">Identificación</label>
                                                                     <input type="text" class="form-control"
                                                                         id="identificacion" name="identificacion"
-                                                                        placeholder="" onchange="$.validaIdentificacion(this.value);" value="" required
+                                                                        placeholder=""
+                                                                        onchange="$.validaIdentificacion(this.value);"
+                                                                        value="" required
                                                                         data-validation-required-message="This username field is required">
                                                                 </div>
                                                             </div>
@@ -265,7 +270,7 @@
                                                         <div class="col-5">
                                                             <div class="form-group">
                                                                 <div class="controls">
-                                                                    <label for="account-e-mail">E-mail</label>
+                                                                    <label for="account-e-mail">Email</label>
                                                                     <input type="email" class="form-control"
                                                                         id="email" name="email" placeholder="Email"
                                                                         value="" required
@@ -284,8 +289,10 @@
                                                         <div class="col-4">
                                                             <div class="form-group">
                                                                 <label for="account-company">Ciudad</label>
-                                                                <select class="select2-data-ajax form-control"
-                                                                    id="ciudad" name="ciudad"></select>
+                                                                <input type="text" class="form-control" id="ciudad"
+                                                                    name="ciudad" onkeypress="return validartxt(event)"
+                                                                    placeholder="Ciudad" value=""
+                                                                    data-validation-required-message="This name field is required">
                                                             </div>
                                                         </div>
                                                         <div class="col-3">
@@ -308,60 +315,115 @@
                                                         </div>
                                                         <div
                                                             class="col-12 d-flex flex-sm-row flex-column justify-content-end">
-                                                            <button type="button" onclick="$.guardar()"
-                                                                class="btn btn-primary mr-sm-1 mb-1 mb-sm-0"> <i class="fa fa-save"></i> Guardar
+                                                            <button type="button" id="btnGuardar" onclick="$.guardar()"
+                                                                class="btn btn-primary mr-sm-1 mb-1 mb-sm-0"> <i
+                                                                    class="fa fa-save"></i> Guardar
                                                                 Cambios</button>
-                                                            <button type="reset" onclick="$.ListPacientes()" class="btn btn-light"><i class="fa fa-reply"></i> Atras</button>
+                                                            <button type="reset" onclick="$.ListPacientes()"
+                                                                class="btn btn-light"><i class="fa fa-reply"></i>
+                                                                Atras</button>
                                                         </div>
                                                     </div>
                                                 </form>
                                             </div>
                                             <div class="tab-pane fade " id="account-vertical-citas" role="tabpanel"
                                                 aria-labelledby="account-pill-password" aria-expanded="false">
-                                                <form novalidate>
-                                                    <div class="row">
-                                                        <div class="col-12">
-                                                            <div class="form-group">
-                                                                <div class="controls">
-                                                                    <label for="account-old-password">Old
-                                                                        Password</label>
-                                                                    <input type="password" class="form-control"
-                                                                        id="account-old-password" required
-                                                                        placeholder="Old Password"
-                                                                        data-validation-required-message="This old password field is required">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-12">
-                                                            <div class="form-group">
-                                                                <div class="controls">
-                                                                    <label for="account-new-password">New
-                                                                        Password</label>
-                                                                    <input type="password" name="password"
-                                                                        id="account-new-password" class="form-control"
-                                                                        placeholder="New Password" required
-                                                                        data-validation-required-message="The password field is required"
-                                                                        minlength="6">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-12">
-                                                            <div class="form-group">
-                                                                <div class="controls">
-                                                                    <label for="account-retype-new-password">Retype New
-                                                                        Password</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div
-                                                            class="col-12 d-flex flex-sm-row flex-column justify-content-end">
-                                                            <button type="submit"
-                                                                class="btn btn-primary mr-sm-1 mb-1 mb-sm-0">Save
-                                                                changes</button>
-                                                            <button type="reset" class="btn btn-light">Cancel</button>
+                                                <div class="card-head">
+                                                    <div class="card-header">
+                                                        <h4 id="tit-citas" class="card-title">Historial de Citas</h4>
+                                                        <div class="heading-elements mt-0">
+                                                            <button class="btn btn-primary btn-md" id="btn-addCitas"
+                                                                onclick="$.addCita();"><i
+                                                                    class="d-md-none d-block feather icon-plus white"></i>
+                                                                <span class="d-md-block d-none">
+                                                                    <li class="fa fa-plus"></li> Agendar Cita
+                                                                </span></button>
                                                         </div>
                                                     </div>
-                                                </form>
+                                                </div>
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <!-- datatable started -->
+                                                        <div id="div-listCitas" class="">
+                                                            <table id="table-citas" class="table" style="width: 100%;">
+                                                                <thead class="border-bottom border-dark">
+                                                                    <tr>
+                                                                        <th>
+                                                                            <span class="align-middle">Motivo de la
+                                                                                consulta</span>
+                                                                        </th>
+                                                                        <th>Profesional</th>
+                                                                        <th>Fecha</th>
+                                                                        <th>Hora</th>
+                                                                        <th>Estado</th>
+                                                                        <th>Acción</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="trRegistrosCitas">
+                                                                </tbody>
+                                                            </table>
+
+                                                            <div id="pagination-links" class="text-center ml-1 mt-2">
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div id="div-addCitas" style="display: none;">
+                                                            <div class="row">
+                                                                <div class="col-6">
+                                                                    <div class="form-group">
+                                                                        <div class="controls">
+                                                                            <label
+                                                                                for="account-username">Profesional</label>
+                                                                            <select onchange="$.cargarDisponibilidad(this.value)"
+                                                                                class="select2 form-control"
+                                                                                id="profesional" name="profesional">
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <div class="form-group">
+                                                                        <div class="controls">
+                                                                            <label for="account-username">Motivo de la
+                                                                                Consulta</label>
+                                                                            <select class="select2 form-control"
+                                                                                id="motivo" name="motivo">
+                                                                                <option value="">Seleccione...
+                                                                                </option>
+                                                                                <option value="Consulta General">Consulta
+                                                                                    General</option>
+                                                                                <option value="Consulta Especializada">
+                                                                                    Consulta Especializada</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-3">
+                                                                    <div class="form-group">
+                                                                        <div class="controls">
+                                                                            <label for="account-username">Duración </label>
+                                                                            <select class="form-control" id="duracionCita"
+                                                                                name="duracionCita" aria-invalid="false">
+                                                                                <option value="15">15 minutos</option>
+                                                                                <option value="30">30 minutos</option>
+                                                                                <option value="60">1 hora</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-12">
+                                                                    <div class="card-body">
+                                                                        <div id='fc-agenda-views'
+                                                                            style=" width: 100%;  height: 600px;"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="tab-pane fade" id="account-vertical-recaudo" role="tabpanel"
                                                 aria-labelledby="account-pill-info" aria-expanded="false">
@@ -559,7 +621,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            
+
                                         </div>
                                     </div>
                                 </div>
@@ -583,11 +645,23 @@
         <!-- Tus campos del formulario aquí -->
     </form>
 
-    <form action="{{ url('/AdminPacientes/CargarPacientes') }}" id="formCargarPacientes" method="POST">
+    <form action="{{ url('/AdminPacientes/ValidarPacientes') }}" id="formValidarPacientes" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
     <form action="{{ url('/AdminPacientes/ValidarPacientes') }}" id="formValidarPacientes" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/AdminPacientes/BuscarPacientes') }}" id="formBuscarPaciente" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/AdminPacientes/AllProfesionales') }}" id="formCargarProfesionales" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/AdminCitas/CargarDisponibilidad') }}" id="formCargarDisponibilidad" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
@@ -597,7 +671,98 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-            $("#MenPaciente").removeClass("active");
+
+
+            var disponibilidadJSON = [{
+                    "start": "2023-10-09T08:00:00",
+                    "end": "2023-10-09T09:00:00",
+                    "title": "Nombre del paciente 1"
+                },
+                {
+                    "start": "2023-10-10T10:00:00",
+                    "end": "2023-10-10T11:00:00",
+                    "title": "Nombre del paciente 2"
+                }
+                // ... más citas
+            ];
+
+            var fechaActual = new Date().toISOString().split("T")[0];
+            var calendarE3 = document.getElementById("fc-agenda-views");
+            var fcAgendaViews = new FullCalendar.Calendar(calendarE3, {
+                header: {
+                    left: "prev,next today",
+                    center: "title",
+                    right: "dayGridMonth,timeGridWeek,timeGridDay",
+                },
+                defaultView: "dayGridMonth",
+                defaultDate: fechaActual,
+                editable: false,
+                plugins: ["dayGrid", "timeGrid", "interaction"],
+                eventLimit: true, // allow "more" link when too many events
+                firstDay: 1, // 1 for Monday, 0 for Sunday
+                allDaySlot: false,
+                height: 'auto',
+                slotLabelFormat: {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    omitZeroMinute: false,
+                    meridiem: true,
+                },
+                buttonText: {
+                    today: "Hoy",
+                    month: "Mes",
+                    week: "Semana",
+                    day: "Día",
+                },
+                slotDuration: '00:15:00', // Duración de cada intervalo en la vista semanal (aquí es de una hora)
+                slotLabelInterval: "00:15", // Mostrar etiquetas de hora cada una hora
+                minTime: "07:00:00",
+                maxTime: "19:00:00",
+                locale: "es",
+                {{--  events: disponibilidadJSON,  --}}
+                dateClick: function(event) {
+                    console.log('clicked on the date: ', event);
+                    if (event) {
+                        var duracionCita = parseInt(document.getElementById('duracionCita').value);
+                        var nuevaCitaStart = new Date(event.date);
+                        var nuevaCitaEnd = new Date(nuevaCitaStart.getTime() + duracionCita *
+                        60000); // Duración en milisegundos
+                        // Verifica si la nueva cita se superpone con alguna cita existente
+                        var seSuperpone = disponibilidadJSON.some(function(cita) {
+                            var citaStart = new Date(cita.start);
+                            var citaEnd = new Date(cita.end);
+                            console.log(citaEnd);
+                            return (nuevaCitaStart < citaEnd && nuevaCitaEnd > citaStart);
+                        });
+
+                        console.log(seSuperpone);
+
+                        if (seSuperpone) {
+                            alert(
+                                'La nueva cita se superpone con una cita existente. Por favor, elige otra hora.');
+                            return;
+                        }
+
+                        var nuevaCita = {
+                            title: 'Nueva Cita',
+                            start: nuevaCitaStart,
+                            end: nuevaCitaEnd,
+                        };
+                        console.log('Fecha y hora de inicio de la nueva cita: ', nuevaCita.start);
+                        console.log('Fecha y hora de finalización de la nueva cita: ', nuevaCita.end);
+
+                        // Añade la cita al calendario
+                        fcAgendaViews.addEvent(nuevaCita);
+
+                        // Cierra el evento clickeado
+                        fcAgendaViews.refetchEvents();
+                    }
+                }
+
+            });
+
+            fcAgendaViews.render();
+
 
             // Single Date Picker
             $('.pickadate').daterangepicker({
@@ -612,7 +777,7 @@
                 }
             });
 
-            $('.select2-data-ajax').select2({
+            {{--  $('.select2-data-ajax').select2({
                 dropdownAutoWidth: true,
                 width: '100%',
                 placeholder: 'Selecciona un municipio',
@@ -647,7 +812,7 @@
                     return markup;
                 },
                 minimumInputLength: 1
-            });
+            });  --}}
 
             document.getElementById('account-upload').addEventListener('change', function(event) {
                 const file = event.target.files[0];
@@ -658,8 +823,9 @@
                     previewImage.src = imageUrl;
                 }
             });
-
-
+            var citas = document.getElementById("account-pill-citas");
+            var tratamiento = document.getElementById("account-pill-tratamiento");
+            var recaudos = document.getElementById("account-pill-recaudos");
 
             $.extend({
                 cargar: function(page, searchTerm = '') {
@@ -691,14 +857,46 @@
                         }
                     });
                 },
-                validaIdentificacion: function(valida){
+                validaIdentificacion: function(valida) {
                     var form = $("#formValidarPacientes");
                     var url = form.attr("action");
+                    $('#idPac').remove();
+                    form.append("<input type='hidden' id='idPac' name='idPac'  value='" + valida +
+                        "'>");
+                    var datos = form.serialize();
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(response) {
+                            if (response.existe === "si") {
+                                Swal.fire({
+                                    type: "warning",
+                                    title: "Oops...",
+                                    text: "Esta identificación se enuentra registrada",
+                                    confirmButtonClass: "btn btn-primary",
+                                    timer: 1500,
+                                    buttonsStyling: false
+                                });
+                                $("#identificacion").val("");
+                                return;
+                            }
+
+                        }
+                    });
                 },
                 addPaciente: function() {
                     $('#cont-crear').show();
                     $('#cont-lista').hide();
+                    $("#btnGuardar").show();
                     $("#accion").val("agregar");
+                    citas.classList.add("disabled");
+                    tratamiento.classList.add("disabled");
+                    recaudos.classList.add("disabled");
+                    document.getElementById("div-media").style.pointerEvents = "auto";
                 },
                 ListPacientes: function() {
                     $('#cont-crear').hide();
@@ -796,14 +994,10 @@
                                     buttonsStyling: false
                                 });
 
-                                $("accion").val("editar");
+                                $("#accion").val("editar");
+                                $("#idPaciente").val(respuesta.id);
 
-                                
                                 //habilitar procesos pacientes
-                                var citas = document.getElementById("account-pill-citas");
-                                var tratamiento = document.getElementById("account-pill-tratamiento");
-                                var recaudos = document.getElementById("account-pill-recaudos");
-
                                 citas.classList.remove("disabled");
                                 tratamiento.classList.remove("disabled");
                                 recaudos.classList.remove("disabled");
@@ -832,6 +1026,178 @@
                     });
 
                 },
+                editar: function(id) {
+                    $('#cont-crear').show();
+                    $('#cont-lista').hide();
+                    $("#accion").val("editar");
+                    document.getElementById("div-media").style.pointerEvents = "auto";
+
+                    $("#btnGuardar").show();
+
+                    $("#idPaciente").val(id);
+
+                    citas.classList.remove("disabled");
+                    tratamiento.classList.remove("disabled");
+                    recaudos.classList.remove("disabled");
+
+                    var form = $("#formBuscarPaciente");
+                    $("#idPac").remove();
+                    form.append("<input type='hidden' id='idPac' name='idPac'  value='" + id + "'>");
+
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    let multimedia = "";
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            $("#tipoId").val(respuesta.paciente.tipo_identificacion);
+                            $("#identificacion").val(respuesta.paciente.identificacion);
+                            $("#nombre").val(respuesta.paciente.nombre);
+                            $("#apellido").val(respuesta.paciente.apellido);
+                            $("#sexo").val(respuesta.paciente.sexo);
+                            var fechForm = convertirFecha(respuesta.paciente
+                                .fecha_nacimiento);
+                            $("#nacimiento").val(fechForm);
+                            $("#email").val(respuesta.paciente.email);
+                            $("#telefono").val(respuesta.paciente.telefono);
+                            $("#direccion").val(respuesta.paciente.direccion);
+                            $("#ciudad").val(respuesta.paciente.ciudad);
+                            $("#observaciones").val(respuesta.paciente.observaciones);
+
+                            var foto = respuesta.paciente.foto;
+                            $("#fotoCargada").val(foto);
+                            const previewImage = document.getElementById('previewImage');
+                            let url = $('#Ruta').data("ruta");
+                            previewImage.src = url + "/images/FotosPacientes/" + foto;
+
+
+                        }
+                    });
+
+                    $("#trMultimedia").html(multimedia);
+                },
+                ver: function(id) {
+                    $('#cont-crear').show();
+                    $('#cont-lista').hide();
+                    $("#idPaciente").val(id);
+                    $("#btnGuardar").hide();
+
+                    document.getElementById("div-media").style.pointerEvents = "none";
+
+                    citas.classList.remove("disabled");
+                    tratamiento.classList.remove("disabled");
+                    recaudos.classList.remove("disabled");
+
+                    var form = $("#formBuscarPaciente");
+                    $("#idPac").remove();
+                    form.append("<input type='hidden' id='idPac' name='idPac'  value='" + id + "'>");
+
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    let multimedia = "";
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            $("#tipoId").val(respuesta.paciente.tipo_identificacion);
+                            $("#identificacion").val(respuesta.paciente.identificacion);
+                            $("#nombre").val(respuesta.paciente.nombre);
+                            $("#apellido").val(respuesta.paciente.apellido);
+                            $("#sexo").val(respuesta.paciente.sexo);
+                            var fechForm = convertirFecha(respuesta.paciente
+                                .fecha_nacimiento);
+                            $("#nacimiento").val(fechForm);
+                            $("#email").val(respuesta.paciente.email);
+                            $("#telefono").val(respuesta.paciente.telefono);
+                            $("#direccion").val(respuesta.paciente.direccion);
+                            $("#ciudad").val(respuesta.paciente.ciudad);
+                            $("#observaciones").val(respuesta.paciente.observaciones);
+
+                            var foto = respuesta.paciente.foto;
+                            $("#fotoCargada").val(foto);
+                            const previewImage = document.getElementById('previewImage');
+                            let url = $('#Ruta').data("ruta");
+                            previewImage.src = url + "/images/FotosPacientes/" + foto;
+
+
+                        }
+                    });
+
+                    $("#trMultimedia").html(multimedia);
+                },
+                addCita: function() {
+                    $('#div-listCitas').hide();
+                    $('#btn-addCitas').hide();
+                    $('#div-addCitas').show();
+                    $('#tit-citas').html('Agregar Cita');
+                    var agenda = document.getElementsByClassName('fc-view-container');
+                    var primeClase = agenda[0];
+                    primeClase.style.overflow =
+                        'auto'; // Puedes ajustar 'auto' a otro valor como 'hidden' o 'scroll'
+                    primeClase.style.height = '400px';
+
+                    $.cargarProfesionales();
+
+                },
+                cargarProfesionales: function() {
+
+                    var form = $("#formCargarProfesionales");
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    let select = '<option value="">Seleccione...</option>';
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            $.each(respuesta.profesionales, function(i, item) {
+
+                                select += '<option value="' + item.id + '">' + item
+                                    .nombre + '</option>';
+
+                            });
+                        }
+                    });
+
+                    $("#profesional").html(select);
+                },
+                cargarDisponibilidad: function (id){
+
+                    var form = $("#formCargarDisponibilidad");
+                    $("#idProf").remove();
+                    form.append("<input type='hidden' id='idProf' name='idProf'  value='" + id +
+                    "'>");
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+                   
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                          
+                        }
+                    });
+
+                 
+
+                }
             });
 
             $.cargar(1);
@@ -857,6 +1223,16 @@
             previewImage.src = '../../../app-assets/images/FotosPacientes/avatar-s-1.png';
         }
 
+        function convertirFecha(fecha) {
+            // Dividir la fecha en año, mes y día
+            const [año, mes, dia] = fecha.split('-');
+
+            // Formatear la fecha en el formato dd/mm/yyyy
+            const fechaFormateada = `${dia.padStart(2, '0')}/${mes.padStart(2, '0')}/${año}`;
+
+            return fechaFormateada;
+        }
+
         function validartxtnum(e) {
             tecla = e.which || e.keyCode;
             patron = /[0-9]+$/;
@@ -874,6 +1250,14 @@
             return (patron.test(te) || tecla == 9 || tecla == 8 || tecla == 37 || tecla == 39 || tecla == 46);
         }
     </script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+    var menuPaciente = document.getElementById('MenPaciente');
+    if (menuPaciente) {
+    menuPaciente.classList.add('active');
+    }
+    });
+
 
     </script>
 @endsection

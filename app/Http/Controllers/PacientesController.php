@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pacientes;
+use App\Models\Profesionales;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Models\Pacientes;
 
 class PacientesController extends Controller
 {
@@ -20,18 +21,40 @@ class PacientesController extends Controller
         }
     }
 
-    public function ValidarPacientes(){
+    public function ValidarPacientes()
+    {
         $idPac = request()->get('idPac');
-
+        $existe = "no";
         $pacientes = DB::connection('mysql')
-        ->table('pacientes')
-        ->where('identificacion', $idPac)
-        ->where('estado', 'ACTIVO');
+            ->table('pacientes')
+            ->where('identificacion', $idPac)
+            ->where('estado', 'ACTIVO')
+            ->first();
+
+        if ($pacientes) {
+            $existe = "si";
+        }
+
+        return response()->json([
+            'existe' => $existe,
+
+        ]);
+
+    }
+
+    public function AllProfesionales() {
+       
+        $profesionales = Profesionales::AllProfesional();
+
+        if (request()->ajax()) {
+            return response()->json([
+                'profesionales' => $profesionales,
+            ]);
+        }
     }
 
     public function CargarPacientes()
     {
-
         $perPage = 5; // Número de posts por página
         $page = request()->get('page', 1);
         $search = request()->get('search');
@@ -57,7 +80,7 @@ class PacientesController extends Controller
             if (!is_null($item)) {
                 $tdTable .= '<tr>
                 <td>
-                    <a href="invoice-view.html">' . $item->identificacion . '</a>
+                    <a style="color:#009c9f; font-weight: bold" onclick="$.ver(' . $item->id . ');" >' . $item->identificacion . '</a>
                 </td>
                 <td><span class="invoice-amount">' . $item->nombre . '</span></td>
                 <td><span class="invoice-date">' . $item->apellido . '</span></td>
@@ -69,13 +92,13 @@ class PacientesController extends Controller
                 <td><span class="badge badge-warning badge-pill">Pendientes</span></td>
                 <td>
                     <div class="invoice-action">
-                    <a href="invoice-view.html" title="Ver" class="invoice-action-view mr-1">
+                    <a onclick="$.ver(' . $item->id . ');"  title="Ver" class="invoice-action-view mr-1">
                     <i class="feather icon-eye"></i>
                     </a>
-                    <a href="invoice-edit.html" title="Editar" class="invoice-action-edit cursor-pointer mr-1">
+                    <a onclick="$.editar(' . $item->id . ');" title="Editar" class="invoice-action-edit cursor-pointer mr-1">
                         <i class="feather icon-edit-1"></i>
                     </a>
-                    <a href="invoice-edit.html" title="Tratamientos" class="invoice-action-edit cursor-pointer">
+                    <a onclick="$.eliminar(' . $item->id . ');" title="Tratamientos" class="invoice-action-edit cursor-pointer">
                         <i class="feather icon-heart"></i>
                     </a>
                     </div>
@@ -94,7 +117,8 @@ class PacientesController extends Controller
         ]);
     }
 
-    public function CargarMunicipios(Request $request){
+    public function CargarMunicipios(Request $request)
+    {
 
         $term = $request->input('q'); // Obtener el término de búsqueda
 
@@ -111,13 +135,14 @@ class PacientesController extends Controller
         foreach ($municipios as $municipio) {
             $formattedMunicipios[] = ['id' => $municipio->id, 'text' => $municipio->text];
         }
-           return response()->json(['data' => $municipios]);
-    
+        return response()->json(['data' => $municipios]);
+
     }
 
     public function GuardarPaciente()
     {
         $data = request()->all();
+        $idPaciente = $data['idPaciente'];
         if ($data['accion'] == "agregar") {
 
             if (isset($data['fotoPaciente'])) {
@@ -125,24 +150,36 @@ class PacientesController extends Controller
                 $archivo = $data['fotoPaciente'];
                 $nombreOriginal = $archivo->getClientOriginalName();
                 $tipoMime = $archivo->getClientMimeType();
-                // Accede a otros atributos del archivo según sea necesario
 
-                // Realiza acciones con el archivo, como moverlo a una ubicación deseada
                 $prefijo = substr(md5(uniqid(rand())), 0, 6);
                 $nombreArchivo = self::sanear_string($prefijo . '_' . $nombreOriginal);
                 $archivo->move(public_path() . '/app-assets/images/FotosPacientes/', $nombreArchivo);
                 $data['img'] = $nombreArchivo;
-                // Aquí puedes trabajar con los datos del archivo, como almacenarlos en una base de datos
-               
-            }else{
-                $data['img'] = ""; 
+
+            } else {
+                $data['img'] = "avatar-s-1.png";
             }
 
             $respuesta = Pacientes::guardar($data);
+            $idPaciente = $respuesta;
         } else if ($data['accion'] == "editar") {
+            if (isset($data['fotoPaciente'])) {
 
+                $archivo = $data['fotoPaciente'];
+                $nombreOriginal = $archivo->getClientOriginalName();
+                $tipoMime = $archivo->getClientMimeType();
+
+                $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                $nombreArchivo = self::sanear_string($prefijo . '_' . $nombreOriginal);
+                $archivo->move(public_path() . '/app-assets/images/FotosPacientes/', $nombreArchivo);
+                $data['img'] = $nombreArchivo;
+
+            }else{
+                $data['img'] = $data['fotoCargada'];
+            }
+
+            $respuesta = Pacientes::editar($data);
         }
-
 
         if ($respuesta) {
             $estado = "ok";
@@ -153,6 +190,18 @@ class PacientesController extends Controller
         if (request()->ajax()) {
             return response()->json([
                 'estado' => $estado,
+                'id' => $idPaciente,
+            ]);
+        }
+    }
+
+    public function BuscarPacientes() {
+        $idPaciente = request()->get('idPac');
+        $paciente = Pacientes::BuscarPaciente($idPaciente);
+
+        if (request()->ajax()) {
+            return response()->json([
+                'paciente' => $paciente,
             ]);
         }
     }
@@ -207,7 +256,7 @@ class PacientesController extends Controller
                 "¿", "[", "^", "<code>", "]",
                 "+", "}", "{", "¨", "´",
                 ">", "< ", ";", ",", ":",
-                " "
+                " ",
             ),
             '',
             $string
