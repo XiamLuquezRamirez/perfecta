@@ -21,6 +21,7 @@
 <script src="{{ asset('app-assets/js/core/libraries/jquery_ui/jquery-ui.min.js') }}"></script>
 <script src="{{ asset('app-assets/vendors/js/forms/select/select2.full.min.js') }}"></script>
 <script src="{{ asset('app-assets/vendors/js/extensions/sweetalert2.all.min.js') }}"></script>
+<script src="{{ asset('app-assets/vendors/js/forms/icheck/icheck.min.js') }}"></script>
 
 
 <!-- END: Page Vendor JS-->

@@ -11,7 +11,20 @@ class Citas extends Model
     {
         return DB::connection('mysql')->table('citas')
         ->where('profesional', $idProf)
-            ->where('estado', 'ACTIVO')
+            ->where('estado', 'Activa')
             ->get();
+    }
+
+    public static function GuardarCitas($request){
+        $respuesta = DB::connection('mysql')->table('citas')->insertGetId([
+            'paciente' => $request['idpac'],
+            'profesional' => $request['profesional'],
+            'motivo' => $request['motivo'],
+            'inicio' => $request['fechaHoraInicio'],
+            'final' => $request['fechaHoraFinal'],
+            'estado' => "Activa",
+        ]);
+
+        return $respuesta;
     }
 }
