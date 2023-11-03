@@ -549,6 +549,8 @@
                 },
                 nuevo: function(){
                     $("#accion").val("agregar");
+                    $("#btnGuardar").show();
+                    $("#btnNuevo").hide();
                     $.limpiar();
                 },
 

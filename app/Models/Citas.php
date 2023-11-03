@@ -10,8 +10,10 @@ class Citas extends Model
     public static function CitasProfesional($idProf)
     {
         return DB::connection('mysql')->table('citas')
+        ->join('pacientes', 'citas.paciente', '=', 'pacientes.id')
+        ->select('citas.*', 'pacientes.nombre','pacientes.apellido')
         ->where('profesional', $idProf)
-            ->where('estado', 'Activa')
+            ->where('citas.estado', 'Activa')
             ->get();
     }
 

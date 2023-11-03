@@ -16,7 +16,7 @@ class CitasController extends Controller
 
         if (request()->ajax()) {
             return response()->json([
-                'disponibilidad' => $disponibilidad,
+                'disponibilidad' => $disponibilidad
             ]);
         }
     }
