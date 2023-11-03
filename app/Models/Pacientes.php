@@ -57,4 +57,10 @@ class Pacientes extends Model
             ->where('id', $id)
             ->first();
     }
+    public static function BuscarPacienteCita()
+    {
+        return DB::connection('mysql')->table('pacientes')
+            ->where('estado', 'ACTIVO')
+            ->get();
+    }
 }

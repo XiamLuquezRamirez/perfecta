@@ -50,3 +50,5 @@ Route::post('/Administracion/EliminarProfesional', [AdminitraccionController::cl
 
 Route::post('/AdminCitas/CargarDisponibilidad', [CitasController::class,'CargarDisponibilidad']);
 Route::post('/AdminCitas/GuardarCita', [CitasController::class,'GuardarCita']);
+Route::post('/AdminCitas/CargarPacientesCita', [PacientesController::class,'CargarPacientesCita']);
+Route::post('/AdminCitas/CargarAllCitas', [CitasController::class,'CargarAllCitas']);

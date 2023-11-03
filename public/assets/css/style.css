@@ -33,3 +33,13 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 .parpadeo {
     animation: parpadeo 1s infinite;
 }
+
+
+.fc-title {
+    font-size: 9px; /* Ajusta el tamaño de fuente según tus necesidades */
+}
+
+/* Cambiar el tamaño de fuente del tiempo del evento */
+.fc-time {
+    font-size: 9px; /* Ajusta el tamaño de fuente según tus necesidades */
+}

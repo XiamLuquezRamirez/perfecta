@@ -206,6 +206,17 @@ class PacientesController extends Controller
         }
     }
 
+    public function CargarPacientesCita() {
+   
+        $paciente = Pacientes::BuscarPacienteCita();
+
+        if (request()->ajax()) {
+            return response()->json([
+                'pacientes' => $paciente,
+            ]);
+        }
+    }
+
     public function sanear_string($string)
     {
 

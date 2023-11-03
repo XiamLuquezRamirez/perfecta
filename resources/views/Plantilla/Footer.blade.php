@@ -35,5 +35,6 @@
 <script src="{{ asset('app-assets/js/scripts/ui/breadcrumbs-with-stats.js') }}"></script>
 <script src="{{ asset('app-assets/js/scripts/forms/select/form-select2.js') }}"></script>
 <script src="{{ asset('app-assets/js/scripts/extensions/fullcalendar.js') }}"></script>
+<script src="{{ asset('app-assets/vendors/js/forms/extended/inputmask/jquery.inputmask.bundle.min.js') }}"></script>
 
 <!-- END: Page JS-->

@@ -10,14 +10,25 @@ class Citas extends Model
     public static function CitasProfesional($idProf)
     {
         return DB::connection('mysql')->table('citas')
-        ->join('pacientes', 'citas.paciente', '=', 'pacientes.id')
-        ->select('citas.*', 'pacientes.nombre','pacientes.apellido')
-        ->where('profesional', $idProf)
+            ->join('pacientes', 'citas.paciente', '=', 'pacientes.id')
+            ->select('citas.*', 'pacientes.nombre', 'pacientes.apellido')
+            ->where('profesional', $idProf)
             ->where('citas.estado', 'Activa')
             ->get();
     }
 
-    public static function GuardarCitas($request){
+    public static function AllCitas()
+    {
+        return DB::connection('mysql')->table('citas')
+            ->join('pacientes', 'citas.paciente', '=', 'pacientes.id')
+            ->select('citas.*', 'pacientes.nombre', 'pacientes.apellido')
+            ->where('citas.estado', 'Activa')
+            ->get();
+    }
+
+    public static function GuardarCitas($request)
+    {
+       
         $respuesta = DB::connection('mysql')->table('citas')->insertGetId([
             'paciente' => $request['idpac'],
             'profesional' => $request['profesional'],

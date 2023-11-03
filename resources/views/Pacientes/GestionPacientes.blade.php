@@ -368,101 +368,122 @@
                                                             </div>
                                                         </div>
                                                         <form class="form" method="post" id="formGuardarCita"
-                                                        action="{{ url('/') }}/AdminCitas/GuardarCita">
-    
-                                                        <div id="div-addCitas" style="display: none;">
-                                                            <div class="row">
-                                                                <div class="col-6">
-                                                                    <div class="form-group">
-                                                                        <div class="controls">
-                                                                            <label
-                                                                                for="account-username">Profesional</label>
-                                                                            <select
-                                                                                onchange="$.cargarDisponibilidad(this.value)"
-                                                                                class="select2 form-control"
-                                                                                id="profesional" name="profesional">
-                                                                            </select>
+                                                            action="{{ url('/') }}/AdminCitas/GuardarCita">
+
+                                                            <div id="div-addCitas" style="display: none;">
+                                                                <div class="row">
+                                                                    <div class="col-6">
+                                                                        <div class="form-group">
+                                                                            <div class="controls">
+                                                                                <label
+                                                                                    for="account-username">Profesional</label>
+                                                                                <select
+                                                                                    onchange="$.cargarDisponibilidad(this.value)"
+                                                                                    class="select2 form-control"
+                                                                                    id="profesional" name="profesional">
+                                                                                </select>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
-                                                                </div>
-                                                                <div class="col-6">
-                                                                    <div class="form-group">
-                                                                        <div class="controls">
-                                                                            <label for="account-username">Motivo de la
-                                                                                Consulta</label>
-                                                                            <select class="select2 form-control"
-                                                                                id="motivo" name="motivo">
-                                                                                <option value="">Seleccione...
-                                                                                </option>
-                                                                                <option value="Consulta General">Consulta
-                                                                                    General</option>
-                                                                                <option value="Consulta Especializada">
-                                                                                    Consulta Especializada</option>
-                                                                            </select>
+                                                                    <div class="col-6">
+                                                                        <div class="form-group">
+                                                                            <div class="controls">
+                                                                                <label for="account-username">Motivo de la
+                                                                                    Consulta</label>
+                                                                                <select class="select2 form-control"
+                                                                                    id="motivo" name="motivo">
+                                                                                    <option value="">Seleccione...
+                                                                                    </option>
+                                                                                    <option value="Consulta General">
+                                                                                        Consulta
+                                                                                        General</option>
+                                                                                    <option value="Consulta Especializada">
+                                                                                        Consulta Especializada</option>
+                                                                                </select>
+                                                                            </div>
                                                                         </div>
+                                                                    </div>
+
+                                                                    <div class="col-3">
+                                                                        <div class="form-group">
+                                                                            <div class="controls">
+                                                                                <label for="account-username">Duración
+                                                                                </label>
+                                                                                <select class="form-control"
+                                                                                    id="duracionCita" name="duracionCita"
+                                                                                    aria-invalid="false">
+                                                                                    <option value="15">15 minutos
+                                                                                    </option>
+                                                                                    <option value="30">30 minutos
+                                                                                    </option>
+                                                                                    <option value="60">1 hora</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-4">
+                                                                        <div class="form-group">
+                                                                            <div class="controls">
+                                                                                <label for="account-username">Cita
+                                                                                    seleccionada para: </label>
+                                                                                <input type="hidden" class="form-control"
+                                                                                    id="fechaHoraInicio"
+                                                                                    name="fechaHoraInicio"
+                                                                                    placeholder="Fecha cita">
+                                                                                <input type="hidden" class="form-control"
+                                                                                    id="fechaHoraFinal"
+                                                                                    name="fechaHoraFinal"
+                                                                                    placeholder="Fecha cita">
+                                                                                <input disabled type="text"
+                                                                                    class="form-control"
+                                                                                    id="fechaHoraSelCita"
+                                                                                    name="fechaHoraSelCita"
+                                                                                    placeholder="Fecha cita">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-5">
+                                                                        <div class="form-group"
+                                                                            style="inline-flex: flex; align-items: center;">
+                                                                            <div class="controls align-content-center">
+                                                                                <label
+                                                                                    for="account-username">&nbsp;</label>
+                                                                                <fieldset>
+                                                                                    <label for="input-16"
+                                                                                        style="cursor: pointer;"> <input
+                                                                                            type="checkbox"
+                                                                                            id="notifCliente" checked>
+                                                                                        <li class="fa fa-envelope"></li>
+                                                                                        Notificar a paciente por correo
+                                                                                    </label>
+                                                                                </fieldset>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-12">
+                                                                        <div class="card-body">
+                                                                            <div id='fc-agenda-views'
+                                                                                style=" width: 100%;  height: 600px;">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div
+                                                                        class="col-12 d-flex flex-sm-row flex-column justify-content-end">
+                                                                        <button type="button" id="btnGuardar"
+                                                                            onclick="$.guardarCita()"
+                                                                            class="btn btn-primary mr-sm-1 mb-1 mb-sm-0"
+                                                                            style=""> <i
+                                                                                class="fa fa-arrow-right"></i>
+                                                                            Confimar Cita</button>
+                                                                        <button type="reset"
+                                                                            onclick="$.cancelarProCita()"
+                                                                            class="btn btn-light"><i
+                                                                                class="fa fa-times"></i>
+                                                                            Cancelar</button>
                                                                     </div>
                                                                 </div>
 
-                                                                <div class="col-3">
-                                                                    <div class="form-group">
-                                                                        <div class="controls">
-                                                                            <label for="account-username">Duración </label>
-                                                                            <select class="form-control" id="duracionCita"
-                                                                                name="duracionCita" aria-invalid="false">
-                                                                                <option value="15">15 minutos</option>
-                                                                                <option value="30">30 minutos</option>
-                                                                                <option value="60">1 hora</option>
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-4">
-                                                                    <div class="form-group">
-                                                                        <div class="controls">
-                                                                            <label for="account-username">Cita
-                                                                                seleccionada para: </label>
-                                                                            <input  type="hidden" class="form-control"
-                                                                                id="fechaHoraInicio" name="fechaHoraInicio"
-                                                                                placeholder="Fecha cita">
-                                                                            <input  type="hidden" class="form-control"
-                                                                                id="fechaHoraFinal" name="fechaHoraFinal"
-                                                                                placeholder="Fecha cita">
-                                                                            <input disabled type="text" class="form-control"
-                                                                                id="fechaHoraSelCita" name="fechaHoraSelCita"
-                                                                                placeholder="Fecha cita">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-5">
-                                                                    <div class="form-group" style="inline-flex: flex; align-items: center;">
-                                                                        <div class="controls align-content-center">
-                                                                            <label for="account-username">&nbsp;</label>
-                                                                            <fieldset>
-                                                                                <label for="input-16" style="cursor: pointer;"> <input type="checkbox" id="notifCliente" checked> <li class="fa fa-envelope"></li> Notificar a paciente por correo</label>
-                                                                            </fieldset>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-12">
-                                                                    <div class="card-body">
-                                                                        <div id='fc-agenda-views'
-                                                                            style=" width: 100%;  height: 600px;"></div>
-                                                                    </div>
-                                                                </div>
-                                                                <div
-                                                                    class="col-12 d-flex flex-sm-row flex-column justify-content-end">
-                                                                    <button type="button" id="btnGuardar"
-                                                                        onclick="$.guardarCita()"
-                                                                        class="btn btn-primary mr-sm-1 mb-1 mb-sm-0"
-                                                                        style=""> <i class="fa fa-arrow-right"></i>
-                                                                        Confimar Cita</button>
-                                                                    <button type="reset" onclick="$.cancelarProCita()"
-                                                                        class="btn btn-light"><i class="fa fa-times"></i>
-                                                                        Cancelar</button>
-                                                                </div>
                                                             </div>
-
-                                                        </div>
                                                         </form>
                                                     </div>
                                                 </div>
@@ -676,10 +697,8 @@
 
         <div id="loader" class="loader-spinner" style="display: none;">
             <img src="{{ asset('app-assets/images/mujer.gif') }}" width="150" />
-            <h2 class="parpadeo" style="color: #FC4F00; font-weight: bold;">Cargando...</h2>
-
+            <h2 class="parpadeo" style="color: #D08997; font-weight: bold;">Cargando...</h2>
         </div>
-
     </div>
 
     <form action="{{ url('/AdminPacientes/CargarPacientes') }}" id="formCargarPacientes" method="POST">
@@ -793,7 +812,7 @@
                         if (seSuperpone) {
                             alert(
                                 'La nueva cita se superpone con una cita existente. Por favor, elige otra hora.'
-                                );
+                            );
                             return;
                         }
 
@@ -808,50 +827,47 @@
                         console.log('Fecha y hora de inicio de la nueva cita: ', nuevaCita.start);
                         console.log('Fecha y hora de finalización de la nueva cita: ', nuevaCita.end);
                         const fechaHora = new Date(nuevaCita.start);
-                        
+
                         // Obtiene el día, mes y año
                         const dia = fechaHora.getDate().toString().padStart(2,
-                        '0'); // Asegura que el día tenga dos dígitos
+                            '0'); // Asegura que el día tenga dos dígitos
                         const mes = (fechaHora.getMonth() + 1).toString().padStart(2,
-                        '0'); // El mes se indexa desde 0
+                            '0'); // El mes se indexa desde 0
                         const año = fechaHora.getFullYear();
 
                         // Obtiene la hora y los minutos
                         const hora = fechaHora.getHours().toString().padStart(2,
-                        '0'); // Asegura que la hora tenga dos dígitos
+                            '0'); // Asegura que la hora tenga dos dígitos
                         const minutos = fechaHora.getMinutes().toString().padStart(2,
-                        '0'); // Asegura que los minutos tengan dos dígitos
+                            '0'); // Asegura que los minutos tengan dos dígitos
                         const segundos = fechaHora.getSeconds().toString().padStart(2, '0');
                         // Combina los componentes para formar la fecha y hora en el formato deseado
-                         fechaHoraSelCita = `${dia}/${mes}/${año} ${hora}:${minutos}`;
-                         fechaHoraInicio =  `${año}-${mes}-${dia}T${hora}:${minutos}:${segundos}`;
-                        
+                        fechaHoraSelCita = `${dia}/${mes}/${año} ${hora}:${minutos}`;
+                        fechaHoraInicio = `${año}-${mes}-${dia}T${hora}:${minutos}:${segundos}`;
 
-                         const fechaHoraFin = new Date(nuevaCita.end);
-                        
-                         // Obtiene el día, mes y año
-                         const dia1 = fechaHoraFin.getDate().toString().padStart(2,
-                         '0'); // Asegura que el día tenga dos dígitos
-                         const mes1 = (fechaHoraFin.getMonth() + 1).toString().padStart(2,
-                         '0'); // El mes se indexa desde 0
-                         const año1 = fechaHoraFin.getFullYear();
- 
-                         // Obtiene la hora y los minutos
-                         const hora1 = fechaHoraFin.getHours().toString().padStart(2,
-                         '0'); // Asegura que la hora tenga dos dígitos
-                         const minutos1 = fechaHoraFin.getMinutes().toString().padStart(2,
-                         '0'); // Asegura que los minutos tengan dos dígitos
-                         const segundos1 = fechaHoraFin.getSeconds().toString().padStart(2, '0');
-                         // Combina los componentes para formar la fecha y hora en el formato deseado
-                         
-                        
-                        
-                         fechaHoraFinal =  `${año1}-${mes1}-${dia1}T${hora1}:${minutos1}:${segundos1}`;
+                        const fechaHoraFin = new Date(nuevaCita.end);
 
-                         document.getElementById('fechaHoraSelCita').value = fechaHoraSelCita;
-                         document.getElementById('fechaHoraInicio').value = fechaHoraInicio;
-                         document.getElementById('fechaHoraFinal').value = fechaHoraFinal;
-                        
+                        // Obtiene el día, mes y año
+                        const dia1 = fechaHoraFin.getDate().toString().padStart(2,
+                            '0'); // Asegura que el día tenga dos dígitos
+                        const mes1 = (fechaHoraFin.getMonth() + 1).toString().padStart(2,
+                            '0'); // El mes se indexa desde 0
+                        const año1 = fechaHoraFin.getFullYear();
+
+                        // Obtiene la hora y los minutos
+                        const hora1 = fechaHoraFin.getHours().toString().padStart(2,
+                            '0'); // Asegura que la hora tenga dos dígitos
+                        const minutos1 = fechaHoraFin.getMinutes().toString().padStart(2,
+                            '0'); // Asegura que los minutos tengan dos dígitos
+                        const segundos1 = fechaHoraFin.getSeconds().toString().padStart(2, '0');
+                        // Combina los componentes para formar la fecha y hora en el formato deseado
+
+                        fechaHoraFinal = `${año1}-${mes1}-${dia1}T${hora1}:${minutos1}:${segundos1}`;
+
+                        document.getElementById('fechaHoraSelCita').value = fechaHoraSelCita;
+                        document.getElementById('fechaHoraInicio').value = fechaHoraInicio;
+                        document.getElementById('fechaHoraFinal').value = fechaHoraFinal;
+
                         // Añade la cita al calendario
                         fcAgendaViews.addEvent(nuevaCita);
 
@@ -863,7 +879,6 @@
             });
 
             fcAgendaViews.render();
-
 
             // Single Date Picker
             $('.pickadate').daterangepicker({
@@ -1128,15 +1143,14 @@
 
                     const notifCliente = document.getElementById('notifCliente');
 
-                    if(notifCliente.checked){
-                        notifCliente="si";
-                    }else{
-                        notifCliente="no";
+                    if (notifCliente.checked) {
+                        notifCliente = "si";
+                    } else {
+                        notifCliente = "no";
                     }
 
                     var loader = document.getElementById('loader');
                     loader.style.display = 'block';
-
 
                     var form = $("#formGuardarCita");
                     var url = form.attr("action");
@@ -1153,9 +1167,8 @@
                         "'>");
                     form.append("<input type='hidden' id='idpac' name='idpac'  value='" + idPac +
                         "'>");
-                    form.append("<input type='hidden' id='idpac' name='idpac'  value='" + idPac +
-                        "'>");
-                    form.append("<input type='hidden' id='notCliente' name='notCliente'  value='" + notifCliente +
+                    form.append("<input type='hidden' id='notCliente' name='notCliente'  value='" +
+                        notifCliente +
                         "'>");
 
                     $.ajax({
@@ -1175,16 +1188,11 @@
                                     buttonsStyling: false
                                 });
 
-                                $("#accion").val("editar");
-                                $("#idPaciente").val(respuesta.id);
-
                                 var loader = document.getElementById('loader');
                                 loader.style.display = 'none';
                             }
 
                             $.cargar(1);
-
-
                         },
                         error: function() {
                             Swal.fire({

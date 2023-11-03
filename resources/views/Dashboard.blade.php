@@ -3,6 +3,8 @@
 @section('Contenido')
     <div class="content-header row">
     </div>
+    <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
+   
     <div class="content-body">
         <!-- Grouped multiple cards for statistics starts here -->
         <div class="row grouped-multiple-statistics-card">
@@ -109,132 +111,392 @@
 
         </div>
 
-        <div class="modal fade text-left" id="modalCitas" tabindex="-1" role="dialog"
-        aria-labelledby="myModalLabel1" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Agregar Cita</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="card-body">
+        <div class="modal fade text-left" id="modalCitas" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1"
+            aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Agregar Cita</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
 
-                        <form class="form" method="post" id="formGuardar"
-                            action="{{ url('/') }}/AdminCitas/GuardarCita">
-                         
+                    
+                    <input type="hidden" name="idPaciente" id="idPaciente"
+                    value="">
 
-                            <div class="row">
-                                <div class="col-4">
-                                    <div class="form-body">
-                                        <h4 class="form-section"><i class="fa fa-list-alt"></i> Información</h4>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <div class="controls">
-                                                        <label
-                                                            for="account-username">Profesional:</label>
-                                                        <select
-                                                            onchange="$.cargarDisponibilidad(this.value)"
-                                                            class="select2 form-control"
-                                                            id="profesional" name="profesional">
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <div class="controls">
-                                                        <label for="account-username">Motivo de la
-                                                            Consulta:</label>
-                                                        <select class="select2 form-control"
-                                                            id="motivo" name="motivo">
-                                                            <option value="">Seleccione...
-                                                            </option>
-                                                            <option value="Consulta General">Consulta
-                                                                General</option>
-                                                            <option value="Consulta Especializada">
-                                                                Consulta Especializada</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
+                    <div class="modal-body">
+                        <div class="card-body">
 
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <div class="controls">
-                                                        <label for="account-username">Duración: </label>
-                                                        <select class="form-control" id="duracionCita"
-                                                            name="duracionCita" aria-invalid="false">
-                                                            <option value="15">15 minutos</option>
-                                                            <option value="30">30 minutos</option>
-                                                            <option value="60">1 hora</option>
-                                                        </select>
+                            <form class="form" method="post" id="formGuardarCita"
+                                action="{{ url('/') }}/AdminCitas/GuardarCita">
+
+                            
+                                <div class="row">
+                                    <div class="col-4">
+                                        <div class="form-body">
+                                            <h4 class="form-section"><i class="fa fa-list-alt"></i> Información</h4>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <div class="controls">
+                                                            <label for="account-username">Profesional:</label>
+                                                            <select onchange="$.cargarDisponibilidad(this.value)"
+                                                                class="select2 form-control" id="profesional"
+                                                                name="profesional">
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <div class="controls">
+                                                            <label for="account-username">Motivo de la
+                                                                Consulta:</label>
+                                                            <select class="select2 form-control" id="motivo"
+                                                                name="motivo">
+                                                                <option value="">Seleccione...
+                                                                </option>
+                                                                <option value="Consulta General">Consulta
+                                                                    General</option>
+                                                                <option value="Consulta Especializada">
+                                                                    Consulta Especializada</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <div class="controls">
+                                                            <label for="account-username">Duración: </label>
+                                                            <select class="form-control" id="duracionCita"
+                                                                name="duracionCita" aria-invalid="false">
+                                                                <option value="15">15 minutos</option>
+                                                                <option value="30">30 minutos</option>
+                                                                <option value="60">1 hora</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <div class="controls">
+                                                            <label for="account-username">Cita
+                                                                seleccionada para: </label>
+                                                            <input type="hidden" class="form-control"
+                                                                id="fechaHoraInicio" name="fechaHoraInicio"
+                                                                placeholder="Fecha cita">
+                                                            <input type="hidden" class="form-control"
+                                                                id="fechaHoraFinal" name="fechaHoraFinal"
+                                                                placeholder="Fecha cita">
+                                                            <input disabled type="text" class="form-control"
+                                                                id="fechaHoraSelCita" name="fechaHoraSelCita"
+                                                                placeholder="Fecha cita">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="form-group"
+                                                        style="inline-flex: flex; align-items: center;">
+                                                        <div class="controls align-content-center">
+                                                            <label for="account-username">&nbsp;</label>
+                                                            <fieldset>
+                                                                <label for="input-16" style="cursor: pointer;"> <input
+                                                                        type="checkbox" id="notifCliente" checked>
+                                                                    <li class="fa fa-envelope"></li> Notificar a paciente
+                                                                    por correo
+                                                                </label>
+                                                            </fieldset>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <div class="controls">
-                                                        <label for="account-username">Cita
-                                                            seleccionada para: </label>
-                                                        <input  type="hidden" class="form-control"
-                                                            id="fechaHoraInicio" name="fechaHoraInicio"
-                                                            placeholder="Fecha cita">
-                                                        <input  type="hidden" class="form-control"
-                                                            id="fechaHoraFinal" name="fechaHoraFinal"
-                                                            placeholder="Fecha cita">
-                                                        <input disabled type="text" class="form-control"
-                                                            id="fechaHoraSelCita" name="fechaHoraSelCita"
-                                                            placeholder="Fecha cita">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="form-group" style="inline-flex: flex; align-items: center;">
-                                                    <div class="controls align-content-center">
-                                                        <label for="account-username">&nbsp;</label>
-                                                        <fieldset>
-                                                            <label for="input-16" style="cursor: pointer;"> <input type="checkbox" id="notifCliente" checked> <li class="fa fa-envelope"></li> Notificar a paciente por correo</label>
-                                                        </fieldset>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                     </div>
-                                    </div>
-                                </div>
-                                <div class="col-8">
-                                    <div class="form-body">
-                                        <h4 class="form-section"><i class="fa fa-calendar"></i> Fecha</h4>
-                                        <div class="card-body">
-                                            <div id='fc-agenda-views2'
-                                                style=" width: 100%;  height: 600px;"></div>
                                         </div>
                                     </div>
+                                    <div class="col-8">
+                                        <div class="form-body" id="calendaCita">
+                                            <h4 class="form-section"><i class="fa fa-calendar"></i> Fecha</h4>
+                                            <div class="card-body">
+                                                <div id='fc-agenda-views2' style=" width: 100%;  height: 600px;"></div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="form-body" id="calendaCitaPaci" style="display: none;">
+                                            <h4 class="form-section"><i class="fa fa-user"></i> Información del Paciente
+                                            </h4>
+                                            <div class="card-body">
+                                                <ul class="nav nav-tabs" role="tablist">
+                                                    <li class="nav-item" onclick="$.habPacExist();">
+                                                        <a class="nav-link active" id="homeIcon-tab" data-toggle="tab"
+                                                            href="#homeIcon" aria-controls="homeIcon" role="tab"
+                                                            aria-selected="true"><i class="fa fa-user"></i> Paciente
+                                                            existente</a>
+                                                    </li>
+                                                    <li class="nav-item" onclick="$.habPacNuevo();">
+                                                        <a class="nav-link" id="profileIcon-tab" data-toggle="tab"
+                                                            href="#profileIcon" aria-controls="profileIcon"
+                                                            role="tab" aria-selected="false"><i
+                                                                class="fa fa-user-plus"></i> Paciente nuevo</a>
+                                                    </li>
+
+
+                                                </ul>
+                                                <div class="tab-content px-1 pt-1">
+                                                    <div class="tab-pane active" id="homeIcon"
+                                                        aria-labelledby="homeIcon-tab" role="tabpanel">
+                                                        <div class="row">
+                                                            <div class="col-12">
+                                                                <div class="form-group">
+                                                                    <div class="controls">
+                                                                        <label for="account-username">Paciente:</label>
+                                                                        <select onchange="$.selecPaciente(this.value)"
+                                                                            class="select2 form-control" id="paciente"
+                                                                            name="paciente">
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12">
+                                                                <div class="form-group">
+                                                                    <div class="controls">
+                                                                        <label for="account-username">Comentario:</label>
+                                                                        <textarea class="form-control" id="comentario" name="comentario" rows="3"
+                                                                            placeholder="Ingrese un comentario"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12" id="div-tratamiento"
+                                                                style="display: none;">
+                                                                <h4 class="form-section"><i class="fa fa-universal-access"></i>
+                                                                    Información de Tratamientos
+                                                                </h4>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="tab-pane in" id="profileIcon"
+                                                    <form class="form" method="post" id="formGuardar"
+                                                    action="{{ url('/') }}/AdminPacientes/GuardarPaciente">
+
+                                                    <input type="hidden" name="idPaciente" id="idPaciente"
+                                                        value="">
+                                                    <input type="hidden" name="accion" id="accion" value="">
+                                                    <input type="hidden" name="fotoCargada" id="fotoCargada"
+                                                        value="">
+                                                    <div id='div-media' class="media">
+                                                        <a href="javascript: void(0);">
+                                                            <img src="../../../app-assets/images/FotosPacientes/avatar-s-1.png"
+                                                                class="rounded mr-75" id="previewImage"
+                                                                alt="profile image" height="64" width="64">
+                                                        </a>
+                                                        <div class="media-body mt-75">
+                                                            <div
+                                                                class="col-12 px-0 d-flex flex-sm-row flex-column justify-content-start">
+                                                                <label
+                                                                    class="btn btn-sm btn-primary ml-50 mb-50 mb-sm-0 cursor-pointer"
+                                                                    for="account-upload">Subir una foto</label>
+                                                                <input type="file" name="fotoPaciente"
+                                                                    id="account-upload" hidden>
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-secondary ml-50"
+                                                                    onclick="clearImage()">Limpiar</button>
+                                                            </div>
+                                                            <p class="text-muted ml-75 mt-50"><small>Solo JPG, GIF o PNG.
+                                                                    Tam. Max. de 800kB</small></p>
+                                                        </div>
+                                                    </div>
+
+                                                    <hr>
+
+                                                    <div class="row">
+                                                        <div class="col-5">
+                                                            <div class="form-group">
+                                                                <div class="controls">
+                                                                    <label for="account-username">Tipo de
+                                                                        Identificación</label>
+                                                                    <select class="form-control" id="tipoId"
+                                                                        name="tipoId" aria-invalid="false">
+
+                                                                        <option value="">Selecciona una
+                                                                            opción</option>
+                                                                        <option value="RC">
+                                                                            Registro Civil </option>
+                                                                        <option value="TI">
+                                                                            Tarjeta De Identidad </option>
+                                                                        <option value="CE">
+                                                                            Cédula De Extranjería </option>
+                                                                        <option value="CC">
+                                                                            Cédula De Ciudadanía </option>
+                                                                        <option value="PA">
+                                                                            Pasaporte </option>
+                                                                        <option value="MS">
+                                                                            Menor Sin Identificación </option>
+                                                                        <option value="AS">
+                                                                            Adulto Sin Identificación </option>
+                                                                        <option value="NV">
+                                                                            Certificado nacido vivo </option>
+                                                                        <option value="SC">
+                                                                            Salvoconducto de permanencia </option>
+                                                                        <option value="PE">
+                                                                            Permiso especial de permanencia
+                                                                        </option>
+                                                                        <option value="CD">
+                                                                            Carné Diplomático </option>
+
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-7">
+                                                            <div class="form-group">
+                                                                <div class="controls">
+                                                                    <label for="account-username">Identificación</label>
+                                                                    <input type="text" class="form-control"
+                                                                        id="identificacion" name="identificacion"
+                                                                        placeholder=""
+                                                                        onchange="$.validaIdentificacion(this.value);"
+                                                                        value="" required
+                                                                        data-validation-required-message="This username field is required">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="form-group">
+                                                                <div class="controls">
+                                                                    <label for="account-name">Nombre</label>
+                                                                    <input type="text" class="form-control"
+                                                                        id="nombre" name="nombre"
+                                                                        onkeypress="return validartxt(event)"
+                                                                        placeholder="Nombre" value="" required
+                                                                        data-validation-required-message="This name field is required">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="form-group">
+                                                                <div class="controls">
+                                                                    <label for="account-name">Apellido</label>
+                                                                    <input type="text" class="form-control"
+                                                                        id="apellido" name="apellido"
+                                                                        onkeypress="return validartxt(event)"
+                                                                        placeholder="Apellido" value="" required
+                                                                        data-validation-required-message="This name field is required">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <div class="form-group">
+                                                                <div class="controls">
+                                                                    <label for="account-username">Sexo</label>
+                                                                    <select class="form-control" id="sexo"
+                                                                        name="sexo" aria-invalid="false">
+                                                                        <option value="">Selecciona una
+                                                                            opción</option>
+                                                                        <option value="Masculino">
+                                                                            Masculino </option>
+                                                                        <option value="Femenino">
+                                                                            Femenino </option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <div class="form-group">
+                                                                <div class="controls">
+                                                                    <label for="account-username">Fecha de
+                                                                        Nacimiento</label>
+                                                                        <input name="nacimiento" id="nacimiento" class="form-control date-inputmask" type="text" placeholder="Ingresa Fecha de Nacimiento" data-inputmask="'alias': 'datetime','inputFormat': 'dd/mm/yyyy'">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-5">
+                                                            <div class="form-group">
+                                                                <div class="controls">
+                                                                    <label for="account-e-mail">Email</label>
+                                                                    <input type="email" class="form-control"
+                                                                        id="email" name="email" placeholder="Email"
+                                                                        value="" required
+                                                                        data-validation-required-message="This email field is required">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-5">
+                                                            <div class="form-group">
+                                                                <label for="account-company">Dirección</label>
+                                                                <input type="text" class="form-control" id="direccion"
+                                                                    name="direccion" placeholder="Dirección">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <div class="form-group">
+                                                                <label for="account-company">Ciudad</label>
+                                                                <input type="text" class="form-control" id="ciudad"
+                                                                    name="ciudad" onkeypress="return validartxt(event)"
+                                                                    placeholder="Ciudad" value=""
+                                                                    data-validation-required-message="This name field is required">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <div class="form-group">
+                                                                <label for="account-company">Teléfono</label>
+                                                                <input type="text" class="form-control" id="telefono"
+                                                                    name="telefono"
+                                                                    onkeypress="return validartxtnum(event)"
+                                                                    placeholder="Teléfono">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <div class="form-group">
+                                                                <label for="account-company">Observaciones</label>
+                                                                <div class="form-group">
+                                                                    <textarea name="observaciones" class="form-control textarea-maxlength" id="observaciones"
+                                                                        placeholder="Ingrese alguna observación del paciente.." maxlength="250" rows="5"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                  
+                                                    </div>
+                                                </form> 
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
-                            
-                            </div>
+
+                        </div>
+
+                        <div id="loader" class="loader-spinner" style="display: none;">
+                            <img src="{{ asset('app-assets/images/mujer.gif') }}" width="150" />
+                            <h2 class="parpadeo" style="color: #D08997; font-weight: bold;">Cargando...</h2>
+                        </div>
+
+                        <div class="form-actions right" id="div-btnes" style="text-align: right">
+                                                 
+                            <button type="button" onclick="$.cancelarProCita();" class="btn btn-warning mr-1">
+                                <i class="feather icon-x"></i> Cancelar
+                            </button>
+                            <button type="button" disabled id="btnAtras" onclick="$.atrasCita()" class="btn btn-info">
+                                <i class="fa fa fa-arrow-left"></i> Atras
+                            </button>
+                            <button type="button" id="btnGuardar" onclick="$.continuar()" class="btn btn-success">
+                                <i class="fa fa fa-arrow-right"></i> Continuar
+                            </button>
+
+                        </div>
+                        </form>
 
                     </div>
-
-                    <div class="form-actions right" style="text-align: right">
-                        <button type="button" onclick="$.cancelarProCita();" class="btn btn-warning mr-1">
-                            <i class="feather icon-x"></i> Cancelar
-                        </button>
-                        <button type="button" id="btnGuardar" onclick="$.continuar()" class="btn btn-success">
-                            <i class="fa fa fa-arrow-right"></i> Continuar
-                        </button>
-                    
-                    </div>
-                    </form>
-
                 </div>
-            </div>
 
+            </div>
         </div>
-    </div>
 
     </div>
 
@@ -243,6 +505,14 @@
         <!-- Tus campos del formulario aquí -->
     </form>
     <form action="{{ url('/AdminCitas/CargarDisponibilidad') }}" id="formCargarDisponibilidad" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/AdminCitas/CargarPacientesCita') }}" id="formCargarPacientes" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/AdminCitas/CargarAllCitas') }}" id="formCargarCitas" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
@@ -267,7 +537,9 @@
 
             ];
 
-            var disponibilidadProfesional = [];   
+            $('.date-inputmask').inputmask("dd/mm/yyyy");
+
+            var disponibilidadProfesional = [];
 
             $('#notifCliente').iCheck({
                 checkboxClass: 'icheckbox_flat-green',
@@ -290,6 +562,7 @@
                 firstDay: 1, // 1 for Monday, 0 for Sunday
                 allDaySlot: false,
                 height: 'auto',
+
                 slotLabelFormat: {
                     hour: "2-digit",
                     minute: "2-digit",
@@ -301,6 +574,10 @@
                     month: "Mes",
                     week: "Semana",
                     day: "Día",
+                },
+                eventRender: function(info) {
+                    // Cambia el tamaño de fuente de los eventos aquí
+                    info.el.style.fontSize = '12px'; // Ajusta el tamaño de fuente según tus necesidades
                 },
                 slotDuration: '00:15:00', // Duración de cada intervalo en la vista semanal (aquí es de una hora)
                 slotLabelInterval: "00:15", // Mostrar etiquetas de hora cada una hora
@@ -369,7 +646,7 @@
                         if (seSuperpone) {
                             alert(
                                 'La nueva cita se superpone con una cita existente. Por favor, elige otra hora.'
-                                );
+                            );
                             return;
                         }
 
@@ -384,50 +661,50 @@
                         console.log('Fecha y hora de inicio de la nueva cita: ', nuevaCita.start);
                         console.log('Fecha y hora de finalización de la nueva cita: ', nuevaCita.end);
                         const fechaHora = new Date(nuevaCita.start);
-                        
+
                         // Obtiene el día, mes y año
                         const dia = fechaHora.getDate().toString().padStart(2,
-                        '0'); // Asegura que el día tenga dos dígitos
+                            '0'); // Asegura que el día tenga dos dígitos
                         const mes = (fechaHora.getMonth() + 1).toString().padStart(2,
-                        '0'); // El mes se indexa desde 0
+                            '0'); // El mes se indexa desde 0
                         const año = fechaHora.getFullYear();
 
                         // Obtiene la hora y los minutos
                         const hora = fechaHora.getHours().toString().padStart(2,
-                        '0'); // Asegura que la hora tenga dos dígitos
+                            '0'); // Asegura que la hora tenga dos dígitos
                         const minutos = fechaHora.getMinutes().toString().padStart(2,
-                        '0'); // Asegura que los minutos tengan dos dígitos
+                            '0'); // Asegura que los minutos tengan dos dígitos
                         const segundos = fechaHora.getSeconds().toString().padStart(2, '0');
                         // Combina los componentes para formar la fecha y hora en el formato deseado
-                         fechaHoraSelCita = `${dia}/${mes}/${año} ${hora}:${minutos}`;
-                         fechaHoraInicio =  `${año}-${mes}-${dia}T${hora}:${minutos}:${segundos}`;
-                        
+                        fechaHoraSelCita = `${dia}/${mes}/${año} ${hora}:${minutos}`;
+                        fechaHoraInicio = `${año}-${mes}-${dia}T${hora}:${minutos}:${segundos}`;
 
-                         const fechaHoraFin = new Date(nuevaCita.end);
-                        
-                         // Obtiene el día, mes y año
-                         const dia1 = fechaHoraFin.getDate().toString().padStart(2,
-                         '0'); // Asegura que el día tenga dos dígitos
-                         const mes1 = (fechaHoraFin.getMonth() + 1).toString().padStart(2,
-                         '0'); // El mes se indexa desde 0
-                         const año1 = fechaHoraFin.getFullYear();
- 
-                         // Obtiene la hora y los minutos
-                         const hora1 = fechaHoraFin.getHours().toString().padStart(2,
-                         '0'); // Asegura que la hora tenga dos dígitos
-                         const minutos1 = fechaHoraFin.getMinutes().toString().padStart(2,
-                         '0'); // Asegura que los minutos tengan dos dígitos
-                         const segundos1 = fechaHoraFin.getSeconds().toString().padStart(2, '0');
-                         // Combina los componentes para formar la fecha y hora en el formato deseado
-                         
-                        
-                        
-                         fechaHoraFinal =  `${año1}-${mes1}-${dia1}T${hora1}:${minutos1}:${segundos1}`;
 
-                         document.getElementById('fechaHoraSelCita').value = fechaHoraSelCita;
-                         document.getElementById('fechaHoraInicio').value = fechaHoraInicio;
-                         document.getElementById('fechaHoraFinal').value = fechaHoraFinal;
-                        
+                        const fechaHoraFin = new Date(nuevaCita.end);
+
+                        // Obtiene el día, mes y año
+                        const dia1 = fechaHoraFin.getDate().toString().padStart(2,
+                            '0'); // Asegura que el día tenga dos dígitos
+                        const mes1 = (fechaHoraFin.getMonth() + 1).toString().padStart(2,
+                            '0'); // El mes se indexa desde 0
+                        const año1 = fechaHoraFin.getFullYear();
+
+                        // Obtiene la hora y los minutos
+                        const hora1 = fechaHoraFin.getHours().toString().padStart(2,
+                            '0'); // Asegura que la hora tenga dos dígitos
+                        const minutos1 = fechaHoraFin.getMinutes().toString().padStart(2,
+                            '0'); // Asegura que los minutos tengan dos dígitos
+                        const segundos1 = fechaHoraFin.getSeconds().toString().padStart(2, '0');
+                        // Combina los componentes para formar la fecha y hora en el formato deseado
+
+
+
+                        fechaHoraFinal = `${año1}-${mes1}-${dia1}T${hora1}:${minutos1}:${segundos1}`;
+
+                        document.getElementById('fechaHoraSelCita').value = fechaHoraSelCita;
+                        document.getElementById('fechaHoraInicio').value = fechaHoraInicio;
+                        document.getElementById('fechaHoraFinal').value = fechaHoraFinal;
+
                         // Añade la cita al calendario
                         fcAgendaViews2.addEvent(nuevaCita);
 
@@ -443,11 +720,10 @@
             var agenda = document.getElementsByClassName('fc-view-container');
             var primeClase = agenda[0];
             var segunClase = agenda[1];
-            primeClase.style.overflow = 'auto'; 
+            primeClase.style.overflow = 'auto';
             primeClase.style.height = '500px';
-            segunClase.style.overflow = 'auto'; 
+            segunClase.style.overflow = 'auto';
             segunClase.style.height = '350px';
-
 
             var fcLeftDiv = document.querySelector('.fc-left');
 
@@ -462,9 +738,9 @@
             miBoton.id = 'agregarCita';
             miBoton.classList.add('fc-today-button', 'fc-button', 'fc-button-primary');
             miBoton.insertBefore(iconElement, miBoton.firstChild);
-         
+
             // Agrega el botón al div 'fc-left'
-            console.log(miBoton);
+
             fcLeftDiv.appendChild(miBoton);
 
             miBoton.addEventListener('click', function() {
@@ -473,12 +749,42 @@
                     backdrop: 'static',
                     keyboard: false
                 });
-
+                $('#fechaHoraSelCita').val("");
                 $.cargarProfesionales();
                 // Puedes reemplazar la alerta con la acción que desees realizar.
             });
-            
+
             $.extend({
+
+                cargarCita: function(){
+                    var form = $("#formCargarCitas");
+                    $("#idProf").remove();
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            disponibilidadJSON = respuesta.disponibilidad.map(function(
+                                item) {
+                                return {
+                                    "start": item.inicio,
+                                    "end": item.final,
+                                    "title": item.nombre + " " + item.apellido,
+                                    "id": item.id
+                                };
+                            });
+                        }
+
+                    });
+
+                    fcAgendaViews.removeAllEvents();
+                    fcAgendaViews.addEventSource(disponibilidadJSON);
+                },
                 cargarProfesionales: function() {
 
                     var form = $("#formCargarProfesionales");
@@ -504,12 +810,87 @@
 
                     $("#profesional").html(select);
                 },
+                cargarPacientes: function() {
+
+                    var form = $("#formCargarPacientes");
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    let select = '<option value="">Seleccione...</option>';
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            $.each(respuesta.pacientes, function(i, item) {
+                                select += '<option value="' + item.id + '">' + item
+                                    .nombre + ' ' + item.apellido + '</option>';
+                            });
+                        }
+                    });
+
+                    $("#paciente").html(select);
+                },
                 cancelarProCita: function() {
                     fcAgendaViews2.removeAllEvents();
-                    fcAgendaViews2.addEventSource(disponibilidadJSON);
+                    $('#modalCitas').modal('toggle');
+
+                    $('#profesional').val("").trigger('change.select2');
+                    $('#motivo').val("").trigger('change.select2');
+                    $('#duracion').val("15").trigger('change.select2');
+                    $('#fechaHoraSelCita').val("");
+
+                    $.atrasCita();
                 },
                 continuar: function() {
-                    calendarE32.style.display = 'none';
+
+                    if ($("#fechaHoraSelCita").val().trim() == "") {
+                        Swal.fire({
+                            type: "warning",
+                            title: "Oops...",
+                            text: "Debes de seleccionar la feha de la cita",
+                            confirmButtonClass: "btn btn-primary",
+                            timer: 1500,
+                            buttonsStyling: false
+                        });
+                        return;
+                    }
+
+                    $.cargarPacientes();
+                    document.getElementById("calendaCita").style = "display: none";
+                    document.getElementById("calendaCitaPaci").style = "display: block";
+                    var btm_atras = document.getElementById("btnAtras");
+                    var btnGuardar = document.getElementById("btnGuardar");
+                    btm_atras.disabled = false;
+                    btnGuardar.textContent = " Confirmar Cita";
+                    var iconElement = document.createElement('i');
+                    iconElement.className = 'fa fa-check';
+
+                    btnGuardar.insertBefore(iconElement, btnGuardar.firstChild); 
+
+                    btnGuardar.onclick = function() {
+                        $.guardarCita();
+                    };
+                },
+
+                atrasCita: function () {
+                    document.getElementById("calendaCita").style = "display: block";
+                    document.getElementById("calendaCitaPaci").style = "display: none";
+                   
+                 var btm_atras = document.getElementById("btnAtras");
+                 btm_atras.disabled = true;
+                 var btnGuardar = document.getElementById("btnGuardar");
+                 btnGuardar.textContent = " Continuar";
+
+                 var iconElement = document.createElement('i');
+                 iconElement.className = 'fa fa fa-arrow-right';
+                 btnGuardar.insertBefore(iconElement, btnGuardar.firstChild); 
+
+                 btnGuardar.onclick = function() {
+                    $.continuar();
+                };
                 },
                 cargarDisponibilidad: function(id) {
 
@@ -527,25 +908,147 @@
                         async: false,
                         dataType: "json",
                         success: function(respuesta) {
-                            disponibilidadJSON = respuesta.disponibilidad.map(function(item) {
+                            disponibilidadJSON = respuesta.disponibilidad.map(function(
+                                item) {
                                 return {
                                     "start": item.inicio,
                                     "end": item.final,
                                     "title": item.nombre + " " + item.apellido,
                                     "id": item.id
                                 };
-                            }); 
+                            });
                         }
-                      
+
                     });
-                    
 
                     fcAgendaViews2.removeAllEvents();
                     fcAgendaViews2.addEventSource(disponibilidadJSON);
 
                 },
+                selecPaciente: function(id){
+                    $("#idPaciente").val(id);
+                    document.getElementById("div-tratamiento").style = "display: block;";
+                },
+                guardarCita: function() {
+                    var notCli;
+                    if ($("#profesional").val().trim() === "") {
+                        Swal.fire({
+                            type: "warning",
+                            title: "Oops...",
+                            text: "Debes de seleccionar el profesional...",
+                            confirmButtonClass: "btn btn-primary",
+                            timer: 1500,
+                            buttonsStyling: false
+                        });
+                        return;
+                    }
+                    if ($("#motivo").val().trim() === "") {
+                        Swal.fire({
+                            type: "warning",
+                            title: "Oops...",
+                            text: "Debes de seleccionar el tipo de consulta",
+                            confirmButtonClass: "btn btn-primary",
+                            timer: 1500,
+                            buttonsStyling: false
+                        });
+                        return;
+                    }
+                    if ($("#fechaHoraSelCita").val().trim() === "") {
+                        Swal.fire({
+                            type: "warning",
+                            title: "Oops...",
+                            text: "Debes de seleccionar la hora y fecha de cita",
+                            confirmButtonClass: "btn btn-primary",
+                            timer: 1500,
+                            buttonsStyling: false
+                        });
+                        return;
+                    }
+
+                    const notifCliente = document.getElementById('notifCliente');
+                    
+
+                    if (notifCliente.checked) {
+                        notCli = "si";
+                    } else {
+                        notCli = "no";
+                    }
+
+                    var loader = document.getElementById('loader');
+                    loader.style.display = 'block';
+
+                    var form = $("#formGuardarCita");
+                    var url = form.attr("action");
+                    var accion = $("#accion").val();
+                    var token = $("#token").val();
+                    var idPac = $("#idPaciente").val()
+                    $("#idtoken").remove();
+                    $("#accion").remove();
+                    $("#idpac").remove();
+                    $("#notCliente").remove();
+                    form.append("<input type='hidden' id='accion' name='accion'  value='" + accion +
+                        "'>");
+                    form.append("<input type='hidden' id='idtoken' name='_token'  value='" + token +
+                        "'>");
+                    form.append("<input type='hidden' id='idpac' name='idpac'  value='" + idPac +
+                        "'>");
+                    form.append("<input type='hidden' id='notCliente' name='notCliente'  value='" +
+                            notCli +
+                        "'>");
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: new FormData($('#formGuardarCita')[0]),
+                        processData: false,
+                        contentType: false,
+                        success: function(respuesta) {
+                            if (respuesta.estado == "ok") {
+                                Swal.fire({
+                                    type: "success",
+                                    title: "",
+                                    text: "La cita fue confirmada exitosamente",
+                                    confirmButtonClass: "btn btn-primary",
+                                    timer: 1500,
+                                    buttonsStyling: false
+                                });
+
+                                var btnGuardar = document.getElementById("btnGuardar");
+                                btnGuardar.disabled = true;
+                                
+                                var loader = document.getElementById('loader');
+                                loader.style.display = 'none';
+                            }
+
+                            $.cargarCita();
+                        },
+                        error: function() {
+                            Swal.fire({
+                                type: "errot",
+                                title: "Opsss...",
+                                text: "Ha ocurrido un error",
+                                confirmButtonClass: "btn btn-primary",
+                                timer: 1500,
+                                buttonsStyling: false
+                            });
+                        }
+                    });
+                },
+                habPacNuevo: function() {
+                    var div_btnes = document.getElementById("div-btnes");
+                    div_btnes.style.pointerEvents = "none";
+                    div_btnes.style.textAlign = "right";
+                   
+                },
+                habPacExist: function() {
+                    var div_btnes = document.getElementById("div-btnes");
+                    div_btnes.style.pointerEvents = "auto";
+                    div_btnes.style.textAlign = "right";
+                }
             });
 
+
+            $.cargarCita();
 
         })
     </script>
