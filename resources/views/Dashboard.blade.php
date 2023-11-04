@@ -4,7 +4,7 @@
     <div class="content-header row">
     </div>
     <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
-   
+
     <div class="content-body">
         <!-- Grouped multiple cards for statistics starts here -->
         <div class="row grouped-multiple-statistics-card">
@@ -16,40 +16,36 @@
                                 <div
                                     class="d-flex align-items-start mb-sm-1 mb-xl-0 border-right-blue-grey border-right-lighten-5">
                                     <span class="card-icon primary d-flex justify-content-center mr-3">
-                                        <i class="icon p-1 icon-bar-chart customize-icon font-large-2 p-1"></i>
+                                        <i class="icon p-1 icon-user customize-icon font-large-2 p-1"></i>
                                     </span>
                                     <div class="stats-amount mr-3">
-                                        <h3 class="heading-text text-bold-600">$95k</h3>
-                                        <p class="sub-heading">Revenue</p>
+                                        <h3 class="heading-text text-bold-600">80</h3>
+                                        <p class="sub-heading">Pacientes Activos</p>
                                     </div>
-                                    <span class="inc-dec-percentage">
-                                        <small class="success"><i class="fa fa-long-arrow-up"></i> 5.2%</small>
-                                    </span>
+
                                 </div>
                             </div>
                             <div class="col-lg-6 col-xl-3 col-sm-6 col-12">
                                 <div
                                     class="d-flex align-items-start mb-sm-1 mb-xl-0 border-right-blue-grey border-right-lighten-5">
                                     <span class="card-icon danger d-flex justify-content-center mr-3">
-                                        <i class="icon p-1 icon-pie-chart customize-icon font-large-2 p-1"></i>
+                                        <i class="icon p-1 fa fa-calendar customize-icon font-large-2 p-1"></i>
                                     </span>
                                     <div class="stats-amount mr-3">
-                                        <h3 class="heading-text text-bold-600">18.63%</h3>
-                                        <p class="sub-heading">Growth Rate</p>
+                                        <h3 class="heading-text text-bold-600">25</h3>
+                                        <p class="sub-heading">Citas hoy</p>
                                     </div>
-                                    <span class="inc-dec-percentage">
-                                        <small class="danger"><i class="fa fa-long-arrow-down"></i> 2.0%</small>
-                                    </span>
+
                                 </div>
                             </div>
                             <div class="col-lg-6 col-xl-3 col-sm-6 col-12">
                                 <div class="d-flex align-items-start border-right-blue-grey border-right-lighten-5">
                                     <span class="card-icon success d-flex justify-content-center mr-3">
-                                        <i class="icon p-1 icon-graph customize-icon font-large-2 p-1"></i>
+                                        <i class="icon p-1 fa fa-usd customize-icon font-large-2 p-1"></i>
                                     </span>
                                     <div class="stats-amount mr-3">
-                                        <h3 class="heading-text text-bold-600">$27k</h3>
-                                        <p class="sub-heading">Sales</p>
+                                        <h3 class="heading-text text-bold-600">$ 350.000</h3>
+                                        <p class="sub-heading">Recaudo hoy</p>
                                     </div>
                                     <span class="inc-dec-percentage">
                                         <small class="success"><i class="fa fa-long-arrow-up"></i> 10.0%</small>
@@ -59,11 +55,11 @@
                             <div class="col-lg-6 col-xl-3 col-sm-6 col-12">
                                 <div class="d-flex align-items-start">
                                     <span class="card-icon warning d-flex justify-content-center mr-3">
-                                        <i class="icon p-1 icon-basket-loaded customize-icon font-large-2 p-1"></i>
+                                        <i class="icon p-1 fa fa-usd  customize-icon font-large-2 p-1"></i>
                                     </span>
                                     <div class="stats-amount mr-3">
-                                        <h3 class="heading-text text-bold-600">13700</h3>
-                                        <p class="sub-heading">Orders</p>
+                                        <h3 class="heading-text text-bold-600">$ 1.500.000</h3>
+                                        <p class="sub-heading">Recaudo Mes</p>
                                     </div>
                                     <span class="inc-dec-percentage">
                                         <small class="danger"><i class="fa fa-long-arrow-down"></i> 13.6%</small>
@@ -122,16 +118,15 @@
                         </button>
                     </div>
 
-                    
-                    <input type="hidden" name="idPaciente" id="idPaciente"
-                    value="">
+
+                    <input type="hidden" name="idPaciente" id="idPaciente" value="">
 
                     <div class="modal-body">
                         <div class="card-body">
 
                             <form class="form" method="post" id="formGuardarCita"
                                 action="{{ url('/') }}/AdminCitas/GuardarCita">
-                            
+
                                 <div class="row">
                                     <div class="col-4">
                                         <div class="form-body">
@@ -269,195 +264,211 @@
                                                             </div>
                                                             <div class="col-12" id="div-tratamiento"
                                                                 style="display: none;">
-                                                                <h4 class="form-section"><i class="fa fa-universal-access"></i>
+                                                                <h4 class="form-section"><i
+                                                                        class="fa fa-universal-access"></i>
                                                                     Información de Tratamientos
                                                                 </h4>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="tab-pane in" id="profileIcon"
-                                                 
-
-                                                    <input type="hidden" name="idPaciente" id="idPaciente"
-                                                        value="">
-                                                    <input type="hidden" name="accion" id="accion" value="agregar">
-                                                    <input type="hidden" name="fotoCargada" id="fotoCargada"
-                                                        value="">
-                                                    <div id='div-media' class="media">
-                                                        <a href="javascript: void(0);">
-                                                            <img src="../../../app-assets/images/FotosPacientes/avatar-s-1.png"
-                                                                class="rounded mr-75" id="previewImage"
-                                                                alt="profile image" height="64" width="64">
-                                                        </a>
-                                                        <div class="media-body mt-75">
-                                                            <div
-                                                                class="col-12 px-0 d-flex flex-sm-row flex-column justify-content-start">
-                                                                <label
-                                                                    class="btn btn-sm btn-primary ml-50 mb-50 mb-sm-0 cursor-pointer"
-                                                                    for="account-upload">Subir una foto</label>
-                                                                <input type="file" name="fotoPaciente"
-                                                                    id="account-upload" hidden>
-                                                                <button type="button"
-                                                                    class="btn btn-sm btn-secondary ml-50"
-                                                                    onclick="$.clearImage()">Limpiar</button>
-                                                            </div>
-                                                            <p class="text-muted ml-75 mt-50"><small>Solo JPG, GIF o PNG.
-                                                                    Tam. Max. de 800kB</small></p>
-                                                        </div>
-                                                    </div>
-
-                                                    <hr>
-
-                                                    <div class="row">
-                                                        <div class="col-5">
-                                                            <div class="form-group">
-                                                                <div class="controls">
-                                                                    <label for="account-username">Tipo de
-                                                                        Identificación</label>
-                                                                    <select class="form-control" id="tipoId"
-                                                                        name="tipoId" aria-invalid="false">
-
-                                                                        <option value="">Selecciona una
-                                                                            opción</option>
-                                                                        <option value="RC">
-                                                                            Registro Civil </option>
-                                                                        <option value="TI">
-                                                                            Tarjeta De Identidad </option>
-                                                                        <option value="CE">
-                                                                            Cédula De Extranjería </option>
-                                                                        <option value="CC">
-                                                                            Cédula De Ciudadanía </option>
-                                                                        <option value="PA">
-                                                                            Pasaporte </option>
-                                                                        <option value="MS">
-                                                                            Menor Sin Identificación </option>
-                                                                        <option value="AS">
-                                                                            Adulto Sin Identificación </option>
-                                                                        <option value="NV">
-                                                                            Certificado nacido vivo </option>
-                                                                        <option value="SC">
-                                                                            Salvoconducto de permanencia </option>
-                                                                        <option value="PE">
-                                                                            Permiso especial de permanencia
-                                                                        </option>
-                                                                        <option value="CD">
-                                                                            Carné Diplomático </option>
-
-                                                                    </select>
+                                                    <div class="tab-pane in" id="profileIcon" <input type="hidden"
+                                                        name="idPaciente" id="idPaciente" value="">
+                                                        <input type="hidden" name="accion" id="accion"
+                                                            value="agregar">
+                                                        <input type="hidden" name="fotoCargada" id="fotoCargada"
+                                                            value="">
+                                                        <div id='div-media' class="media">
+                                                            <a href="javascript: void(0);">
+                                                                <img src="../../../app-assets/images/FotosPacientes/avatar-s-1.png"
+                                                                    class="rounded mr-75" id="previewImage"
+                                                                    alt="profile image" height="64" width="64">
+                                                            </a>
+                                                            <div class="media-body mt-75">
+                                                                <div
+                                                                    class="col-12 px-0 d-flex flex-sm-row flex-column justify-content-start">
+                                                                    <label
+                                                                        class="btn btn-sm btn-primary ml-50 mb-50 mb-sm-0 cursor-pointer"
+                                                                        for="account-upload">Subir una foto</label>
+                                                                    <input type="file" name="fotoPaciente"
+                                                                        id="account-upload" hidden>
+                                                                    <button type="button"
+                                                                        class="btn btn-sm btn-secondary ml-50"
+                                                                        onclick="$.clearImage()">Limpiar</button>
                                                                 </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-7">
-                                                            <div class="form-group">
-                                                                <div class="controls">
-                                                                    <label for="account-username">Identificación</label>
-                                                                    <input type="text" class="form-control"
-                                                                        id="identificacion" name="identificacion"
-                                                                        placeholder=""
-                                                                        onchange="$.validaIdentificacion(this.value);"
-                                                                        value="" required
-                                                                        data-validation-required-message="This username field is required">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-6">
-                                                            <div class="form-group">
-                                                                <div class="controls">
-                                                                    <label for="account-name">Nombre</label>
-                                                                    <input type="text" class="form-control"
-                                                                        id="nombre" name="nombre"
-                                                                        onkeypress="return validartxt(event)"
-                                                                        placeholder="Nombre" value="" required
-                                                                        data-validation-required-message="This name field is required">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-6">
-                                                            <div class="form-group">
-                                                                <div class="controls">
-                                                                    <label for="account-name">Apellido</label>
-                                                                    <input type="text" class="form-control"
-                                                                        id="apellido" name="apellido"
-                                                                        onkeypress="return validartxt(event)"
-                                                                        placeholder="Apellido" value="" required
-                                                                        data-validation-required-message="This name field is required">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-3">
-                                                            <div class="form-group">
-                                                                <div class="controls">
-                                                                    <label for="account-username">Sexo</label>
-                                                                    <select class="form-control" id="sexo"
-                                                                        name="sexo" aria-invalid="false">
-                                                                        <option value="">Selecciona una
-                                                                            opción</option>
-                                                                        <option value="Masculino">
-                                                                            Masculino </option>
-                                                                        <option value="Femenino">
-                                                                            Femenino </option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-4">
-                                                            <div class="form-group">
-                                                                <div class="controls">
-                                                                    <label for="account-username">Fecha de
-                                                                        Nacimiento</label>
-                                                                        <input name="nacimiento" id="nacimiento" class="form-control date-inputmask" type="text" placeholder="Ingresa Fecha de Nacimiento" data-inputmask="'alias': 'datetime','inputFormat': 'dd/mm/yyyy'">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-5">
-                                                            <div class="form-group">
-                                                                <div class="controls">
-                                                                    <label for="account-e-mail">Email</label>
-                                                                    <input type="email" class="form-control"
-                                                                        id="email" name="email" placeholder="Email"
-                                                                        value="" required
-                                                                        data-validation-required-message="This email field is required">
-                                                                </div>
+                                                                <p class="text-muted ml-75 mt-50"><small>Solo JPG, GIF o
+                                                                        PNG.
+                                                                        Tam. Max. de 800kB</small></p>
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-5">
-                                                            <div class="form-group">
-                                                                <label for="account-company">Dirección</label>
-                                                                <input type="text" class="form-control" id="direccion"
-                                                                    name="direccion" placeholder="Dirección">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-4">
-                                                            <div class="form-group">
-                                                                <label for="account-company">Ciudad</label>
-                                                                <input type="text" class="form-control" id="ciudad"
-                                                                    name="ciudad" onkeypress="return validartxt(event)"
-                                                                    placeholder="Ciudad" value=""
-                                                                    data-validation-required-message="This name field is required">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-3">
-                                                            <div class="form-group">
-                                                                <label for="account-company">Teléfono</label>
-                                                                <input type="text" class="form-control" id="telefono"
-                                                                    name="telefono"
-                                                                    onkeypress="return validartxtnum(event)"
-                                                                    placeholder="Teléfono">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-12">
-                                                            <div class="form-group">
-                                                                <label for="account-company">Observaciones</label>
+                                                        <hr>
+
+                                                        <div class="row">
+                                                            <div class="col-5">
                                                                 <div class="form-group">
-                                                                    <textarea name="observaciones" class="form-control textarea-maxlength" id="observaciones"
-                                                                        placeholder="Ingrese alguna observación del paciente.." maxlength="250" rows="5"></textarea>
+                                                                    <div class="controls">
+                                                                        <label for="account-username">Tipo de
+                                                                            Identificación</label>
+                                                                        <select class="form-control" id="tipoId"
+                                                                            name="tipoId" aria-invalid="false">
+
+                                                                            <option value="">Selecciona una
+                                                                                opción</option>
+                                                                            <option value="RC">
+                                                                                Registro Civil </option>
+                                                                            <option value="TI">
+                                                                                Tarjeta De Identidad </option>
+                                                                            <option value="CE">
+                                                                                Cédula De Extranjería </option>
+                                                                            <option value="CC">
+                                                                                Cédula De Ciudadanía </option>
+                                                                            <option value="PA">
+                                                                                Pasaporte </option>
+                                                                            <option value="MS">
+                                                                                Menor Sin Identificación </option>
+                                                                            <option value="AS">
+                                                                                Adulto Sin Identificación </option>
+                                                                            <option value="NV">
+                                                                                Certificado nacido vivo </option>
+                                                                            <option value="SC">
+                                                                                Salvoconducto de permanencia </option>
+                                                                            <option value="PE">
+                                                                                Permiso especial de permanencia
+                                                                            </option>
+                                                                            <option value="CD">
+                                                                                Carné Diplomático </option>
+
+                                                                        </select>
+                                                                    </div>
                                                                 </div>
                                                             </div>
+                                                            <div class="col-7">
+                                                                <div class="form-group">
+                                                                    <div class="controls">
+                                                                        <label
+                                                                            for="account-username">Identificación</label>
+                                                                        <input type="text" class="form-control"
+                                                                            id="identificacion" name="identificacion"
+                                                                            placeholder=""
+                                                                            onchange="$.validaIdentificacion(this.value);"
+                                                                            value="" required
+                                                                            data-validation-required-message="This username field is required">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="form-group">
+                                                                    <div class="controls">
+                                                                        <label for="account-name">Nombre</label>
+                                                                        <input type="text" class="form-control"
+                                                                            id="nombre" name="nombre"
+                                                                            onkeypress="return validartxt(event)"
+                                                                            placeholder="Nombre" value="" required
+                                                                            data-validation-required-message="This name field is required">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="form-group">
+                                                                    <div class="controls">
+                                                                        <label for="account-name">Apellido</label>
+                                                                        <input type="text" class="form-control"
+                                                                            id="apellido" name="apellido"
+                                                                            onkeypress="return validartxt(event)"
+                                                                            placeholder="Apellido" value="" required
+                                                                            data-validation-required-message="This name field is required">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-3">
+                                                                <div class="form-group">
+                                                                    <div class="controls">
+                                                                        <label for="account-username">Sexo</label>
+                                                                        <select class="form-control" id="sexo"
+                                                                            name="sexo" aria-invalid="false">
+                                                                            <option value="">Selecciona una
+                                                                                opción</option>
+                                                                            <option value="Masculino">
+                                                                                Masculino </option>
+                                                                            <option value="Femenino">
+                                                                                Femenino </option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <div class="form-group">
+                                                                    <div class="controls">
+                                                                        <label for="account-username">Fecha de
+                                                                            Nacimiento</label>
+                                                                        <input name="nacimiento" id="nacimiento"
+                                                                            class="form-control date-inputmask"
+                                                                            type="text"
+                                                                            placeholder="Ingresa Fecha de Nacimiento"
+                                                                            data-inputmask="'alias': 'datetime','inputFormat': 'dd/mm/yyyy'">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-5">
+                                                                <div class="form-group">
+                                                                    <div class="controls">
+                                                                        <label for="account-e-mail">Email</label>
+                                                                        <input type="email" class="form-control"
+                                                                            id="email" name="email"
+                                                                            placeholder="Email" value="" required
+                                                                            data-validation-required-message="This email field is required">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-5">
+                                                                <div class="form-group">
+                                                                    <label for="account-company">Dirección</label>
+                                                                    <input type="text" class="form-control"
+                                                                        id="direccion" name="direccion"
+                                                                        placeholder="Dirección">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <div class="form-group">
+                                                                    <label for="account-company">Ciudad</label>
+                                                                    <input type="text" class="form-control"
+                                                                        id="ciudad" name="ciudad"
+                                                                        onkeypress="return validartxt(event)"
+                                                                        placeholder="Ciudad" value=""
+                                                                        data-validation-required-message="This name field is required">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-3">
+                                                                <div class="form-group">
+                                                                    <label for="account-company">Teléfono</label>
+                                                                    <input type="text" class="form-control"
+                                                                        id="telefono" name="telefono"
+                                                                        onkeypress="return validartxtnum(event)"
+                                                                        placeholder="Teléfono">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12">
+                                                                <div class="form-group">
+                                                                    <label for="account-company">Observaciones</label>
+                                                                    <div class="form-group">
+                                                                        <textarea name="observaciones" class="form-control textarea-maxlength" id="observaciones"
+                                                                            placeholder="Ingrese alguna observación del paciente.." maxlength="250" rows="5"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12">
+                                                                <div class="form-group">
+                                                                    <label for="account-company">Comentario</label>
+                                                                    <div class="form-group">
+                                                                        <textarea name="comentario2" class="form-control textarea-maxlength" id="comentario2"
+                                                                            placeholder="Ingrese un comentario" maxlength="250" rows="3"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
                                                         </div>
-                                                  
-                                                    </div>
-                                               
+
                                                     </div>
 
 
@@ -476,11 +487,12 @@
                         </div>
 
                         <div class="form-actions right" id="div-btnes" style="text-align: right">
-                                                 
+
                             <button type="button" onclick="$.cancelarProCita();" class="btn btn-warning mr-1">
-                                <i class="feather icon-x"></i> Cancelar
+                                <i class="feather icon-corner-up-left"></i> Salir
                             </button>
-                            <button type="button" disabled id="btnAtras" onclick="$.atrasCita()" class="btn btn-info">
+                            <button type="button" style="display: none;" id="btnAtras" onclick="$.atrasCita()"
+                                class="btn btn-info">
                                 <i class="fa fa fa-arrow-left"></i> Atras
                             </button>
                             <button type="button" id="btnGuardar" onclick="$.continuar()" class="btn btn-success">
@@ -490,6 +502,109 @@
                         </div>
                         </form>
 
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="modal fade text-left" id="modalCitasDeta" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="media p-1">
+                            <div class="media-left pr-1"><span class="avatar avatar-online avatar-sm rounded-circle"><img src="../../../app-assets/images/FotosPacientes/avatar-s-1.png" alt="avatar"><i></i></span></div>
+                            <div class="media-body media-middle">
+                                <h5 class="media-heading">77097205 - Xiamir Luquez Ramirez</h5>
+                            </div>
+                        </div>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card-body">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="homeIcon-tab" data-toggle="tab" href="#infCita" aria-controls="homeIcon" role="tab" aria-selected="true"><i class="fa fa-calendar"></i> Detalle de la Cita</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="profileIcon-tab" data-toggle="tab" href="#infTrata" aria-controls="profileIcon" role="tab" aria-selected="false"><i class="fa fa-street-view"></i> Plan de tratamiento</a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link" data-toggle="tab" href="#infDatos" aria-haspopup="true">
+                                        <i class="fa fa-address-card-o"></i> Datos Personales</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="aboutIcon-tab" data-toggle="tab" href="#infReca" aria-controls="about" role="tab" aria-selected="false"><i class="fa feather icon-shopping-cart"></i> Recaudo</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content px-1 pt-1">
+                                <div class="tab-pane active" id="infCita" aria-labelledby="homeIcon-tab" role="tabpanel">
+                                    <div class="col-12">
+                                        <h5 class="mb-1"><i class="feather icon-info"></i> Información de la cita</h5>
+                                       
+                                        <table class="table table-borderless">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Username:</td>
+                                                    <td class="users-view-username">dean3004</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Name:</td>
+                                                    <td class="users-view-name">Dean Stanley</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>E-mail:</td>
+                                                    <td class="users-view-email">deanstanley@gmail.com</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Comapny:</td>
+                                                    <td>XYZ Corp. Ltd.</td>
+                                                </tr>
+    
+                                            </tbody>
+                                        </table>
+                                    
+                                  
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="infTrata" aria-labelledby="profileIcon-tab" role="tabpanel">
+                                    <p>Pudding candy canes sugar plum cookie chocolate cake powder croissant. Carrot cake tiramisu danish candy cake muffin croissant tart dessert. Tiramisu caramels candy canes chocolate cake sweet roll liquorice icing cupcake.</p>
+                                </div>
+                                <div class="tab-pane" id="infDatos" aria-labelledby="dropdownIcon1-tab" role="tabpanel">
+                                    <div class="col-12">
+                                      
+                                    
+                                        <h5 class="mb-1"><i class="feather icon-info"></i> Información Personal</h5>
+                                        <table class="table table-borderless mb-0">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Birthday:</td>
+                                                    <td>03/04/1990</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Country:</td>
+                                                    <td>USA</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Languages:</td>
+                                                    <td>English</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Contact:</td>
+                                                    <td>+(305) 254 24668</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="infReca" aria-labelledby="dropdownIcon2-tab" role="tabpanel">
+                                    <p>Chocolate croissant cupcake croissant jelly donut. Cheesecake toffee apple pie chocolate bar biscuit tart croissant. Lemon drops danish cookie. Oat cake macaroon icing tart lollipop cookie sweet bear claw.</p>
+                                </div>
+                                
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -560,8 +675,6 @@
             });
 
 
-           
-
 
             var fechaActual = new Date().toISOString().split("T")[0];
             var calendarE3 = document.getElementById("fc-agenda-views");
@@ -591,20 +704,22 @@
                     month: "Mes",
                     week: "Semana",
                     day: "Día",
+                    more: "Mas"
                 },
+              
                 eventRender: function(info) {
                     // Cambiar el tamaño de fuente de los eventos aquí
                     info.el.style.fontSize = '9px'; // Ajustar el tamaño de fuente según tus necesidades
-            
+
                     // Agregar el campo "prof" al contenido del evento
-                    console.log(info.event.extendedProps.idCita);
+
                     var prof = info.event.extendedProps.prof;
                     var id = info.event.extendedProps.id;
 
                     if (prof) {
                         var profElement = document.createElement('div');
                         profElement.className = 'fc-event-prof';
-                        profElement.textContent = 'Prof: '+prof;
+                        profElement.textContent = 'Prof: ' + prof;
 
 
                         info.el.appendChild(profElement);
@@ -612,11 +727,11 @@
                 },
                 eventClick: function(info) {
                     // Obtiene el valor del campo "id" del evento clicado
-                    
+
                     var idCita = info.event.extendedProps.idCita;
-                    
+
                     // Llama a una función y pasa el parámetro "id" específico
-                    miFuncionEspecifica(idCita);
+                    $.verCita(idCita);
                 },
                 slotDuration: '00:15:00', // Duración de cada intervalo en la vista semanal (aquí es de una hora)
                 slotLabelInterval: "00:15", // Mostrar etiquetas de hora cada una hora
@@ -656,20 +771,16 @@
                     month: "Mes",
                     week: "Semana",
                     day: "Día",
+                    more: "Mas" 
                 },
                 slotDuration: '00:15:00', // Duración de cada intervalo en la vista semanal (aquí es de una hora)
                 slotLabelInterval: "00:15", // Mostrar etiquetas de hora cada una hora
                 minTime: "07:00:00",
                 maxTime: "19:00:00",
                 locale: "es",
-                {{--  events: disponibilidadJSON,  --}}
                 dateClick: function(event) {
                     console.log('clicked on the date: ', event);
                     if (event) {
-
-                        fcAgendaViews2.removeAllEvents();
-                        fcAgendaViews2.addEventSource(disponibilidadJSON);
-
                         var duracionCita = parseInt(document.getElementById('duracionCita').value);
                         var nuevaCitaStart = new Date(event.date);
                         var nuevaCitaEnd = new Date(nuevaCitaStart.getTime() + duracionCita *
@@ -683,11 +794,38 @@
                         });
 
                         if (seSuperpone) {
-                            alert(
-                                'La nueva cita se superpone con una cita existente. Por favor, elige otra hora.'
-                            );
+                            Swal.fire({
+                                type: "warning",
+                                title: "Oops...",
+                                text: "La nueva cita se superpone con alguna cita existente, verifica la duración de la nueva",
+                                confirmButtonClass: "btn btn-primary",
+                                buttonsStyling: false
+                            });
                             return;
                         }
+                        if ($("#profesional").val() == "") {
+                            Swal.fire({
+                                type: "warning",
+                                title: "Oops...",
+                                text: "Debes de seleccionar el profesional",
+                                confirmButtonClass: "btn btn-primary",
+                                buttonsStyling: false
+                            });
+                            return;
+                            fcAgendaViews2.removeAllEvents();
+                        }
+                        if ($("#motivo").val() == "") {
+                            Swal.fire({
+                                type: "warning",
+                                title: "Oops...",
+                                text: "Debes de seleccionar el motivo de la consulta",
+                                confirmButtonClass: "btn btn-primary",
+                                buttonsStyling: false
+                            });
+                            return;
+                        }
+
+
 
                         let motivo = document.getElementById('motivo').value;
 
@@ -788,14 +926,16 @@
                     backdrop: 'static',
                     keyboard: false
                 });
+               
                 $('#fechaHoraSelCita').val("");
                 $.cargarProfesionales();
+                fcAgendaViews2.removeAllEvents();
                 // Puedes reemplazar la alerta con la acción que desees realizar.
             });
 
             $.extend({
 
-                cargarCita: function(){
+                cargarCita: function() {
                     var form = $("#formCargarCitas");
                     $("#idProf").remove();
                     var url = form.attr("action");
@@ -886,7 +1026,7 @@
 
                     $.atrasCita();
                 },
-                clearImage: function(){
+                clearImage: function() {
                     const previewImage = document.getElementById('previewImage');
                     previewImage.src = '../../../app-assets/images/FotosPacientes/avatar-s-1.png';
                 },
@@ -907,37 +1047,38 @@
                     $.cargarPacientes();
                     document.getElementById("calendaCita").style = "display: none";
                     document.getElementById("calendaCitaPaci").style = "display: block";
-                    var btm_atras = document.getElementById("btnAtras");
+
                     var btnGuardar = document.getElementById("btnGuardar");
-                    btm_atras.disabled = false;
+                    var btm_atras = document.getElementById("btnAtras");
+                    btm_atras.style.display = "initial";
                     btnGuardar.textContent = " Confirmar Cita";
                     var iconElement = document.createElement('i');
                     iconElement.className = 'fa fa-check';
 
-                    btnGuardar.insertBefore(iconElement, btnGuardar.firstChild); 
+                    btnGuardar.insertBefore(iconElement, btnGuardar.firstChild);
 
                     btnGuardar.onclick = function() {
                         $.guardarCita(2);
                     };
                 },
 
-                atrasCita: function () {
+                atrasCita: function() {
                     document.getElementById("calendaCita").style = "display: block";
                     document.getElementById("calendaCitaPaci").style = "display: none";
-                   
-                 var btm_atras = document.getElementById("btnAtras");
-                 btm_atras.disabled = true;
-                 var btnGuardar = document.getElementById("btnGuardar");
-                 btnGuardar.textContent = " Continuar";
-                 btnGuardar.disabled = false;
+                    var btm_atras = document.getElementById("btnAtras");
+                    btm_atras.style.display = "none";
+                    
+                    var btnGuardar = document.getElementById("btnGuardar");
+                    btnGuardar.textContent = " Continuar";
+                    btnGuardar.disabled = false;
 
-                 var iconElement = document.createElement('i');
-                 iconElement.className = 'fa fa fa-arrow-right';
-                 btnGuardar.insertBefore(iconElement, btnGuardar.firstChild); 
+                    var iconElement = document.createElement('i');
+                    iconElement.className = 'fa fa fa-arrow-right';
+                    btnGuardar.insertBefore(iconElement, btnGuardar.firstChild);
 
-                 btnGuardar.onclick = function() {
-                    $.continuar();
-                };
+                    btnGuardar.onclick = function() {
+                        $.continuar();
+                    };
                 },
                 cargarDisponibilidad: function(id) {
 
@@ -972,13 +1113,13 @@
                     fcAgendaViews2.addEventSource(disponibilidadJSON);
 
                 },
-                selecPaciente: function(id){
+                selecPaciente: function(id) {
                     $("#idPaciente").val(id);
                     document.getElementById("div-tratamiento").style = "display: block;";
                 },
-                guardarCita: function(opc) { 
+                guardarCita: function(opc) {
 
-                   
+
                     var notCli;
                     if ($("#profesional").val().trim() === "") {
                         Swal.fire({
@@ -1022,7 +1163,7 @@
                         notCli = "no";
                     }
 
-                    if(opc==1){
+                    if (opc == 1) {
 
                         if ($("#tipoId").val().trim() === "") {
                             Swal.fire({
@@ -1046,7 +1187,7 @@
                             });
                             return;
                         }
-    
+
                         if ($("#nombre").val().trim() === "") {
                             Swal.fire({
                                 type: "warning",
@@ -1058,7 +1199,7 @@
                             });
                             return;
                         }
-    
+
                         if ($("#apellido").val().trim() === "") {
                             Swal.fire({
                                 type: "warning",
@@ -1091,7 +1232,7 @@
                     var token = $("#token").val();
                     var idPac = $("#idPaciente").val()
                     $("#idtoken").remove();
-                    
+
                     $("#idpac").remove();
                     $("#opc").remove();
                     $("#notCliente").remove();
@@ -1100,10 +1241,10 @@
                     form.append("<input type='hidden' id='idpac' name='idpac'  value='" + idPac +
                         "'>");
                     form.append("<input type='hidden' id='notCliente' name='notCliente'  value='" +
-                            notCli +
+                        notCli +
                         "'>");
                     form.append("<input type='hidden' id='opc' name='opc'  value='" +
-                    opc +
+                        opc +
                         "'>");
 
                     $.ajax({
@@ -1123,9 +1264,9 @@
                                     buttonsStyling: false
                                 });
 
-                                var btnGuardar = document.getElementById("btnGuardar");
-                                btnGuardar.disabled = true;
-                                
+                                $.habNueva();
+
+
                                 var loader = document.getElementById('loader');
                                 loader.style.display = 'none';
                             }
@@ -1144,13 +1285,37 @@
                         }
                     });
                 },
-           
+                habNueva: function() {
+                    var btnGuardar = document.getElementById("btnGuardar");
+                    btnGuardar.textContent = " Nueva Cita";
+                    btnGuardar.disabled = false;
+
+                    var btm_atras = document.getElementById("btnAtras");
+                    btm_atras.style.display = "none";
+
+                    var iconElement = document.createElement('i');
+                    iconElement.className = 'fa fa-calendar-plus-o'; 
+                    btnGuardar.insertBefore(iconElement, btnGuardar.firstChild);
+
+                    btnGuardar.onclick = function() {
+                        $.nevaCita();
+                    };
+                },
+                nevaCita: function() {
+                    fcAgendaViews2.removeAllEvents();
+
+                    $('#profesional').val("").trigger('change.select2');
+                    $('#motivo').val("").trigger('change.select2');
+                    $('#duracion').val("15").trigger('change.select2');
+                    $('#fechaHoraSelCita').val("");
+                    $.atrasCita();
+                },
                 habPacNuevo: function() {
                     var btnGuardar = document.getElementById("btnGuardar");
                     btnGuardar.onclick = function() {
                         $.guardarCita(1);
                     };
-                   
+
                 },
                 habPacExist: function() {
                     var btnGuardar = document.getElementById("btnGuardar");
@@ -1189,6 +1354,12 @@
                         }
                     });
                 },
+                verCita: function(idCita){
+                    $("#modalCitasDeta").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+                }
             });
 
             $.cargarCita();
