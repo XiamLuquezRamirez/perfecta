@@ -710,10 +710,7 @@
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
-    <form action="{{ url('/AdminPacientes/ValidarPacientes') }}" id="formValidarPacientes" method="POST">
-        @csrf
-        <!-- Tus campos del formulario aquí -->
-    </form>
+
     <form action="{{ url('/AdminPacientes/BuscarPacientes') }}" id="formBuscarPaciente" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->

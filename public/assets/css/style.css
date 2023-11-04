@@ -43,3 +43,10 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 .fc-time {
     font-size: 9px; /* Ajusta el tamaño de fuente según tus necesidades */
 }
+.fc-event-prof {
+    font-size: 9px; /* Ajusta el tamaño de fuente según tus necesidades */
+	color: #FFF;
+	padding: 0 1px;
+	box-sizing: content-box;
+
+}

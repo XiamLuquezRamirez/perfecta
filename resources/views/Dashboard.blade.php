@@ -131,7 +131,6 @@
 
                             <form class="form" method="post" id="formGuardarCita"
                                 action="{{ url('/') }}/AdminCitas/GuardarCita">
-
                             
                                 <div class="row">
                                     <div class="col-4">
@@ -277,12 +276,11 @@
                                                         </div>
                                                     </div>
                                                     <div class="tab-pane in" id="profileIcon"
-                                                    <form class="form" method="post" id="formGuardar"
-                                                    action="{{ url('/') }}/AdminPacientes/GuardarPaciente">
+                                                 
 
                                                     <input type="hidden" name="idPaciente" id="idPaciente"
                                                         value="">
-                                                    <input type="hidden" name="accion" id="accion" value="">
+                                                    <input type="hidden" name="accion" id="accion" value="agregar">
                                                     <input type="hidden" name="fotoCargada" id="fotoCargada"
                                                         value="">
                                                     <div id='div-media' class="media">
@@ -301,7 +299,7 @@
                                                                     id="account-upload" hidden>
                                                                 <button type="button"
                                                                     class="btn btn-sm btn-secondary ml-50"
-                                                                    onclick="clearImage()">Limpiar</button>
+                                                                    onclick="$.clearImage()">Limpiar</button>
                                                             </div>
                                                             <p class="text-muted ml-75 mt-50"><small>Solo JPG, GIF o PNG.
                                                                     Tam. Max. de 800kB</small></p>
@@ -459,7 +457,7 @@
                                                         </div>
                                                   
                                                     </div>
-                                                </form> 
+                                               
                                                     </div>
 
 
@@ -517,6 +515,11 @@
         <!-- Tus campos del formulario aquí -->
     </form>
 
+    <form action="{{ url('/AdminPacientes/ValidarPacientes') }}" id="formValidarPacientes" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+
 @endsection
 
 @section('scripts')
@@ -545,6 +548,20 @@
                 checkboxClass: 'icheckbox_flat-green',
                 radioClass: 'iradio_flat-green'
             });
+
+            document.getElementById('account-upload').addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                const previewImage = document.getElementById('previewImage');
+
+                if (file) {
+                    const imageUrl = URL.createObjectURL(file);
+                    previewImage.src = imageUrl;
+                }
+            });
+
+
+           
+
 
             var fechaActual = new Date().toISOString().split("T")[0];
             var calendarE3 = document.getElementById("fc-agenda-views");
@@ -576,8 +593,30 @@
                     day: "Día",
                 },
                 eventRender: function(info) {
-                    // Cambia el tamaño de fuente de los eventos aquí
-                    info.el.style.fontSize = '12px'; // Ajusta el tamaño de fuente según tus necesidades
+                    // Cambiar el tamaño de fuente de los eventos aquí
+                    info.el.style.fontSize = '9px'; // Ajustar el tamaño de fuente según tus necesidades
+            
+                    // Agregar el campo "prof" al contenido del evento
+                    console.log(info.event.extendedProps.idCita);
+                    var prof = info.event.extendedProps.prof;
+                    var id = info.event.extendedProps.id;
+
+                    if (prof) {
+                        var profElement = document.createElement('div');
+                        profElement.className = 'fc-event-prof';
+                        profElement.textContent = 'Prof: '+prof;
+
+
+                        info.el.appendChild(profElement);
+                    }
+                },
+                eventClick: function(info) {
+                    // Obtiene el valor del campo "id" del evento clicado
+                    
+                    var idCita = info.event.extendedProps.idCita;
+                    
+                    // Llama a una función y pasa el parámetro "id" específico
+                    miFuncionEspecifica(idCita);
                 },
                 slotDuration: '00:15:00', // Duración de cada intervalo en la vista semanal (aquí es de una hora)
                 slotLabelInterval: "00:15", // Mostrar etiquetas de hora cada una hora
@@ -775,12 +814,15 @@
                                     "start": item.inicio,
                                     "end": item.final,
                                     "title": item.nombre + " " + item.apellido,
-                                    "id": item.id
+                                    "prof": item.nomprof,
+                                    "idCita": item.id
                                 };
                             });
                         }
 
                     });
+
+                    console.log(disponibilidadJSON);
 
                     fcAgendaViews.removeAllEvents();
                     fcAgendaViews.addEventSource(disponibilidadJSON);
@@ -844,6 +886,10 @@
 
                     $.atrasCita();
                 },
+                clearImage: function(){
+                    const previewImage = document.getElementById('previewImage');
+                    previewImage.src = '../../../app-assets/images/FotosPacientes/avatar-s-1.png';
+                },
                 continuar: function() {
 
                     if ($("#fechaHoraSelCita").val().trim() == "") {
@@ -871,7 +917,7 @@
                     btnGuardar.insertBefore(iconElement, btnGuardar.firstChild); 
 
                     btnGuardar.onclick = function() {
-                        $.guardarCita();
+                        $.guardarCita(2);
                     };
                 },
 
@@ -883,6 +929,7 @@
                  btm_atras.disabled = true;
                  var btnGuardar = document.getElementById("btnGuardar");
                  btnGuardar.textContent = " Continuar";
+                 btnGuardar.disabled = false;
 
                  var iconElement = document.createElement('i');
                  iconElement.className = 'fa fa fa-arrow-right';
@@ -929,7 +976,9 @@
                     $("#idPaciente").val(id);
                     document.getElementById("div-tratamiento").style = "display: block;";
                 },
-                guardarCita: function() {
+                guardarCita: function(opc) { 
+
+                   
                     var notCli;
                     if ($("#profesional").val().trim() === "") {
                         Swal.fire({
@@ -966,7 +1015,6 @@
                     }
 
                     const notifCliente = document.getElementById('notifCliente');
-                    
 
                     if (notifCliente.checked) {
                         notCli = "si";
@@ -974,26 +1022,88 @@
                         notCli = "no";
                     }
 
+                    if(opc==1){
+
+                        if ($("#tipoId").val().trim() === "") {
+                            Swal.fire({
+                                type: "warning",
+                                title: "Oops...",
+                                text: "Debes de seleccionar tipo de indetificación",
+                                confirmButtonClass: "btn btn-primary",
+                                timer: 1500,
+                                buttonsStyling: false
+                            });
+                            return;
+                        }
+                        if ($("#identificacion").val().trim() === "") {
+                            Swal.fire({
+                                type: "warning",
+                                title: "Oops...",
+                                text: "Debes de ingresar el numero de indetificación",
+                                confirmButtonClass: "btn btn-primary",
+                                timer: 1500,
+                                buttonsStyling: false
+                            });
+                            return;
+                        }
+    
+                        if ($("#nombre").val().trim() === "") {
+                            Swal.fire({
+                                type: "warning",
+                                title: "Oops...",
+                                text: "Debes de ingresar el nombre del paciente",
+                                confirmButtonClass: "btn btn-primary",
+                                timer: 1500,
+                                buttonsStyling: false
+                            });
+                            return;
+                        }
+    
+                        if ($("#apellido").val().trim() === "") {
+                            Swal.fire({
+                                type: "warning",
+                                title: "Oops...",
+                                text: "Debes de ingresar el apellido del paciente",
+                                confirmButtonClass: "btn btn-primary",
+                                timer: 1500,
+                                buttonsStyling: false
+                            });
+                            return;
+                        }
+                        if ($("#telefono").val().trim() === "") {
+                            Swal.fire({
+                                type: "warning",
+                                title: "Oops...",
+                                text: "Debes de ingresar el teléfono del paciente",
+                                confirmButtonClass: "btn btn-primary",
+                                timer: 1500,
+                                buttonsStyling: false
+                            });
+                            return;
+                        }
+                    }
+
                     var loader = document.getElementById('loader');
                     loader.style.display = 'block';
 
                     var form = $("#formGuardarCita");
                     var url = form.attr("action");
-                    var accion = $("#accion").val();
                     var token = $("#token").val();
                     var idPac = $("#idPaciente").val()
                     $("#idtoken").remove();
-                    $("#accion").remove();
+                    
                     $("#idpac").remove();
+                    $("#opc").remove();
                     $("#notCliente").remove();
-                    form.append("<input type='hidden' id='accion' name='accion'  value='" + accion +
-                        "'>");
                     form.append("<input type='hidden' id='idtoken' name='_token'  value='" + token +
                         "'>");
                     form.append("<input type='hidden' id='idpac' name='idpac'  value='" + idPac +
                         "'>");
                     form.append("<input type='hidden' id='notCliente' name='notCliente'  value='" +
                             notCli +
+                        "'>");
+                    form.append("<input type='hidden' id='opc' name='opc'  value='" +
+                    opc +
                         "'>");
 
                     $.ajax({
@@ -1034,23 +1144,78 @@
                         }
                     });
                 },
+           
                 habPacNuevo: function() {
-                    var div_btnes = document.getElementById("div-btnes");
-                    div_btnes.style.pointerEvents = "none";
-                    div_btnes.style.textAlign = "right";
+                    var btnGuardar = document.getElementById("btnGuardar");
+                    btnGuardar.onclick = function() {
+                        $.guardarCita(1);
+                    };
                    
                 },
                 habPacExist: function() {
-                    var div_btnes = document.getElementById("div-btnes");
-                    div_btnes.style.pointerEvents = "auto";
-                    div_btnes.style.textAlign = "right";
-                }
-            });
+                    var btnGuardar = document.getElementById("btnGuardar");
+                    btnGuardar.onclick = function() {
+                        $.guardarCita(2);
+                    };
+                },
+                validaIdentificacion: function(valida) {
+                    var form = $("#formValidarPacientes");
+                    var url = form.attr("action");
+                    $('#idPac').remove();
+                    form.append("<input type='hidden' id='idPac' name='idPac'  value='" + valida +
+                        "'>");
+                    var datos = form.serialize();
 
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(response) {
+                            if (response.existe === "si") {
+                                Swal.fire({
+                                    type: "warning",
+                                    title: "Oops...",
+                                    text: "Esta identificación se enuentra registrada",
+                                    confirmButtonClass: "btn btn-primary",
+                                    timer: 1500,
+                                    buttonsStyling: false
+                                });
+                                $("#identificacion").val("");
+                                return;
+                            }
+
+                        }
+                    });
+                },
+            });
 
             $.cargarCita();
 
-        })
+        });
+
+        function validartxtnum(e) {
+            tecla = e.which || e.keyCode;
+            patron = /[0-9]+$/;
+            te = String.fromCharCode(tecla);
+            //    if(e.which==46 || e.keyCode==46) {
+            //        tecla = 44;
+            //    }
+            return (patron.test(te) || tecla == 9 || tecla == 8 || tecla == 37 || tecla == 39 || tecla == 44);
+        }
+
+        function validartxt(e) {
+            tecla = e.which || e.keyCode;
+            patron = /[a-zA-Z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF\s]+$/;
+            te = String.fromCharCode(tecla);
+            return (patron.test(te) || tecla == 9 || tecla == 8 || tecla == 37 || tecla == 39 || tecla == 46);
+        }
+
+        function miFuncionEspecifica(id) {
+            // Haz lo que necesites con el parámetro "id"
+            console.log("Evento con ID: " + id + " ha sido clicado.");
+        }
     </script>
 
     </script>

@@ -29,15 +29,15 @@
                                 class="badge badge-pill badge-danger badge-up">5</span></a>
                         <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
                             <li class="dropdown-menu-header">
-                                <h6 class="dropdown-header m-0"><span class="grey darken-2">Notifications</span><span
-                                        class="notification-tag badge badge-danger float-right m-0">5 New</span></h6>
+                                <h6 class="dropdown-header m-0"><span class="grey darken-2">Notificationes</span><span
+                                        class="notification-tag badge badge-danger float-right m-0">5 Nuevas</span></h6>
                             </li>
                             <li class="scrollable-container media-list"><a href="javascript:void(0)">
                                     <div class="media">
                                         <div class="media-left align-self-center"><i
                                                 class="feather icon-plus-square icon-bg-circle bg-cyan"></i></div>
                                         <div class="media-body">
-                                            <h6 class="media-heading">You have new order!</h6>
+                                            <h6 class="media-heading">Recaudacion: Xiamir Luquez</h6>
                                             <p class="notification-text font-small-3 text-muted">Lorem ipsum dolor sit
                                                 amet, consectetuer elit.</p><small>
                                                 <time class="media-meta text-muted"

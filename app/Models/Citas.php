@@ -21,7 +21,8 @@ class Citas extends Model
     {
         return DB::connection('mysql')->table('citas')
             ->join('pacientes', 'citas.paciente', '=', 'pacientes.id')
-            ->select('citas.*', 'pacientes.nombre', 'pacientes.apellido')
+            ->join('profesionales', 'citas.profesional', 'profesionales.id')
+            ->select('citas.*', 'pacientes.nombre', 'pacientes.apellido', 'profesionales.nombre AS nomprof')
             ->where('citas.estado', 'Activa')
             ->get();
     }
