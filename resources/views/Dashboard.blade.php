@@ -507,15 +507,19 @@
 
             </div>
         </div>
-        <div class="modal fade text-left" id="modalCitasDeta" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1"
-            aria-hidden="true">
+        <div class="modal fade text-left" id="modalCitasDeta" tabindex="-1" role="dialog"
+            aria-labelledby="myModalLabel1" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <div class="media p-1">
-                            <div class="media-left pr-1"><span class="avatar avatar-online avatar-sm rounded-circle"><img src="../../../app-assets/images/FotosPacientes/avatar-s-1.png" alt="avatar"><i></i></span></div>
+                            <div class="media-left pr-1"><span class="avatar avatar-online avatar-sm rounded-circle"
+                                    style="width: 60px !important;  height: 60px !important;"><img
+                                        src="../../../app-assets/images/FotosPacientes/avatar-s-1.png"
+                                        alt="avatar"><i></i></span></div>
                             <div class="media-body media-middle">
                                 <h5 class="media-heading">77097205 - Xiamir Luquez Ramirez</h5>
+                                <p>Edad: 25 Años</p>
                             </div>
                         </div>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -526,83 +530,131 @@
                         <div class="card-body">
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="homeIcon-tab" data-toggle="tab" href="#infCita" aria-controls="homeIcon" role="tab" aria-selected="true"><i class="fa fa-calendar"></i> Detalle de la Cita</a>
+                                    <a class="nav-link active" id="homeIcon-tab" data-toggle="tab" href="#infCita"
+                                        aria-controls="homeIcon" role="tab" aria-selected="true"><i
+                                            class="fa fa-calendar"></i> Detalle de la Cita</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="profileIcon-tab" data-toggle="tab" href="#infTrata" aria-controls="profileIcon" role="tab" aria-selected="false"><i class="fa fa-street-view"></i> Plan de tratamiento</a>
+                                    <a class="nav-link" id="profileIcon-tab" data-toggle="tab" href="#infTrata"
+                                        aria-controls="profileIcon" role="tab" aria-selected="false"><i
+                                            class="fa fa-street-view"></i> Plan de tratamiento</a>
                                 </li>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link" data-toggle="tab" href="#infDatos" aria-haspopup="true">
                                         <i class="fa fa-address-card-o"></i> Datos Personales</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="aboutIcon-tab" data-toggle="tab" href="#infReca" aria-controls="about" role="tab" aria-selected="false"><i class="fa feather icon-shopping-cart"></i> Recaudo</a>
+                                    <a class="nav-link" id="aboutIcon-tab" data-toggle="tab" href="#infReca"
+                                        aria-controls="about" role="tab" aria-selected="false"><i
+                                            class="fa feather icon-shopping-cart"></i> Recaudo</a>
                                 </li>
                             </ul>
                             <div class="tab-content px-1 pt-1">
-                                <div class="tab-pane active" id="infCita" aria-labelledby="homeIcon-tab" role="tabpanel">
+                                <div class="tab-pane active" id="infCita" aria-labelledby="homeIcon-tab"
+                                    role="tabpanel">
                                     <div class="col-12">
                                         <h5 class="mb-1"><i class="feather icon-info"></i> Información de la cita</h5>
-                                       
                                         <table class="table table-borderless">
                                             <tbody>
                                                 <tr>
-                                                    <td>Username:</td>
-                                                    <td class="users-view-username">dean3004</td>
+                                                    <td>Motivo de la cita:</td>
+                                                    <td id="motivoCita"></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Name:</td>
-                                                    <td class="users-view-name">Dean Stanley</td>
+                                                    <td>Profesional:</td>
+                                                    <td id="profesionalCita"></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>E-mail:</td>
-                                                    <td class="users-view-email">deanstanley@gmail.com</td>
+                                                    <td>Fecha y hora de Inicio:</td>
+                                                    <td id="inicioCita">deanstanley@gmail.com</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Comapny:</td>
-                                                    <td>XYZ Corp. Ltd.</td>
+                                                    <td>Fecha y hora de finalización:</td>
+                                                    <td id="finalcita"></td>
                                                 </tr>
-    
+                                                <tr>
+                                                    <td>Comentario:</td>
+                                                    <td id="cometarioCita">Sin Comentario</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Cambiar estado:</td>
+                                                    <td id="final">
+                                                        <select class="select2-bg form-control" onchange="$.cambioEstado(this.value);" id="bg-select">
+                                                            <option value="Por Atender" class="por-atender">Por Atender</option>
+                                                            <option value="Atendida" class="atendida">Atendida</option>
+                                                            <option value="Confirmada" class="confirmada">Confirmada</option>
+                                                            <option value="No Confirmada" class="no-confirmada">No Confirmada</option>
+                                                            <option value="Anulada" class="anulada">Anulada</option>
+                                                        </select>
+                                                        
+                                                    </td>
+                                                </tr>
+                                                <tr>
+
+                                                    <td colspan="2">
+                                                        <div class="form-actions right">
+                                                            <button type="button" class="btn btn-warning mr-1">
+                                                                <i class="  feather icon-bell"></i> Notificar al Cliente
+                                                            </button>
+                                                            <button type="submit" class="btn btn-primary">
+                                                                <i class="feather icon-message-square"></i> Agregar
+                                                                Comentario
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
                                             </tbody>
                                         </table>
-                                    
-                                  
+
+
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="infTrata" aria-labelledby="profileIcon-tab" role="tabpanel">
-                                    <p>Pudding candy canes sugar plum cookie chocolate cake powder croissant. Carrot cake tiramisu danish candy cake muffin croissant tart dessert. Tiramisu caramels candy canes chocolate cake sweet roll liquorice icing cupcake.</p>
+                                    <p>Listado tratamiento</p>
                                 </div>
-                                <div class="tab-pane" id="infDatos" aria-labelledby="dropdownIcon1-tab" role="tabpanel">
+                                <div class="tab-pane" id="infDatos" aria-labelledby="dropdownIcon1-tab"
+                                    role="tabpanel">
                                     <div class="col-12">
-                                      
-                                    
+
+
                                         <h5 class="mb-1"><i class="feather icon-info"></i> Información Personal</h5>
                                         <table class="table table-borderless mb-0">
                                             <tbody>
                                                 <tr>
-                                                    <td>Birthday:</td>
-                                                    <td>03/04/1990</td>
+                                                    <td>Identificación:</td>
+                                                    <td id="identificacionCita"></td>
+                                                    <td>nombre:</td>
+                                                    <td id="nombreCita"></td>
                                                 </tr>
+                                             
                                                 <tr>
-                                                    <td>Country:</td>
-                                                    <td>USA</td>
+                                                    <td>Sexo:</td>
+                                                    <td id="sexoCita"></td>
+                                                    <td>Fecha Nacimiento:</td>
+                                                    <td id="nacimientoCita"></td>
                                                 </tr>
+                                               
                                                 <tr>
-                                                    <td>Languages:</td>
-                                                    <td>English</td>
+                                                    <td>Teléfono:</td>
+                                                    <td id="telefonoCita"></td>
+                                                    <td>Email:</td>
+                                                    <td id="emailCita"></td>
                                                 </tr>
+                                              
                                                 <tr>
-                                                    <td>Contact:</td>
-                                                    <td>+(305) 254 24668</td>
+                                                    <td>Dirección:</td>
+                                                    <td id="direccionCita" colspan="3"></td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
-                                <div class="tab-pane" id="infReca" aria-labelledby="dropdownIcon2-tab" role="tabpanel">
-                                    <p>Chocolate croissant cupcake croissant jelly donut. Cheesecake toffee apple pie chocolate bar biscuit tart croissant. Lemon drops danish cookie. Oat cake macaroon icing tart lollipop cookie sweet bear claw.</p>
+                                <div class="tab-pane" id="infReca" aria-labelledby="dropdownIcon2-tab"
+                                    role="tabpanel">
+                                    <p>Listado recaudo</p>
                                 </div>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -634,6 +686,10 @@
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
+    <form action="{{ url('/AdminCitas/VerDetallesCita') }}" id="formVerDetallesCita" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
 
 @endsection
 
@@ -654,6 +710,16 @@
                 }
 
             ];
+
+
+            $('#bg-select').select2();
+
+            $('#bg-select').on('change', function() {
+                var selectedOption = $(this).find('option:selected');
+                var selectedClass = selectedOption.attr('class');
+                $(this).css('background-color', selectedOption.css('background-color'));
+                $(this).css('color', selectedOption.css('color'));
+            });
 
             $('.date-inputmask').inputmask("dd/mm/yyyy");
 
@@ -706,7 +772,7 @@
                     day: "Día",
                     more: "Mas"
                 },
-              
+
                 eventRender: function(info) {
                     // Cambiar el tamaño de fuente de los eventos aquí
                     info.el.style.fontSize = '9px'; // Ajustar el tamaño de fuente según tus necesidades
@@ -771,7 +837,7 @@
                     month: "Mes",
                     week: "Semana",
                     day: "Día",
-                    more: "Mas" 
+                    more: "Mas"
                 },
                 slotDuration: '00:15:00', // Duración de cada intervalo en la vista semanal (aquí es de una hora)
                 slotLabelInterval: "00:15", // Mostrar etiquetas de hora cada una hora
@@ -926,7 +992,7 @@
                     backdrop: 'static',
                     keyboard: false
                 });
-               
+
                 $('#fechaHoraSelCita').val("");
                 $.cargarProfesionales();
                 fcAgendaViews2.removeAllEvents();
@@ -1067,7 +1133,7 @@
                     document.getElementById("calendaCitaPaci").style = "display: none";
                     var btm_atras = document.getElementById("btnAtras");
                     btm_atras.style.display = "none";
-                    
+
                     var btnGuardar = document.getElementById("btnGuardar");
                     btnGuardar.textContent = " Continuar";
                     btnGuardar.disabled = false;
@@ -1294,7 +1360,7 @@
                     btm_atras.style.display = "none";
 
                     var iconElement = document.createElement('i');
-                    iconElement.className = 'fa fa-calendar-plus-o'; 
+                    iconElement.className = 'fa fa-calendar-plus-o';
                     btnGuardar.insertBefore(iconElement, btnGuardar.firstChild);
 
                     btnGuardar.onclick = function() {
@@ -1354,11 +1420,127 @@
                         }
                     });
                 },
-                verCita: function(idCita){
+                verCita: function(idCita) {
                     $("#modalCitasDeta").modal({
                         backdrop: 'static',
                         keyboard: false
                     });
+
+
+                    var form = $("#formVerDetallesCita");
+                    var url = form.attr("action");
+                    $('#idCita').remove();
+                    form.append("<input type='hidden' id='idCita' name='idCita'  value='" + idCita +
+                        "'>");
+                    var datos = form.serialize();
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(response) {
+                            //datos de citas
+                            console.log(response.detaCita.motivo);
+                            $("#motivoCita").html(response.detaCita.motivo);
+                            $("#profesionalCita").html(response.detaCita.nomprof);
+                            var nuevoFormatoIni = $.convertirFormato(response.detaCita.inicio);
+                            $("#inicioCita").html(nuevoFormatoIni);
+                            var nuevoFormatoFinal = $.convertirFormato(response.detaCita.final);
+                            $("#finalcita").html(nuevoFormatoFinal);
+                            $("#cometarioCita").html(response.detaCita.comentario);
+                            //datos de paciente
+                            $("#identificacionCita").html(response.paciente.tipo_identificacion+" "+response.paciente.identificacion);
+                            $("#nombreCita").html(response.paciente.nombre+" "+response.paciente.apellido);
+                            $("#sexoCita").html(response.paciente.sexo);
+                            var fechNaci = $.convertirFormatoNac(response.paciente.fecha_nacimiento);
+                            $("#nacimientoCita").html(fechNaci);
+                            $("#emailCita").html(response.paciente.email);
+                            $("#telefonoCita").html(response.paciente.telefono);
+                            $("#direccionCita").html(response.paciente.direccion);
+
+
+
+                            //datos de tratameintos
+
+
+                            //datos de recaudo
+
+                        }
+                    });
+
+                },
+                convertirFormato: function(fechaHora) {
+                    // Crear un objeto Date a partir de la cadena de fecha y hora
+                    var fecha = new Date(fechaHora);
+
+                    // Obtener los componentes de la fecha y la hora
+                    var dia = fecha.getDate();
+                    var mes = fecha.getMonth() + 1; // Los meses comienzan desde 0, por lo que sumamos 1
+                    var anio = fecha.getFullYear();
+                    var horas = fecha.getHours();
+                    var minutos = fecha.getMinutes();
+                    var ampm = horas >= 12 ? 'PM' : 'AM';
+
+                    // Formatear los componentes en el nuevo formato
+                    horas = horas % 12;
+                    horas = horas ? horas : 12; // Si es 0, cambiar a 12
+                    minutos = minutos < 10 ? '0' + minutos : minutos;
+
+                    // Crear la cadena formateada
+                    var nuevoFormato = `${dia}/${mes}/${anio} ${horas}:${minutos} ${ampm}`;
+
+                    return nuevoFormato;
+                },
+                convertirFormatoNac: function(fecha) {
+                    // Crear un objeto Date a partir de la cadena de fecha y hora
+                    var fecha = new Date(fecha);
+
+                    // Obtener los componentes de la fecha y la hora
+                    var dia = fecha.getDate();
+                    var mes = fecha.getMonth() + 1; // Los meses comienzan desde 0, por lo que sumamos 1
+                    var anio = fecha.getFullYear();
+
+                   
+
+                    // Crear la cadena formateada
+                    var nuevoFormato = `${dia}/${mes}/${anio}`;
+
+                    return nuevoFormato;
+                },
+                cambioEstado: function(estado){
+
+                    Swal.fire({
+                        title: "Esta seguro de cambiar el estado a "+estado+" ?",
+                        text: "¡No podrás revertir esto!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Si, cambiar!",
+                        cancelButtonText: "Cancelar",
+                        confirmButtonClass: "btn btn-warning",
+                        cancelButtonClass: "btn btn-danger ml-1",
+                        buttonsStyling: false
+                    }).then(function(result) {
+                        if (result.value) {
+                            $.procederCambiarEstado(estado);
+                            $.cargarCita();
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                            Swal.fire({
+                                title: "Cancelado",
+                                text: "La cita no ha cambiado ;)",
+                                type: "error",
+                                confirmButtonClass: "btn btn-success"
+                            });
+                        }
+                    });
+
+                },
+                procederCambiarEstado: function(estado){
+                    var idcita = $("#idCita").val();
+
                 }
             });
 

@@ -88,7 +88,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link d-flex disabled" id="account-pill-citas" data-toggle="pill"
+                                    <a class="nav-link d-flex disabled"  onclick="$.cargarCitas();" id="account-pill-citas" data-toggle="pill"
                                         href="#account-vertical-citas" aria-expanded="false">
                                         <i class="fa fa-calendar-check-o"></i>
                                         Citas
@@ -353,10 +353,8 @@
                                                                                 consulta</span>
                                                                         </th>
                                                                         <th>Profesional</th>
-                                                                        <th>Fecha</th>
-                                                                        <th>Hora</th>
+                                                                        <th>Fecha y Hora</th>
                                                                         <th>Estado</th>
-                                                                        <th>Acción</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody id="trRegistrosCitas">
@@ -598,57 +596,40 @@
                                             <div class="tab-pane fade " id="account-vertical-tratamiento" role="tabpanel"
                                                 aria-labelledby="account-pill-social" aria-expanded="false">
                                                 <form>
-                                                    <div class="row">
-                                                        <div class="col-12">
-                                                            <div class="form-group">
-                                                                <label for="account-twitter">Twitter</label>
-                                                                <input type="text" id="account-twitter"
-                                                                    class="form-control" placeholder="Add link"
-                                                                    value="https://www.twitter.com">
+                                                    <div class="card-header">
+                                                        <h4 class="card-title">Planes de tratamiento</h4>
+                                                        <div class="heading-elements mt-0">
+                                                            <button class="btn btn-primary btn-md" data-toggle="modal" data-target="#AddContactModal"><i class="d-md-none d-block feather icon-plus white"></i>
+                                                                <span class="d-md-block d-none"> <li class="fa fa-plus"></li> Nuevo plan de tratamiento</span></button>
+                                                            <div class="modal fade" id="AddContactModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+                                                                <div class="modal-dialog" role="document">
+                                                                    <div class="modal-content">
+                                                                        <section class="contact-form">
+                                                                            <form id="form-add-contact" class="contact-input">
+                                                                                <div class="modal-header">
+                                                                                    <h5 class="modal-title" id="exampleModalLabel1"></h5>
+                                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                        <span aria-hidden="true">×</span>
+                                                                                    </button>
+                                                                                </div>
+                                                                          
+                                                                               
+                                                                            </form>
+                                                                        </section>
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="col-12">
-                                                            <div class="form-group">
-                                                                <label for="account-facebook">Facebook</label>
-                                                                <input type="text" id="account-facebook"
-                                                                    class="form-control" placeholder="Add link">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-12">
-                                                            <div class="form-group">
-                                                                <label for="account-google">Google+</label>
-                                                                <input type="text" id="account-google"
-                                                                    class="form-control" placeholder="Add link">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-12">
-                                                            <div class="form-group">
-                                                                <label for="account-linkedin">LinkedIn</label>
-                                                                <input type="text" id="account-linkedin"
-                                                                    class="form-control" placeholder="Add link"
-                                                                    value="https://www.linkedin.com">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-12">
-                                                            <div class="form-group">
-                                                                <label for="account-instagram">Instagram</label>
-                                                                <input type="text" id="account-instagram"
-                                                                    class="form-control" placeholder="Add link">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-12">
-                                                            <div class="form-group">
-                                                                <label for="account-quora">Quora</label>
-                                                                <input type="text" id="account-quora"
-                                                                    class="form-control" placeholder="Add link">
-                                                            </div>
-                                                        </div>
-                                                        <div
-                                                            class="col-12 d-flex flex-sm-row flex-column justify-content-end">
-                                                            <button type="submit"
-                                                                class="btn btn-primary mr-sm-1 mb-1 mb-sm-0">Save
-                                                                changes</button>
-                                                            <button type="reset" class="btn btn-light">Cancel</button>
+                                                            
+                                                            <span class="dropdown">
+                                                                <button id="btnSearchDrop1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-warning dropdown-menu-right dropdown-toggle btn-md">
+                                                                    <i class="fa fa-eye white"></i> </button>
+                                                                <span aria-labelledby="btnSearchDrop1" class="dropdown-menu dropdown-menu-right mt-1" x-placement="bottom-end" style="position: absolute; transform: translate3d(-108px, 32px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                                                    <a href="#" class="dropdown-item"><i class="fa fa-eye"></i> Todos los tratamientos</a>
+                                                                    <a href="#" class="dropdown-item"><i class="fa fa-eye"></i> Tratamietos Activos</a>
+                                                                    <a href="#" class="dropdown-item"><i class="fa fa-eye"></i> Tratamietos finalizados</a>
+                                                                </span>
+                                                            </span>
+                                                            <button class="btn btn-default btn-sm"><i class="feather icon-settings white"></i></button>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -720,6 +701,10 @@
         <!-- Tus campos del formulario aquí -->
     </form>
     <form action="{{ url('/AdminCitas/CargarDisponibilidad') }}" id="formCargarDisponibilidad" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/AdminCitas/VerCitasPac') }}" id="formVerCitasPac" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
@@ -1379,7 +1364,72 @@
                 cancelarProCita: function() {
                     fcAgendaViews.removeAllEvents();
                     fcAgendaViews.addEventSource(disponibilidadJSON);
-                }
+
+                    $('#div-listCitas').show();
+                    $('#btn-addCitas').show();
+                    $('#div-addCitas').hide();
+                    $('#tit-citas').html('Historial de Citas');
+                },
+                cargarCitas: function() {
+                    
+                  var idPac = $("#idPac").val();
+                  var form = $("#formVerCitasPac");
+                    var url = form.attr("action");
+                    $('#idCita').remove();
+                    form.append("<input type='hidden' id='idPac' name='idPac'  value='" + idPac +
+                        "'>");
+                    var datos = form.serialize();
+
+                    var citas = "";
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(response) {
+                            $.each(response.CitasPaciente, function(i, item) {
+                                citas += '<td><span class="invoice-amount">' + item.motivo + '</span></td>';
+                                citas += '<td><span class="invoice-amount">' + item.nomprof  + '</span></td>';
+                                var fechaHora = $.convertirFormato(item.inicio);
+                                citas += '<td><span class="invoice-amount">' + fechaHora+ '</span></td>';
+                                citas += '<td><span class="invoice-amount"><select class="select2-bg form-control" onchange="$.cambioEstado(this.value);" id="estadoCita">'
+                                    +'<option value="Por Atender" class="por-atender">Por Atender</option>'
+                                    +'<option value="Atendida" class="atendida">Atendida</option>'
+                                    +'<option value="Confirmada" class="confirmada">Confirmada</option>'
+                                    +'<option value="No Confirmada" class="no-confirmada">No Confirmada</option>'
+                                    +'<option value="Anulada" class="anulada">Anulada</option>'
+                                    +'</select></span></td>';
+                            });
+
+                        
+                        }
+                    });
+
+                    $("#trRegistrosCitas").html(citas)
+                },
+                convertirFormato: function(fechaHora) {
+                    // Crear un objeto Date a partir de la cadena de fecha y hora
+                    var fecha = new Date(fechaHora);
+
+                    // Obtener los componentes de la fecha y la hora
+                    var dia = fecha.getDate();
+                    var mes = fecha.getMonth() + 1; // Los meses comienzan desde 0, por lo que sumamos 1
+                    var anio = fecha.getFullYear();
+                    var horas = fecha.getHours();
+                    var minutos = fecha.getMinutes();
+                    var ampm = horas >= 12 ? 'PM' : 'AM';
+
+                    // Formatear los componentes en el nuevo formato
+                    horas = horas % 12;
+                    horas = horas ? horas : 12; // Si es 0, cambiar a 12
+                    minutos = minutos < 10 ? '0' + minutos : minutos;
+
+                    // Crear la cadena formateada
+                    var nuevoFormato = `${dia}/${mes}/${anio} ${horas}:${minutos} ${ampm}`;
+
+                    return nuevoFormato;
+                },
             });
 
             $.cargar(1);

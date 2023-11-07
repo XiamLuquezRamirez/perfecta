@@ -13,7 +13,7 @@ class Citas extends Model
             ->join('pacientes', 'citas.paciente', '=', 'pacientes.id')
             ->select('citas.*', 'pacientes.nombre', 'pacientes.apellido')
             ->where('profesional', $idProf)
-            ->where('citas.estado', 'Activa')
+            ->where('citas.estado', '!=', 'Anulada')
             ->get();
     }
 
@@ -23,7 +23,23 @@ class Citas extends Model
             ->join('pacientes', 'citas.paciente', '=', 'pacientes.id')
             ->join('profesionales', 'citas.profesional', 'profesionales.id')
             ->select('citas.*', 'pacientes.nombre', 'pacientes.apellido', 'profesionales.nombre AS nomprof')
-            ->where('citas.estado', 'Activa')
+            ->where('citas.estado', '!=', 'Anulada')
+            ->get();
+    }
+    public static function buscaDetCitas($idCita)
+    {
+        return DB::connection('mysql')->table('citas')
+            ->join('profesionales', 'citas.profesional', 'profesionales.id')
+            ->select('citas.*', 'profesionales.nombre AS nomprof')
+            ->where('citas.id', $idCita)
+            ->first();
+    }
+    public static function buscaCitasPacientes($idCita)
+    {
+        return DB::connection('mysql')->table('citas')
+            ->join('profesionales', 'citas.profesional', 'profesionales.id')
+            ->select('citas.*', 'profesionales.nombre AS nomprof')
+            ->where('citas.paciente', $idCita)
             ->get();
     }
 
@@ -36,7 +52,7 @@ class Citas extends Model
             'motivo' => $request['motivo'],
             'inicio' => $request['fechaHoraInicio'],
             'final' => $request['fechaHoraFinal'],
-            'estado' => "Activa",
+            'estado' => "Por atender",
         ]);
 
         return $respuesta;

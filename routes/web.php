@@ -52,3 +52,5 @@ Route::post('/AdminCitas/CargarDisponibilidad', [CitasController::class,'CargarD
 Route::post('/AdminCitas/GuardarCita', [CitasController::class,'GuardarCita']);
 Route::post('/AdminCitas/CargarPacientesCita', [PacientesController::class,'CargarPacientesCita']);
 Route::post('/AdminCitas/CargarAllCitas', [CitasController::class,'CargarAllCitas']);
+Route::post('/AdminCitas/VerDetallesCita', [CitasController::class,'VerDetallesCita']);
+Route::post('/AdminCitas/VerCitasPac', [CitasController::class,'VerCitasPac']);

@@ -34,6 +34,32 @@ class CitasController extends Controller
             ]);
         }
     }
+    public function VerDetallesCita()
+    {
+        $idCita = request()->get('idCita');
+        $detaCita = Citas::buscaDetCitas($idCita);
+
+        $paciente = Pacientes::BuscarPaciente($detaCita->paciente);
+
+        if (request()->ajax()) {
+            return response()->json([
+                'detaCita' => $detaCita,
+                'paciente' => $paciente,
+            ]);
+        }
+    }
+    public function VerCitasPac()
+    {
+        $idPac = request()->get('idPac');
+        $CitasPaciente = Citas::buscaCitasPacientes($idPac);
+
+
+        if (request()->ajax()) {
+            return response()->json([
+                'CitasPaciente' => $CitasPaciente
+            ]);
+        }
+    }
 
     public function GuardarCita()
     {
