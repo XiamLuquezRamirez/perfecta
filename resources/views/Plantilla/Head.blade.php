@@ -39,6 +39,9 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/pages/vertical-timeline.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/plugins/calendars/fullcalendar.css') }}">
     <!-- END: Page CSS-->
+    
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/Hover-master/css/hover.css') }}">
+
 
     <!-- BEGIN: Custom CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">

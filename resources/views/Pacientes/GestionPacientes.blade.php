@@ -600,26 +600,7 @@
                                                         <h4 class="card-title">Planes de tratamiento</h4>
                                                         <div class="heading-elements mt-0">
                                                             <button class="btn btn-primary btn-md" data-toggle="modal" data-target="#AddContactModal"><i class="d-md-none d-block feather icon-plus white"></i>
-                                                                <span class="d-md-block d-none"> <li class="fa fa-plus"></li> Nuevo plan de tratamiento</span></button>
-                                                            <div class="modal fade" id="AddContactModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
-                                                                <div class="modal-dialog" role="document">
-                                                                    <div class="modal-content">
-                                                                        <section class="contact-form">
-                                                                            <form id="form-add-contact" class="contact-input">
-                                                                                <div class="modal-header">
-                                                                                    <h5 class="modal-title" id="exampleModalLabel1"></h5>
-                                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                        <span aria-hidden="true">×</span>
-                                                                                    </button>
-                                                                                </div>
-                                                                          
-                                                                               
-                                                                            </form>
-                                                                        </section>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            
+                                                                <span class="d-md-block d-none"> <li class="fa fa-share"></li> Ir a tratamientos</span></button>
                                                             <span class="dropdown">
                                                                 <button id="btnSearchDrop1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-warning dropdown-menu-right dropdown-toggle btn-md">
                                                                     <i class="fa fa-eye white"></i> </button>
@@ -632,6 +613,86 @@
                                                             <button class="btn btn-default btn-sm"><i class="feather icon-settings white"></i></button>
                                                         </div>
                                                     </div>
+
+                                                    <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">Tratamientos Activos</h4>
+                                                    <hr>
+
+                                                    <div class="col-xxl-8 col-xl-12 col-lg-12 col-md-12 col-12">
+                                                        <div class="card info-time-tracking">
+                                                            <div class="card-content">
+                                                                <div class="row">
+                                                                    <div class="col-12 pt-2 pb-2 border-bottom-blue-grey border-bottom-lighten-5">
+                                                                        <div class="info-time-tracking-title d-flex justify-content-between align-items-center">
+                                                                            <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">Tratamiento de depilacion laser</h4>
+                                                                       
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-12">
+                                                                        <div class="card-body">
+                                                                            <div class="row justify-content-center align-items-center">
+                                                                                <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">
+                                                                                    <h6 class="pt-1"><span class="fa fa-user"></span> Profesional:</h6>
+                                                                                    <p>Mairen Pumarejo</p>
+                                                                                </div>
+                                                                                <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">
+                                                                                    <h6 class="pt-1"><span class="fa fa-th-large"></span> Especialidad:</h6>
+                                                                                    <p>Consulta General</p>
+                                                                                </div>
+                                                                                <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">
+                                                                                    <h6 class="pt-1"><span class="fa fa-calendar"></span> Ultima Cita:</h6>
+                                                                                    <p>23/11/2023 08:00 AM</p>
+                                                                                </div>
+                                                                                <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">
+                                                                                    <div id="general_task_radial_bar_chart"></div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">Otros Tratamientos</h4>
+                                                    <hr>
+
+                                                    <div class="col-xxl-8 col-xl-12 col-lg-12 col-md-12 col-12">
+                                                        <div class="card info-time-tracking">
+                                                            <div class="card-content">
+                                                                <div class="row">
+                                                                    <div class="col-12 pt-2 pb-2 border-bottom-blue-grey border-bottom-lighten-5">
+                                                                        <div class="info-time-tracking-title d-flex justify-content-between align-items-center">
+                                                                            <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">Tratamiento de depilacion laser</h4>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-12">
+                                                                        <div class="card-body">
+                                                                            <div class="row justify-content-center align-items-center">
+                                                                                <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">
+                                                                                    <h6 class="pt-1"><span class="fa fa-user"></span> Profesional:</h6>
+                                                                                    <p>Mairen Pumarejo</p>
+                                                                                </div>
+                                                                                <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">
+                                                                                    <h6 class="pt-1"><span class="fa fa-th-large"></span> Especialidad:</h6>
+                                                                                    <p>Consulta General</p>
+                                                                                </div>
+                                                                                <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">
+                                                                                    <h6 class="pt-1"><span class="fa fa-calendar"></span> Ultima Cita:</h6>
+                                                                                    <p>15/11/2023 09:00 AM</p>
+                                                                                </div>
+                                                                                <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">
+                                                                                    <div id="general_task_radial_bar_chart2"></div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
                                                 </form>
                                             </div>
                                             <div class="tab-pane fade" id="account-vertical-recaudos" role="tabpanel"
@@ -714,7 +775,12 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-
+            var $primary = "#00b5b8",
+            $secondary = "#2c3648",
+            $success = "#0f8e67",
+            $info = "#179bad",
+            $warning = "#ffb997",
+            $danger = "#ff8f9e"
 
             var disponibilidadJSON = [{
                     "start": "2023-10-09T08:00:00",
@@ -733,6 +799,86 @@
                 checkboxClass: 'icheckbox_flat-green',
                 radioClass: 'iradio_flat-green'
             });
+
+            var general_task_radial_bar_chart_options = {
+                chart: {
+                  height: 145,
+                  width: 170,
+                  type: 'radialBar',
+                  offsetY: 30,
+                  toolbar: {
+                    show: false
+                  }
+                },
+            
+                plotOptions: {
+                  radialBar: {
+                    hollow: {
+                      margin: 0,
+                      size: '80%',
+                    },
+                    track: {
+                      background: '#eee',
+                      strokeWidth: '80%',
+                      margin: 0, // margin is in pixels
+            
+                    },
+            
+                    dataLabels: {
+                      showOn: 'always',
+                      name: {
+                        show: false,
+                      },
+                      value: {
+                        formatter: function (val) {
+                          return parseInt(val) + '%';
+                        },
+                        offsetY: 8,
+                        color: $info,
+                        fontSize: '20px',
+                        show: true,
+                      }
+                    }
+                  }
+                },
+                responsive: [
+                  {
+                    breakpoint: 768,
+                    options: {
+                      chart: {
+                        width: 80,
+                        offsetX: -15
+                      },
+                      legend: {
+                        show: false
+                      }
+                    }
+                  }
+                ],
+                fill: {
+                  colors: [$primary]
+                },
+                series: [67],
+                stroke: {
+                  lineCap: 'flat'
+                },
+                labels: ['Percent'],
+            
+              }
+            
+              var general_task_radial_bar_chart = new ApexCharts(
+                document.querySelector("#general_task_radial_bar_chart"),
+                general_task_radial_bar_chart_options
+              );
+            
+              var general_task_radial_bar_chart2 = new ApexCharts(
+                document.querySelector("#general_task_radial_bar_chart2"),
+                general_task_radial_bar_chart_options
+              );
+            
+              general_task_radial_bar_chart.render();
+              general_task_radial_bar_chart2.render();
+            
 
             let fechaHoraSelCita;
             let fechaHoraInicio;

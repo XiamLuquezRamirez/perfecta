@@ -7,6 +7,8 @@
             </li>
             <li id="MenPaciente" class="dropdown nav-item" data-menu="dropdown"><a class="nav-link" href="{{ url('/AdminPacientes/Pacientes') }}"><i class="feather icon-users"></i><span data-i18n="Templates">Pacientes</span></a>
             </li>
+            <li id="MenTratamientos" class="dropdown nav-item" data-menu="dropdown"><a class="nav-link" href="{{ url('/AdminPacientes/Tratamientos') }}"><i class="fa fa-universal-access"></i><span data-i18n="Templates">Tratamientos</span></a>
+            </li>
             <li id="MenRecaudo" class="dropdown nav-item" data-menu="dropdown"><a class="nav-link" href="#" data-toggle="dropdown"><i class="feather icon-shopping-cart"></i><span data-i18n="Templates">Recaudaciones</span></a>
             </li>
             <li id="MenCaja" class="dropdown nav-item" data-menu="dropdown"><a class="nav-link" href="#" data-toggle="dropdown"><i class="feather icon-grid"></i><span data-i18n="Layouts">Cajas</span></a>
@@ -15,7 +17,7 @@
                 <ul class="dropdown-menu">
                     <li id="MenAdminGasto"  data-menu=""><a class="dropdown-item" href="app-email.html" data-i18n="Email Application" data-toggle="dropdown">Gestión de Gastos</a>
                     </li>
-                    <li  id="MenAdminServicios"  data-menu=""><a class="dropdown-item" href="app-chat.html" data-i18n="Chat Application" data-toggle="dropdown">Gestión de Servicios</a>
+                    <li  id="MenAdminServicios"  data-menu=""><a class="dropdown-item" href="{{ url('/Administracion/Servicios') }}" data-i18n="Chat Application" data-toggle="dropdown">Gestión de Servicios</a>
                     </li>
                     <li id="MenAdminProesional"  data-menu=""><a class="dropdown-item" href="{{ url('/Administracion/Profesionales') }}" data-i18n="Todo Application" data-toggle="dropdown">Gestión de Profesionales</a>
                     </li>

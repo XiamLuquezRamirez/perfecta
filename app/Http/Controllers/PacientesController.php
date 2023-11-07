@@ -117,6 +117,12 @@ class PacientesController extends Controller
         ]);
     }
 
+    public function Tratamientos(){
+        $bandera = "";
+        
+        return view('Pacientes.GestionTratamientos', compact('bandera'));
+    }
+
     public function CargarMunicipios(Request $request)
     {
 

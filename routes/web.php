@@ -34,16 +34,22 @@ Route::get('/AdminPacientes/municipios', [PacientesController::class,'CargarMuni
 Route::post('/AdminPacientes/ValidarPacientes', [PacientesController::class,'ValidarPacientes']);
 Route::post('/AdminPacientes/BuscarPacientes', [PacientesController::class,'BuscarPacientes']);
 Route::post('/AdminPacientes/AllProfesionales', [PacientesController::class,'AllProfesionales']);
+Route::get('/AdminPacientes/Tratamientos', [PacientesController::class,'Tratamientos']);
 
 
 //GESTIOAR ADMINISTRACCION
 Route::get('/Administracion/Profesionales', [AdminitraccionController::class,'Profesionales']);
+Route::get('/Administracion/Servicios', [AdminitraccionController::class,'Servicios']);
 Route::post('/Administracion/CargarProfesionales', [AdminitraccionController::class,'CargarProfesionales']);
+Route::post('/Administracion/CargarServicios', [AdminitraccionController::class,'CargarServicios']);
 Route::post('/Administracion/GuardarProfesional', [AdminitraccionController::class,'GuardarProfesional']);
+Route::post('/Administracion/GuardarServicio', [AdminitraccionController::class,'GuardarServicio']);
 Route::post('/Administracion/ValidarProfesional', [AdminitraccionController::class,'ValidarProfesional']);
 Route::post('/Administracion/BuscarProfesional', [AdminitraccionController::class,'BuscarProfesional']);
+Route::post('/Administracion/BuscarServicio', [AdminitraccionController::class,'BuscarServicio']);
 Route::post('/Administracion/BuscarUsuario', [AdminitraccionController::class,'BuscarUsuario']);
 Route::post('/Administracion/EliminarProfesional', [AdminitraccionController::class,'EliminarProfesional']);
+Route::post('/Administracion/EliminarServicio', [AdminitraccionController::class,'EliminarServicio']);
 
 
 //GESTIONAR CITAS
