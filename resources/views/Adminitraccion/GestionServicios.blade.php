@@ -105,8 +105,8 @@
                                     <div class="col-7">
                                         <div class="form-group">
                                             <label for="userinput8">Valor:</label>
-                                            <input type="text" onchange="$.cambioFormato(this.id);" class="form-control" id="valorvis" name="valorvis"
-                                            <input type="hidden" vañ id="valor" name="valor" value="">
+                                            <input type="text" onchange="$.cambioFormato(this.id);" class="form-control" id="valorVis" name="valorVis">
+                                            <input type="hidden" value="" id="valor" name="valor">
                                         </div>
                                     </div>
                                     <div class="col-5">
@@ -348,7 +348,7 @@
                     var numero = $("#"+id).val();
                     $("#valor").val(numero);
                     var formatoMoneda = formatCurrency(numero, 'es-CO', 'COP');
-                    $("#valorvis").val(formatoMoneda);
+                    $("#valorVis").val(formatoMoneda);
 
                 },
                 editar: function(id) {
@@ -384,7 +384,8 @@
                             $("#nombre").val(respuesta.servicio.nombre);
                             var numero = respuesta.servicio.valor;
                             var formatoMoneda = formatCurrency(numero, 'es-CO', 'COP');
-                            $("#valor").val(formatoMoneda);
+                            $("#valor").val(numero);
+                            $("#valorVis").val(formatoMoneda);
                             $("#descripcion").val(respuesta.servicio.descripcion);
                             var checkbox = document.getElementById("customSwitch1");
 

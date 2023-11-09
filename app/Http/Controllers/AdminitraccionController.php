@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Profesionales;
+use App\Models\Servicios;
+use App\Models\Usuario;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Models\Profesionales;
-use App\Models\Usuario;
-use App\Models\Servicios;
+
 
 class AdminitraccionController extends Controller
 {
-    
+
     public function Profesionales()
     {
         if (Auth::check()) {
@@ -52,7 +53,6 @@ class AdminitraccionController extends Controller
 
     }
 
-
     public function CargarProfesionales()
     {
         if (Auth::check()) {
@@ -76,19 +76,17 @@ class AdminitraccionController extends Controller
             $tdTable = '';
             $x = ($page - 1) * $perPage + 1;
 
-            
-
             foreach ($ListProfesionales as $i => $item) {
                 if (!is_null($item)) {
                     $tdTable .= '<tr>
                 <td>
                     <a style="color:#009c9f; font-weight: bold" onclick="$.editar(' . $item->id . ');" >' . $item->identificacion . '</a>
                 </td>
-    
+
                 <td><span class="invoice-date">' . $item->nombre . '</span></td>
                 <td>
                     <div class="invoice-action">
-                  
+
                     <a onclick="$.editar(' . $item->id . ');" title="Editar" class="invoice-action-edit cursor-pointer mr-1">
                         <i class="feather icon-edit-1"></i>
                     </a>
@@ -136,18 +134,19 @@ class AdminitraccionController extends Controller
             $j = 1;
             $x = ($page - 1) * $perPage + 1;
 
-            
-
             foreach ($ListServicios as $i => $item) {
                 if (!is_null($item)) {
+
+                    $numero_formateado = number_format($item->valor, 2, ',', '.');
+
                     $tdTable .= '<tr>
                 <td><span class="invoice-date">' . $j . '</span></td>
                 <td><span class="invoice-date">' . $item->nombre . '</span></td>
                 <td><span class="invoice-date">' . $item->descuento . '</span></td>
-                <td><span class="invoice-date">' . $item->valor . '</span></td>
+                <td><span class="invoice-date">$ ' . $numero_formateado . '</span></td>
                 <td>
                     <div class="invoice-action">
-                  
+
                     <a onclick="$.editar(' . $item->id . ');" title="Editar" class="invoice-action-edit cursor-pointer mr-1">
                         <i class="feather icon-edit-1"></i>
                     </a>
@@ -174,8 +173,9 @@ class AdminitraccionController extends Controller
         }
     }
 
-    public function BuscarProfesional() {
-        $idProfesional= request()->get('idProf');
+    public function BuscarProfesional()
+    {
+        $idProfesional = request()->get('idProf');
         $profesional = Profesionales::BuscarProfesional($idProfesional);
 
         if (request()->ajax()) {
@@ -185,8 +185,9 @@ class AdminitraccionController extends Controller
         }
     }
 
-    public function BuscarServicio() {
-        $idSErvicio= request()->get('idServ');
+    public function BuscarServicio()
+    {
+        $idSErvicio = request()->get('idServ');
         $servicio = Servicios::BuscarServicio($idSErvicio);
 
         if (request()->ajax()) {
@@ -195,10 +196,10 @@ class AdminitraccionController extends Controller
             ]);
         }
     }
- 
 
-    public function BuscarUsuario() {
-        $idUsu= request()->get('Usu');
+    public function BuscarUsuario()
+    {
+        $idUsu = request()->get('Usu');
         $usuario = Usuario::BuscarUsuario($idUsu);
 
         if ($usuario) {
@@ -207,7 +208,7 @@ class AdminitraccionController extends Controller
 
         if (request()->ajax()) {
             return response()->json([
-                'existe' => $existe
+                'existe' => $existe,
             ]);
         }
     }
@@ -218,12 +219,12 @@ class AdminitraccionController extends Controller
             $data = request()->all();
             $idProfesional = $data['idProfesional'];
 
-            if($data['accion']=="agregar"){
+            if ($data['accion'] == "agregar") {
                 $respuesta = Usuario::guardar($data);
-                $respuesta = Profesionales::guardar($data,$respuesta);
-             
+                $respuesta = Profesionales::guardar($data, $respuesta);
+
                 $idProfesional = $respuesta;
-            }else{
+            } else {
                 $respuesta = Usuario::editar($data);
                 $respuesta = Profesionales::editar($data);
             }
@@ -234,8 +235,6 @@ class AdminitraccionController extends Controller
                 $estado = "fail";
             }
 
-         
-    
             if (request()->ajax()) {
                 return response()->json([
                     'estado' => $estado,
@@ -253,11 +252,11 @@ class AdminitraccionController extends Controller
             $data = request()->all();
             $idProfesional = $data['idServicio'];
 
-            if($data['accion']=="agregar"){
+            if ($data['accion'] == "agregar") {
                 $respuesta = Servicios::guardar($data);
                 $idProfesional = $respuesta;
-            }else{
-            
+            } else {
+
                 $respuesta = Servicios::editar($data);
             }
 
@@ -267,8 +266,6 @@ class AdminitraccionController extends Controller
                 $estado = "fail";
             }
 
-         
-    
             if (request()->ajax()) {
                 return response()->json([
                     'estado' => $estado,
