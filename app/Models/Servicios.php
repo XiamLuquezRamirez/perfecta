@@ -24,7 +24,7 @@ class Servicios extends Model
 
     public static function editar($request)
     {
-        $respuesta = DB::connection('mysql')->table('servicios')->where('id', $request['idServiciocc'])->update([
+        $respuesta = DB::connection('mysql')->table('servicios')->where('id', $request['idServicio'])->update([
             'nombre' => $request['nombre'],
             'descripcion' => $request['descripcion'],
             'descuento' => $request['descuento'],

@@ -359,10 +359,9 @@
                     });
 
                     $("#accion").val("editar");
-                    $("#idProfesional").val(id);
+                    $("#idServicio").val(id);
                     $("#btnGuardar").show();
                     $("#btnNuevo").hide();
-
 
                     var form = $("#formBuscarServicio");
                     $("#idServ").remove();

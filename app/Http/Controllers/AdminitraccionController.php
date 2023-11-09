@@ -246,6 +246,7 @@ class AdminitraccionController extends Controller
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
+    
     public function GuardarServicio()
     {
         if (Auth::check()) {

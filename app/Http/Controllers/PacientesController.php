@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pacientes;
 use App\Models\Profesionales;
+use App\Models\Tratamientos;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -143,6 +144,29 @@ class PacientesController extends Controller
         }
         return response()->json(['data' => $municipios]);
 
+    }
+
+    public function GuardarTratamiento(){
+        if (Auth::check()) {
+            $data = request()->all();
+            $idProfesional = $data['idTratamiento'];
+
+            if ($data['accion'] == "agregar") {
+                $respuesta = Tratamientos::guardar($data);
+            } else {
+                $respuesta = Profesionales::editar($data);
+            }
+
+            
+            if (request()->ajax()) {
+                return response()->json([
+                    'tratamiento' => $respuesta,
+                ]);
+            }
+
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
     }
 
     public function GuardarPaciente()
