@@ -3,6 +3,7 @@
 @section('Contenido')
     <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
     <input type="hidden" id="Ruta" data-ruta="{{ asset('/app-assets/') }}" />
+    <input type="hidden" id="conSeccion" name="conSeccion" value="1" />
     <div class="content-header row">
         <div class="content-header-left col-md-6 col-12 mb-2">
             <h3 class="content-header-title mb-0">Gestionar Tratamientos</h3>
@@ -239,283 +240,280 @@
                                                 </section>
 
                                             </div>
-                                            <div class="card-body" id="detTratamiento" style="display: none">
-                                                <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">Gestionar
-                                                    Tratamiento</h4>
-                                                <hr>
-                                                <section id="user-profile-cards" class="row mt-2">
-                                                    <div class="col-xl-12 col-md-6 col-12">
-                                                        <div class="card card border-teal border-lighten-2">
-                                                            <div>
-                                                                <div class="card-body">
-                                                                    <h4 id="tit_tratamiento" class="card-title mb-0">
-                                                                        Tratamiento de depilacion laser</h4>
-                                                                </div>
-                                                                <div class="card-body text-center">
-                                                                    <button type="button" class="btn btn-danger mr-1"><i
-                                                                            class="fa fa-plus"></i> Agregar
-                                                                        Sección</button>
-                                                                    <button type="button" class="btn btn-primary mr-1"><i
-                                                                            class="fa fa-plus"></i> Agregar
-                                                                        Procedimiento</button>
-                                                                </div>
-                                                                <div id="sesionesTratamiento" class="form-body pt-0">
-                                                                    <div class="card-body">
-                                                                        <div>
 
-                                                                            <div  class="card collapse-icon accordion-icon-rotate">
-                                                                                <div id="headingCollapse11"
-                                                                                    class="card-header primary"
-                                                                                    data-toggle="collapse"
-                                                                                    href="#collapse11"
-                                                                                    aria-expanded="true"
-                                                                                    aria-controls="collapse11">
-
-                                                                                    <h4 style=""
-                                                                                        class="form-section"
-                                                                                        id="tsesion1"><i
-                                                                                            class="fa fa-opencart mb-0"></i>
-                                                                                        Sesion 1</h4>
-                                                                                       
-                                                                                </div>
-                                                                                <div id="collapse11" role="tabpanel"
-                                                                                    aria-labelledby="headingCollapse11"
-                                                                                    class="collapse show">
-                                                                                    <div class="card-content">
-                                                                                        <div class="card-body">
-                                                                                            <div
-                                                                                                class="repeater-controls d-flex">
-                                                                                                <div class="input-fields border border-light rounded p-1 d-flex"
-                                                                                                    style="width: 100%">
-                                                                                                    <div class="row invoice-item-controls d-flex"
-                                                                                                        style="width: 100%">
-                                                                                                        <div
-                                                                                                            class="col-12 col-md-4 form-group item-name">
-                                                                                                            <select
-                                                                                                                class="form-control"
-                                                                                                                id="selrct-cumpl">
-
-                                                                                                            </select>
-                                                                                                        </div>
-                                                                                                        <div
-                                                                                                            class="col-12 col-md-3 form-group item-cost">
-                                                                                                            <input
-                                                                                                                type="text"
-                                                                                                                id="valorServ"
-                                                                                                                class="form-control"
-                                                                                                                value="24">
-                                                                                                        </div>
-                                                                                                        <div
-                                                                                                            class="col-12 col-md-2 form-group item-price">
-                                                                                                            <select
-                                                                                                                class="form-control"
-                                                                                                                id="selrct-cumpl">
-                                                                                                                <option
-                                                                                                                    value="0">
-                                                                                                                    0%
-                                                                                                                </option>
-                                                                                                                <option
-                                                                                                                    value="25">
-                                                                                                                    25%
-                                                                                                                </option>
-                                                                                                                <option
-                                                                                                                    value="50">
-                                                                                                                    50%
-                                                                                                                </option>
-                                                                                                                <option
-                                                                                                                    value="75">
-                                                                                                                    75%
-                                                                                                                </option>
-                                                                                                                <option
-                                                                                                                    value="100">
-                                                                                                                    100%
-                                                                                                                </option>
-                                                                                                            </select>
-                                                                                                        </div>
-
-
-                                                                                                    </div>
-                                                                                                    <div
-                                                                                                        class="delete-and-discount-config h-100 ml-1 d-flex flex-column justify-content-between">
-                                                                                                        <span
-                                                                                                            class="cursor-pointer d-flex justify-content-center align-items-center">
-                                                                                                            <i class="fa fa-times-circle-o font-size-increase"
-                                                                                                                data-repeater-delete=""></i>
-                                                                                                        </span>
-
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div id="headingCollapse12"
-                                                                                    class="card-header primary pt-0"
-                                                                                    data-toggle="collapse"
-                                                                                    href="#collapse12"
-                                                                                    aria-expanded="false"
-                                                                                    aria-controls="collapse12">
-                                                                                    <a class="card-title lead collapsed"
-                                                                                        href="#">Collapsible Group
-                                                                                        Item #2</a>
-                                                                                </div>
-                                                                                <div id="collapse12" role="tabpanel"
-                                                                                    aria-labelledby="headingCollapse12"
-                                                                                    class="collapse"
-                                                                                    aria-expanded="false">
-                                                                                    <div class="card-content">
-                                                                                        <div class="card-body">
-                                                                                            Sugar plum bear claw oat cake
-                                                                                            chocolate jelly tiramisu dessert
-                                                                                            pie. Tiramisu macaroon muffin
-                                                                                            jelly marshmallow cake. Pastry
-                                                                                            oat cake chupa chups. Caramels
-                                                                                            marshmallow carrot cake
-                                                                                            topping donut sesame snaps
-                                                                                            toffee tootsie roll. Lollipop
-                                                                                            sweet jelly beans oat cake
-                                                                                            biscuit
-                                                                                            pastry chocolate cake. Cupcake
-                                                                                            chocolate biscuit lemon drops
-                                                                                            cotton candy marshmallow oat
-                                                                                            cake donut. Croissant chocolate
-                                                                                            cake oat cake brownie topping
-                                                                                            carrot cake jelly beans.
-                                                                                            Dessert gingerbread marshmallow
-                                                                                            pudding donut lemon drops cake.
-                                                                                            Cake topping gummi bears
-                                                                                            cake.
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-
-
-
-                                                                            </div>
-
-
-
-
-
-                                                                        </div>
-
-                                                                    </div>
-
-                                                                </div>
-
-                                                            </div>
-
-                                                            <div class="list-group list-group-flush">
-                                                            </div>
+                                            {{--  Modal nueva sesion  --}}
+                                            <div class="modal fade text-left" id="modalSesiones" tabindex="-1"
+                                                role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title" id="tituloUnidad">Crear Sección</h4>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true"
+                                                                    style="font-size: 25px;">&times;</span>
+                                                            </button>
                                                         </div>
-                                                    </div>
-
-                                                </section>
-
-                                            </div>
+                                                        <div class="modal-body">
+                                                            <div class="card-body">
+                                                                <form class="form" method="post"
+                                                                    id="formGuardarSeccion"
+                                                                    action="{{ url('/') }}/Administracion/GuardarSeccion">
+                                                                    <input type="hidden" name="idSeccion"
+                                                                        id="idSeccion" value="" />
+                                                                    <div class="form-body">
+                                                                        <div class="form-group">
+                                                                            <label for="userinput5">Nombre:</label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="nombreSeccion" name="nombreSeccion">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="userinput8">Descripción:</label>
+                                                                        <textarea id="descripcionSeccion" rows="5" class="form-control border-primary" name="descripcionSeccion"
+                                                                            placeholder="Descripcion"></textarea>
+                                                                    </div>
+                                                            </div>
+                                                            <div class="form-actions right">
+                                                                <button type="button" onclick="$.salirSeccion();"
+                                                                    class="btn btn-warning mr-1">
+                                                                    <i class="feather icon-corner-up-left"></i> Salir
+                                                                </button>
+                                                                <button type="button" id="btnGuardar"
+                                                                    onclick="$.guardarSeccion()" class="btn btn-success">
+                                                                    <i class="fa fa-check-square-o"></i> Guardar
+                                                                </button>
+                                                            </div>
                                         </form>
                                     </div>
                                 </div>
+
                             </div>
-                        </section>
                     </div>
-                </div>
-                <div class="sidebar-detached sidebar-left ps">
-                    <div class="sidebar">
-                        <div class="bug-list-sidebar-content">
-                            <!-- Predefined Views -->
-                            <div class="card">
-                                <div class="card-head">
-                                    <div class="media p-1">
-                                        <div class="media-left pr-1"><span
-                                                class="avatar avatar-online avatar-sm rounded-circle"><img
-                                                    src="{{ asset('app-assets/images/portrait/small/avatar-s-1.png') }}"
-                                                    alt="avatar"><i></i></span></div>
-                                        <div class="media-body media-middle">
-                                            <h5 class="media-heading">Xiamir Luquez</h5>
+                    <div class="card-body" id="detTratamiento" style="display: none">
+                        <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">Gestionar
+                            Tratamiento</h4>
+                        <hr>
+                        <section id="user-profile-cards" class="row mt-2">
+                            <div class="col-xl-12 col-md-6 col-12">
+                                <div class="card card border-teal border-lighten-2">
+                                    <div>
+                                        <div class="card-body">
+                                            <h4 id="tit_tratamiento" class="card-title mb-0">
+                                                Tratamiento de depilacion laser</h4>
                                         </div>
+                                        <div class="card-body text-center">
+                                            <button type="button" onclick="$.addSeccion();"
+                                                class="btn btn-danger mr-1"><i class="fa fa-plus"></i> Agregar
+                                                Sección</button>
+                                            <button type="button" class="btn btn-primary mr-1"><i
+                                                    class="fa fa-plus"></i> Agregar
+                                                Servicio</button>
+                                        </div>
+                                        <div id="sesionesTratamiento" class="form-body pt-0">
+                                            <div class="card-body">
+                                                <div id="nseccciones">
+
+                                                    <div class="card collapse-icon accordion-icon-rotate">
+                                                        <div id="headingCollapse11" class="card-header pb-0 primary"
+                                                            data-toggle="collapse" href="#collapse11"
+                                                            aria-expanded="true" aria-controls="collapse11">
+
+                                                            <h4 style="" class="form-section" id="tsesion1"><i
+                                                                    class="fa fa-opencart mb-0"></i>
+                                                                Sesion 1</h4>
+
+                                                        </div>
+                                                        <div id="collapse11" role="tabpanel"
+                                                            aria-labelledby="headingCollapse11" class="collapse show">
+                                                            <div class="card-content">
+                                                                <div class="card-body">
+                                                                    <div class="repeater-controls d-flex">
+                                                                        <div class="input-fields border border-light rounded p-1 d-flex"
+                                                                            style="width: 100%">
+                                                                            <div class="row invoice-item-controls d-flex"
+                                                                                style="width: 100%">
+                                                                                <div
+                                                                                    class="col-12 col-md-4 form-group item-name">
+                                                                                    <select class="form-control"
+                                                                                        id="selServ">
+
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="col-12 col-md-2 form-group item-cost">
+                                                                                    <input type="text" id="valorServ"
+                                                                                        class="form-control"
+                                                                                        value="">
+                                                                                </div>
+                                                                                <div
+                                                                                    class="col-12 col-md-2 form-group item-price">
+                                                                                    <select class="form-control"
+                                                                                        id="selrct-cumpl">
+                                                                                        <option value="0">
+                                                                                            0%
+                                                                                        </option>
+                                                                                        <option value="25">
+                                                                                            25%
+                                                                                        </option>
+                                                                                        <option value="50">
+                                                                                            50%
+                                                                                        </option>
+                                                                                        <option value="75">
+                                                                                            75%
+                                                                                        </option>
+                                                                                        <option value="100">
+                                                                                            100%
+                                                                                        </option>
+                                                                                    </select>
+                                                                                </div>
+
+                                                                                <div class="col-12 col-md-3 form-group item-price "
+                                                                                    style="display: flex; align-items: center; justify-content: center;">
+                                                                                    <span
+                                                                                        class="fa fa-calendar"></span>11/11/2023
+                                                                                </div>
+
+                                                                            </div>
+                                                                            <div
+                                                                                class="delete-and-discount-config h-100 ml-1 d-flex flex-column justify-content-between">
+                                                                                <span
+                                                                                    class="cursor-pointer d-flex justify-content-center align-items-center">
+                                                                                    <i
+                                                                                        class="fa fa-trash-o font-size-large"></i>
+                                                                                </span>
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <button type="button"
+                                                                        class="btn mt-1 btn-outline-success btn-sm"><i
+                                                                            class="fa fa-plus"></i> Agregar
+                                                                        Servicio</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="list-group list-group-flush">
                                     </div>
                                 </div>
-
-                                <!-- contacts view -->
-                                <div class="card-body border-top-blue-grey border-top-lighten-5">
-                                    <div class="list-group">
-                                        <a href="#" class="list-group-item active">Todos</a>
-                                        <a href="#" class="list-group-item list-group-item-action">Activos</a>
-                                        <a href="#" class="list-group-item list-group-item-action">Otros</a>
-                                    </div>
-                                </div>
-
-                                <!-- Groups-->
-                                <div class="card-body">
-                                    <p class="lead">Información General</p>
-                                    <ul class="list-group">
-                                        <li class="list-group-item">
-                                            <span class="fa fa-calendar float-right"></span>
-                                            <a href="#">23 años</a>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <span class="feather icon-phone float-right"></span>
-                                            <a href="#">316 4915332</a>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <span class="feather icon-at-sign float-right"></span>
-                                            <a href="#">alexanderx105@hotmail.com</a>
-                                        </li>
-
-                                    </ul>
-                                </div>
-                                <!--/ Groups-->
-
-                                <!--More-->
-                                <div class="card-body  justify-content-between align-items-center">
-                                    <p class="lead">Citas del paciente</p>
-                                    <ul class="list-group">
-                                        <li class="list-group-item">
-                                            <span class="fa fa-calendar float-right"></span>
-                                            <a href="#">Consulta General </a>
-                                            <p class="sub-heading">23/11/2023 - 08:30 PM</p>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <span class="fa fa-calendar float-right"></span>
-                                            <a href="#">Consulta Especializada </a>
-                                            <p class="sub-heading">23/11/2023 - 08:30 PM</p>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <span class="fa fa-calendar float-right"></span>
-                                            <a href="#">Consulta Especializada </a>
-                                            <p class="sub-heading">23/11/2023 - 08:30 PM</p>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <span class="fa fa-calendar float-right"></span>
-                                            <a href="#">Consulta General </a>
-                                            <p class="sub-heading">23/11/2023 - 08:30 PM</p>
-                                        </li>
-
-                                    </ul>
-                                </div>
-                                <!--/More-->
-
                             </div>
-                            <!--/ Predefined Views -->
 
-                        </div>
+                        </section>
+
                     </div>
-                    <div class="ps__rail-x" style="left: 0px; bottom: 0px;">
-                        <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>
-                    </div>
-                    <div class="ps__rail-y" style="top: 0px; right: 0px;">
-                        <div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;"></div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
+        </section>
+    </div>
+    </div>
+    <div class="sidebar-detached sidebar-left ps">
+        <div class="sidebar">
+            <div class="bug-list-sidebar-content">
+                <!-- Predefined Views -->
+                <div class="card">
+                    <div class="card-head">
+                        <div class="media p-1">
+                            <div class="media-left pr-1"><span class="avatar avatar-online avatar-sm rounded-circle"><img
+                                        src="{{ asset('app-assets/images/portrait/small/avatar-s-1.png') }}"
+                                        alt="avatar"><i></i></span></div>
+                            <div class="media-body media-middle">
+                                <h5 class="media-heading">Xiamir Luquez</h5>
+                            </div>
+                        </div>
+                    </div>
 
-        <div id="loader" class="loader-spinner" style="display: none;">
-            <img src="{{ asset('app-assets/images/mujer.gif') }}" width="150" />
-            <h2 class="parpadeo" style="color: #D08997; font-weight: bold;">Cargando...</h2>
+                    <!-- contacts view -->
+                    <div class="card-body border-top-blue-grey border-top-lighten-5">
+                        <div class="list-group">
+                            <a href="#" class="list-group-item active">Todos</a>
+                            <a href="#" class="list-group-item list-group-item-action">Activos</a>
+                            <a href="#" class="list-group-item list-group-item-action">Otros</a>
+                        </div>
+                    </div>
 
+                    <!-- Groups-->
+                    <div class="card-body">
+                        <p class="lead">Información General</p>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <span class="fa fa-calendar float-right"></span>
+                                <a href="#">23 años</a>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="feather icon-phone float-right"></span>
+                                <a href="#">316 4915332</a>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="feather icon-at-sign float-right"></span>
+                                <a href="#">alexanderx105@hotmail.com</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <!--/ Groups-->
+
+                    <!--More-->
+                    <div class="card-body  justify-content-between align-items-center">
+                        <p class="lead">Citas del paciente</p>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <span class="fa fa-calendar float-right"></span>
+                                <a href="#">Consulta General </a>
+                                <p class="sub-heading">23/11/2023 - 08:30 PM</p>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="fa fa-calendar float-right"></span>
+                                <a href="#">Consulta Especializada </a>
+                                <p class="sub-heading">23/11/2023 - 08:30 PM</p>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="fa fa-calendar float-right"></span>
+                                <a href="#">Consulta Especializada </a>
+                                <p class="sub-heading">23/11/2023 - 08:30 PM</p>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="fa fa-calendar float-right"></span>
+                                <a href="#">Consulta General </a>
+                                <p class="sub-heading">23/11/2023 - 08:30 PM</p>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <!--/More-->
+
+                </div>
+                <!--/ Predefined Views -->
+
+            </div>
         </div>
+        <div class="ps__rail-x" style="left: 0px; bottom: 0px;">
+            <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+        </div>
+        <div class="ps__rail-y" style="top: 0px; right: 0px;">
+            <div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;"></div>
+        </div>
+    </div>
+    </div>
+    </div>
+
+    <div id="loader" class="loader-spinner" style="display: none;">
+        <img src="{{ asset('app-assets/images/mujer.gif') }}" width="150" />
+        <h2 class="parpadeo" style="color: #D08997; font-weight: bold;">Cargando...</h2>
+
+    </div>
 
     </div>
 
@@ -527,7 +525,7 @@
     <form action="{{ url('/Administracion/ValidarProfesional') }}" id="formValidarProfesional" method="POST">
         @csrf
         <!-- Tus c
-                            ampos del formulario aquí -->
+                                                    ampos del formulario aquí -->
     </form>
 
     <form action="{{ url('/Administracion/BuscarProfesional') }}" id="formBuscarProfesional" method="POST">
@@ -541,6 +539,10 @@
     </form>
 
     <form action="{{ url('/Administracion/EliminarProfesional') }}" id="formEliminar" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/Administracion/GuardarSeccion') }}" id="formGuardarSeccion" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
@@ -817,12 +819,176 @@
                                 type: "errot",
                                 title: "Opsss...",
                                 text: "Ha ocurrido un error",
+                                confirmButtonClccass: "btn btn-primary",
+                                timer: 1500,
+                                buttonsStyling: false
+                            });
+                        }
+                    });
+                },
+                addSeccion: function() {
+                    $("#modalSesiones").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+
+                    $("#nombreSeccion").val('');
+                    $("#Descripcion").val('');
+                    $("#accion").val('agregar');
+
+                },
+                salirSeccion: function() {
+                    $('#modalSesiones').modal('toggle');
+                },
+                guardar: function() {
+
+
+                    if ($("#nombreSeccion").val().trim() === "") {
+                        Swal.fire({
+                            type: "warning",
+                            title: "Oops...",
+                            text: "Debes de ingresar el nombrer de la sección",
+                            confirmButtonClass: "btn btn-primary",
+                            timer: 1500,
+                            buttonsStyling: false
+                        });
+                        return;
+                    }
+
+                    var loader = document.getElementById('loader');
+                    loader.style.display = 'block';
+
+
+                    var form = $("#formGuardarSeccion");
+                    var url = form.attr("action");
+                    var accion = $("#accion").val();
+                    var token = $("#token").val();
+                    $("#idtoken").remove();
+                    $("#accion").remove();
+                    form.append("<input type='hidden' id='accion' name='accion'  value='" + accion +
+                        "'>");
+                    form.append("<input type='hidden' id='idtoken' name='_token'  value='" + token +
+                        "'>");
+
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: new FormData($('#formGuardarSeccion')[0]),
+                        processData: false,
+                        contentType: false,
+                        success: function(respuesta) {
+                            if (respuesta) {
+                                Swal.fire({
+                                    type: "success",
+                                    title: "",
+                                    text: "Operación realizada exitosamente",
+                                    confirmButtonClass: "btn btn-primary",
+                                    timer: 1500,
+                                    buttonsStyling: false
+                                });
+
+                                $.dibujarSeccion(respuesta);
+                                var loader = document.getElementById('loader');
+                                loader.style.display = 'none';
+                            }
+
+
+
+                        },
+                        error: function() {
+                            Swal.fire({
+                                type: "errot",
+                                title: "Opsss...",
+                                text: "Ha ocurrido un error",
                                 confirmButtonClass: "btn btn-primary",
                                 timer: 1500,
                                 buttonsStyling: false
                             });
                         }
                     });
+
+                },
+                dibujarSeccion: function(respuesta) {
+                    let conSeccion = $("#idSeccion").val(respuesta.id);
+                    conSeccion++;
+                    $("#conSeccion").val(conSeccion);
+                    let divSecciones = '<div class="card collapse-icon accordion-icon-rotate">' +
+                        '<div id="headingCollapse11" class="card-header pb-0 primary"' +
+                        '    data-toggle="collapse" href="#collapse11"' +
+                        '    aria-expanded="true" aria-controls="collapse11">' +
+                        '                                <h4 style="" class="form-section" id="tsesion1"><i' +
+                        '            class="fa fa-opencart mb-0"></i>'+respuesta.nombre+'</h4>' +
+                        '</div>' +
+                        '<div id="collapse11" role="tabpanel"' +
+                        ' aria-labelledby="headingCollapse11" class="collapse show">' +
+                        '<div class="card-content">' +
+                        '    <div class="card-body">' +
+                        '        <div class="repeater-controls d-flex">' +
+                        '           <div class="input-fields border border-light rounded p-1 d-flex"' +
+                        '               style="width: 100%">' +
+                        '    <div class="row invoice-item-controls d-flex"' +
+                        '       style="width: 100%">' +
+                        '        <div' +
+                        '           class="col-12 col-md-4 form-group item-name">' +
+                        '            <select class="form-control"' +
+                        '               id="selServ">' +
+                        '             </select>' +
+                        '        </div>' +
+                        '        <div' +
+                        '            class="col-12 col-md-2 form-group item-cost">' +
+                        '            <input type="text" id="valorServ"' +
+                        '                class="form-control"' +
+                        '                value="">' +
+                        '       </div>' +
+                        '        <div' +
+                        '            class="col-12 col-md-2 form-group item-price">' +
+                        '            <select class="form-control"' +
+                        '                id="selrct-cumpl">' +
+                        '                <option value="0">' +
+                        '                    0%' +
+                        '               </option>' +
+                        '                <option value="25">' +
+                        '                    25%' +
+                        '                </option>' +
+                        '                <option value="50">' +
+                        '                    50%' +
+                        '               </option>' +
+                        '                <option value="75">' +
+                        '                   75%' +
+                        '               </option>' +
+                        '          <option value="100">' +
+                        '            100%' +
+                        '    </option>' +
+                        ' </select>' +
+                        '</div>' +
+                        ' <div class="col-12 col-md-3 form-group item-price "' +
+                        ' style="display: flex; align-items: center; justify-content: center;">' +
+                        '<span' +
+                        '   class="fa fa-calendar"></span>11/11/2023' +
+                        ' </div>' +
+                        '</div>' +
+                        '<div' +
+                        'class="delete-and-discount-config h-100 ml-1 d-flex flex-column justify-content-between">' +
+                        '<span' +
+                        'class="cursor-pointer d-flex justify-content-center align-items-center">' +
+                        '<i class="fa fa-trash-o font-size-large"></i>' +
+                        '  </span>' +
+                        '</div>' +
+                        '</div>' +
+                        ' </div>' +
+                        '<button type="button"' +
+                        ' class="btn mt-1 btn-outline-success btn-sm"><i' +
+                        ' class="fa fa-plus"></i> Agregar' +
+                        '  Servicio</button>' +
+                        '  </div>' +
+                        '       </div>' +
+                        '   </div>' +
+                        '  </div>';
+
+
+                    $("#nseccciones").append(divSecciones);
+
                 }
 
             });

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Profesionales;
 use App\Models\Servicios;
+use App\Models\Secciones;
 use App\Models\Usuario;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -271,6 +272,32 @@ class AdminitraccionController extends Controller
                 return response()->json([
                     'estado' => $estado,
                     'id' => $idProfesional,
+                ]);
+            }
+
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+    
+    public function GuardarSeccion()
+    {
+        if (Auth::check()) {
+            $data = request()->all();
+            $idTratamiento = $data['idSeccion'];
+
+            if ($data['accion'] == "agregar") {
+                $respuesta = Secciones::guardar($data);
+            } else {
+
+                $respuesta = Servicios::editar($data);
+            }
+
+          
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'respuesta' => $respuesta
                 ]);
             }
 

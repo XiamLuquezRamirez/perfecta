@@ -61,3 +61,8 @@ Route::post('/AdminCitas/CargarPacientesCita', [PacientesController::class,'Carg
 Route::post('/AdminCitas/CargarAllCitas', [CitasController::class,'CargarAllCitas']);
 Route::post('/AdminCitas/VerDetallesCita', [CitasController::class,'VerDetallesCita']);
 Route::post('/AdminCitas/VerCitasPac', [CitasController::class,'VerCitasPac']);
+
+
+
+// GESTIONAR TRATAMIENTOS
+Route::post('/Administracion/GuardarSeccion', [AdminitraccionController::class,'GuardarSeccion']);
