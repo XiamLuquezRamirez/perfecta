@@ -263,7 +263,7 @@
                                                                     <div class="card-body">
                                                                         <div>
 
-                                                                            <div  class="card collapse-icon accordion-icon-rotate left">
+                                                                            <div  class="card collapse-icon accordion-icon-rotate">
                                                                                 <div id="headingCollapse11"
                                                                                     class="card-header primary"
                                                                                     data-toggle="collapse"
@@ -274,7 +274,7 @@
                                                                                     <h4 style=""
                                                                                         class="form-section"
                                                                                         id="tsesion1"><i
-                                                                                            class="fa fa-opencart"></i>
+                                                                                            class="fa fa-opencart mb-0"></i>
                                                                                         Sesion 1</h4>
                                                                                        
                                                                                 </div>
@@ -350,7 +350,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div id="headingCollapse12"
-                                                                                    class="card-header primary"
+                                                                                    class="card-header primary pt-0"
                                                                                     data-toggle="collapse"
                                                                                     href="#collapse12"
                                                                                     aria-expanded="false"
