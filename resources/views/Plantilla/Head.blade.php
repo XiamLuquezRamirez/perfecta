@@ -41,6 +41,7 @@
     <!-- END: Page CSS-->
     
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/Hover-master/css/hover.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/pages/app-email.css') }}">
 
 
     <!-- BEGIN: Custom CSS-->

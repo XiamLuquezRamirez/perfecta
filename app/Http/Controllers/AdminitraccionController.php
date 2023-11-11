@@ -289,15 +289,12 @@ class AdminitraccionController extends Controller
             if ($data['accion'] == "agregar") {
                 $respuesta = Secciones::guardar($data);
             } else {
-
                 $respuesta = Servicios::editar($data);
             }
 
-          
-
             if (request()->ajax()) {
                 return response()->json([
-                    'respuesta' => $respuesta
+                    'seccion' => $respuesta
                 ]);
             }
 

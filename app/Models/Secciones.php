@@ -11,8 +11,8 @@ class Secciones extends Model
     {
 
         $respuesta = DB::connection('mysql')->table('secciones')->insertGetId([
-            'nombre' => $request['nombre'],
-            'descripcion' => $request['descripcion'],
+            'nombre' => $request['nombreSeccion'],
+            'descripcion' => $request['descripcionSeccion'],
             'estado' => 'ACTIVO'
         ]);
 
