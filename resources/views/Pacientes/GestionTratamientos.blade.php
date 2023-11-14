@@ -311,554 +311,136 @@
                                                             <div id="sesionesTratamiento" class="form-body pt-0">
                                                                 <div class="carwd-body">
                                                                     <div id="nseccciones">
-                                                                      <div class="card collapse-header" role="tablist">
-                                                <div id="headingCollapse5" class="card-header d-flex justify-content-between align-items-center hvr-grow-shadow m-1" 
-                                                style="border-top-left-radius: 0.25rem; border-top-right-radius: 0.25rem; border: 1px solid #e4e7ed;" data-toggle="collapse" role="tab" data-target="#collapse5" aria-expanded="false" aria-controls="collapse5">
-                                                    <div class="collapse-title media">
-                                                      
-                                                        <div class="media-body mt-25">
-                                                       <h4>Nombre del tratamiento</h4>
-                                                        </div>
-                                                    </div>
-                                                    <div class="information d-sm-flex d-none align-items-center">
-                                                        <div class="collection mr-1">
-                                                           <span class="bullet bullet-xs bullet-primary"></span>
-                                                               <span class="font-weight-bold">$ 45.000,00</span>
-                                                            </div>
-                                                   
-                                                        <div class="dropdown">
-                                                            <a href="#" class="dropdown-toggle" id="fisrt-open-submenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                <i class='feather icon-more-vertical mr-0'></i>
-                                                            </a>
-                                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="fisrt-open-submenu">
-                                                                <a href="#" class="dropdown-item mail-reply">
-                                                                    <i class='feather icon-plus'></i>
-                                                                    Agregar Servicio
-                                                                </a>
-                                                                <div class="dropdown-divider"></div>
-                                                                <a href="#" class="dropdown-item">
-                                                                    <i class='feather icon-edit'></i>
-                                                                    Editar sección
-                                                                </a>
-                                                                <a href="#" class="dropdown-item">
-                                                                    <i class='feather icon-trash-2'></i>
-                                                                    Eliminar Sección
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div id="collapse5" role="tabpanel" aria-labelledby="headingCollapse5" class="collapse">
-                                                    <div class="card-content">
-                                                        <div class="card-body py-1">
-                                                            <div class="email-user-list list-group ps ps--active-y">
-                                                                <ul class="users-list-wrapper media-list">
-                                                                    <li class="media mail-read">
-                                                                        <div class="user-action">
-                                                                            <div class="checkbox-con ">
-                                                                                <div class="custom-control custom-checkbox">
-                                                                                    <input type="checkbox" class="custom-control-input" id="checkboxsmall1">
-                                                                                    <label class="custom-control-label" for="checkboxsmall1"></label>
+                                                                        <div class="card collapse-header" role="tablist">
+                                                                            <div id="headingCollapse5"
+                                                                                class="card-header d-flex justify-content-between align-items-center hvr-grow-shadow m-1"
+                                                                                style="border-top-left-radius: 0.25rem; border-top-right-radius: 0.25rem; border: 1px solid #e4e7ed;"
+                                                                                data-toggle="collapse" role="tab"
+                                                                                data-target="#collapse5"
+                                                                                aria-expanded="false"
+                                                                                aria-controls="collapse5">
+                                                                                <div class="collapse-title media">
+
+                                                                                    <div class="media-body mt-25">
+                                                                                        <h4>Nombre del tratamiento</h4>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="information d-sm-flex d-none align-items-center">
+                                                                                    <div class="collection mr-1">
+                                                                                        <span
+                                                                                            class="bullet bullet-xs bullet-primary"></span>
+                                                                                        <span class="font-weight-bold">$
+                                                                                            45.000,00</span>
+                                                                                    </div>
+
+                                                                                    <div class="dropdown">
+                                                                                        <a href="#"
+                                                                                            class="dropdown-toggle"
+                                                                                            id="fisrt-open-submenu"
+                                                                                            data-toggle="dropdown"
+                                                                                            aria-haspopup="true"
+                                                                                            aria-expanded="false">
+                                                                                            <i
+                                                                                                class='feather icon-more-vertical mr-0'></i>
+                                                                                        </a>
+                                                                                        <div class="dropdown-menu dropdown-menu-right"
+                                                                                            aria-labelledby="fisrt-open-submenu">
+                                                                                            <a href="#"
+                                                                                                class="dropdown-item mail-reply">
+                                                                                                <i
+                                                                                                    class='feather icon-plus'></i>
+                                                                                                Agregar Servicio
+                                                                                            </a>
+                                                                                            <div class="dropdown-divider">
+                                                                                            </div>
+                                                                                            <a href="#"
+                                                                                                class="dropdown-item">
+                                                                                                <i
+                                                                                                    class='feather icon-edit'></i>
+                                                                                                Editar sección
+                                                                                            </a>
+                                                                                            <a href="#"
+                                                                                                class="dropdown-item">
+                                                                                                <i
+                                                                                                    class='feather icon-trash-2'></i>
+                                                                                                Eliminar Sección
+                                                                                            </a>
+                                                                                        </div>
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <span class="favorite warning">
-                                                                                <i class="feather icon-star"></i>
-                                                                            </span>
-                                                                        </div>
-                                                                        <div class="pr-50">
-                                                                            <div class="avatar">
-                                                                                <img src="../../../app-assets/images/portrait/small/avatar-s-20.png" alt="avtar img holder">
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="media-body">
-                                                                            <div class="user-details">
-                                                                                <div class="mail-items">
-                                                                                    <span class="list-group-item-text text-truncate">Open source project public release 👍</span>
-                                                                                </div>
-                                                                                <div class="mail-meta-item">
-                                                                                    <span class="float-right">
-                                                                                        <span class="mail-date">4:14 AM</span>
-                                                                                    </span>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="mail-message">
-                                                                                <p class="list-group-item-text truncate mb-0">
-                                                                                    Hey John, bah kivu decrete epanorthotic unnotched
-                                                                                    Argyroneta nonius veratrine preimaginary
-                                                                                </p>
-                                                                                <div class="mail-meta-item">
-                                                                                    <span class="float-right">
-                                                                                        <span class="bullet bullet-success bullet-sm"></span>
-                                                                                    </span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </li>
-                                                                    <li class="media mail-read">
-                                                                        <div class="user-action">
-                                                                            <div class="checkbox-con ">
-                                                                                <div class="custom-control custom-checkbox">
-                                                                                    <input type="checkbox" class="custom-control-input" id="checkboxsmall2">
-                                                                                    <label class="custom-control-label" for="checkboxsmall2"></label>
-                                                                                </div>
-                                                                            </div>
-                                                                            <span class="favorite"><i class="feather icon-star"></i></span>
-                                                                        </div>
-                                                                        <div class="pr-50">
-                                                                            <div class="avatar">
-                                                                                <img class="rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-17.png" alt="Generic placeholder image">
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="media-body">
-                                                                            <div class="user-details">
-                                                                                <div class="mail-items">
-                                                                                    <span class="list-group-item-text text-truncate">Ecommerce website Paypal integration 😃</span>
-                                                                                </div>
-                                                                                <div class="mail-meta-item">
-                                                                                    <span class="float-right">
-                                                                                        <span class="mail-date">2:15 AM</span>
-                                                                                    </span>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="mail-message">
-                                                                                <p class="list-group-item-text mb-0 truncate">
-                                                                                    We will start the new application development soon once
-                                                                                    this will be completed.
-                                                                                </p>
-                                                                                <div class="mail-meta-item">
-                                                                                    <span class="float-right">
-                                                                                        <span class="bullet bullet-danger bullet-sm"></span>
-                                                                                    </span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </li>
-                                                                    <li class="media">
-                                                                        <div class="user-action">
-                                                                            <div class="checkbox-con ">
-                                                                                <div class="custom-control custom-checkbox">
-                                                                                    <input type="checkbox" class="custom-control-input" id="checkboxsmall3">
-                                                                                    <label class="custom-control-label" for="checkboxsmall3"></label>
-                                                                                </div>
-                                                                            </div>
-                                                                            <span class="favorite">
-                                                                                <i class="feather icon-star"></i>
-                                                                            </span>
-                                                                        </div>
-                                                                        <div class="pr-50">
-                                                                            <div class="avatar">
-                                                                                <img class="rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-7.png" alt="Generic placeholder image">
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="media-body">
-                                                                            <div class="user-details">
-                                                                                <div class="mail-items">
-                                                                                    <span class="list-group-item-text text-truncate">How To Set Intentions That Energize You</span>
-                                                                                </div>
-                                                                                <div class="mail-meta-item">
-                                                                                    <span class="float-right">
-                                                                                        <span class="mail-date">2:15 AM</span>
-                                                                                    </span>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="mail-message">
-                                                                                <p class="list-group-item-text mb-0 truncate">
-                                                                                    I will provide you more details after this Saturday. Hope
-                                                                                    that will be fine for you..
-                                                                                </p>
-                                                                                <div class="mail-meta-item">
-                                                                                    <span class="float-right d-flex align-items-center">
-                                                                                        <i class="feather icon-paperclip mr-50"></i>
-                                                                                        <span class="bullet bullet-success bullet-sm"></span>
-                                                                                    </span>
+                                                                            <div id="collapse5" role="tabpanel"
+                                                                                aria-labelledby="headingCollapse5"
+                                                                                class="collapse">
+                                                                                <div class="card-content">
+                                                                                    <div class="card-body py-1">
+                                                                                        <div id="audience-list-scroll"
+                                                                                            style="height: 400px;"
+                                                                                            class="table-responsive position-relative">
+                                                                                            <table class="table">
+
+                                                                                                <tbody>
+                                                                                                    <tr >     
+                                                                                                         <td  class="align-middle">
+                                                                                                        <div class="outerCircle" style="display: flex; justify-content: center; align-items: center; padding: 0; height: 50px; width: 50px; border-radius: 100%; background-image: conic-gradient(#94d3a2 0deg, #94d3a2 162deg, #D3D3D3 162deg)">
+                                                                                                            <div style="display: flex; justify-content: center; align-items: center; padding: 0; height: 40px; width: 40px; border-radius: 100%; background-color:white">
+                                                                                                                <span id="percentage">95%</span>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </td>
+
+                                                                                                        <td
+                                                                                                            class="align-middle">
+                                                                                                            <span>Cera</span>
+                                                                                                        </td>
+                                                                                                        <td
+                                                                                                            class="align-middle">
+                                                                                                            <span>$
+                                                                                                                45.000.00</span>
+                                                                                                        </td>
+                                                                                                   
+                                                                                                        <td
+                                                                                                            class="align-middle">
+                                                                                                            <span
+                                                                                                                class="badge badge-success">Activo</span>
+                                                                                                        </td>
+                                                                                                        <td
+                                                                                                            class="align-middle">
+                                                                                                            <div
+                                                                                                                class="dropdown">
+                                                                                                                <span
+                                                                                                                    class="feather icon-more-vertical dropdown-toggle"
+                                                                                                                    id="dropdownMenuButton"
+                                                                                                                    data-toggle="dropdown"
+                                                                                                                    aria-haspopup="true"
+                                                                                                                    aria-expanded="false">
+                                                                                                                </span>
+                                                                                                                <div class="dropdown-menu dropdown-menu-right"
+                                                                                                                    aria-labelledby="dropdownMenuButton"
+                                                                                                                    x-placement="bottom-end"
+                                                                                                                    style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 18px, 0px);"
+                                                                                                                    x-out-of-boundaries="">
+                                                                                                                    <a class="dropdown-item"
+                                                                                                                        href="#"></a>
+                                                                                                                    <a class="dropdown-item"
+                                                                                                                        href="#">Extras</a>
+                                                                                                                    <a class="dropdown-item"
+                                                                                                                        href="#">Newslatter</a>
+                                                                                                                </div>
+                                                                                                            </div>
+
+                                                                                                        </td>
+                                                                                                    </tr>
+
+                                                                                                </tbody>
+                                                                                            </table>
+                                                                                        </div>
+                                                                                    </div>
+
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                    </li>
-                                                                    <li class="media">
-                                                                        <div class="user-action">
-                                                                            <div class="checkbox-con ">
-                                                                                <div class="custom-control custom-checkbox">
-                                                                                    <input type="checkbox" class="custom-control-input" id="checkboxsmall4">
-                                                                                    <label class="custom-control-label" for="checkboxsmall4"></label>
-                                                                                </div>
-                                                                            </div>
-                                                                            <span class="favorite">
-                                                                                <i class="feather icon-star"></i>
-                                                                            </span>
-                                                                        </div>
-                                                                        <div class="pr-50">
-                                                                            <div class="avatar">
-                                                                                <img class="rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-5.png" alt="Generic placeholder image">
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="media-body">
-                                                                            <div class="user-details">
-                                                                                <div class="mail-items">
-                                                                                    <span class="list-group-item-text text-truncate">Harness The Power Of Words In Your Life</span>
-                                                                                </div>
-                                                                                <div class="mail-meta-item">
-                                                                                    <span class="float-right">
-                                                                                        <span class="mail-date">Yesterday</span>
-                                                                                    </span>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="mail-message">
-                                                                                <p class="list-group-item-text text-truncate mb-0">
-                                                                                    When the equation, first to ability the forwards, the a but travelling, outlines sentinels
-                                                                                    bad expand to goodness....
-                                                                                </p>
-                                                                                <div class="mail-meta-item">
-                                                                                    <span class="float-right d-flex align-items-center">
-                                                                                        <i class="feather icon-paperclip mr-50"></i>
-                                                                                        <span class="bullet bullet-warning bullet-sm"></span>
-                                                                                    </span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </li>
-                                                                    <li class="media mail-read">
-                                                                        <div class="user-action">
-                                                                            <div class="checkbox-con ">
-                                                                                <div class="custom-control custom-checkbox">
-                                                                                    <input type="checkbox" class="custom-control-input" id="checkboxsmall5">
-                                                                                    <label class="custom-control-label" for="checkboxsmall5"></label>
-                                                                                </div>
-                                                                            </div>
-                                                                            <span class="favorite">
-                                                                                <i class="feather icon-star"></i>
-                                                                            </span>
-                                                                        </div>
-                                                                        <div class="pr-50">
-                                                                            <div class="avatar">
-                                                                                <img class="rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-3.png" alt="Generic placeholder image">
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="media-body">
-                                                                            <div class="user-details">
-                                                                                <div class="mail-items">
-                                                                                    <span class="list-group-item-text text-truncate mb-0">Helen Keller A Teller And A Seller</span>
-                                                                                </div>
-                                                                                <div class="mail-meta-item">
-                                                                                    <span class="float-right">
-                                                                                        <span class="mail-date">15 July</span>
-                                                                                    </span>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="mail-message">
-                                                                                <p class="list-group-item-text mb-0 truncate">
-                                                                                    Thanks for your feedback ! Here's a new layout for a new Modern Admin theme.
-                                                                                </p>
-                                                                                <div class="mail-meta-item">
-                                                                                    <span class="float-right d-flex align-items-center">
-                                                                                        <i class="feather icon-paperclip mr-50"></i>
-                                                                                        <span class="bullet bullet-warning bullet-sm"></span>
-                                                                                    </span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </li>
-                                                                    <li class="media mail-read">
-                                                                        <div class="user-action">
-                                                                            <div class="checkbox-con ">
-                                                                                <div class="custom-control custom-checkbox">
-                                                                                    <input type="checkbox" class="custom-control-input" id="checkboxsmall6">
-                                                                                    <label class="custom-control-label" for="checkboxsmall6"></label>
-                                                                                </div>
-                                                                            </div>
-                                                                            <span class="favorite warning">
-                                                                                <i class="feather icon-star"></i>
-                                                                            </span>
-                                                                        </div>
-                                                                        <div class="pr-50">
-                                                                            <div class="avatar">
-                                                                                <img class="rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-8.png" alt="Generic placeholder image">
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="media-body">
-                                                                            <div class="user-details">
-                                                                                <div class="mail-items">
-                                                                                    <span class="list-group-item-text text-truncate mb-0">
-                                                                                        Use Your Reset Button To Change Your Vibration 🎉
-                                                                                    </span>
-                                                                                </div>
-                                                                                <div class="mail-meta-item">
-                                                                                    <span class="float-right">
-                                                                                        <span class="mail-date">12-07-2019</span>
-                                                                                    </span>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="mail-message">
-                                                                                <p class="list-group-item-text mb-0 truncate">
-                                                                                    Hey John, bah kivu decrete epanorthotic unnotched
-                                                                                    Argyroneta nonius veratrine preimaginary.</p>
-                                                                                <div class="mail-meta-item">
-                                                                                    <span class="float-right">
-                                                                                        <span class="bullet bullet-info bullet-sm"></span>
-                                                                                    </span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </li>
-                                                                    <li class="media">
-                                                                        <div class="user-action">
-                                                                            <div class="checkbox-con ">
-                                                                                <div class="custom-control custom-checkbox">
-                                                                                    <input type="checkbox" class="custom-control-input" id="checkboxsmall7">
-                                                                                    <label class="custom-control-label" for="checkboxsmall7"></label>
-                                                                                </div>
-                                                                            </div>
-                                                                            <span class="favorite warning">
-                                                                                <i class="feather icon-star"></i>
-                                                                            </span>
-                                                                        </div>
-                                                                        <div class="pr-50">
-                                                                            <div class="avatar">
-                                                                                <img class="rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-11.png" alt="Generic placeholder image">
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="media-body">
-                                                                            <div class="user-details">
-                                                                                <div class="mail-items">
-                                                                                    <span class="list-group-item-text text-truncate mb-0">Harness The Power Of Words In Your Life</span>
-                                                                                </div>
-                                                                                <div class="mail-meta-item">
-                                                                                    <span class="float-right">
-                                                                                        <span class="mail-date">03-29-2019</span>
-                                                                                    </span>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="mail-message">
-                                                                                <p class="list-group-item-text mb-0 truncate">
-                                                                                    Hope your like it, or feel free to comment, feedback or rebound !
-                                                                                </p>
-                                                                                <div class="mail-meta-item">
-                                                                                    <span class="float-right">
-                                                                                        <span class="bullet bullet-success bullet-sm"></span>
-                                                                                    </span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </li>
-                                                                    <li class="media mail-read">
-                                                                        <div class="user-action">
-                                                                            <div class="checkbox-con ">
-                                                                                <div class="custom-control custom-checkbox">
-                                                                                    <input type="checkbox" class="custom-control-input" id="checkboxsmall8">
-                                                                                    <label class="custom-control-label" for="checkboxsmall8"></label>
-                                                                                </div>
-                                                                            </div>
-                                                                            <span class="favorite">
-                                                                                <i class="feather icon-star"></i>
-                                                                            </span>
-                                                                        </div>
-                                                                        <div class="pr-50">
-                                                                            <div class="avatar">
-                                                                                <img class="rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-10.png" alt="Generic placeholder image">
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="media-body">
-                                                                            <div class="user-details">
-                                                                                <div class="mail-items">
-                                                                                    <span class="list-group-item-text text-truncate mb-0">Hypnosis 12 Steps To Acquire Mind Power</span>
-                                                                                </div>
-                                                                                <div class="mail-meta-item">
-                                                                                    <span class="float-right">
-                                                                                        <span class="mail-date">19 Jun</span>
-                                                                                    </span>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="mail-message">
-                                                                                <p class="list-group-item-text mb-0 truncate">
-                                                                                    Monstrous with geared from far and these, morals, phase rome; Class. Called get amidst of geared from
-                                                                                    next...
-                                                                                </p>
-                                                                                <div class="mail-meta-item">
-                                                                                    <span class="float-right">
-                                                                                        <span class="bullet bullet-danger bullet-sm"></span>
-                                                                                    </span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </li>
-                                                                    <li class="media mail-read">
-                                                                        <div class="user-action">
-                                                                            <div class="checkbox-con ">
-                                                                                <div class="custom-control custom-checkbox">
-                                                                                    <input type="checkbox" class="custom-control-input" id="checkboxsmall9">
-                                                                                    <label class="custom-control-label" for="checkboxsmall9"></label>
-                                                                                </div>
-                                                                            </div>
-                                                                            <span class="favorite">
-                                                                                <i class="feather icon-star"></i>
-                                                                            </span>
-                                                                        </div>
-                                                                        <div class="pr-50">
-                                                                            <div class="avatar">
-                                                                                <img class="rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-6.png" alt="Generic placeholder image">
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="media-body">
-                                                                            <div class="user-details">
-                                                                                <div class="mail-items">
-                                                                                    <span class="list-group-item-text text-truncate mb-0">How To Stop Living Your Life On Autopilot</span>
-                                                                                </div>
-                                                                                <div class="mail-meta-item">
-                                                                                    <span class="float-right">
-                                                                                        <span class="mail-date">2 Jun</span>
-                                                                                    </span>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="mail-message">
-                                                                                <p class="list-group-item-text mb-0 truncate">
-                                                                                    Thanks for your feedback ! Here's a new layout for a new
-                                                                                    Modern Admin theme.
-                                                                                </p>
-                                                                                <div class="mail-meta-item">
-                                                                                    <span class="float-right">
-                                                                                        <span class="bullet bullet-info bullet-sm"></span>
-                                                                                    </span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </li>
-                                                                    <li class="media">
-                                                                        <div class="user-action">
-                                                                            <div class="checkbox-con ">
-                                                                                <div class="custom-control custom-checkbox">
-                                                                                    <input type="checkbox" class="custom-control-input" id="checkboxsmall10">
-                                                                                    <label class="custom-control-label" for="checkboxsmall10"></label>
-                                                                                </div>
-                                                                            </div>
-                                                                            <span class="favorite">
-                                                                                <i class="feather icon-star"></i>
-                                                                            </span>
-                                                                        </div>
-                                                                        <div class="pr-50">
-                                                                            <div class="avatar">
-                                                                                <img class="rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-9.png" alt="Generic placeholder image">
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="media-body">
-                                                                            <div class="user-details">
-                                                                                <div class="mail-items">
-                                                                                    <span class="list-group-item-text text-truncate mb-0">
-                                                                                        Invest a few hours contributing to the software
-                                                                                        you use and love. 🍕
-                                                                                    </span>
-                                                                                </div>
-                                                                                <div class="mail-meta-item">
-                                                                                    <span class="float-right">
-                                                                                        <span class="mail-date">29 May</span>
-                                                                                    </span>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="mail-message">
-                                                                                <p class="list-group-item-text mb-0 truncate">
-                                                                                    Hope your like it, or feel free to comment, feedback or rebound !
-                                                                                </p>
-                                                                                <div class="mail-meta-item">
-                                                                                    <span class="float-right">
-                                                                                        <span class="bullet bullet-info bullet-sm"></span>
-                                                                                    </span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </li>
-                                                                    <li class="media">
-                                                                        <div class="user-action">
-                                                                            <div class="checkbox-con ">
-                                                                                <div class="custom-control custom-checkbox">
-                                                                                    <input type="checkbox" class="custom-control-input" id="checkboxsmall11">
-                                                                                    <label class="custom-control-label" for="checkboxsmall11"></label>
-                                                                                </div>
-                                                                            </div>
-                                                                            <span class="favorite">
-                                                                                <i class="feather icon-star"></i>
-                                                                            </span>
-                                                                        </div>
-                                                                        <div class="pr-50">
-                                                                            <div class="avatar">
-                                                                                <img class="rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-20.png" alt="Generic placeholder image">
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="media-body">
-                                                                            <div class="user-details">
-                                                                                <div class="mail-items">
-                                                                                    <span class="list-group-item-text text-truncate mb-0">Harness The Power Of Words In Your Life</span>
-                                                                                </div>
-                                                                                <div class="mail-meta-item">
-                                                                                    <span class="float-right">
-                                                                                        <span class="mail-date">17 May</span>
-                                                                                    </span>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="mail-message">
-                                                                                <p class="list-group-item-text mb-0 truncate">
-                                                                                    Hope your like it, or feel free to comment, feedback or rebound !.
-                                                                                </p>
-                                                                                <div class="mail-meta-item">
-                                                                                    <span class="float-right">
-                                                                                        <span class="bullet bullet-warning bullet-sm"></span>
-                                                                                    </span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </li>
-                                                                    <li class="media mail-read">
-                                                                        <div class="user-action">
-                                                                            <div class="checkbox-con ">
-                                                                                <div class="custom-control custom-checkbox">
-                                                                                    <input type="checkbox" class="custom-control-input" id="checkboxsmall12">
-                                                                                    <label class="custom-control-label" for="checkboxsmall12"></label>
-                                                                                </div>
-                                                                            </div>
-                                                                            <span class="favorite">
-                                                                                <i class="feather icon-star"></i>
-                                                                            </span>
-                                                                        </div>
-                                                                        <div class="pr-50">
-                                                                            <div class="avatar">
-                                                                                <img class="rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-17.png" alt="Generic placeholder image">
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="media-body">
-                                                                            <div class="user-details">
-                                                                                <div class="mail-items">
-                                                                                    <span class="list-group-item-text text-truncate mb-0"> Know Yourself Your Inner Power </span>
-                                                                                </div>
-                                                                                <div class="mail-meta-item">
-                                                                                    <span class="float-right">
-                                                                                        <span class="mail-date">21 Mar</span>
-                                                                                    </span>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="mail-message">
-                                                                                <p class="list-group-item-text mb-0 truncate">
-                                                                                    Hope your like it, or feel free to comment, feedback or rebound !
-                                                                                </p>
-                                                                                <div class="mail-meta-item">
-                                                                                    <span class="float-right">
-                                                                                        <span class="bullet bullet-warning bullet-sm"></span>
-                                                                                    </span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </li>
-                                                                </ul>
-                                                                <!-- email user list end -->
-                            
-                                                                <!-- no result when nothing to show on list -->
-                                                                <div class="no-results">
-                                                                    <i class="feather icon-info font-large-2"></i>
-                                                                    <h5>No Items Found</h5>
-                                                                </div>
-                                                            <div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; height: 605px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 391px;"></div></div></div>
-                                                        </div>
-                                                   
-                                                    </div>
-                                                </div>
-                                            </div>
 
                                                                     </div>
                                                                 </div>
@@ -986,7 +568,7 @@
     <form action="{{ url('/Administracion/ValidarProfesional') }}" id="formValidarProfesional" method="POST">
         @csrf
         <!-- Tus c
-                                                        ampos del formulario aquí -->
+                                                            ampos del formulario aquí -->
     </form>
 
     <form action="{{ url('/Administracion/BuscarProfesional') }}" id="formBuscarProfesional" method="POST">
@@ -1166,6 +748,9 @@
 
             general_task_radial_bar_chart.render();
             general_task_radial_bar_chart2.render();
+
+
+
 
             $.extend({
                 addTratamiento: function() {
@@ -1372,45 +957,46 @@
 
                     let conSeccion = $("#conSeccion").val();
                     conSeccion++;
-                    let divSecciones = '<div class="card box-shadow-0 border-primary bg-transparent">'
-                        +'<div class="card-header bg-transparent">'
-                        +'    <h4 class="card-title"><i class="feather icon-heart"></i> '+respuesta.seccion.nombre+'</h4>'
-                        +'    <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>'
-                        +'    <div class="heading-elements">'
-                        +'        <ul class="list-inline mb-0">'
-                        +'            <li><div class="collection mr-1">'
-                            +'    <span class="bullet bullet-xs bullet-primary"></span>'
-                            +'   <span class="font-weight-bold">$ 45.000,00</span>'
-                            +'</div></li>'
-                        +'            <li><div class="dropdown">'
-                        +'    <div class="dropdown-toggle cursor-pointer" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">'
-                        +'        <i class="feather icon-more-vertical">'
-                        +'         </i>'
-                        +'        </div>'
-                        +'        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton" x-placement="bottom-end" style="position: absolute; transform: translate3d(-127px, 24px, 0px); top: 0px; left: 0px; will-change: transform;">'
-                        +'             <a class="dropdown-item" href="#">'
-                        +'                <i class="feather icon-plus mr-50">'
-                        +'                    </i>Argregar Servicio'
-                        +'                </a>'
-                        +'             <a class="dropdown-item" href="#">'
-                        +'                <i class="feather icon-edit mr-50">'
-                        +'                    </i>Editar sección'
-                        +'                </a>'
-                        +'                <a class="dropdown-item kanban-delete" id="kanban-delete" href="#">'
-                        +'                    <i class="feather icon-trash-2 mr-50">'
-                        +'                    </i>Eliminar sección'
-                        +'                </a>'
-                        +'            </div>'
-                        +'        </div>'
-                        +'    </li>'
-                        +'        </ul>'
-                        +'    </div>'
-                        +'</div>'
-                        +'<div  class="card-content collapse show">'
-                        +'    <div class="card-body" id="div-servSeccion">'
-                        +'    </div>'
-                        +'</div>'
-                        +'</div>';
+                    let divSecciones = '<div class="card box-shadow-0 border-primary bg-transparent">' +
+                        '<div class="card-header bg-transparent">' +
+                        '    <h4 class="card-title"><i class="feather icon-heart"></i> ' + respuesta
+                        .seccion.nombre + '</h4>' +
+                        '    <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>' +
+                        '    <div class="heading-elements">' +
+                        '        <ul class="list-inline mb-0">' +
+                        '            <li><div class="collection mr-1">' +
+                        '    <span class="bullet bullet-xs bullet-primary"></span>' +
+                        '   <span class="font-weight-bold">$ 45.000,00</span>' +
+                        '</div></li>' +
+                        '            <li><div class="dropdown">' +
+                        '    <div class="dropdown-toggle cursor-pointer" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">' +
+                        '        <i class="feather icon-more-vertical">' +
+                        '         </i>' +
+                        '        </div>' +
+                        '        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton" x-placement="bottom-end" style="position: absolute; transform: translate3d(-127px, 24px, 0px); top: 0px; left: 0px; will-change: transform;">' +
+                        '             <a class="dropdown-item" href="#">' +
+                        '                <i class="feather icon-plus mr-50">' +
+                        '                    </i>Argregar Servicio' +
+                        '                </a>' +
+                        '             <a class="dropdown-item" href="#">' +
+                        '                <i class="feather icon-edit mr-50">' +
+                        '                    </i>Editar sección' +
+                        '                </a>' +
+                        '                <a class="dropdown-item kanban-delete" id="kanban-delete" href="#">' +
+                        '                    <i class="feather icon-trash-2 mr-50">' +
+                        '                    </i>Eliminar sección' +
+                        '                </a>' +
+                        '            </div>' +
+                        '        </div>' +
+                        '    </li>' +
+                        '        </ul>' +
+                        '    </div>' +
+                        '</div>' +
+                        '<div  class="card-content collapse show">' +
+                        '    <div class="card-body" id="div-servSeccion">' +
+                        '    </div>' +
+                        '</div>' +
+                        '</div>';
 
                     $("#nseccciones").append(divSecciones);
 
@@ -1418,7 +1004,7 @@
                 addServicio: function(id) {
                     let servicios = '';
 
-                        $("#div-servSeccion"+id).append(servicios);
+                    $("#div-servSeccion" + id).append(servicios);
                 }
 
             });
@@ -1428,6 +1014,16 @@
 
 
         })
+
+
+        function updatePercentage(porcentaje) {
+            $('#percentage').text(porcentaje + '%');
+            $('.outerCircle').css('background-image', `conic-gradient(#94d3a2 0deg, #94d3a2 ${3.6 * porcentaje}deg, #D3D3D3 ${3.6 * porcentaje}deg)`);
+        }
+
+        // Llamar a la función con un porcentaje específico (puedes cambiar este valor)
+        updatePercentage(30);
+
     </script>
 
     </script>
