@@ -34,8 +34,6 @@ Route::get('/AdminPacientes/municipios', [PacientesController::class,'CargarMuni
 Route::post('/AdminPacientes/ValidarPacientes', [PacientesController::class,'ValidarPacientes']);
 Route::post('/AdminPacientes/BuscarPacientes', [PacientesController::class,'BuscarPacientes']);
 Route::post('/AdminPacientes/AllProfesionales', [PacientesController::class,'AllProfesionales']);
-Route::get('/AdminPacientes/Tratamientos', [PacientesController::class,'Tratamientos']);
-Route::post('/AdminPacientes/GuardarTratamiento', [PacientesController::class,'GuardarTratamiento']);
 
 
 //GESTIOAR ADMINISTRACCION
@@ -65,4 +63,6 @@ Route::post('/AdminCitas/VerCitasPac', [CitasController::class,'VerCitasPac']);
 
 
 // GESTIONAR TRATAMIENTOS
-Route::post('/Administracion/GuardarSeccion', [AdminitraccionController::class,'GuardarSeccion']);
+Route::get('/AdminPacientes/Tratamientos', [PacientesController::class,'Tratamientos']);
+Route::post('/AdminPacientes/GuardarTratamiento', [PacientesController::class,'GuardarTratamiento']);
+Route::post('/AdminPacientes/GuardarSeccion', [AdminPacientes::class,'GuardarSeccion']);

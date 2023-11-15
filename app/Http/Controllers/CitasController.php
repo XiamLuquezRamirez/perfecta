@@ -13,6 +13,7 @@ class CitasController extends Controller
 {
     public function CargarDisponibilidad()
     {
+        if (Auth::check()) {
         $idProf =  request()->get('idProf');
         $disponibilidad = Citas::CitasProfesional($idProf);
 
@@ -21,11 +22,14 @@ class CitasController extends Controller
                 'disponibilidad' => $disponibilidad
             ]);
         }
+    } else {
+        return redirect("/")->with("error", "Su Sesión ha Terminado");
+    }
     }
 
     public function CargarAllCitas()
     {
-
+        if (Auth::check()) {
         $disponibilidad = Citas::AllCitas();
 
         if (request()->ajax()) {
@@ -33,9 +37,14 @@ class CitasController extends Controller
                 'disponibilidad' => $disponibilidad
             ]);
         }
+    } else {
+        return redirect("/")->with("error", "Su Sesión ha Terminado");
     }
+    }
+
     public function VerDetallesCita()
     {
+        if (Auth::check()) {
         $idCita = request()->get('idCita');
         $detaCita = Citas::buscaDetCitas($idCita);
 
@@ -47,9 +56,14 @@ class CitasController extends Controller
                 'paciente' => $paciente,
             ]);
         }
+    } else {
+        return redirect("/")->with("error", "Su Sesión ha Terminado");
     }
+    }
+
     public function VerCitasPac()
     {
+        if (Auth::check()) {
         $idPac = request()->get('idPac');
         $CitasPaciente = Citas::buscaCitasPacientes($idPac);
 
@@ -59,6 +73,9 @@ class CitasController extends Controller
                 'CitasPaciente' => $CitasPaciente
             ]);
         }
+    } else {
+        return redirect("/")->with("error", "Su Sesión ha Terminado");
+    }
     }
 
     public function GuardarCita()

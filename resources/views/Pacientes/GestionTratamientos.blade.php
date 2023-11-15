@@ -3,7 +3,8 @@
 @section('Contenido')
     <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
     <input type="hidden" id="Ruta" data-ruta="{{ asset('/app-assets/') }}" />
-    <input type="hidden" id="conSeccion" name="conSeccion" value="1" />
+    <input type="hidden" id="conSeccion" name="conSeccion" value="0" />
+    <input type="hidden" id="accion" value="" />
     <div class="content-header row">
         <div class="content-header-left col-md-6 col-12 mb-2">
             <h3 class="content-header-title mb-0">Gestionar Tratamientos</h3>
@@ -80,57 +81,11 @@
                                             <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">Tratamientos Activos
                                             </h4>
                                             <hr>
-
                                             <div class="col-xxl-8 col-xl-12 col-lg-12 col-md-12 col-12">
                                                 <div class="card info-time-tracking">
-                                                    <div class="card-content">
-                                                        <div class="row">
-                                                            <div
-                                                                class="col-12 pt-2 pb-2 border-bottom-blue-grey border-bottom-lighten-5">
-                                                                <div
-                                                                    class="info-time-tracking-title d-flex justify-content-between align-items-center">
-                                                                    <h4
-                                                                        class="pl-2 mb-0 title-info-time-heading text-bold-500">
-                                                                        Tratamiento de depilacion laser</h4>
-                                                                    <span class="pr-2" style="cursor: pointer;">
-                                                                        <i class="fa fa-trash-o"></i>
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-12 hvr-grow-shadow" style="cursor: pointer;"
-                                                                onclick="$.verTratamiento();">
-                                                                <div class="card-body ">
-                                                                    <div
-                                                                        class="row justify-content-center align-items-center">
-                                                                        <div
-                                                                            class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">
-                                                                            <h6 class="pt-1"><span
-                                                                                    class="fa fa-user"></span> Profesional:
-                                                                            </h6>
-                                                                            <p>Mairen Pumarejo</p>
-                                                                        </div>
-                                                                        <div
-                                                                            class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">
-                                                                            <h6 class="pt-1"><span
-                                                                                    class="fa fa-th-large"></span>
-                                                                                Especialidad:</h6>
-                                                                            <p>Consulta General</p>
-                                                                        </div>
-                                                                        <div
-                                                                            class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">
-                                                                            <h6 class="pt-1"><span
-                                                                                    class="fa fa-calendar"></span> Ultima
-                                                                                Cita:</h6>
-                                                                            <p>23/11/2023 08:00 AM</p>
-                                                                        </div>
-                                                                        <div
-                                                                            class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">
-                                                                            <div id="general_task_radial_bar_chart"></div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                    <div class="card-content" id="div-trata-act">
+                                                        
+                                                        
                                                     </div>
                                                 </div>
                                             </div>
@@ -182,64 +137,111 @@
                                                                         </div>
                                                                         <div
                                                                             class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">
-                                                                            <div id="general_task_radial_bar_chart2"></div>
+                                                                            <div class="outerCircle"
+                                                                                style="display: flex; justify-content: center; align-items: center; padding: 0; height: 50px; width: 50px; border-radius: 100%; background-image: conic-gradient(#94d3a2 0deg, #94d3a2 162deg, #D3D3D3 162deg)">
+                                                                                <div
+                                                                                    style="display: flex; justify-content: center; align-items: center; padding: 0; height: 40px; width: 40px; border-radius: 100%; background-color:white">
+                                                                                    <span id="porcentajeTrata">95%</span>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <form class="form" method="post" id="formGuardarTratamiento"
-                                            action="{{ url('/') }}/AdminPacientes/GuardarTratamiento">
-                                            <input type="hidden" name="idTratamiento" id="idTratamiento"
-                                                value="" />
-                                            <input type="hidden" id="accion" value="" />
 
-                                            <div class="card-body" id="addTratamiento" style="display: none">
-                                                <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">Gestionar
-                                                    Tratamiento</h4>
-                                                <hr>
-                                                <section id="user-profile-cards" class="row mt-2">
-                                                    <div class="col-xl-12 col-md-6 col-12">
-                                                        <div class="form-group">
-                                                            <div class="controls">
-                                                                <label>Nombre de tratamiento:</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="nombre_tratamiento" name="nombre_tratamiento"
-                                                                    placeholder="Nombre de tratamiento" value="">
-                                                            </div>
-                                                        </div>
+                                        {{--  Modal nuevo tratamiento  --}}
+                                        <div class="modal fade text-left" id="modalTratamiento" tabindex="-1"
+                                            role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title" id="tituloTratamiento">Crear Tratmiento
+                                                        </h4>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true"
+                                                                style="font-size: 25px;">&times;</span>
+                                                        </button>
                                                     </div>
-                                                    <div class="col-xl-12 col-md-6 col-12">
-                                                        <div class="form-group">
-                                                            <div class="controls">
-                                                                <label>Profesional:</label>
-                                                                <select class="select2 form-control" id="profesional"
-                                                                    name="profesional">
-                                                                </select>
-                                                            </div>
+                                                    <div class="modal-body">
+                                                        <div class="card-body">
+                                                            <form class="form" method="post"
+                                                                id="formGuardarTratamiento"
+                                                                action="{{ url('/') }}/AdminPacientes/GuardarTratamiento">
+                                                                <input type="hidden" name="idTratamiento"
+                                                                    id="idTratamiento" value="" />
+                                                                <section id="user-profile-cards" class="row mt-2">
+                                                                    <div class="col-xl-12 col-md-6 col-12">
+                                                                        <div class="form-group">
+                                                                            <div class="controls">
+                                                                                <label>Nombre de tratamiento:</label>
+                                                                                <input type="text" class="form-control"
+                                                                                    id="nombre_tratamiento"
+                                                                                    name="nombre_tratamiento"
+                                                                                    placeholder="Nombre de tratamiento"
+                                                                                    value="">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-xl-12 col-md-6 col-12">
+                                                                        <div class="form-group">
+                                                                            <div class="controls">
+                                                                                <label>Profesional:</label>
+                                                                                <select class="select2 form-control"
+                                                                                    id="profesional" name="profesional">
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-xl-12 col-md-6 col-12">
+                                                                        <div class="form-group">
+                                                                            <div class="controls">
+                                                                                <label>Especialidad:</label>
+                                                                                <select class="select2 form-control" id="especialidad"
+                                                                                name="especialidad">
+                                                                                <option value="">Seleccione...
+                                                                                </option>
+                                                                                <option value="Consulta General">Consulta
+                                                                                    General</option>
+                                                                                <option value="Consulta Especializada">
+                                                                                    Consulta Especializada</option>
+                                                                            </select>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-xl-12 col-md-6 col-12">
+                                                                        <div class="form-actions right">
+                                                                            <button type="button"
+                                                                                id="btn_cancelaTratamiento"
+                                                                                onclick="$.cancelarTrataminto();"
+                                                                                class="btn btn-warning mr-1">
+                                                                                <i class="feather icon-corner-up-left"></i>
+                                                                                Salir
+                                                                            </button>
+                                                                            <button type="button"
+                                                                                id="btn_guadarTrataminto"
+                                                                                onclick="$.guardarTrataminto();"
+                                                                                class="btn btn-primary">
+                                                                                <i class="fa fa-check-square-o"></i>
+                                                                                Guardar
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </section>
+                                                            </form>
                                                         </div>
+
                                                     </div>
-                                                    <div class="col-xl-12 col-md-6 col-12">
-                                                        <div class="form-actions right">
-                                                            <button type="button" id="btn_cancelaTratamiento"
-                                                                onclick="$.cancelarTrataminto();"
-                                                                class="btn btn-warning mr-1">
-                                                                <i class="feather icon-x"></i> Cancelar
-                                                            </button>
-                                                            <button type="button" id="btn_guadarTrataminto"
-                                                                onclick="$.guardarTrataminto();" class="btn btn-primary">
-                                                                <i class="fa fa-check-square-o"></i> Guardar
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </section>
+                                                </div>
 
                                             </div>
-                                        </form>
+                                        </div>
                                         {{--  Modal nueva sesion  --}}
                                         <div class="modal fade text-left" id="modalSesiones" tabindex="-1"
                                             role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
@@ -256,7 +258,7 @@
                                                     <div class="modal-body">
                                                         <div class="card-body">
                                                             <form class="form" method="post" id="formGuardarSeccion"
-                                                                action="{{ url('/') }}/Administracion/GuardarSeccion">
+                                                                action="{{ url('/') }}/AdminPacientes/GuardarSeccion">
                                                                 <input type="hidden" name="idSeccion" id="idSeccion"
                                                                     value="" />
                                                                 <div class="form-body">
@@ -287,6 +289,8 @@
 
                                             </div>
                                         </div>
+
+
                                         <div class="card-body" id="detTratamiento" style="display: none">
                                             <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">Gestionar
                                                 Tratamiento</h4>
@@ -311,136 +315,7 @@
                                                             <div id="sesionesTratamiento" class="form-body pt-0">
                                                                 <div class="carwd-body">
                                                                     <div id="nseccciones">
-                                                                        <div class="card collapse-header" role="tablist">
-                                                                            <div id="headingCollapse5"
-                                                                                class="card-header d-flex justify-content-between align-items-center hvr-grow-shadow m-1"
-                                                                                style="border-top-left-radius: 0.25rem; border-top-right-radius: 0.25rem; border: 1px solid #e4e7ed;"
-                                                                                data-toggle="collapse" role="tab"
-                                                                                data-target="#collapse5"
-                                                                                aria-expanded="false"
-                                                                                aria-controls="collapse5">
-                                                                                <div class="collapse-title media">
 
-                                                                                    <div class="media-body mt-25">
-                                                                                        <h4>Nombre del tratamiento</h4>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div
-                                                                                    class="information d-sm-flex d-none align-items-center">
-                                                                                    <div class="collection mr-1">
-                                                                                        <span
-                                                                                            class="bullet bullet-xs bullet-primary"></span>
-                                                                                        <span class="font-weight-bold">$
-                                                                                            45.000,00</span>
-                                                                                    </div>
-
-                                                                                    <div class="dropdown">
-                                                                                        <a href="#"
-                                                                                            class="dropdown-toggle"
-                                                                                            id="fisrt-open-submenu"
-                                                                                            data-toggle="dropdown"
-                                                                                            aria-haspopup="true"
-                                                                                            aria-expanded="false">
-                                                                                            <i
-                                                                                                class='feather icon-more-vertical mr-0'></i>
-                                                                                        </a>
-                                                                                        <div class="dropdown-menu dropdown-menu-right"
-                                                                                            aria-labelledby="fisrt-open-submenu">
-                                                                                            <a href="#"
-                                                                                                class="dropdown-item mail-reply">
-                                                                                                <i
-                                                                                                    class='feather icon-plus'></i>
-                                                                                                Agregar Servicio
-                                                                                            </a>
-                                                                                            <div class="dropdown-divider">
-                                                                                            </div>
-                                                                                            <a href="#"
-                                                                                                class="dropdown-item">
-                                                                                                <i
-                                                                                                    class='feather icon-edit'></i>
-                                                                                                Editar sección
-                                                                                            </a>
-                                                                                            <a href="#"
-                                                                                                class="dropdown-item">
-                                                                                                <i
-                                                                                                    class='feather icon-trash-2'></i>
-                                                                                                Eliminar Sección
-                                                                                            </a>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div id="collapse5" role="tabpanel"
-                                                                                aria-labelledby="headingCollapse5"
-                                                                                class="collapse">
-                                                                                <div class="card-content">
-                                                                                    <div class="card-body py-1">
-                                                                                        <div id="audience-list-scroll"
-                                                                                            style="height: 400px;"
-                                                                                            class="table-responsive position-relative">
-                                                                                            <table class="table">
-
-                                                                                                <tbody>
-                                                                                                    <tr >     
-                                                                                                         <td  class="align-middle">
-                                                                                                        <div class="outerCircle" style="display: flex; justify-content: center; align-items: center; padding: 0; height: 50px; width: 50px; border-radius: 100%; background-image: conic-gradient(#94d3a2 0deg, #94d3a2 162deg, #D3D3D3 162deg)">
-                                                                                                            <div style="display: flex; justify-content: center; align-items: center; padding: 0; height: 40px; width: 40px; border-radius: 100%; background-color:white">
-                                                                                                                <span id="percentage">95%</span>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </td>
-
-                                                                                                        <td
-                                                                                                            class="align-middle">
-                                                                                                            <span>Cera</span>
-                                                                                                        </td>
-                                                                                                        <td
-                                                                                                            class="align-middle">
-                                                                                                            <span>$
-                                                                                                                45.000.00</span>
-                                                                                                        </td>
-                                                                                                   
-                                                                                                        <td
-                                                                                                            class="align-middle">
-                                                                                                            <span
-                                                                                                                class="badge badge-success">Activo</span>
-                                                                                                        </td>
-                                                                                                        <td
-                                                                                                            class="align-middle">
-                                                                                                            <div
-                                                                                                                class="dropdown">
-                                                                                                                <span
-                                                                                                                    class="feather icon-more-vertical dropdown-toggle"
-                                                                                                                    id="dropdownMenuButton"
-                                                                                                                    data-toggle="dropdown"
-                                                                                                                    aria-haspopup="true"
-                                                                                                                    aria-expanded="false">
-                                                                                                                </span>
-                                                                                                                <div class="dropdown-menu dropdown-menu-right"
-                                                                                                                    aria-labelledby="dropdownMenuButton"
-                                                                                                                    x-placement="bottom-end"
-                                                                                                                    style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 18px, 0px);"
-                                                                                                                    x-out-of-boundaries="">
-                                                                                                                    <a class="dropdown-item"
-                                                                                                                        href="#"></a>
-                                                                                                                    <a class="dropdown-item"
-                                                                                                                        href="#">Extras</a>
-                                                                                                                    <a class="dropdown-item"
-                                                                                                                        href="#">Newslatter</a>
-                                                                                                                </div>
-                                                                                                            </div>
-
-                                                                                                        </td>
-                                                                                                    </tr>
-
-                                                                                                </tbody>
-                                                                                            </table>
-                                                                                        </div>
-                                                                                    </div>
-
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
 
                                                                     </div>
                                                                 </div>
@@ -568,7 +443,7 @@
     <form action="{{ url('/Administracion/ValidarProfesional') }}" id="formValidarProfesional" method="POST">
         @csrf
         <!-- Tus c
-                                                            ampos del formulario aquí -->
+                                                                                ampos del formulario aquí -->
     </form>
 
     <form action="{{ url('/Administracion/BuscarProfesional') }}" id="formBuscarProfesional" method="POST">
@@ -585,10 +460,7 @@
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
-    <form action="{{ url('/Administracion/GuardarSeccion') }}" id="formGuardarSeccion" method="POST">
-        @csrf
-        <!-- Tus campos del formulario aquí -->
-    </form>
+
 
 @endsection
 
@@ -754,11 +626,17 @@
 
             $.extend({
                 addTratamiento: function() {
-                    $("#addTratamiento").show();
-                    $("#detTratamiento").hide();
-                    $("#listTratamientos").hide();
+
+                    $("#modalTratamiento").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+
                     $("#accion").val("agregar");
                     $.cargarProfesionales();
+                },
+                cancelarTrataminto: function() {
+                    $('#modalTratamiento').modal('toggle');
                 },
                 verTratamiento: function() {
                     $("#detTratamiento").show();
@@ -832,7 +710,10 @@
                         "'>");
                     form.append("<input type='hidden' id='accion' name='accion'  value='" + accion +
                         "'>");
-
+                
+                    let newTrata = '';   
+                    let consTrata = 1;
+                    let porAvancTrat = 0;
                     $.ajax({
                         type: "POST",
                         url: url,
@@ -850,11 +731,62 @@
                                     buttonsStyling: false
                                 });
 
-                                $("#idTratamiento").val(respuesta.tratamiento.id);
-                                $("#tit_tratamiento").html(respuesta.tratamiento.nombre);
+                                $.each(respuesta.newTrata, function(i, item) {
 
-                                $("#addTratamiento").hide();
-                                $("#detTratamiento").show();
+                                    newTrata += '<div class="row">'
+                                        +'<div class="col-12 pt-2 pb-2 border-bottom-blue-grey border-bottom-lighten-5">'
+                                        +'    <div class="info-time-tracking-title d-flex justify-content-between align-items-center">'
+                                        +'        <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">'
+                                        +'            '+item.nombre+'</h4>'
+                                        +'        <span class="pr-2 fonticon-wrap"'
+                                        +'            style="cursor: pointer; ">'
+                                        +'            <i style="transition: all .2s ease-in-out;c" title="Editar Tratamiento"'
+                                        +'                class="fa fa-pencil font-medium-5"></i>'
+                                        +'            <i title="Eliminar Tratamiento"'
+                                        +'                class="fa fa-trash-o  font-medium-5"></i>'
+                                        +'        </span>'
+                                        +'    </div>'
+                                        +'</div>'
+                                        +'<div class="col-12 hvr-grow-shadow" style="cursor: pointer;"'
+                                        +'    onclick="$.verTratamiento();">'
+                                        +'    <div class="card-body ">'
+                                        +'        <div class="row justify-content-center align-items-center">'
+                                        +'            <div class="col-xl-4 col-lg-6 col-md-12 text-center clearfix">'
+                                        +'                <h6 class="pt-1"><span'
+                                        +'                        class="fa fa-user"></span> Profesional:'
+                                        +'                </h6>'
+                                        +'                <p>Mairen Pumarejo</p>'
+                                        +'            </div>'
+                                        +'            <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">'
+                                        +'                <h6 class="pt-1"><span'
+                                        +'                        class="fa fa-th-large"></span>'
+                                        +'                    Especialidad:</h6>'
+                                        +'                <p>'+item.especialidad+'</p>'
+                                        +'            </div>'
+                                        +'            <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">'
+                                        +'                <h6 class="pt-1"><span'
+                                        +'                        class="fa fa-calendar"></span> Ultima'
+                                        +'                    Cita:</h6>'
+                                        +'                <p>---</p>'
+                                        +'            </div>'
+                                        +'            <div class="col-xl-2 col-lg-6 col-md-12 text-center clearfix">'
+                                        +'                <div id="outerCircleTrata'+consTrata+'" class="outerCircleTrata"'
+                                        +'                style="display: flex; justify-content: center; align-items: center; padding: 0; height: 50px; width: 50px; border-radius: 100%; background-image: conic-gradient(#24BEC0 0deg, #24BEC0 162deg, #F0F0F0 162deg)">'
+                                        +'                <div style="display: flex; justify-content: center; align-items: center; padding: 0; height: 40px; width: 40px; border-radius: 100%; background-color:white">'
+                                        +'                    <span id="porcentajeTrata'+consTrata+'">0%</span>'
+                                        +'                </div>'
+                                        +'            </div>'
+                                        +'           </div>'
+                                        +'        </div>'
+                                        +'    </div>'
+                                        +'</div>'
+                                        +'</div>';
+                                        updatePercentageTratamientos(porAvancTrat,consTrata);
+                                        consTrata++;
+    
+                                });
+
+                                $("#div-trata-act").html(newTrata);
 
                                 var loader = document.getElementById('loader');
                                 loader.style.display = 'none';
@@ -909,11 +841,15 @@
                     var url = form.attr("action");
                     var accion = $("#accion").val();
                     var token = $("#token").val();
+                    var tratamiento = $("#idTratamiento").val();
                     $("#idtoken").remove();
                     $("#accion").remove();
                     form.append("<input type='hidden' id='accion' name='accion'  value='" + accion +
                         "'>");
                     form.append("<input type='hidden' id='idtoken' name='_token'  value='" + token +
+                        "'>");
+                    form.append("<input type='hidden' id='idtrata' name='idtrata'  value='" +
+                        tratamiento +
                         "'>");
 
 
@@ -957,49 +893,78 @@
 
                     let conSeccion = $("#conSeccion").val();
                     conSeccion++;
-                    let divSecciones = '<div class="card box-shadow-0 border-primary bg-transparent">' +
-                        '<div class="card-header bg-transparent">' +
-                        '    <h4 class="card-title"><i class="feather icon-heart"></i> ' + respuesta
-                        .seccion.nombre + '</h4>' +
-                        '    <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>' +
-                        '    <div class="heading-elements">' +
-                        '        <ul class="list-inline mb-0">' +
-                        '            <li><div class="collection mr-1">' +
-                        '    <span class="bullet bullet-xs bullet-primary"></span>' +
-                        '   <span class="font-weight-bold">$ 45.000,00</span>' +
-                        '</div></li>' +
-                        '            <li><div class="dropdown">' +
-                        '    <div class="dropdown-toggle cursor-pointer" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">' +
-                        '        <i class="feather icon-more-vertical">' +
-                        '         </i>' +
+                    let divSecciones = '<div class="card collapse-header" role="tablist">' +
+                        '<div id="headingCollapse5"' +
+                        '    class="card-header d-flex justify-content-between align-items-center hvr-grow-shadow m-1"' +
+                        '    style="border-top-left-radius: 0.25rem; border-top-right-radius: 0.25rem; border: 1px solid #e4e7ed;"' +
+                        '    data-toggle="collapse" role="tab"' +
+                        '    data-target="#collapse5"' +
+                        '    aria-expanded="false"' +
+                        '   aria-controls="collapse5">' +
+                        '    <div class="collapse-title media">' +
+                        '        <div class="media-body mt-25">' +
+                        '            <h4>' + respuesta.seccion.nombre + '</h4>' +
                         '        </div>' +
-                        '        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton" x-placement="bottom-end" style="position: absolute; transform: translate3d(-127px, 24px, 0px); top: 0px; left: 0px; will-change: transform;">' +
-                        '             <a class="dropdown-item" href="#">' +
-                        '                <i class="feather icon-plus mr-50">' +
-                        '                    </i>Argregar Servicio' +
+                        '    </div>' +
+                        '    <div' +
+                        '        class="information d-sm-flex d-none align-items-center">' +
+                        '        <div class="collection mr-1">' +
+                        '            <span' +
+                        '                class="bullet bullet-xs bullet-primary"></span>' +
+                        '            <span class="font-weight-bold">$' +
+                        '                0,00</span>' +
+                        '        </div>' +
+                        '<div class="dropdown">' +
+                        '            <a href="#"' +
+                        '                class="dropdown-toggle"' +
+                        '                id="fisrt-open-submenu"' +
+                        '                data-toggle="dropdown"' +
+                        '                aria-haspopup="true"' +
+                        '                aria-expanded="false">' +
+                        '                <i class="feather icon-more-vertical mr-0"></i>' +
+                        '            </a>' +
+                        '            <div class="dropdown-menu dropdown-menu-right"' +
+                        '                aria-labelledby="fisrt-open-submenu">' +
+                        '               <a onclick="$.addServicioSeccion(' + conSeccion +
+                        ');" class="dropdown-item mail-reply">' +
+                        '                    <i class="feather icon-plus"></i>' +
+                        '                   Agregar Servicio' +
                         '                </a>' +
-                        '             <a class="dropdown-item" href="#">' +
-                        '                <i class="feather icon-edit mr-50">' +
-                        '                    </i>Editar sección' +
+                        '                <div class="dropdown-divider">' +
+                        '                </div>' +
+                        '                <a href="#"' +
+                        '                    class="dropdown-item">' +
+                        '                    <i class="feather icon-edit" ></i>' +
+                        '                   Editar sección' +
                         '                </a>' +
-                        '                <a class="dropdown-item kanban-delete" id="kanban-delete" href="#">' +
-                        '                    <i class="feather icon-trash-2 mr-50">' +
-                        '                    </i>Eliminar sección' +
+                        '                <a href="#"' +
+                        '                    class="dropdown-item">' +
+                        '                    <i class="feather icon-trash-2"></i>' +
+                        '                    Eliminar Sección' +
                         '                </a>' +
                         '            </div>' +
-                        '        </div>' +
-                        '    </li>' +
-                        '        </ul>' +
+                        '       </div>' +
                         '    </div>' +
                         '</div>' +
-                        '<div  class="card-content collapse show">' +
-                        '    <div class="card-body" id="div-servSeccion">' +
+                        '<div id="collapse5" role="tabpanel"' +
+                        '    aria-labelledby="headingCollapse5"' +
+                        '    class="collapse">' +
+                        '    <div class="card-content">' +
+                        '        <div class="card-body">' +
+                        '          <table class="table mb-5">' +
+                        '   <tbody  id="trServicioSeccion' + conSeccion + '">' +
+                        '   </tbody>' +
+                        '                </table>' +
+                        '        </div>' +
                         '    </div>' +
                         '</div>' +
                         '</div>';
 
                     $("#nseccciones").append(divSecciones);
 
+                },
+                addServicioSeccion: function(id) {
+                    alert('agregar servicios a seccion ' + id);
                 },
                 addServicio: function(id) {
                     let servicios = '';
@@ -1009,21 +974,22 @@
 
             });
 
-
-
-
-
         })
 
 
         function updatePercentage(porcentaje) {
             $('#percentage').text(porcentaje + '%');
-            $('.outerCircle').css('background-image', `conic-gradient(#94d3a2 0deg, #94d3a2 ${3.6 * porcentaje}deg, #D3D3D3 ${3.6 * porcentaje}deg)`);
+            $('.outerCircle').css('background-image',
+                `conic-gradient(#24BEC0 0deg, #24BEC0 ${3.6 * porcentaje}deg, #F0F0F0 ${3.6 * porcentaje}deg)`);
+        }
+        function updatePercentageTratamientos(porcentaje,consTrata) {
+            $('#porcentajeTrata'+consTrata).text(porcentaje + '%');
+            $('#outerCircleTrata'+consTrata).css('background-image',
+                `conic-gradient(#24BEC0 0deg, #24BEC0 ${3.6 * porcentaje}deg, #F0F0F0 ${3.6 * porcentaje}deg)`);
         }
 
         // Llamar a la función con un porcentaje específico (puedes cambiar este valor)
-        updatePercentage(30);
-
+       
     </script>
 
     </script>

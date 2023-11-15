@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Profesionales;
 use App\Models\Servicios;
-use App\Models\Secciones;
+
 use App\Models\Usuario;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +18,6 @@ class AdminitraccionController extends Controller
         if (Auth::check()) {
             $bandera = "";
             return view('Adminitraccion.GestionProfesionales', compact('bandera'));
-
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
@@ -28,13 +27,13 @@ class AdminitraccionController extends Controller
         if (Auth::check()) {
             $bandera = "";
             return view('Adminitraccion.GestionServicios', compact('bandera'));
-
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
     public function ValidarProfesional()
     {
+        if (Auth::check()) {
         $idPac = request()->get('idPac');
         $existe = "no";
         $pacientes = DB::connection('mysql')
@@ -51,7 +50,9 @@ class AdminitraccionController extends Controller
             'existe' => $existe,
 
         ]);
-
+    } else {
+        return redirect("/")->with("error", "Su Sesión ha Terminado");
+    }
     }
 
     public function CargarProfesionales()
@@ -176,41 +177,53 @@ class AdminitraccionController extends Controller
 
     public function BuscarProfesional()
     {
-        $idProfesional = request()->get('idProf');
-        $profesional = Profesionales::BuscarProfesional($idProfesional);
+        if (Auth::check()) {
+            $idProfesional = request()->get('idProf');
+            $profesional = Profesionales::BuscarProfesional($idProfesional);
 
-        if (request()->ajax()) {
-            return response()->json([
-                'profesional' => $profesional,
-            ]);
+            if (request()->ajax()) {
+                return response()->json([
+                    'profesional' => $profesional,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
 
     public function BuscarServicio()
     {
-        $idSErvicio = request()->get('idServ');
-        $servicio = Servicios::BuscarServicio($idSErvicio);
+        if (Auth::check()) {
+            $idSErvicio = request()->get('idServ');
+            $servicio = Servicios::BuscarServicio($idSErvicio);
 
-        if (request()->ajax()) {
-            return response()->json([
-                'servicio' => $servicio,
-            ]);
+            if (request()->ajax()) {
+                return response()->json([
+                    'servicio' => $servicio,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
 
     public function BuscarUsuario()
     {
-        $idUsu = request()->get('Usu');
-        $usuario = Usuario::BuscarUsuario($idUsu);
+        if (Auth::check()) {
+            $idUsu = request()->get('Usu');
+            $usuario = Usuario::BuscarUsuario($idUsu);
 
-        if ($usuario) {
-            $existe = "si";
-        }
+            if ($usuario) {
+                $existe = "si";
+            }
 
-        if (request()->ajax()) {
-            return response()->json([
-                'existe' => $existe,
-            ]);
+            if (request()->ajax()) {
+                return response()->json([
+                    'existe' => $existe,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
 
@@ -242,12 +255,11 @@ class AdminitraccionController extends Controller
                     'id' => $idProfesional,
                 ]);
             }
-
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
-    
+
     public function GuardarServicio()
     {
         if (Auth::check()) {
@@ -274,53 +286,39 @@ class AdminitraccionController extends Controller
                     'id' => $idProfesional,
                 ]);
             }
-
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
-    
-    public function GuardarSeccion()
-    {
-        if (Auth::check()) {
-            $data = request()->all();
-            $idTratamiento = $data['idSeccion'];
 
-            if ($data['accion'] == "agregar") {
-                $respuesta = Secciones::guardar($data);
-            } else {
-                $respuesta = Servicios::editar($data);
-            }
 
-            if (request()->ajax()) {
-                return response()->json([
-                    'seccion' => $respuesta
-                ]);
-            }
-
-        } else {
-            return redirect("/")->with("error", "Su Sesión ha Terminado");
-        }
-    }
 
     public function EliminarProfesional()
     {
-        $idProf = request()->get('idProf');
-        $profesional = Profesionales::Eliminar($idProf);
-        if (request()->ajax()) {
-            return response()->json([
-                'estado' => "ok",
-            ]);
+        if (Auth::check()) {
+            $idProf = request()->get('idProf');
+            $profesional = Profesionales::Eliminar($idProf);
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => "ok",
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
     public function EliminarServicio()
     {
-        $idServ = request()->get('idServ');
-        $servicios = Servicios::Eliminar($idServ);
-        if (request()->ajax()) {
-            return response()->json([
-                'estado' => "ok",
-            ]);
+        if (Auth::check()) {
+            $idServ = request()->get('idServ');
+            $servicios = Servicios::Eliminar($idServ);
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => "ok",
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
 }
