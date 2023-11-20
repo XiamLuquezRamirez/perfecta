@@ -16,6 +16,13 @@ class Citas extends Model
             ->where('citas.estado', '!=', 'Anulada')
             ->get();
     }
+    public static function CitasPaciente($idPac)
+    {
+        return DB::connection('mysql')->table('citas')
+            ->where('paciente', $idPac)
+            ->where('citas.estado', '!=', 'Anulada')
+            ->get();
+    }
 
     public static function AllCitas()
     {
@@ -58,3 +65,4 @@ class Citas extends Model
         return $respuesta;
     }
 }
+ 

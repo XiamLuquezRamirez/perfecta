@@ -28,8 +28,26 @@ class Tratamientos extends Model
 
     public static function AllActivos(){
         $respuestaTra = DB::connection('mysql')->table('tratamientos')
-        ->leftJoin("profesionales","profesionales.id","tratamientos.profesionales")
+        ->leftJoin("profesionales","profesionales.id","tratamientos.profesional")
         ->select("tratamientos.*", "profesionales.nombre AS nprofe")
+        ->get();
+        return $respuestaTra;
+    }
+    public static function TratamientosPacientesAct($idPac){
+        $respuestaTra = DB::connection('mysql')->table('tratamientos')
+        ->leftJoin("profesionales","profesionales.id","tratamientos.profesional")
+        ->select("tratamientos.*", "profesionales.nombre AS nprofe")
+       ->where("paciente", $idPac)
+       ->where('estado_reg', '<>','Terminados')
+        ->get();
+        return $respuestaTra;
+    }
+    public static function TratamientosPacientesOtr($idPac){
+        $respuestaTra = DB::connection('mysql')->table('tratamientos')
+        ->leftJoin("profesionales","profesionales.id","tratamientos.profesional")
+        ->select("tratamientos.*", "profesionales.nombre AS nprofe")
+       ->where("paciente", $idPac)
+       ->where('estado_reg', 'Terminados')
         ->get();
         return $respuestaTra;
     }

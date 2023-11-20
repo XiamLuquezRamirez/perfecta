@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Citas;
 use App\Models\Pacientes;
 use App\Models\Profesionales;
 use App\Models\Tratamientos;
@@ -54,6 +55,28 @@ class PacientesController extends Controller
             if (request()->ajax()) {
                 return response()->json([
                     'profesionales' => $profesionales,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+    public function CargarDatosPacTrat()
+    {
+        if (Auth::check()) {
+            $idPac = request()->get('pacTrat');
+            $paciente = Pacientes::BuscarPaciente($idPac);
+            $tratamientosAct = Tratamientos::TratamientosPacientesAct($idPac);
+            $tratamientosOtr = Tratamientos::TratamientosPacientesOtr($idPac);
+            $citas = Citas::CitasPaciente($idPac);
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'paciente' => $paciente,
+                    'tratamientosAct' => $tratamientosAct,
+                    'tratamientosOtr' => $tratamientosOtr,
+                    'citas' => $citas,
                 ]);
             }
         } else {
@@ -298,6 +321,32 @@ class PacientesController extends Controller
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
+    }
+
+    public function PacientesTratamientos(Request $request){
+
+        $term = $request->input('q'); // Obtener el término de búsqueda
+
+        // Consultar municipios desde la base de datos y filtrar por término de búsqueda
+        $pacientes = DB::connection('mysql')
+        ->table('pacientes')
+        ->select('id', DB::raw('CONCAT(nombre, " ", apellido) AS text'))
+        ->where('estado', 'ACTIVO')
+        ->where(function ($query) use ($term) {
+            $query->where('nombre', 'LIKE', '%' . $term . '%')
+                ->orWhere('apellido', 'LIKE', '%' . $term . '%')
+                ->orWhere('identificacion', 'LIKE', '%' . $term . '%');
+        })
+        ->get();
+
+
+        // Formatear los resultados en un array
+        $formattedPacientes = [];
+        foreach ($pacientes as $pacient) {
+            $formattedPacientes[] = ['id' => $pacient->id, 'text' => $pacient->text];
+        }
+           return response()->json(['data' => $pacientes]);
+    
     }
 
     public function sanear_string($string)

@@ -1049,7 +1049,7 @@
                     $('#tdTable').empty();
 
                     let x = 1;
-                    let tdTable = '';
+                let tdTable = '';
                     $.ajax({
                         type: "POST",
                         url: url,

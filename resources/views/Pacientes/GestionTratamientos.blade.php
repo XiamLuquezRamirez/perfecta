@@ -3,7 +3,10 @@
 @section('Contenido')
     <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
     <input type="hidden" id="Ruta" data-ruta="{{ asset('/app-assets/') }}" />
+    <input type="hidden" id="RutaTotal" data-ruta="{{ asset('/') }}" />
     <input type="hidden" id="conSeccion" name="conSeccion" value="0" />
+    <input type="hidden" id="conTrata" name="conTrata" value="" />
+    <input type="hidden" id="conTrataOtro" name="conTrataOtro" value="" />
     <input type="hidden" id="accion" value="" />
     <div class="content-header row">
         <div class="content-header-left col-md-6 col-12 mb-2">
@@ -21,11 +24,8 @@
                             </div>
                             <form action="#">
                                 <div class="position-relative">
-                                    <input type="search" id="search-contacts" class="form-control"
-                                        placeholder="Buscar paciente por identificación, nombre, apellido...">
-                                    <div class="form-control-position">
-                                        <i class="fa fa-search text-size-base text-muted la-rotate-270"></i>
-                                    </div>
+                                    <select onchange="$.buscInfGeneralPaciente(this);" class="select2-data-ajax form-control"
+                                    id="paciente" name="paciente"></select>
                                 </div>
                             </form>
                         </div>
@@ -44,7 +44,7 @@
                     <div class="content-body">
                         <div class="content-overlay"></div>
 
-                        <section class="row all-contacts">
+                        <section id="div-datTratameintos" style=" filter: blur(5px);" class="row all-contacts">
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-head">
@@ -96,59 +96,8 @@
 
                                             <div class="col-xxl-8 col-xl-12 col-lg-12 col-md-12 col-12">
                                                 <div class="card info-time-tracking">
-                                                    <div class="card-content">
-                                                        <div class="row">
-                                                            <div
-                                                                class="col-12 pt-2 pb-2 border-bottom-blue-grey border-bottom-lighten-5">
-                                                                <div
-                                                                    class="info-time-tracking-title d-flex justify-content-between align-items-center">
-                                                                    <h4
-                                                                        class="pl-2 mb-0 title-info-time-heading text-bold-500">
-                                                                        Tratamiento de depilacion laser</h4>
-                                                                    <span class="pr-2" style="cursor: pointer;">
-                                                                        <i class="fa fa-trash-o"></i>
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-12 hvr-grow-shadow" style="cursor: pointer;">
-                                                                <div class="card-body">
-                                                                    <div
-                                                                        class="row justify-content-center align-items-center">
-                                                                        <div
-                                                                            class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">
-                                                                            <h6 class="pt-1"><span
-                                                                                    class="fa fa-user"></span> Profesional:
-                                                                            </h6>
-                                                                            <p>Mairen Pumarejo</p>
-                                                                        </div>
-                                                                        <div
-                                                                            class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">
-                                                                            <h6 class="pt-1"><span
-                                                                                    class="fa fa-th-large"></span>
-                                                                                Especialidad:</h6>
-                                                                            <p>Consulta General</p>
-                                                                        </div>
-                                                                        <div
-                                                                            class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">
-                                                                            <h6 class="pt-1"><span
-                                                                                    class="fa fa-calendar"></span> Ultima
-                                                                                Cita:</h6>
-                                                                            <p>15/11/2023 09:00 AM</p>
-                                                                        </div>
-                                                                        <div
-                                                                            class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">
-                                                                            <div class="outerCircle"
-                                                                                style="display: flex; justify-content: center; align-items: center; padding: 0; height: 50px; width: 50px; border-radius: 100%; background-image: conic-gradient(#94d3a2 0deg, #94d3a2 162deg, #D3D3D3 162deg)">
-                                                                                <div
-                                                                                    style="display: flex; justify-content: center; align-items: center; padding: 0; height: 40px; width: 40px; border-radius: 100%; background-color:white">
-                                                                                    <span id="porcentajeTrata">95%</span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                    <div class="card-content" id="div-trata-otr">
+                                                  
                                                         
                                                     </div>
                                                 </div>
@@ -175,7 +124,8 @@
                                                                 id="formGuardarTratamiento"
                                                                 action="{{ url('/') }}/AdminPacientes/GuardarTratamiento">
                                                                 <input type="hidden" name="idTratamiento"
-                                                                    id="idTratamiento" value="" />
+                                                                <input type="hidden" name="idPaciente"
+                                                                    id="idPaciente" value="" />
                                                                 <section id="user-profile-cards" class="row mt-2">
                                                                     <div class="col-xl-12 col-md-6 col-12">
                                                                         <div class="form-group">
@@ -329,6 +279,7 @@
                                             </section>
 
                                         </div>
+                                        
                                         </form>
                                     </div>
                                 </div>
@@ -336,7 +287,7 @@
                         </section>
                     </div>
                 </div>
-                <div class="sidebar-detached sidebar-left ps">
+                <div id="div-datPersona" style=" filter: blur(5px);" class="sidebar-detached sidebar-left ps">
                     <div class="sidebar">
                         <div class="bug-list-sidebar-content">
                             <!-- Predefined Views -->
@@ -345,10 +296,10 @@
                                     <div class="media p-1">
                                         <div class="media-left pr-1"><span
                                                 class="avatar avatar-online avatar-sm rounded-circle"><img
-                                                    src="{{ asset('app-assets/images/portrait/small/avatar-s-1.png') }}"
+                                                id="previewImage"  src="{{ asset('app-assets/images/portrait/small/avatar-s-1.png') }}"
                                                     alt="avatar"><i></i></span></div>
                                         <div class="media-body media-middle">
-                                            <h5 class="media-heading">Xiamir Luquez</h5>
+                                            <h5 id="npaciente" style="text-transform: capitalize;" class="media-heading">Xiamir Luquez</h5>
                                         </div>
                                     </div>
                                 </div>
@@ -368,15 +319,15 @@
                                     <ul class="list-group">
                                         <li class="list-group-item">
                                             <span class="fa fa-calendar float-right"></span>
-                                            <a href="#">23 años</a>
+                                            <a href="#" id="edadPac">23 años</a>
                                         </li>
                                         <li class="list-group-item">
                                             <span class="feather icon-phone float-right"></span>
-                                            <a href="#">316 4915332</a>
+                                            <a id="telPac" href="#">316 4915332</a>
                                         </li>
                                         <li class="list-group-item">
                                             <span class="feather icon-at-sign float-right"></span>
-                                            <a href="#">alexanderx105@hotmail.com</a>
+                                            <a id="emailPac" href="#">alexanderx105@hotmail.com</a>
                                         </li>
 
                                     </ul>
@@ -386,12 +337,8 @@
                                 <!--More-->
                                 <div class="card-body  justify-content-between align-items-center">
                                     <p class="lead">Citas del paciente</p>
-                                    <ul class="list-group">
-                                        <li class="list-group-item">
-                                            <span class="fa fa-calendar float-right"></span>
-                                            <a href="#">Consulta General </a>
-                                            <p class="sub-heading">23/11/2023 - 08:30 PM</p>
-                                        </li>
+                                    <ul class="list-group" id="listCitas">
+                                       
                                         <li class="list-group-item">
                                             <span class="fa fa-calendar float-right"></span>
                                             <a href="#">Consulta Especializada </a>
@@ -461,6 +408,11 @@
         <!-- Tus campos del formulario aquí -->
     </form>
 
+    <form action="{{ url('/AdminPacientes/CargarDatosPacTrat') }}" id="formCargarDatosPacTrat" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+
 
 @endsection
 
@@ -468,6 +420,10 @@
     <script>
         $(document).ready(function() {
             $("#MenPaciente").removeClass("active");
+
+
+            var lastSelectedData = null; 
+
             var $primary = "#00b5b8",
                 $secondary = "#2c3648",
                 $success = "#0f8e67",
@@ -621,8 +577,73 @@
             general_task_radial_bar_chart.render();
             general_task_radial_bar_chart2.render();
 
+            let rtotal = $("#RutaTotal").data("ruta");
 
+            $('.select2-data-ajax').select2({
+                dropdownAutoWidth: true,
+                width: '100%',
+                placeholder: 'Buscar paciente por identificación, nombre, apellido...',
+                language: {
+                    inputTooShort: function() {
+                        return 'Por favor, ingresa al menos un carácter';
+                    },
+                    noResults: function () {
+                        return 'No se encontraron resultados.'; // Cambia el mensaje según tus necesidades
+                    },
+                    searching: function () {
+                        return 'Buscando...'; // Cambia el mensaje según tus necesidades
+                    },
+                },
+                ajax: {
+                    url: rtotal + 'AdminPacientes/PacientesTratamientos', // Ruta de tu API en Laravel
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            q: params.term, // Término de búsqueda
+                            page: params.page
+                        };
+                    },
+                    processResults: function(data, params) {
+                        params.page = params.page || 1;
 
+                        return {
+                            results: data.data,
+                            pagination: {
+                                more: (params.page * 30) < data.total_count
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                escapeMarkup: function(markup) {
+                    return markup;
+                },
+                minimumInputLength: 1
+            });
+
+            $('#paciente').on('select2:select', function (e) {
+                // Obtener la información del elemento seleccionado
+                var selectedData = e.params.data;
+        
+                // Mostrar la información del último elemento seleccionado
+                if (selectedData) {
+                    lastSelectedData = selectedData;
+                    mostrarInformacionUltimoSeleccionado();
+                }
+            });
+
+            $('#paciente').on('click', function () {
+                $(this).val(null).trigger('change');
+              });
+
+            function mostrarInformacionUltimoSeleccionado() {
+                if (lastSelectedData) {
+                    console.log(lastSelectedData.id);
+            console.log(lastSelectedData.text);
+                    $.buscInfGeneralPaciente(lastSelectedData.id);
+                }
+            }
 
             $.extend({
                 addTratamiento: function() {
@@ -669,8 +690,6 @@
                 },
                 guardarTrataminto: function() {
 
-
-
                     if ($("#nombre_tratamiento").val().trim() === "") {
                         Swal.fire({
                             type: "warning",
@@ -697,7 +716,6 @@
 
                     var loader = document.getElementById('loader');
                     loader.style.display = 'block';
-
 
                     var form = $("#formGuardarTratamiento");
                     var url = form.attr("action");
@@ -781,12 +799,14 @@
                                         +'    </div>'
                                         +'</div>'
                                         +'</div>';
+                                        $("#div-trata-act").append(newTrata);
                                         updatePercentageTratamientos(porAvancTrat,consTrata);
                                         consTrata++;
     
                                 });
+                                
 
-                                $("#div-trata-act").html(newTrata);
+                              
 
                                 var loader = document.getElementById('loader');
                                 loader.style.display = 'none';
@@ -970,11 +990,171 @@
                     let servicios = '';
 
                     $("#div-servSeccion" + id).append(servicios);
-                }
+                },
+                buscInfGeneralPaciente: function(pac) {
+                    $("#idPaciente").val(pac)
+                    var form = $("#formCargarDatosPacTrat");
+                    $("#pacTrat").remove();
+                    form.append("<input type='hidden' id='pacTrat' name='pacTrat'  value='" + pac +
+                    "'>");
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                  
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                          //DATOS PERSONALES
+                          $("#npaciente").html(respuesta.paciente.nombre + " " + respuesta.paciente.apellido);
+                          var edad = calcularEdad(respuesta.paciente.fecha_nacimiento)
+                            $("#edadPac").html(edad+ " Años");
+                            $("#telPac").html(respuesta.paciente.telefono);
+                            $("#emailPac").html(respuesta.paciente.email);
+
+                            var foto = respuesta.paciente.foto;
+                            if(foto == ""){
+                                foto = "../../../app-assets/images/FotosPacientes/avatar-s-1.png";
+                            }
+                          
+                            const previewImage = document.getElementById('previewImage');
+                            let url = $('#Ruta').data("ruta");
+                            previewImage.src = url + "/images/FotosPacientes/" + foto;
+
+                            var datTratameintos = document.getElementById('div-datTratameintos'); // Reemplaza 'miDiv' con el ID de tu div
+                            datTratameintos.style.filter = 'none';
+                            var datPersona = document.getElementById('div-datPersona'); // Reemplaza 'miDiv' con el ID de tu div
+                            datPersona.style.filter = 'none';
+
+                            ///datos citas
+                            let citas  = "";
+                            $.each(respuesta.citas, function(i, item) {
+                                var fechaHora = $.convertirFormato(item.inicio);
+
+                                citas += ' <li class="list-group-item">'
+                                    +'<span class="fa fa-calendar float-right"></span>'
+                                    +'<a href="#">'+item.motivo+'</a>'
+                                    +'<p class="font-small-2 mb-0 text-muted">'+fechaHora+'</p>'
+                                    +'<p class="font-small-2 mb-0 text-muted">'+item.estado+'</p>'
+                                    +'</li>';
+
+                            });
+                            $('#listCitas').html(citas);
+
+                            ////datos tratamiento activos
+                            let tratAct = '';
+                            let consTrata = 1;
+                            $.each(respuesta.tratamientosAct, function(i, item) {
+                                tratAct += '<div class="row">'
+                                    +'<div class="col-12 pt-2 pb-2 border-bottom-blue-grey border-bottom-lighten-5">'
+                                    +'    <div class="info-time-tracking-title d-flex justify-content-between align-items-center">'
+                                    +'        <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">'
+                                    +'            '+item.nombre+'</h4>'
+                                    +'        <span class="pr-2 fonticon-wrap"'
+                                    +'            style="cursor: pointer; ">'
+                                    +'            <i style="transition: all .2s ease-in-out;c" title="Editar Tratamiento"'
+                                    +'                class="fa fa-pencil font-medium-5"></i>'
+                                    +'            <i title="Eliminar Tratamiento"'
+                                    +'                class="fa fa-trash-o  font-medium-5"></i>'
+                                    +'        </span>'
+                                    +'    </div>'
+                                    +'</div>'
+                                    +'<div class="col-12 hvr-grow-shadow" style="cursor: pointer;"'
+                                    +'    onclick="$.verTratamiento();">'
+                                    +'    <div class="card-body ">'
+                                    +'        <div class="row justify-content-center align-items-center">'
+                                    +'            <div class="col-xl-4 col-lg-6 col-md-12 text-center clearfix">'
+                                    +'                <h6 class="pt-1"><span'
+                                    +'                        class="fa fa-user"></span> Profesional:'
+                                    +'                </h6>'
+                                    +'                <p>Mairen Pumarejo</p>'
+                                    +'            </div>'
+                                    +'            <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">'
+                                    +'                <h6 class="pt-1"><span'
+                                    +'                        class="fa fa-th-large"></span>'
+                                    +'                    Especialidad:</h6>'
+                                    +'                <p>'+item.especialidad+'</p>'
+                                    +'            </div>'
+                                    +'            <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">'
+                                    +'                <h6 class="pt-1"><span'
+                                    +'                        class="fa fa-calendar"></span> Ultima'
+                                    +'                    Cita:</h6>'
+                                    +'                <p>---</p>'
+                                    +'            </div>'
+                                    +'            <div class="col-xl-2 col-lg-6 col-md-12 text-center clearfix">'
+                                    +'                <div id="outerCircleTrata'+consTrata+'" class="outerCircleTrata"'
+                                    +'                style="display: flex; justify-content: center; align-items: center; padding: 0; height: 50px; width: 50px; border-radius: 100%; background-image: conic-gradient(#24BEC0 0deg, #24BEC0 162deg, #F0F0F0 162deg)">'
+                                    +'                <div style="display: flex; justify-content: center; align-items: center; padding: 0; height: 40px; width: 40px; border-radius: 100%; background-color:white">'
+                                    +'                    <span id="porcentajeTrata'+consTrata+'">0%</span>'
+                                    +'                </div>'
+                                    +'            </div>'
+                                    +'           </div>'
+                                    +'        </div>'
+                                    +'    </div>'
+                                    +'</div>'
+                                    +'</div>';
+                                    $("#div-trata-act").append(tratAct);
+                                    updatePercentageTratamientos(porAvancTrat,consTrata);
+                                    consTrata++;
+                            });
+
+                            $('#conTrata').val(consTrata);
+
+                           
+
+                            ////datos otros tratamiento
+
+
+                        }
+                    });
+                },
+                convertirFormato: function(fechaHora) {
+                    // Crear un objeto Date a partir de la cadena de fecha y hora
+                    var fecha = new Date(fechaHora);
+
+                    // Obtener los componentes de la fecha y la hora
+                    var dia = fecha.getDate();
+                    var mes = fecha.getMonth() + 1; // Los meses comienzan desde 0, por lo que sumamos 1
+                    var anio = fecha.getFullYear();
+                    var horas = fecha.getHours();
+                    var minutos = fecha.getMinutes();
+                    var ampm = horas >= 12 ? 'PM' : 'AM';
+
+                    // Formatear los componentes en el nuevo formato
+                    horas = horas % 12;
+                    horas = horas ? horas : 12; // Si es 0, cambiar a 12
+                    minutos = minutos < 10 ? '0' + minutos : minutos;
+
+                    // Crear la cadena formateada
+                    var nuevoFormato = `${dia}/${mes}/${anio} ${horas}:${minutos} ${ampm}`;
+
+                    return nuevoFormato;
+                },
 
             });
 
         })
+
+
+        function calcularEdad(fechaNacimiento) {
+            // Convierte la cadena de fecha de nacimiento a un objeto Date
+            var fechaNacimiento = new Date(fechaNacimiento);
+        
+            // Obtiene la fecha actual
+            var fechaActual = new Date();
+        
+            // Calcula la diferencia en milisegundos entre la fecha actual y la fecha de nacimiento
+            var diferencia = fechaActual - fechaNacimiento;
+        
+            // Convierte la diferencia de milisegundos a años
+            var edadEnMilisegundos = new Date(diferencia);
+            var edad = Math.abs(edadEnMilisegundos.getUTCFullYear() - 1970);
+        
+            return edad;
+        }
 
 
         function updatePercentage(porcentaje) {
