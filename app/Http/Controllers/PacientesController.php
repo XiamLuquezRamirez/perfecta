@@ -7,6 +7,7 @@ use App\Models\Pacientes;
 use App\Models\Profesionales;
 use App\Models\Tratamientos;
 use App\Models\Secciones;
+use App\Models\ItemsTratamiento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -83,6 +84,35 @@ class PacientesController extends Controller
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
+    public function SeccionesTratamientos()
+    {
+        if (Auth::check()) {
+           $idTrat = request()->get('tratSecc');
+
+           $Tratamientos = Tratamientos::busTatamiento($idTrat);
+           $ItemsTratamientos = ItemsTratamiento::consulAllItem($idTrat);
+            $ContTratamientos = "";
+           foreach ($ItemsTratamientos as $i => $item) {
+            if($item->tip_servi=="seccion"){
+
+            }else{
+
+            }
+
+           }
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'Tratamientos' => $Tratamientos,
+                    'ContTratamientos' => $ContTratamientos,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+    
 
     public function CargarPacientes()
     {
@@ -219,10 +249,12 @@ class PacientesController extends Controller
             $idTrat = $data['idtrata'];
 
             if ($data['accion'] == "agregar") {
-                $respuesta = Secciones::guardar($data,$archivoidTrat);
+                $respuesta = Secciones::guardar($data,$idTrat);
+                $itemTatra = ItemsTratamiento::guardar($respuesta->id,'seccion', $idTrat);
             } else {
                 $respuesta = Secciones::editar($data);
             }
+            
 
             if (request()->ajax()) {
                 return response()->json([

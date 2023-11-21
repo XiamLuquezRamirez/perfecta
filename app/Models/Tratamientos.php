@@ -12,6 +12,7 @@ class Tratamientos extends Model
 
         $respuesta = DB::connection('mysql')->table('tratamientos')->insertGetId([
             'nombre' => $request['nombre_tratamiento'],
+            'paciente' => $request['idPaciente'],
             'profesional' => $request['profesional'],
             'especialidad' => $request['especialidad'],
             'estado' => 'pendiente',
@@ -23,6 +24,13 @@ class Tratamientos extends Model
         ->where('id', $respuesta)
         ->first();
 
+        return $respuestaTra;
+    }
+
+    public static function busTatamiento($idTrat){
+        $respuestaTra = DB::connection('mysql')->table('tratamientos')
+        ->where('id', $idTrat)
+        ->first();
         return $respuestaTra;
     }
 

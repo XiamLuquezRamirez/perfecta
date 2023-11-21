@@ -129,40 +129,49 @@
     });
 
     // Loading remote data
-    $(".select2-data-ajax").select2({
-      dropdownAutoWidth: true,
-      width: '100%',
-      placeholder: "Loading remote data",
-      ajax: {
-        url: "http://api.github.com/search/repositories",
-        dataType: 'json',
-        delay: 250,
-        data: function (params) {
-          return {
-            q: params.term, // search term
-            page: params.page
-          };
-        },
-        processResults: function (data, params) {
-          // parse the results into the format expected by Select2
-          // since we are using custom formatting functions we do not need to
-          // alter the remote JSON data, except to indicate that infinite
-          // scrolling can be used
-          params.page = params.page || 1;
+    let rtotal = $("#RutaTotal").data("ruta");
 
-          return {
-            results: data.items,
-            pagination: {
-              more: (params.page * 30) < data.total_count
-            }
-          };
+    $('.select2-data-ajax').select2({
+        dropdownAutoWidth: true,
+        width: '100%',
+        placeholder: 'Buscar paciente por identificación, nombre, apellido...',
+        language: {
+            inputTooShort: function() {
+                return 'Por favor, ingresa al menos un carácter';
+            },
+            noResults: function() {
+                return 'No se encontraron resultados.'; // Cambia el mensaje según tus necesidades
+            },
+            searching: function() {
+                return 'Buscando...'; // Cambia el mensaje según tus necesidades
+            },
         },
-        cache: true
-      },
-      escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-      minimumInputLength: 1,
-      templateResult: formatRepo, // omitted for brevity, see the source of this page
-      templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+        ajax: {
+            url: rtotal + 'AdminPacientes/PacientesTratamientos', // Ruta de tu API en Laravel
+            dataType: 'json',
+            delay: 250,
+            data: function(params) {
+                return {
+                    q: params.term, // Término de búsqueda
+                    page: params.page
+                };
+            },
+            processResults: function(data, params) {
+                params.page = params.page || 1;
+
+                return {
+                    results: data.data,
+                    pagination: {
+                        more: (params.page * 30) < data.total_count
+                    }
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function(markup) {
+            return markup;
+        },
+        minimumInputLength: 1
     });
 
     function formatRepo (repo) {

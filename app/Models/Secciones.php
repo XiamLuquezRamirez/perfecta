@@ -23,5 +23,6 @@ class Secciones extends Model
 
         return $respuestaSecc;
     }
+    
 
 }
