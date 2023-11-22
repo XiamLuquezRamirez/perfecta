@@ -8,6 +8,7 @@ use App\Models\Profesionales;
 use App\Models\Tratamientos;
 use App\Models\Secciones;
 use App\Models\ItemsTratamiento;
+use App\Models\Servicios;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -62,6 +63,20 @@ class PacientesController extends Controller
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
+    public function AllServicios()
+    {
+        if (Auth::check()) {
+            $servicios = Servicios::BuscarAllServicio();
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'servicios' => $servicios,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
 
     public function CargarDatosPacTrat()
     {
@@ -91,9 +106,93 @@ class PacientesController extends Controller
 
            $Tratamientos = Tratamientos::busTatamiento($idTrat);
            $ItemsTratamientos = ItemsTratamiento::consulAllItem($idTrat);
-            $ContTratamientos = "";
+            $ContTratamientos = '';
+            $cosSeccio = 1;
+
            foreach ($ItemsTratamientos as $i => $item) {
             if($item->tip_servi=="seccion"){
+
+                $seccion = Secciones::buscSeccion($item->id_servi);
+
+                $ContTratamientos .='<div class="card collapse-header mb-0" role="tablist">
+                <div id="headingCollapse5"
+                    class="card-header d-flex justify-content-between align-items-center m-1"
+                    style="border-top-left-radius: 0.25rem; border-top-right-radius: 0.25rem; border: 1px solid #e4e7ed;"
+                    data-toggle="collapse" role="tab"
+                    data-target="#collapse'.$cosSeccio.'"
+                    aria-expanded="false"
+                    aria-controls="collapse'.$cosSeccio.'">
+                    <div class="collapse-title media">
+
+                        <div class="media-body mt-25">
+                            <h4>'.$seccion->nombre.'</h4>
+                        </div>
+                    </div>
+                    <div
+                        class="information d-sm-flex d-none align-items-center">
+                        <div class="collection mr-1">
+                            <span
+                                class="bullet bullet-xs bullet-primary"></span>
+                            <span class="font-weight-bold">$
+                                45.000,00</span>
+                        </div>
+
+                        <div class="dropdown">
+                            <a href="#"
+                                class="dropdown-toggle"
+                                id="fisrt-open-submenu"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false">
+                                <i
+                                    class="feather icon-more-vertical mr-0"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right"
+                                aria-labelledby="fisrt-open-submenu">
+                                <a onclick="$.addServicio('.$cosSeccio.');"
+                                    class="dropdown-item mail-reply">
+                                    <i
+                                        class="feather icon-plus"></i>
+                                    Agregar Servicio
+                                </a>
+                                <div class="dropdown-divider">
+                                </div>
+                                <a href="#"
+                                    class="dropdown-item">
+                                    <i
+                                        class="feather icon-edit"></i>
+                                    Editar sección
+                                </a>
+                                <a href="#"
+                                    class="dropdown-item">
+                                    <i
+                                        class="feather icon-trash-2"></i>
+                                    Eliminar Sección
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="collapse'.$cosSeccio.'" role="tabpanel"
+                    aria-labelledby="headingCollapse5"
+                    class="collapse">
+                    <div class="card-content">
+                        <div class="card-body">
+                          <table class="table mb-5">
+
+                                    <tbody
+                                        id="trServicioSeccion'.$cosSeccio.'">
+                                        
+
+                                    </tbody>
+                                </table>
+                           
+                        </div>
+
+                    </div>
+                </div>
+            </div>';
+            $cosSeccio++;
 
             }else{
 

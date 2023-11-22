@@ -24,7 +24,7 @@
                             </div>
                             <form action="#">
                                 <div class="position-relative">
-                                    <select  class="select2-data-ajax form-control" id="paciente" name="paciente"></select>
+                                    <select class="select2-data-ajax form-control" id="paciente" name="paciente"></select>
                                 </div>
                             </form>
                         </div>
@@ -50,17 +50,19 @@
                                         <div class="card-header">
                                             <h4 class="card-title">Tratamientos</h4>
                                             <div class="heading-elements mt-0">
-                                                <button id="btn-addTratamientos" class="btn btn-primary btn-md" onclick="$.addTratamiento();"><i
+                                                <button id="btn-addTratamientos" class="btn btn-primary btn-md"
+                                                    onclick="$.addTratamiento();"><i
                                                         class="d-md-none d-block feather icon-plus white"></i>
                                                     <span class="d-md-block d-none">
                                                         <li class="fa fa-plus"></li> Nuevo Tratamiento
                                                     </span></button>
-                                                <button id="btn-atrasTratamiento" class="btn btn-info btn-md" style="display: none;" onclick="$.atrasTratamientos();"><i
+                                                <button id="btn-atrasTratamiento" class="btn btn-info btn-md"
+                                                    style="display: none;" onclick="$.atrasTratamientos();"><i
                                                         class="d-md-none d-block feather icon-plus white"></i>
                                                     <span class="d-md-block d-none">
                                                         <li class="fa fa-reply"></li> Atras Tratamiento
                                                     </span></button>
-                                               
+
                                             </div>
                                         </div>
                                     </div>
@@ -111,10 +113,10 @@
                                                             <form class="form" method="post"
                                                                 id="formGuardarTratamiento"
                                                                 action="{{ url('/') }}/AdminPacientes/GuardarTratamiento">
-                                                                <input type="hidden"  name="idPaciente" id="idPaciente"
+                                                                <input type="hidden" name="idPaciente" id="idPaciente"
                                                                     value="" />
-                                                                <input type="hidden" name="idTratamiento" id="idTratamiento"
-                                                                    value="" />
+                                                                <input type="hidden" name="idTratamiento"
+                                                                    id="idTratamiento" value="" />
                                                                 <section id="user-profile-cards" class="row mt-2">
                                                                     <div class="col-xl-12 col-md-6 col-12">
                                                                         <div class="form-group">
@@ -221,6 +223,68 @@
                                                             </button>
                                                             <button type="button" id="btnGuardar"
                                                                 onclick="$.guardarSeccion()" class="btn btn-success">
+                                                                <i class="fa fa-check-square-o"></i> Guardar
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        {{--  Modal nuevo servicio  --}}
+                                        <div class="modal fade text-left" id="modalServicios" tabindex="-1"
+                                            role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title" id="tituloUnidad">Crear Servicio</h4>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true"
+                                                                style="font-size: 25px;">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="card-body">
+                                                            <form class="form" method="post" id="formGuardarServicio"
+                                                                action="{{ url('/') }}/AdminPacientes/GuardarServicio">
+                                                                <input type="hidden" name="idServicio" id="idServicio"
+                                                                    value="" />
+                                                                <div class="form-body">
+                                                                    <div class="row">
+                                                                        <div class="col-md-9 col-sm-12">
+                                                                            <div class="form-group">
+                                                                                <label for="userinput5">Servicio:</label>
+                                                                                <select class="select2 form-control"
+                                                                                    id="servicioTrat"
+                                                                                    onchange="$.buscInfServicio(this.value);"
+                                                                                    name="servicioTrat">
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-3 col-sm-12">
+                                                                            <div class="form-group">
+                                                                                <label for="userinput5">Valor:</label>
+                                                                                <input type="text"
+                                                                                    onchange="$.cambioFormato(this.id);"
+                                                                                    class="form-control" id="valorVis"
+                                                                                    name="valorVis">
+                                                                                <input type="hidden" value=""
+                                                                                    id="valor" name="valor">
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+
+                                                        </div>
+                                                        <div class="form-actions right">
+                                                            <button type="button" onclick="$.salirServicio();"
+                                                                class="btn btn-warning mr-1">
+                                                                <i class="feather icon-corner-up-left"></i> Salir
+                                                            </button>
+                                                            <button type="button" id="btnGuardar"
+                                                                onclick="$.guardarServicio()" class="btn btn-success">
                                                                 <i class="fa fa-check-square-o"></i> Guardar
                                                             </button>
                                                         </div>
@@ -379,13 +443,18 @@
         <!-- Tus campos del formulario aquí -->
     </form>
 
+    <form action="{{ url('/AdminPacientes/AllServicios') }}" id="formCargarServicios" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+
     <form action="{{ url('/Administracion/ValidarProfesional') }}" id="formValidarProfesional" method="POST">
         @csrf
         <!-- Tus c
-                                                                                    ampos del formulario aquí -->
+                                                                                            ampos del formulario aquí -->
     </form>
 
-    <form action="{{ url('/Administracion/BuscarProfesional') }}" id="formBuscarProfesional" method="POST">
+    <form action="{{ url('/Administracion/BuscarServicio') }}" id="formBuscaServicios" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
@@ -404,7 +473,8 @@
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
-    <form action="{{ url('/AdminPacientes/SeccionesTratamientos') }}" id="formCargarSeccionesTratamientos" method="POST">
+    <form action="{{ url('/AdminPacientes/SeccionesTratamientos') }}" id="formCargarSeccionesTratamientos"
+        method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
@@ -419,7 +489,7 @@
 
 
             var lastSelectedData = null;
-         
+
 
             $('#paciente').on('select2:select', function(e) {
                 // Obtener la información del elemento seleccionado
@@ -432,7 +502,7 @@
                 }
             });
 
-     
+
 
             function mostrarInformacionUltimoSeleccionado() {
                 if (lastSelectedData) {
@@ -457,7 +527,7 @@
                     $('#modalTratamiento').modal('toggle');
                 },
                 verTratamiento: function(trat) {
-                
+
                     $("#idTratamiento").val(trat);
                     $("#detTratamiento").show();
                     $("#listTratamientos").hide();
@@ -480,13 +550,14 @@
                         success: function(respuesta) {
 
                             $("#tit_tratamiento").html(respuesta.Tratamientos.nombre);
+                            $("#nseccciones").html(respuesta.ContTratamientos);
 
-                           
+
                         }
                     });
 
                 },
-                atrasTratamientos: function(){
+                atrasTratamientos: function() {
                     $("#detTratamiento").hide();
                     $("#listTratamientos").show();
                     $("#btn-addTratamientos").show();
@@ -516,6 +587,31 @@
                     });
 
                     $("#profesional").html(select);
+                },
+                cargarServicios: function() {
+
+                    var form = $("#formCargarServicios");
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    let select = '<option value="">Seleccione...</option>';
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            $.each(respuesta.servicios, function(i, item) {
+
+                                select += '<option value="' + item.id + '">' + item
+                                    .nombre + '</option>';
+
+                            });
+                        }
+                    });
+
+                    $("#servicioTrat").html(select);
                 },
                 guardarTrataminto: function() {
 
@@ -595,7 +691,8 @@
                                         '    </div>' +
                                         '</div>' +
                                         '<div class="col-12 hvr-grow-shadow" style="cursor: pointer;"' +
-                                        '    onclick="$.verTratamiento('+item.id+');">' +
+                                        '    onclick="$.verTratamiento(' + item.id +
+                                        ');">' +
                                         '    <div class="card-body ">' +
                                         '        <div class="row justify-content-center align-items-center">' +
                                         '            <div class="col-xl-4 col-lg-6 col-md-12 text-center clearfix">' +
@@ -820,9 +917,56 @@
                     alert('agregar servicios a seccion ' + id);
                 },
                 addServicio: function(id) {
-                    let servicios = '';
+                    // let servicios = '';
+                    $("#modalServicios").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
 
-                    $("#div-servSeccion" + id).append(servicios);
+                    $.cargarServicios();
+
+
+
+                    //  $("#div-servSeccion" + id).append(servicios);
+                },
+
+                buscInfServicio: function(val) {
+                    var form = $("#formBuscaServicios");
+                    $("#idServ").remove();
+                    form.append("<input type='hidden' id='idServ' name='idServ'  value='" + val + "'>");
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            var InputVal = document.getElementById("valorVis");
+                            if (respuesta.servicio.descuento == "No") {
+                                InputVal.disabled = true;
+                            } else {
+                                InputVal.disabled = false;
+                            }
+
+                            $("#valor").val(respuesta.servicio.valor);
+
+                            var formatoMoneda = formatCurrency(respuesta.servicio.valor,
+                                'es-CO', 'COP');
+                            $("#valorVis").val(formatoMoneda);
+                        }
+                    });
+
+
+                },
+                cambioFormato: function(id) {
+                    var numero = $("#" + id).val();
+                    $("#valor").val(numero);
+                    var formatoMoneda = formatCurrency(numero, 'es-CO', 'COP');
+                    $("#valorVis").val(formatoMoneda);
+
                 },
                 buscInfGeneralPaciente: function(pac) {
                     $("#idPaciente").val(pac);
@@ -852,7 +996,8 @@
 
                             var foto = respuesta.paciente.foto;
                             if (foto == "") {
-                                foto ="../../../app-assets/images/FotosPacientes/avatar-s-1.png";
+                                foto =
+                                    "../../../app-assets/images/FotosPacientes/avatar-s-1.png";
                             }
 
                             const previewImage = document.getElementById('previewImage');
@@ -861,10 +1006,10 @@
 
                             var datTratameintos = document.getElementById(
                                 'div-datTratameintos'
-                                ); // Reemplaza 'miDiv' con el ID de tu div
+                            ); // Reemplaza 'miDiv' con el ID de tu div
                             datTratameintos.style.filter = 'none';
                             var datPersona = document.getElementById(
-                            'div-datPersona'); // Reemplaza 'miDiv' con el ID de tu div
+                                'div-datPersona'); // Reemplaza 'miDiv' con el ID de tu div
                             datPersona.style.filter = 'none';
 
                             ///datos citas
@@ -889,7 +1034,7 @@
                             let consTrata = 1;
 
 
-                                 $.each(respuesta.tratamientosAct, function(i, item) {
+                            $.each(respuesta.tratamientosAct, function(i, item) {
                                 tratAct += '<div class="row">' +
                                     '<div class="col-12 pt-2 pb-2 border-bottom-blue-grey border-bottom-lighten-5">' +
                                     '    <div class="info-time-tracking-title d-flex justify-content-between align-items-center">' +
@@ -905,7 +1050,8 @@
                                     '    </div>' +
                                     '</div>' +
                                     '<div class="col-12 hvr-grow-shadow" style="cursor: pointer;"' +
-                                    '    onclick="$.verTratamiento('+item.id+');">' +
+                                    '    onclick="$.verTratamiento(' + item.id +
+                                    ');">' +
                                     '    <div class="card-body ">' +
                                     '        <div class="row justify-content-center align-items-center">' +
                                     '            <div class="col-xl-4 col-lg-6 col-md-12 text-center clearfix">' +
@@ -950,8 +1096,8 @@
                             let tratOtr = '';
                             let consTrataOtro = 1;
 
-                                 $.each(respuesta.tratamientosOtr, function(i, item) {
-                                    tratOtr += '<div class="row">' +
+                            $.each(respuesta.tratamientosOtr, function(i, item) {
+                                tratOtr += '<div class="row">' +
                                     '<div class="col-12 pt-2 pb-2 border-bottom-blue-grey border-bottom-lighten-5">' +
                                     '    <div class="info-time-tracking-title d-flex justify-content-between align-items-center">' +
                                     '        <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">' +
@@ -1035,6 +1181,14 @@
 
         })
 
+
+        function formatCurrency(number, locale, currencySymbol) {
+            return new Intl.NumberFormat(locale, {
+                style: 'currency',
+                currency: currencySymbol,
+                minimumFractionDigits: 2
+            }).format(number);
+        }
 
         function calcularEdad(fechaNacimiento) {
             // Convierte la cadena de fecha de nacimiento a un objeto Date

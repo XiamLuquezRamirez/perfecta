@@ -46,4 +46,10 @@ class Servicios extends Model
             ->where('id', $id)
             ->first();
     }
+    public static function BuscarAllServicio()
+    {
+        return DB::connection('mysql')->table('servicios')
+            ->where('estado', "ACTIVO")
+            ->get();
+    }
 }

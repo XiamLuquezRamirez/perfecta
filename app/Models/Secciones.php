@@ -23,6 +23,14 @@ class Secciones extends Model
 
         return $respuestaSecc;
     }
+
+    public static function buscSeccion($idSec){
+        $respuestaSecc = DB::connection('mysql')->table('secciones')
+        ->where('id', $idSec)
+        ->first();
+
+        return $respuestaSecc;
+    }
     
 
 }
