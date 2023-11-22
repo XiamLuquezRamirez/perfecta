@@ -34,6 +34,16 @@ class Tratamientos extends Model
         return $respuestaTra;
     }
 
+    public static function consulAllServ($idTrat){
+        $respuestaTra = DB::connection('mysql')->table('servicios_tratamiento')
+        ->leftJoin("servicios","servicios.id","servicios_tratamiento.servicio")
+        ->where('tratamiento', $idTrat)
+        ->where("servicios_tratamiento.estado","ACTIVO")
+        ->select("servicios_tratamiento.*","servicios.nombre")
+        ->get();
+        return $respuestaTra;
+    }
+
     public static function AllActivos(){
         $respuestaTra = DB::connection('mysql')->table('tratamientos')
         ->leftJoin("profesionales","profesionales.id","tratamientos.profesional")

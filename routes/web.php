@@ -66,6 +66,7 @@ Route::post('/AdminCitas/VerCitasPac', [CitasController::class,'VerCitasPac']);
 Route::get('/AdminPacientes/Tratamientos', [PacientesController::class,'Tratamientos']);
 Route::post('/AdminPacientes/GuardarTratamiento', [PacientesController::class,'GuardarTratamiento']);
 Route::post('/AdminPacientes/GuardarSeccion', [PacientesController::class,'GuardarSeccion']);
+Route::post('/AdminPacientes/GuardarServicio', [PacientesController::class,'GuardarServicio']);
 Route::get('/AdminPacientes/PacientesTratamientos', [PacientesController::class,'PacientesTratamientos']);
 Route::post('/AdminPacientes/CargarDatosPacTrat', [PacientesController::class,'CargarDatosPacTrat']);
 Route::post('/AdminPacientes/SeccionesTratamientos', [PacientesController::class,'SeccionesTratamientos']);

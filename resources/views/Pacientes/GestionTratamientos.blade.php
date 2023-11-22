@@ -204,31 +204,47 @@
                                                                 <input type="hidden" name="idSeccion" id="idSeccion"
                                                                     value="" />
                                                                 <div class="form-body">
-                                                                    <div class="form-group">
-                                                                        <label for="userinput5">Nombre:</label>
-                                                                        <input type="text" class="form-control"
-                                                                            id="nombreSeccion" name="nombreSeccion">
+                                                                    <div class="row">
+                                                                        <div class="col-md-12 col-sm-12">
+                                                                            <div class="form-group">
+                                                                                <label for="userinput5">Nombre:</label>
+                                                                                <input type="text" class="form-control"
+                                                                                    id="nombreSeccion"
+                                                                                    name="nombreSeccion">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-12 col-sm-12">
+                                                                            <div class="form-group">
+                                                                                <label
+                                                                                    for="userinput8">Descripción:</label>
+                                                                                <textarea id="descripcionSeccion" rows="5" class="form-control border-primary" name="descripcionSeccion"
+                                                                                    placeholder="Descripcion"></textarea>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="col-md-12 col-sm-12">
+                                                                            <div class="form-actions right">
+                                                                                <button type="button"
+                                                                                    onclick="$.salirSeccion();"
+                                                                                    class="btn btn-warning mr-1">
+                                                                                    <i
+                                                                                        class="feather icon-corner-up-left"></i>
+                                                                                    Salir
+                                                                                </button>
+                                                                                <button type="button" id="btnGuardar"
+                                                                                    onclick="$.guardarSeccion()"
+                                                                                    class="btn btn-success">
+                                                                                    <i class="fa fa-check-square-o"></i>
+                                                                                    Guardar
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="form-group">
-                                                                    <label for="userinput8">Descripción:</label>
-                                                                    <textarea id="descripcionSeccion" rows="5" class="form-control border-primary" name="descripcionSeccion"
-                                                                        placeholder="Descripcion"></textarea>
-                                                                </div>
-                                                        </div>
-                                                        <div class="form-actions right">
-                                                            <button type="button" onclick="$.salirSeccion();"
-                                                                class="btn btn-warning mr-1">
-                                                                <i class="feather icon-corner-up-left"></i> Salir
-                                                            </button>
-                                                            <button type="button" id="btnGuardar"
-                                                                onclick="$.guardarSeccion()" class="btn btn-success">
-                                                                <i class="fa fa-check-square-o"></i> Guardar
-                                                            </button>
+                                                            </form>
                                                         </div>
                                                     </div>
                                                 </div>
-
                                             </div>
                                         </div>
                                         {{--  Modal nuevo servicio  --}}
@@ -250,6 +266,10 @@
                                                                 action="{{ url('/') }}/AdminPacientes/GuardarServicio">
                                                                 <input type="hidden" name="idServicio" id="idServicio"
                                                                     value="" />
+                                                                <input type="hidden" name="servSeccion" id="servSeccion"
+                                                                    value="" />
+                                                                <input type="hidden" name="origServicio"
+                                                                    id="origServicio" value="" />
                                                                 <div class="form-body">
                                                                     <div class="row">
                                                                         <div class="col-md-9 col-sm-12">
@@ -273,21 +293,29 @@
                                                                                     id="valor" name="valor">
                                                                             </div>
                                                                         </div>
-
+                                                                        <div class="col-md-12 col-sm-12">
+                                                                            <div class="form-actions right">
+                                                                                <button type="button"
+                                                                                    onclick="$.salirServicio();"
+                                                                                    class="btn btn-warning mr-1">
+                                                                                    <i
+                                                                                        class="feather icon-corner-up-left"></i>
+                                                                                    Salir
+                                                                                </button>
+                                                                                <button type="button" id="btnGuardar"
+                                                                                    onclick="$.guardarServicio()"
+                                                                                    class="btn btn-success">
+                                                                                    <i class="fa fa-check-square-o"></i>
+                                                                                    Guardar
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
+                                                            </form>
 
                                                         </div>
-                                                        <div class="form-actions right">
-                                                            <button type="button" onclick="$.salirServicio();"
-                                                                class="btn btn-warning mr-1">
-                                                                <i class="feather icon-corner-up-left"></i> Salir
-                                                            </button>
-                                                            <button type="button" id="btnGuardar"
-                                                                onclick="$.guardarServicio()" class="btn btn-success">
-                                                                <i class="fa fa-check-square-o"></i> Guardar
-                                                            </button>
-                                                        </div>
+
                                                     </div>
                                                 </div>
 
@@ -307,12 +335,51 @@
                                                                 <h4 id="tit_tratamiento" class="card-title mb-0">
                                                                     Tratamiento de depilacion laser</h4>
                                                             </div>
+                                                            <div
+                                                                class="statistics-chart-data d-flex justify-content-center ml-auto mr-auto pb-50 mb-0">
+                                                                <div class="collection mr-1">
+                                                                    <span
+                                                                        class="list-group-item-icon d-inline font-weight-bold">
+                                                                        <i
+                                                                            class="icon text-primary bg-light-primary icon-wallet total-products-icon rounded-circle p-50"></i>
+                                                                        Total:
+                                                                    </span>
+                                                                    <span>$ 3.000.000,00</span>
+                                                                </div>
+                                                                <div class="collection mr-1">
+                                                                    <span
+                                                                        class="list-group-item-icon d-inline font-weight-bold">
+                                                                        <i
+                                                                            class="icon text-primary bg-light-primary icon-check total-products-icon rounded-circle p-50"></i>
+                                                                        Realizado:
+                                                                    </span>
+                                                                    <span>$ 3.000.000,00</span>
+                                                                </div>
+                                                                <div class="collection mr-1">
+                                                                    <span
+                                                                        class="list-group-item-icon d-inline font-weight-bold">
+                                                                        <i
+                                                                            class="icon text-primary bg-light-primary icon-graph total-products-icon rounded-circle p-50"></i>
+                                                                        Saldo:
+                                                                    </span>
+                                                                    <span>$ 3.000.000,00</span>
+                                                                </div>
+                                                                <div class="collection mr-1">
+                                                                    <span
+                                                                        class="list-group-item-icon d-inline font-weight-bold">
+                                                                        <i
+                                                                            class="icon text-danger bg-light-danger icon-basket-loaded total-products-icon rounded-circle p-50"></i>
+                                                                        Deudas:
+                                                                    </span>
+                                                                    <span>$ 3.000.000,00</span>
+                                                                </div>
+                                                            </div>
                                                             <div class="card-body text-center">
                                                                 <button type="button" onclick="$.addSeccion();"
                                                                     class="btn btn-danger mr-1"><i class="fa fa-plus"></i>
                                                                     Agregar
                                                                     Sección</button>
-                                                                <button type="button" class="btn btn-primary mr-1"><i
+                                                                <button type="button" class="btn btn-primary "><i
                                                                         class="fa fa-plus"></i> Agregar
                                                                     Servicio</button>
                                                             </div>
@@ -451,7 +518,7 @@
     <form action="{{ url('/Administracion/ValidarProfesional') }}" id="formValidarProfesional" method="POST">
         @csrf
         <!-- Tus c
-                                                                                            ampos del formulario aquí -->
+                                                                                                    ampos del formulario aquí -->
     </form>
 
     <form action="{{ url('/Administracion/BuscarServicio') }}" id="formBuscaServicios" method="POST">
@@ -541,6 +608,10 @@
                     var url = form.attr("action");
                     var datos = form.serialize();
 
+                    let servSEccion = '';
+
+
+
                     $.ajax({
                         type: "POST",
                         url: url,
@@ -548,11 +619,68 @@
                         async: false,
                         dataType: "json",
                         success: function(respuesta) {
-
                             $("#tit_tratamiento").html(respuesta.Tratamientos.nombre);
                             $("#nseccciones").html(respuesta.ContTratamientos);
 
+                            $.each(respuesta.servTratamiento, function(i, item) {
 
+                                let porAvancTrat = item.avance;
+
+                                var formatoMoneda = formatCurrency(item.valor,
+                                    'es-CO', 'COP');
+
+                                servSEccion = '<tr id="tr-serv'+item.id+'">' +
+                                    '<td class="align-middle">' +
+                                    '    <div id="outerCircle' + item.id +
+                                    '" class="outerCircle"' +
+                                    '        onclick="$.addEvolucion();"' +
+                                    '        style="display: flex; justify-content: center; align-items: center; padding: 0; height: 50px; width: 50px; border-radius: 100%; background-image: conic-gradient(#94d3a2 0deg, #94d3a2 162deg, #D3D3D3 162deg)">' +
+                                    '        <div style="display: flex; justify-content: center; align-items: center; padding: 0; height: 40px; width: 40px; border-radius: 100%; background-color:white">' +
+                                    '            <span id="porcentajeServ' + item
+                                    .id + '">95%</span>' +
+                                    '        </div>' +
+                                    '    </div>' +
+                                    '</td>' +
+                                    '<td class="align-middle">' +
+                                    '    <span>' + item.nombre + '</span>' +
+                                    '</td>' +
+                                    '<td class="align-middle">' +
+                                    '    <span>' + formatoMoneda + '</span>' +
+                                    '</td>' +
+                                    '<td class="align-middle">' +
+                                    '    <span class="badge badge-success">Activo</span>' +
+                                    '</td>' +
+                                    '<td class="align-middle">' +
+                                    '    <div class="dropdown">' +
+                                    '        <span class="feather icon-more-vertical dropdown-toggle"' +
+                                    '            id="dropdownMenuButton"' +
+                                    '            data-toggle="dropdown"' +
+                                    '            aria-haspopup="true"' +
+                                    '            aria-expanded="false">' +
+                                    '        </span>' +
+                                    '        <div class="dropdown-menu dropdown-menu-right"' +
+                                    '            aria-labelledby="dropdownMenuButton"' +
+                                    '            x-placement="bottom-end"' +
+                                    '            style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 18px, 0px);"' +
+                                    '            x-out-of-boundaries="">' +
+                                    '        <a onclick="$.editServSecc('+item.id+');" class="dropdown-item">' +
+                                    '        <i class="feather icon-edit"></i>' +
+                                    '         Editar' +
+                                    '        </a>' +
+                                    '        <a onclick="$.delServSecc('+item.id+');"  class="dropdown-item">' +
+                                    '        <i class="feather icon-trash-2"></i>' +
+                                    '        Eliminar' +
+                                    '        </a>' +
+                                    '        </div>' +
+                                    '    </div>' +
+                                    '</td>' +
+                                    '</tr>';
+
+                                $("#trServicioSeccion" + item.seccion).append(
+                                    servSEccion);
+                                updatePercentageServicios(porAvancTrat,
+                                    item.id);
+                            });
                         }
                     });
 
@@ -848,9 +976,9 @@
                         '    class="card-header d-flex justify-content-between align-items-center hvr-grow-shadow m-1"' +
                         '    style="border-top-left-radius: 0.25rem; border-top-right-radius: 0.25rem; border: 1px solid #e4e7ed;"' +
                         '    data-toggle="collapse" role="tab"' +
-                        '    data-target="#collapse5"' +
+                        '    data-target="#collapse' + respuesta.seccion.id + '"' +
                         '    aria-expanded="false"' +
-                        '   aria-controls="collapse5">' +
+                        '   aria-controls="collapse' + respuesta.seccion.id + '">' +
                         '    <div class="collapse-title media">' +
                         '        <div class="media-body mt-25">' +
                         '            <h4>' + respuesta.seccion.nombre + '</h4>' +
@@ -861,8 +989,8 @@
                         '        <div class="collection mr-1">' +
                         '            <span' +
                         '                class="bullet bullet-xs bullet-primary"></span>' +
-                        '            <span class="font-weight-bold">$' +
-                        '                0,00</span>' +
+                        '            <span id="span-total' + respuesta.seccion.id +
+                        '" class="font-weight-bold">$ 0,00</span>' +
                         '        </div>' +
                         '<div class="dropdown">' +
                         '            <a href="#"' +
@@ -875,7 +1003,7 @@
                         '            </a>' +
                         '            <div class="dropdown-menu dropdown-menu-right"' +
                         '                aria-labelledby="fisrt-open-submenu">' +
-                        '               <a onclick="$.addServicioSeccion(' + conSeccion +
+                        '               <a onclick="$.addServicioSeccion(' + respuesta.seccion.id +
                         ');" class="dropdown-item mail-reply">' +
                         '                    <i class="feather icon-plus"></i>' +
                         '                   Agregar Servicio' +
@@ -896,7 +1024,7 @@
                         '       </div>' +
                         '    </div>' +
                         '</div>' +
-                        '<div id="collapse5" role="tabpanel"' +
+                        '<div id="collapse' + respuesta.seccion.id + '" role="tabpanel"' +
                         '    aria-labelledby="headingCollapse5"' +
                         '    class="collapse">' +
                         '    <div class="card-content">' +
@@ -913,11 +1041,14 @@
                     $("#nseccciones").append(divSecciones);
 
                 },
-                addServicioSeccion: function(id) {
+                addServicio: function(id) {
+                    $("#origServicio").val("trata");
                     alert('agregar servicios a seccion ' + id);
                 },
-                addServicio: function(id) {
-                    // let servicios = '';
+                addServicioSeccion: function(id) {
+                    $("#origServicio").val("secc");
+                    $("#servSeccion").val(id);
+                    $("#idSeccion").val(id);
                     $("#modalServicios").modal({
                         backdrop: 'static',
                         keyboard: false
@@ -925,11 +1056,160 @@
 
                     $.cargarServicios();
 
-
-
-                    //  $("#div-servSeccion" + id).append(servicios);
                 },
+                salirServicio: function() {
+                    $('#modalServicios').modal('toggle');
+                },
+                guardarServicio: function() {
+                    if ($("#servicioTrat").val().trim() === "") {
+                        Swal.fire({
+                            type: "warning",
+                            title: "Oops...",
+                            text: "Debes de seleccionar el servicio",
+                            confirmButtonClass: "btn btn-primary",
+                            timer: 1500,
+                            buttonsStyling: false
+                        });
+                        return;
+                    }
 
+                    var loader = document.getElementById('loader');
+                    loader.style.display = 'block';
+
+                    var form = $("#formGuardarServicio");
+                    var url = form.attr("action");
+                    var idSeccion = $("#idSeccion").val();
+                    var idTratamiento = $("#idTratamiento").val();
+                    var idPaciente = $("#idPaciente").val();
+                    var token = $("#token").val();
+                    $("#idtoken").remove();
+                    $("#idSecc").remove();
+                    $("#idTrata").remove();
+                    $("#idPac").remove();
+                    form.append("<input type='hidden' id='accion' name='accion'  value='agregar'>");
+                    form.append("<input type='hidden' id='idtoken' name='_token'  value='" + token +
+                        "'>");
+                    form.append("<input type='hidden' id='idSecc' name='idSecc'  value='" +
+                        idSeccion +
+                        "'>");
+                    form.append("<input type='hidden' id='idTrata' name='idTrata'  value='" +
+                        idTratamiento +
+                        "'>");
+                    form.append("<input type='hidden' id='idPac' name='idPac'  value='" +
+                        idPaciente +
+                        "'>");
+
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: new FormData($('#formGuardarServicio')[0]),
+                        processData: false,
+                        contentType: false,
+                        success: function(respuesta) {
+                            if (respuesta) {
+                                Swal.fire({
+                                    type: "success",
+                                    title: "",
+                                    text: "Operación realizada exitosamente",
+                                    confirmButtonClass: "btn btn-primary",
+                                    timer: 1500,
+                                    buttonsStyling: false
+                                });
+
+                                if ($("#origServicio").val() == "secc") {
+                                    $.dibujarServicioSecc(respuesta);
+                                } else {
+                                    $.dibujarServicioTrat(respuesta);
+                                }
+
+                                var totalServicios = formatCurrency(respuesta.totServ,
+                                    'es-CO', 'COP');
+
+                                $("#span-total" + idSeccion).html(totalServicios);
+
+
+                                var loader = document.getElementById('loader');
+                                loader.style.display = 'none';
+                            }
+                        },
+                        error: function() {
+                            Swal.fire({
+                                type: "errot",
+                                title: "Opsss...",
+                                text: "Ha ocurrido un error",
+                                confirmButtonClass: "btn btn-primary",
+                                timer: 1500,
+                                buttonsStyling: false
+                            });
+                        }
+                    });
+
+
+
+                },
+                dibujarServicioSecc: function(respuesta) {
+                    let seccion = $("#servSeccion").val();
+
+                    let porAvancTrat = respuesta.servicios.avance;
+
+                    var formatoMoneda = formatCurrency(respuesta.servicios.valor,
+                        'es-CO', 'COP');
+
+                    let servicio = '<tr>' +
+                        '<td' +
+                        '    class="align-middle">' +
+                        '    <div id="outerCircle' + respuesta.servicios.id + '" class="outerCircle"' +
+                        '        onclick="$.addEvolucion();"' +
+                        '        style="display: flex; justify-content: center; align-items: center; padding: 0; height: 50px; width: 50px; border-radius: 100%; background-image: conic-gradient(#94d3a2 0deg, #94d3a2 162deg, #D3D3D3 162deg)">' +
+                        '        <div style="display: flex; justify-content: center; align-items: center; padding: 0; height: 40px; width: 40px; border-radius: 100%; background-color:white">' +
+                        '            <span' +
+                        '                id="porcentajeServ' + respuesta.servicios.id + '">0%</span>' +
+                        '        </div>' +
+                        '    </div>' +
+                        '</td>' +
+                        '<td class="align-middle">' +
+                        '    <span>' + respuesta.servicios.nombre + '</span>' +
+                        '</td>' +
+                        '<td class="align-middle">' +
+                        '    <span>' + formatoMoneda + '</span>' +
+                        '</td>' +
+                        '<td class="align-middle">' +
+                        '    <span class="badge badge-success">Activo</span>' +
+                        '</td>' +
+                        '<td  class="align-middle">' +
+                        '    <div class="dropdown">' +
+                        '        <span class="feather icon-more-vertical dropdown-toggle"' +
+                        '            id="dropdownMenuButton"' +
+                        '            data-toggle="dropdown"' +
+                        '            aria-haspopup="true"' +
+                        '            aria-expanded="false">' +
+                        '        </span>' +
+                        '        <div class="dropdown-menu dropdown-menu-right"' +
+                        '            aria-labelledby="dropdownMenuButton"' +
+                        '            x-placement="bottom-end"' +
+                        '            style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 18px, 0px);"' +
+                        '            x-out-of-boundaries="">' +
+                        '        <a href="#" class="dropdown-item">' +
+                        '        <i class="feather icon-edit"></i>' +
+                        '         Editar' +
+                        '        </a>' +
+                        '        <a href="#" class="dropdown-item">' +
+                        '        <i class="feather icon-trash-2"></i>' +
+                        '        Eliminar' +
+                        '        </a>' +
+                        '</div>' +
+                        '</div>' +
+                        '</td>' +
+                        '</tr>';
+
+                    $("#trServicioSeccion" + seccion).append(servicio);
+
+                    updatePercentageServicios(porAvancTrat,
+                        respuesta.servicios.id);
+
+
+                },
                 buscInfServicio: function(val) {
                     var form = $("#formBuscaServicios");
                     $("#idServ").remove();
@@ -967,6 +1247,12 @@
                     var formatoMoneda = formatCurrency(numero, 'es-CO', 'COP');
                     $("#valorVis").val(formatoMoneda);
 
+                },
+                editServSecc: function(id){
+                    alert("editemos");
+                },
+                delServSecc: function(id){
+                    alert("eliminemos");
                 },
                 buscInfGeneralPaciente: function(pac) {
                     $("#idPaciente").val(pac);
@@ -1217,6 +1503,12 @@
         function updatePercentageTratamientos(porcentaje, consTrata) {
             $('#porcentajeTrata' + consTrata).text(porcentaje + '%');
             $('#outerCircleTrata' + consTrata).css('background-image',
+                `conic-gradient(#24BEC0 0deg, #24BEC0 ${3.6 * porcentaje}deg, #F0F0F0 ${3.6 * porcentaje}deg)`);
+        }
+
+        function updatePercentageServicios(porcentaje, consServ) {
+            $('#porcentajeServ' + consServ).text(porcentaje + '%');
+            $('#outerCircle' + consServ).css('background-image',
                 `conic-gradient(#24BEC0 0deg, #24BEC0 ${3.6 * porcentaje}deg, #F0F0F0 ${3.6 * porcentaje}deg)`);
         }
 

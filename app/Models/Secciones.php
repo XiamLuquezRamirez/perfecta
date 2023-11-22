@@ -24,12 +24,71 @@ class Secciones extends Model
         return $respuestaSecc;
     }
 
+    public static function guardarServ($request,$idSecc,$idTrata,$idPac)
+    {
+        if($request["origServicio"]=="secc"){
+            $respuesta = DB::connection('mysql')->table('servicios_tratamiento')->insertGetId([
+                'servicio' => $request['servicioTrat'],
+                'seccion' => $idSecc,
+                'tratamiento' => $idTrata,
+                'paciente' => $idPac,
+                'valor' => $request['valor'],
+                'avance' => '0',
+                'estado' => 'ACTIVO'
+            ]);
+        }else{
+            $respuesta = DB::connection('mysql')->table('servicios_tratamiento')->insertGetId([
+                'servicio' => $request['servicioTrat'],
+                'seccion' => "0",
+                'tratamiento' => $idTrata,
+                'paciente' => $idPac,
+                'valor' => $request['valor'],
+                'avance' => '0',
+                'estado' => 'ACTIVO'
+            ]);
+        }
+       
+
+        $respuestaServ = DB::connection('mysql')->table('servicios_tratamiento')
+        ->leftJoin("servicios","servicios.id","servicios_tratamiento.servicio")
+        ->where('servicios_tratamiento.id', $respuesta)
+        ->select("servicios_tratamiento.*","servicios.nombre")
+        ->first();
+
+        return $respuestaServ;
+    }
+
     public static function buscSeccion($idSec){
         $respuestaSecc = DB::connection('mysql')->table('secciones')
         ->where('id', $idSec)
         ->first();
 
         return $respuestaSecc;
+    }
+    public static function buscServSecc($idSec){
+        $respuestaSecc = DB::connection('mysql')->table('servicios_tratamiento')
+        ->where('seccion', $idSec)
+        ->get();
+
+        return $respuestaSecc;
+    }
+    public static function busTotalSeccion($idSec){
+        $totSeccion = DB::connection("mysql")->select("SELECT SUM(valor) AS totseccion FROM  servicios_tratamiento WHERE seccion = ".$idSec." GROUP BY seccion");
+        if($totSeccion){
+            return $totSeccion[0]->totseccion;
+        }else{
+            return 0;
+        }
+        
+        
+    }
+
+    public static function allSeviciosTrat($idTrat){
+        $respuestaServ = DB::connection('mysql')->table('servicios_tratamiento')
+        ->where('tratamiento', $idTrat)
+        ->get();
+
+        return $respuestaServ;
     }
     
 

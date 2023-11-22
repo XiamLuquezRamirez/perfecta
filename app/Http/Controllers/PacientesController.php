@@ -107,21 +107,26 @@ class PacientesController extends Controller
            $Tratamientos = Tratamientos::busTatamiento($idTrat);
            $ItemsTratamientos = ItemsTratamiento::consulAllItem($idTrat);
             $ContTratamientos = '';
-            $cosSeccio = 1;
+
+           $servTratamiento = Tratamientos::consulAllServ($idTrat);
 
            foreach ($ItemsTratamientos as $i => $item) {
             if($item->tip_servi=="seccion"){
 
                 $seccion = Secciones::buscSeccion($item->id_servi);
 
+                $busTotalSeccion = Secciones::busTotalSeccion($seccion->id);
+                $total = number_format($busTotalSeccion, 2, ',', '.');
+
+               
                 $ContTratamientos .='<div class="card collapse-header mb-0" role="tablist">
                 <div id="headingCollapse5"
                     class="card-header d-flex justify-content-between align-items-center m-1"
                     style="border-top-left-radius: 0.25rem; border-top-right-radius: 0.25rem; border: 1px solid #e4e7ed;"
                     data-toggle="collapse" role="tab"
-                    data-target="#collapse'.$cosSeccio.'"
+                    data-target="#collapse'.$seccion->id.'"
                     aria-expanded="false"
-                    aria-controls="collapse'.$cosSeccio.'">
+                    aria-controls="collapse'.$seccion->id.'">
                     <div class="collapse-title media">
 
                         <div class="media-body mt-25">
@@ -133,8 +138,7 @@ class PacientesController extends Controller
                         <div class="collection mr-1">
                             <span
                                 class="bullet bullet-xs bullet-primary"></span>
-                            <span class="font-weight-bold">$
-                                45.000,00</span>
+                            <span class="font-weight-bold" id="span-total'.$seccion->id.'">$ '.$total.'</span>
                         </div>
 
                         <div class="dropdown">
@@ -149,7 +153,7 @@ class PacientesController extends Controller
                             </a>
                             <div class="dropdown-menu dropdown-menu-right"
                                 aria-labelledby="fisrt-open-submenu">
-                                <a onclick="$.addServicio('.$cosSeccio.');"
+                                <a onclick="$.addServicioSeccion('.$seccion->id.');"
                                     class="dropdown-item mail-reply">
                                     <i
                                         class="feather icon-plus"></i>
@@ -173,26 +177,22 @@ class PacientesController extends Controller
                         </div>
                     </div>
                 </div>
-                <div id="collapse'.$cosSeccio.'" role="tabpanel"
+                <div id="collapse'.$seccion->id.'" role="tabpanel"
                     aria-labelledby="headingCollapse5"
                     class="collapse">
                     <div class="card-content">
                         <div class="card-body">
                           <table class="table mb-5">
-
-                                    <tbody
-                                        id="trServicioSeccion'.$cosSeccio.'">
+                                    <tbody id="trServicioSeccion'.$seccion->id.'">
                                         
 
                                     </tbody>
                                 </table>
-                           
                         </div>
-
                     </div>
                 </div>
             </div>';
-            $cosSeccio++;
+          
 
             }else{
 
@@ -204,6 +204,7 @@ class PacientesController extends Controller
                 return response()->json([
                     'Tratamientos' => $Tratamientos,
                     'ContTratamientos' => $ContTratamientos,
+                    'servTratamiento' => $servTratamiento,
                 ]);
             }
         } else {
@@ -358,6 +359,34 @@ class PacientesController extends Controller
             if (request()->ajax()) {
                 return response()->json([
                     'seccion' => $respuesta
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+    public function GuardarServicio()
+    {
+        if (Auth::check()) {
+            $data = request()->all();
+            $idSecc = $data['idSecc'];
+            $idTrata = $data['idTrata'];
+            $idPac = $data['idPac'];
+
+            if ($data['accion'] == "agregar") {
+                $respuesta = Secciones::guardarServ($data,$idSecc,$idTrata,$idPac);
+            } else {
+                $respuesta = Secciones::editar($data);
+            }
+
+             $totServ = Secciones::busTotalSeccion($idSecc);
+
+            
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'servicios' => $respuesta,
+                    'totServ' => $totServ,
                 ]);
             }
         } else {
