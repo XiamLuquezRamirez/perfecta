@@ -100,7 +100,7 @@
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title" id="tituloTratamiento">Crear Tratmiento
+                                                        <h4 class="modal-title" id="tituloTratamiento">Crear Tratamiento
                                                         </h4>
                                                         <button type="button" class="close" data-dismiss="modal"
                                                             aria-label="Close">
@@ -505,13 +505,9 @@
 
     </div>
 
-    <form action="{{ url('/AdminPacientes/AllProfesionales') }}"
-        id="<form action="{{ url('/Administracion/EliminarProfesional') }}" id="formEliminar" method="POST">
+    <form action="{{ url('/AdminPacientes/AllProfesionales') }}" id="formCargarProfesionales" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
-    </form>" method="POST">
-    @csrf
-    <!-- Tus campos del formulario aquí -->
     </form>
 
     <form action="{{ url('/AdminPacientes/AllServicios') }}" id="formCargarServicios" method="POST">
@@ -527,9 +523,6 @@
     </form>
 
 
-
-
-
     <form action="{{ url('/AdminPacientes/CargarDatosPacTrat') }}" id="formCargarDatosPacTrat" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
@@ -543,8 +536,20 @@
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
+    <form action="{{ url('/AdminPacientes/busEditSecc') }}" id="formEditarSeccion" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
 
-    <form action="{{ url('/Administracion/EliminarProfesional') }}" id="formEliminarServicio" method="POST">
+    <form action="{{ url('/AdminPacientes/EliminarServicio') }}" id="formEliminarServicio" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/AdminPacientes/EliminarSeccion') }}" id="formEliminarSeccion" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/AdminPacientes/busEditTrata') }}" id="formEditarTratamiento" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
@@ -590,8 +595,49 @@
                         keyboard: false
                     });
 
+                    $("#nombre_tratamiento").val('');
+                    $('#profesional').val('').trigger('change.select2');
+                    $('#especialidad').val('').trigger('change.select2');
+                
+
+                    $("#tituloTratamiento").html("Agregar tratamiento.");
                     $("#accion").val("agregar");
                     $.cargarProfesionales();
+                },
+                editarTratamiento: function(id){
+                    
+                    $("#modalTratamiento").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+
+                    $("#tituloTratamiento").html("Editar tratamiento.");
+                    $("#accion").val("editar");
+
+                    $.cargarProfesionales();
+
+                    $("#idTratamiento").val(id);
+
+                    var form = $("#formEditarTratamiento");
+                    $("#idTrat").remove();
+                    form.append("<input type='hidden' id='idTrat' name='idTrat'  value='" + id + "'>");
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            $("#nombre_tratamiento").val(respuesta.tratraEdit.nombre);
+                            $('#profesional').val(respuesta.tratraEdit.profesional).trigger('change.select2');
+                            $('#especialidad').val(respuesta.tratraEdit.especialidad).trigger('change.select2');
+                        }
+                    });
+
+
                 },
                 cancelarTrataminto: function() {
                     $('#modalTratamiento').modal('toggle');
@@ -612,8 +658,6 @@
                     var datos = form.serialize();
 
                     let servSEccion = '';
-
-
 
                     $.ajax({
                         type: "POST",
@@ -636,7 +680,8 @@
                                     '<td class="align-middle">' +
                                     '    <div id="outerCircle' + item.id +
                                     '" class="outerCircle"' +
-                                    '        onclick="$.addEvolucion();"' +
+                                    '        onclick="$.addEvolucion(' + item.id +
+                                    ');"' +
                                     '        style="display: flex; justify-content: center; align-items: center; padding: 0; height: 50px; width: 50px; border-radius: 100%; background-image: conic-gradient(#94d3a2 0deg, #94d3a2 162deg, #D3D3D3 162deg)">' +
                                     '        <div style="display: flex; justify-content: center; align-items: center; padding: 0; height: 40px; width: 40px; border-radius: 100%; background-color:white">' +
                                     '            <span id="porcentajeServ' + item
@@ -671,8 +716,10 @@
                                     '        <i class="feather icon-edit"></i>' +
                                     '         Editar' +
                                     '        </a>' +
-                                    '        <a onclick="$.delServSecc(' + item.id +
-                                    ');"  class="dropdown-item">' +
+                                    '        <a  id="btnDel' + item.id +
+                                    '" data-id="' + item.id + '" data-seccion="' +
+                                    item.seccion +
+                                    '" onclick="$.delServSecc(this.id);"  class="dropdown-item">' +
                                     '        <i class="feather icon-trash-2"></i>' +
                                     '        Eliminar' +
                                     '        </a>' +
@@ -807,25 +854,26 @@
                                     buttonsStyling: false
                                 });
 
+                                $("#div-trata-act").html('');
+
                                 $.each(respuesta.newTrata, function(i, item) {
 
-                                    newTrata += '<div class="row">' +
+                                    newTrata = '<div class="row">' +
                                         '<div class="col-12 pt-2 pb-2 border-bottom-blue-grey border-bottom-lighten-5">' +
                                         '    <div class="info-time-tracking-title d-flex justify-content-between align-items-center">' +
                                         '        <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">' +
                                         '            ' + item.nombre + '</h4>' +
                                         '        <span class="pr-2 fonticon-wrap"' +
                                         '            style="cursor: pointer; ">' +
-                                        '            <i style="transition: all .2s ease-in-out;c" title="Editar Tratamiento"' +
-                                        '                class="fa fa-pencil font-medium-5"></i>' +
-                                        '            <i title="Eliminar Tratamiento"' +
-                                        '                class="fa fa-trash-o  font-medium-5"></i>' +
+                                        '            <i onclick="$.editarTratamiento('+item.id+');" style="transition: all .2s ease-in-out;" title="Editar Tratamiento"' +
+                                        '                class="fa fa-pencil font-medium-5 hvr-grow-shadow mr-1"></i>' +
+                                        '            <i onclick="$.eliminarTratamiento('+item.id+');" title="Eliminar Tratamiento"' +
+                                        '                class="fa fa-trash-o  font-medium-5 hvr-grow-shadow"></i>' +
                                         '        </span>' +
                                         '    </div>' +
                                         '</div>' +
                                         '<div class="col-12 hvr-grow-shadow" style="cursor: pointer;"' +
-                                        '    onclick="$.verTratamiento(' + item.id +
-                                        ');">' +
+                                        '    onclick="$.verTratamiento(' + item.id +');">' +
                                         '    <div class="card-body ">' +
                                         '        <div class="row justify-content-center align-items-center">' +
                                         '            <div class="col-xl-4 col-lg-6 col-md-12 text-center clearfix">' +
@@ -839,7 +887,7 @@
                                         '                        class="fa fa-th-large"></span>' +
                                         '                    Especialidad:</h6>' +
                                         '                <p>' + item.especialidad +
-                                        '</p>' +
+                                        '            </p>' +
                                         '            </div>' +
                                         '            <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">' +
                                         '                <h6 class="pt-1"><span' +
@@ -891,8 +939,39 @@
                     });
 
                     $("#nombreSeccion").val('');
-                    $("#Descripcion").val('');
+                    $("#descripcionSeccion").val('');
                     $("#accion").val('agregar');
+
+                },
+                editarSeccion: function(id) {
+                    $("#modalSesiones").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+                    $("#nombreSeccion").val('');
+                    $("#descripcionSeccion").val('');
+
+                    $("#accion").val('editar');
+                    $("#idSeccion").val(id);
+
+                    var form = $("#formEditarSeccion");
+                    $("#idSecc").remove();
+                    form.append("<input type='hidden' id='idSecc' name='idSecc'  value='" + id + "'>");
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            $("#nombreSeccion").val(respuesta.seccionesEdit.nombre);
+                            $("#descripcionSeccion").val(respuesta.seccionesEdit
+                                .descripcion);
+                        }
+                    });
 
                 },
                 salirSeccion: function() {
@@ -945,12 +1024,18 @@
                                     type: "success",
                                     title: "",
                                     text: "Operación realizada exitosamente",
-                                    confirmButtonClass: "btn btn-primary",
+                                    consfirmButtonClass: "btn btn-primary",
                                     timer: 1500,
                                     buttonsStyling: false
                                 });
 
-                                $.dibujarSeccion(respuesta);
+                                if (accion == "agregar") {
+                                    $.dibujarSeccion(respuesta);
+                                } else {
+                                    $("#nomSeccion" + respuesta.seccion.id).html(respuesta
+                                        .seccion.nombre);
+                                }
+
                                 var loader = document.getElementById('loader');
                                 loader.style.display = 'none';
                             }
@@ -973,7 +1058,7 @@
 
                     let conSeccion = $("#conSeccion").val();
                     conSeccion++;
-                    let divSecciones = '<div class="card collapse-header" role="tablist">' +
+                    let divSecciones = '<div id="seccion'+respuesta.seccion.id+'" class="card collapse-header" role="tablist">' +
                         '<div id="headingCollapse5"' +
                         '    class="card-header d-flex justify-content-between align-items-center hvr-grow-shadow m-1"' +
                         '    style="border-top-left-radius: 0.25rem; border-top-right-radius: 0.25rem; border: 1px solid #e4e7ed;"' +
@@ -983,7 +1068,8 @@
                         '   aria-controls="collapse' + respuesta.seccion.id + '">' +
                         '    <div class="collapse-title media">' +
                         '        <div class="media-body mt-25">' +
-                        '            <h4>' + respuesta.seccion.nombre + '</h4>' +
+                        '            <h4 id="nomSeccion' + respuesta.seccion.id + '">' + respuesta
+                        .seccion.nombre + '</h4>' +
                         '        </div>' +
                         '    </div>' +
                         '    <div' +
@@ -1012,13 +1098,13 @@
                         '                </a>' +
                         '                <div class="dropdown-divider">' +
                         '                </div>' +
-                        '                <a href="#"' +
-                        '                    class="dropdown-item">' +
+                        '                <a onclick="$.editarSeccion(' + respuesta.seccion.id +
+                        ');"  class="dropdown-item">' +
                         '                    <i class="feather icon-edit" ></i>' +
                         '                   Editar sección' +
                         '                </a>' +
-                        '                <a href="#"' +
-                        '                    class="dropdown-item">' +
+                        '                <a onclick="$.eliminarSeccion(' + respuesta.seccion.id +
+                        ');"  class="dropdown-item">' +
                         '                    <i class="feather icon-trash-2"></i>' +
                         '                    Eliminar Sección' +
                         '                </a>' +
@@ -1045,7 +1131,7 @@
                 },
                 addServicio: function(id) {
                     $("#origServicio").val("trata");
-                    alert('agregar servicios a seccion ' + id);
+                    alert('agregar servicios a tratamiento ' + id);
                 },
                 addServicioSeccion: function(id) {
                     $("#origServicio").val("secc");
@@ -1055,6 +1141,9 @@
                         backdrop: 'static',
                         keyboard: false
                     });
+
+                    $("#valorVis").val("");
+                    $("#valor").val("");
 
                     $.cargarServicios();
 
@@ -1123,6 +1212,7 @@
                                 });
 
                                 if ($("#origServicio").val() == "secc") {
+                                    $("#trServicioSeccion" + idSeccion).html('');
                                     $.dibujarServicioSecc(respuesta);
                                 } else {
                                     $.dibujarServicioTrat(respuesta);
@@ -1132,6 +1222,7 @@
                                     'es-CO', 'COP');
 
                                 $("#span-total" + idSeccion).html(totalServicios);
+
 
 
                                 var loader = document.getElementById('loader');
@@ -1154,66 +1245,66 @@
 
                 },
                 dibujarServicioSecc: function(respuesta) {
-                    let seccion = $("#servSeccion").val();
 
-                    let porAvancTrat = respuesta.servicios.avance;
+                    $.each(respuesta.servSeccion, function(i, item) {
+                        let porAvancTrat = item.avance;
+                        var formatoMoneda = formatCurrency(item.valor,
+                            'es-CO', 'COP');
 
-                    var formatoMoneda = formatCurrency(respuesta.servicios.valor,
-                        'es-CO', 'COP');
+                        let servicio = '<tr id="tr-serv' + item.id + '">' +
+                            '<td' +
+                            '    class="align-middle">' +
+                            '    <div id="outerCircle' + item.id + '" class="outerCircle"' +
+                            '        onclick="$.addEvolucion(' + item.id + ');"' +
+                            '        style="display: flex; justify-content: center; align-items: center; padding: 0; height: 50px; width: 50px; border-radius: 100%; background-image: conic-gradient(#94d3a2 0deg, #94d3a2 162deg, #D3D3D3 162deg)">' +
+                            '        <div style="display: flex; justify-content: center; align-items: center; padding: 0; height: 40px; width: 40px; border-radius: 100%; background-color:white">' +
+                            '            <span' +
+                            '                id="porcentajeServ' + item.id + '">0%</span>' +
+                            '        </div>' +
+                            '    </div>' +
+                            '</td>' +
+                            '<td class="align-middle">' +
+                            '    <span>' + item.nombre + '</span>' +
+                            '</td>' +
+                            '<td class="align-middle">' +
+                            '    <span>' + formatoMoneda + '</span>' +
+                            '</td>' +
+                            '<td class="align-middle">' +
+                            '    <span class="badge badge-success">Activo</span>' +
+                            '</td>' +
+                            '<td  class="align-middle">' +
+                            '    <div class="dropdown">' +
+                            '        <span class="feather icon-more-vertical dropdown-toggle"' +
+                            '            id="dropdownMenuButton"' +
+                            '            data-toggle="dropdown"' +
+                            '            aria-haspopup="true"' +
+                            '            aria-expanded="false">' +
+                            '        </span>' +
+                            '        <div class="dropdown-menu dropdown-menu-right"' +
+                            '            aria-labelledby="dropdownMenuButton"' +
+                            '            x-placement="bottom-end"' +
+                            '            style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 18px, 0px);"' +
+                            '            x-out-of-boundaries="">' +
+                            '        <a onclick="$.editServSecc(' + item
+                            .id + ');" class="dropdown-item">' +
+                            '        <i class="feather icon-edit"></i>' +
+                            '         Editar' +
+                            '        </a>' +
+                            '        <a  id="btnDel' + item.id + '" data-id="' + item.id +
+                            '" data-seccion="' + item.seccion +
+                            '" onclick="$.delServSecc(this.id);"  class="dropdown-item">' +
+                            '        <i class="feather icon-trash-2"></i>' +
+                            '        Eliminar' +
+                            '        </a>' +
+                            '</div>' +
+                            '</div>' +
+                            '</td>' +
+                            '</tr>';
 
-                    let servicio = '<tr>' +
-                        '<td' +
-                        '    class="align-middle">' +
-                        '    <div id="outerCircle' + respuesta.servicios.id + '" class="outerCircle"' +
-                        '        onclick="$.addEvolucion();"' +
-                        '        style="display: flex; justify-content: center; align-items: center; padding: 0; height: 50px; width: 50px; border-radius: 100%; background-image: conic-gradient(#94d3a2 0deg, #94d3a2 162deg, #D3D3D3 162deg)">' +
-                        '        <div style="display: flex; justify-content: center; align-items: center; padding: 0; height: 40px; width: 40px; border-radius: 100%; background-color:white">' +
-                        '            <span' +
-                        '                id="porcentajeServ' + respuesta.servicios.id + '">0%</span>' +
-                        '        </div>' +
-                        '    </div>' +
-                        '</td>' +
-                        '<td class="align-middle">' +
-                        '    <span>' + respuesta.servicios.nombre + '</span>' +
-                        '</td>' +
-                        '<td class="align-middle">' +
-                        '    <span>' + formatoMoneda + '</span>' +
-                        '</td>' +
-                        '<td class="align-middle">' +
-                        '    <span class="badge badge-success">Activo</span>' +
-                        '</td>' +
-                        '<td  class="align-middle">' +
-                        '    <div class="dropdown">' +
-                        '        <span class="feather icon-more-vertical dropdown-toggle"' +
-                        '            id="dropdownMenuButton"' +
-                        '            data-toggle="dropdown"' +
-                        '            aria-haspopup="true"' +
-                        '            aria-expanded="false">' +
-                        '        </span>' +
-                        '        <div class="dropdown-menu dropdown-menu-right"' +
-                        '            aria-labelledby="dropdownMenuButton"' +
-                        '            x-placement="bottom-end"' +
-                        '            style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 18px, 0px);"' +
-                        '            x-out-of-boundaries="">' +
-                        '        <a href="#" class="dropdown-item">' +
-                        '        <i class="feather icon-edit"></i>' +
-                        '         Editar' +
-                        '        </a>' +
-                        '        <a href="#" class="dropdown-item">' +
-                        '        <i class="feather icon-trash-2"></i>' +
-                        '        Eliminar' +
-                        '        </a>' +
-                        '</div>' +
-                        '</div>' +
-                        '</td>' +
-                        '</tr>';
+                        $("#trServicioSeccion" + item.seccion).append(servicio);
 
-                    $("#trServicioSeccion" + seccion).append(servicio);
-
-                    updatePercentageServicios(porAvancTrat,
-                        respuesta.servicios.id);
-
-
+                        updatePercentageServicios(porAvancTrat, item.id);
+                    });
                 },
                 buscInfServicio: function(val) {
                     var form = $("#formBuscaServicios");
@@ -1260,6 +1351,7 @@
                     });
 
                     $("#accion").val('editar');
+                    $("#idServicio").val(id);
 
                     $.cargarServicios();
 
@@ -1283,7 +1375,7 @@
 
                             $('#servicioTrat').val(respuesta.serviciosEdit.servicio)
                                 .trigger('change.select2');
-                            $("#valor").val(respuesta.serviciosEdit.valor, );
+                            $("#valor").val(respuesta.serviciosEdit.valor);
                             $("#valorVis").val(valorServicio);
 
                             var InputVal = document.getElementById("valorVis");
@@ -1293,16 +1385,148 @@
                                 InputVal.disabled = false;
                             }
 
+                            $("#idSeccion").val(respuesta.serviciosEdit.seccion);
 
+                        }
+                    });
+
+                },
+                delServSecc: function(id) {
+
+                    let idServ = $("#" + id).data("id");
+                    let idSecc = $("#" + id).data("seccion");
+
+                    console.log(idServ + " " + idSecc);
+
+                    Swal.fire({
+                        title: "Esta seguro de Eliminar este registro?",
+                        text: "¡No podrás revertir esto!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Si, eliminar!",
+                        cancelButtonText: "Cancelar",
+                        confirmButtonClass: "btn btn-warning",
+                        cancelButtonClass: "btn btn-danger ml-1",
+                        buttonsStyling: false
+                    }).then(function(result) {
+                        if (result.value) {
+                            $.procederEliminarServ(idServ, idSecc);
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                            Swal.fire({
+                                title: "Cancelado",
+                                text: "Tu registro está a salvo ;)",
+                                type: "error",
+                                confirmButtonClass: "btn btn-success"
+                            });
+                        }
+                    });
+                },
+                procederEliminarServ: function(idServ, idSecc) {
+
+                    var form = $("#formEliminarServicio");
+
+                    $("#idServ").remove();
+                    $("#idSecc").remove();
+                    form.append("<input type='hidden' id='idServ' name='idServ'  value='" + idServ +
+                        "'>");
+                    form.append("<input type='hidden' id='idSecc' name='idSecc'  value='" + idServ +
+                        "'>");
+
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            Swal.fire({
+                                type: "success",
+                                title: "Eliminado!",
+                                text: "El Registro fue eliminado correctamente.",
+                                confirmButtonClass: "btn btn-success"
+                            });
+
+                            $("#trServicioSeccion" + idSecc).html('');
+                            $.dibujarServicioSecc(respuesta);
+                            var totalServicios = formatCurrency(respuesta.totServ,
+                                'es-CO', 'COP');
+
+                            $("#span-total" + idSecc).html(totalServicios);
 
 
                         }
                     });
 
-
                 },
-                delServSecc: function(id) {
-                    alert("eliminemos");
+                eliminarSeccion: function(idSecc) {
+                   
+                    Swal.fire({
+                        title: "Esta seguro de Eliminar este registro?",
+                        text: "¡No podrás revertir esto!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Si, eliminar!",
+                        cancelButtonText: "Cancelar",
+                        confirmButtonClass: "btn btn-warning",
+                        cancelButtonClass: "btn btn-danger ml-1",
+                        buttonsStyling: false
+                    }).then(function(result) {
+                        if (result.value) {
+                            $.procederEliminarSeccion(idSecc);
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                            Swal.fire({
+                                title: "Cancelado",
+                                text: "Tu registro está a salvo ;)",
+                                type: "error",
+                                confirmButtonClass: "btn btn-success"
+                            });
+                        }
+                    });
+                },
+                procederEliminarSeccion: function(idSecc) {
+                    
+
+                    var form = $("#formEliminarSeccion");
+
+                    $("#idSecc").remove();
+                    form.append("<input type='hidden' id='idSecc' name='idSecc'  value='" + idSecc +"'>");
+
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            if(respuesta.seccionStatus == "ok"){
+                                Swal.fire({
+                                    type: "success",
+                                    title: "Eliminado!",
+                                    text: "El registro fue eliminado correctamente.",
+                                    confirmButtonClass: "btn btn-success"
+                                });
+                                $("#seccion"+idSecc).remove();
+                            }else{
+                                Swal.fire({
+                                    type: "warning",
+                                    title: "Alerta!",
+                                    text: "La seccion no puede ser eliminada, tiene Servicios cargados.",
+                                    confirmButtonClass: "btn btn-warning"
+                                });
+
+                            }
+                        }
+                    });
                 },
                 buscInfGeneralPaciente: function(pac) {
                     $("#idPaciente").val(pac);
@@ -1332,8 +1556,7 @@
 
                             var foto = respuesta.paciente.foto;
                             if (foto == "") {
-                                foto =
-                                    "../../../app-assets/images/FotosPacientes/avatar-s-1.png";
+                                foto = "../../../app-assets/images/FotosPacientes/avatar-s-1.png";
                             }
 
                             const previewImage = document.getElementById('previewImage');
@@ -1368,20 +1591,20 @@
                             ////datos tratamiento activos
                             let tratAct = '';
                             let consTrata = 1;
-
+                            $("#div-trata-act").html('');
 
                             $.each(respuesta.tratamientosAct, function(i, item) {
-                                tratAct += '<div class="row">' +
+                                tratAct = '<div class="row">' +
                                     '<div class="col-12 pt-2 pb-2 border-bottom-blue-grey border-bottom-lighten-5">' +
                                     '    <div class="info-time-tracking-title d-flex justify-content-between align-items-center">' +
                                     '        <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">' +
                                     '            ' + item.nombre + '</h4>' +
                                     '        <span class="pr-2 fonticon-wrap"' +
                                     '            style="cursor: pointer; ">' +
-                                    '            <i style="transition: all .2s ease-in-out;c" title="Editar Tratamiento"' +
-                                    '                class="fa fa-pencil font-medium-5"></i>' +
-                                    '            <i title="Eliminar Tratamiento"' +
-                                    '                class="fa fa-trash-o  font-medium-5"></i>' +
+                                    '            <i onclick="$.editarTratamiento('+item.id+');" style="transition: all .2s ease-in-out;" title="Editar Tratamiento"' +
+                                    '                class="fa fa-pencil font-medium-5 hvr-grow-shadow mr-1"></i>' +
+                                    '            <i onclick="$.eliminarTratamiento('+item.id+');" title="Eliminar Tratamiento"' +
+                                    '                class="fa fa-trash-o  font-medium-5 hvr-grow-shadow"></i>' +
                                     '        </span>' +
                                     '    </div>' +
                                     '</div>' +

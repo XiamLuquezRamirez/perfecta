@@ -27,6 +27,21 @@ class Tratamientos extends Model
         return $respuestaTra;
     }
 
+        
+    public static function editar($request)
+    {
+        $respuesta = DB::connection('mysql')->table('tratamientos')->where('id', $request['idTratamiento'])->update([
+            'nombre' => $request['nombre_tratamiento'],
+            'profesional' => $request['profesional'],
+            'especialidad' => $request['especialidad'],
+        ]);
+        $respuestaTra = DB::connection('mysql')->table('tratamientos')
+        ->where('id', $request['idTratamiento'])
+        ->first();
+
+        return $respuestaTra;
+    }
+
     public static function busTatamiento($idTrat){
         $respuestaTra = DB::connection('mysql')->table('tratamientos')
         ->where('id', $idTrat)

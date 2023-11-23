@@ -13,11 +13,21 @@ class ItemsTratamiento extends Model
         $respuesta = DB::connection('mysql')->table('item_tratamientos')->insertGetId([
             'tratamiento' => $trat,
             'tip_servi' => $tserv,
-            'id_servi' => $serv
+            'id_servi' => $serv,
+            'estado' => 'ACTIVO'
         ]);
 
         
         return $respuesta;
+    }
+
+    public static function eliminarSeccion($secc){
+
+        $respuesta = DB::connection('mysql')->table('item_tratamientos')->where('id_servi', $secc)->update([
+            'estado' => 'ELIMINADO'
+        ]);
+        return "ok";
+
     }
 
 
@@ -25,6 +35,7 @@ class ItemsTratamiento extends Model
 
         $itemTrat = DB::connection('mysql')->table('item_tratamientos')
         ->where('tratamiento', $trat)
+        ->where('estado', 'ACTIVO')
         ->orderBy('id', 'desc')
         ->get();
         return $itemTrat;

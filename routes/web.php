@@ -72,3 +72,7 @@ Route::post('/AdminPacientes/CargarDatosPacTrat', [PacientesController::class,'C
 Route::post('/AdminPacientes/SeccionesTratamientos', [PacientesController::class,'SeccionesTratamientos']);
 Route::post('/AdminPacientes/AllServicios', [PacientesController::class,'AllServicios']);
 Route::post('/AdminPacientes/busEditServ', [PacientesController::class,'busEditServ']);
+Route::post('/AdminPacientes/busEditSecc', [PacientesController::class,'busEditSecc']);
+Route::post('/AdminPacientes/busEditTrata', [PacientesController::class,'busEditTrata']);
+Route::post('/AdminPacientes/EliminarServicio', [PacientesController::class,'EliminarServicio']);
+Route::post('/AdminPacientes/EliminarSeccion', [PacientesController::class,'EliminarSeccion']);

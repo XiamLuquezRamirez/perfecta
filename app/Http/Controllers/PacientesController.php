@@ -95,6 +95,88 @@ class PacientesController extends Controller
         }
     }
 
+    public function busEditSecc()
+    {
+        if (Auth::check()) {
+            $idSecc = request()->get('idSecc');
+            $seccionesEdit = Secciones::buscSeccion($idSecc);
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'seccionesEdit' => $seccionesEdit,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+    public function busEditTrata()
+    {
+        if (Auth::check()) {
+            $idTrat = request()->get('idTrat');
+            $tratraEdit = Tratamientos::busTatamiento($idTrat);
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'tratraEdit' => $tratraEdit,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+    public function EliminarServicio(){
+        if (Auth::check()) {
+            $idServ = request()->get('idServ');
+            $idSecc = request()->get('idSecc');
+
+            $serviciosEdit = Secciones::eliminarServ($idServ);
+            $servSeccion = Secciones::buscServSecc($idSecc);
+            $totServ = Secciones::busTotalSeccion($idSecc);
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'serviciosEdit' => $serviciosEdit,
+                    'servSeccion' => $servSeccion,
+                    'totServ' => $totServ
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        } 
+    }
+
+    public function EliminarSeccion(){
+        if (Auth::check()) {
+           
+            $idSecc = request()->get('idSecc');
+
+            $servSeccion = Secciones::buscServSecc($idSecc);
+            $seccionStatus = "";
+        
+            if($servSeccion->count()==0){
+                $serviciosEdit = Secciones::eliminarSeccion($idSecc);
+                $serviciosEdit = ItemsTratamiento::eliminarSeccion($idSecc);
+
+                $seccionStatus="ok";
+            }else{
+                $seccionStatus="fail";
+                $serviciosEdit = "";
+            }
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'seccionStatus' => $seccionStatus,
+                    'serviciosEdit' => $serviciosEdit
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        } 
+    }
+
     public function CargarDatosPacTrat()
     {
         if (Auth::check()) {
@@ -136,7 +218,7 @@ class PacientesController extends Controller
                 $total = number_format($busTotalSeccion, 2, ',', '.');
 
                
-                $ContTratamientos .='<div class="card collapse-header mb-0" role="tablist">
+                $ContTratamientos .='<div id="seccion'.$seccion->id.'" class="card collapse-header mb-0" role="tablist">
                 <div id="headingCollapse5"
                     class="card-header d-flex justify-content-between align-items-center m-1"
                     style="border-top-left-radius: 0.25rem; border-top-right-radius: 0.25rem; border: 1px solid #e4e7ed;"
@@ -147,47 +229,41 @@ class PacientesController extends Controller
                     <div class="collapse-title media">
 
                         <div class="media-body mt-25">
-                            <h4>'.$seccion->nombre.'</h4>
+                            <h4 id="nomSeccion'.$seccion->id.'">'.$seccion->nombre.'</h4>
                         </div>
                     </div>
                     <div
                         class="information d-sm-flex d-none align-items-center">
                         <div class="collection mr-1">
-                            <span
-                                class="bullet bullet-xs bullet-primary"></span>
+                            <span class="bullet bullet-xs bullet-primary"></span>
                             <span class="font-weight-bold" id="span-total'.$seccion->id.'">$ '.$total.'</span>
                         </div>
 
                         <div class="dropdown">
-                            <a href="#"
-                                class="dropdown-toggle"
+                            <a href="#" class="dropdown-toggle"
                                 id="fisrt-open-submenu"
                                 data-toggle="dropdown"
                                 aria-haspopup="true"
                                 aria-expanded="false">
-                                <i
-                                    class="feather icon-more-vertical mr-0"></i>
+                                <i  class="feather icon-more-vertical mr-0"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right"
                                 aria-labelledby="fisrt-open-submenu">
                                 <a onclick="$.addServicioSeccion('.$seccion->id.');"
                                     class="dropdown-item mail-reply">
-                                    <i
-                                        class="feather icon-plus"></i>
+                                    <i class="feather icon-plus"></i>
                                     Agregar Servicio
                                 </a>
                                 <div class="dropdown-divider">
                                 </div>
-                                <a href="#"
+                                <a onclick="$.editarSeccion('.$seccion->id.');" 
                                     class="dropdown-item">
-                                    <i
-                                        class="feather icon-edit"></i>
+                                    <i class="feather icon-edit"></i>
                                     Editar sección
                                 </a>
-                                <a href="#"
+                                <a onclick="$.eliminarSeccion('.$seccion->id.');"
                                     class="dropdown-item">
-                                    <i
-                                        class="feather icon-trash-2"></i>
+                                    <i class="feather icon-trash-2"></i>
                                     Eliminar Sección
                                 </a>
                             </div>
@@ -343,11 +419,10 @@ class PacientesController extends Controller
             if ($data['accion'] == "agregar") {
                 $respuesta = Tratamientos::guardar($data);
             } else {
-                $respuesta = Profesionales::editar($data);
+                $respuesta = Tratamientos::editar($data);
             }
 
-            $newTrata =  Tratamientos::AllActivos();
-
+            $newTrata =  Tratamientos::TratamientosPacientesAct($respuesta->paciente);
 
             if (request()->ajax()) {
                 return response()->json([
@@ -369,10 +444,9 @@ class PacientesController extends Controller
                 $respuesta = Secciones::guardar($data,$idTrat);
                 $itemTatra = ItemsTratamiento::guardar($respuesta->id,'seccion', $idTrat);
             } else {
-                $respuesta = Secciones::editar($data);
+                $respuesta = Secciones::editarSeccion($data);
             }
             
-
             if (request()->ajax()) {
                 return response()->json([
                     'seccion' => $respuesta
@@ -396,14 +470,15 @@ class PacientesController extends Controller
                 $respuesta = Secciones::editarServ($data);
             }
 
-             $totServ = Secciones::busTotalSeccion($idSecc);
-
-            
+            $servSeccion = Secciones::buscServSecc($idSecc);
+            $totServ = Secciones::busTotalSeccion($idSecc);
 
             if (request()->ajax()) {
                 return response()->json([
                     'servicios' => $respuesta,
                     'totServ' => $totServ,
+                    'servSeccion' => $servSeccion,
+                    
                 ]);
             }
         } else {
