@@ -63,6 +63,7 @@ class PacientesController extends Controller
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
+
     public function AllServicios()
     {
         if (Auth::check()) {
@@ -71,6 +72,22 @@ class PacientesController extends Controller
             if (request()->ajax()) {
                 return response()->json([
                     'servicios' => $servicios,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+    public function busEditServ()
+    {
+        if (Auth::check()) {
+            $idServ = request()->get('idServ');
+            $serviciosEdit = Secciones::BuscarServicioEdit($idServ);
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'serviciosEdit' => $serviciosEdit,
                 ]);
             }
         } else {
@@ -376,7 +393,7 @@ class PacientesController extends Controller
             if ($data['accion'] == "agregar") {
                 $respuesta = Secciones::guardarServ($data,$idSecc,$idTrata,$idPac);
             } else {
-                $respuesta = Secciones::editar($data);
+                $respuesta = Secciones::editarServ($data);
             }
 
              $totServ = Secciones::busTotalSeccion($idSecc);

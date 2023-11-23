@@ -505,9 +505,13 @@
 
     </div>
 
-    <form action="{{ url('/AdminPacientes/AllProfesionales') }}" id="formCargarProfesionales" method="POST">
+    <form action="{{ url('/AdminPacientes/AllProfesionales') }}"
+        id="<form action="{{ url('/Administracion/EliminarProfesional') }}" id="formEliminar" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
+    </form>" method="POST">
+    @csrf
+    <!-- Tus campos del formulario aquí -->
     </form>
 
     <form action="{{ url('/AdminPacientes/AllServicios') }}" id="formCargarServicios" method="POST">
@@ -515,26 +519,16 @@
         <!-- Tus campos del formulario aquí -->
     </form>
 
-    <form action="{{ url('/Administracion/ValidarProfesional') }}" id="formValidarProfesional" method="POST">
-        @csrf
-        <!-- Tus c
-                                                                                                    ampos del formulario aquí -->
-    </form>
+
 
     <form action="{{ url('/Administracion/BuscarServicio') }}" id="formBuscaServicios" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
 
-    <form action="{{ url('/Administracion/BuscarUsuario') }}" id="formValidarUsuario" method="POST">
-        @csrf
-        <!-- Tus campos del formulario aquí -->
-    </form>
 
-    <form action="{{ url('/Administracion/EliminarProfesional') }}" id="formEliminar" method="POST">
-        @csrf
-        <!-- Tus campos del formulario aquí -->
-    </form>
+
+
 
     <form action="{{ url('/AdminPacientes/CargarDatosPacTrat') }}" id="formCargarDatosPacTrat" method="POST">
         @csrf
@@ -542,6 +536,15 @@
     </form>
     <form action="{{ url('/AdminPacientes/SeccionesTratamientos') }}" id="formCargarSeccionesTratamientos"
         method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/AdminPacientes/busEditServ') }}" id="formEditarServicio" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+
+    <form action="{{ url('/Administracion/EliminarProfesional') }}" id="formEliminarServicio" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
@@ -629,7 +632,7 @@
                                 var formatoMoneda = formatCurrency(item.valor,
                                     'es-CO', 'COP');
 
-                                servSEccion = '<tr id="tr-serv'+item.id+'">' +
+                                servSEccion = '<tr id="tr-serv' + item.id + '">' +
                                     '<td class="align-middle">' +
                                     '    <div id="outerCircle' + item.id +
                                     '" class="outerCircle"' +
@@ -663,11 +666,13 @@
                                     '            x-placement="bottom-end"' +
                                     '            style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 18px, 0px);"' +
                                     '            x-out-of-boundaries="">' +
-                                    '        <a onclick="$.editServSecc('+item.id+');" class="dropdown-item">' +
+                                    '        <a onclick="$.editServSecc(' + item
+                                    .id + ');" class="dropdown-item">' +
                                     '        <i class="feather icon-edit"></i>' +
                                     '         Editar' +
                                     '        </a>' +
-                                    '        <a onclick="$.delServSecc('+item.id+');"  class="dropdown-item">' +
+                                    '        <a onclick="$.delServSecc(' + item.id +
+                                    ');"  class="dropdown-item">' +
                                     '        <i class="feather icon-trash-2"></i>' +
                                     '        Eliminar' +
                                     '        </a>' +
@@ -862,9 +867,6 @@
                                     consTrata++;
 
                                 });
-
-
-
 
                                 var loader = document.getElementById('loader');
                                 loader.style.display = 'none';
@@ -1078,15 +1080,18 @@
 
                     var form = $("#formGuardarServicio");
                     var url = form.attr("action");
+                    var accion = $("#accio").val();
                     var idSeccion = $("#idSeccion").val();
                     var idTratamiento = $("#idTratamiento").val();
                     var idPaciente = $("#idPaciente").val();
                     var token = $("#token").val();
+                    $("#accion").remove();
                     $("#idtoken").remove();
                     $("#idSecc").remove();
                     $("#idTrata").remove();
                     $("#idPac").remove();
-                    form.append("<input type='hidden' id='accion' name='accion'  value='agregar'>");
+                    form.append("<input type='hidden' id='accion' name='accion'  value='" + accion +
+                        "'>");
                     form.append("<input type='hidden' id='idtoken' name='_token'  value='" + token +
                         "'>");
                     form.append("<input type='hidden' id='idSecc' name='idSecc'  value='" +
@@ -1248,10 +1253,55 @@
                     $("#valorVis").val(formatoMoneda);
 
                 },
-                editServSecc: function(id){
-                    alert("editemos");
+                editServSecc: function(id) {
+                    $("#modalServicios").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+
+                    $("#accion").val('editar');
+
+                    $.cargarServicios();
+
+                    var form = $("#formEditarServicio");
+                    $("#idServ").remove();
+                    form.append("<input type='hidden' id='idServ' name='idServ'  value='" + id + "'>");
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            var valorServicio = formatCurrency(respuesta.serviciosEdit
+                                .valor,
+                                'es-CO', 'COP');
+
+                            $('#servicioTrat').val(respuesta.serviciosEdit.servicio)
+                                .trigger('change.select2');
+                            $("#valor").val(respuesta.serviciosEdit.valor, );
+                            $("#valorVis").val(valorServicio);
+
+                            var InputVal = document.getElementById("valorVis");
+                            if (respuesta.serviciosEdit.descuento == "No") {
+                                InputVal.disabled = true;
+                            } else {
+                                InputVal.disabled = false;
+                            }
+
+
+
+
+                        }
+                    });
+
+
                 },
-                delServSecc: function(id){
+                delServSecc: function(id) {
                     alert("eliminemos");
                 },
                 buscInfGeneralPaciente: function(pac) {

@@ -71,3 +71,4 @@ Route::get('/AdminPacientes/PacientesTratamientos', [PacientesController::class,
 Route::post('/AdminPacientes/CargarDatosPacTrat', [PacientesController::class,'CargarDatosPacTrat']);
 Route::post('/AdminPacientes/SeccionesTratamientos', [PacientesController::class,'SeccionesTratamientos']);
 Route::post('/AdminPacientes/AllServicios', [PacientesController::class,'AllServicios']);
+Route::post('/AdminPacientes/busEditServ', [PacientesController::class,'busEditServ']);

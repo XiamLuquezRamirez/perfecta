@@ -58,6 +58,17 @@ class Secciones extends Model
         return $respuestaServ;
     }
 
+
+    public static function editarServ($data){
+
+        $respuesta = DB::connection('mysql')->table('servicios_tratamiento')->where('id', $data['idServicio'])->update([
+            'servicio' => $data['servicioTrat'],
+            'valor' => $data['valor']
+        ]);
+        return "ok";
+
+    }
+
     public static function buscSeccion($idSec){
         $respuestaSecc = DB::connection('mysql')->table('secciones')
         ->where('id', $idSec)
@@ -72,6 +83,17 @@ class Secciones extends Model
 
         return $respuestaSecc;
     }
+    
+    public static function BuscarServicioEdit($idServ){
+        $respuestaSecc = DB::connection('mysql')->table('servicios_tratamiento')
+        ->leftJoin("servicios","servicios.id","servicios_tratamiento.servicio")
+        ->select("servicios_tratamiento.*", "servicios.descuento")
+        ->where('id', $idServ)
+        ->first();
+
+        return $respuestaSecc;
+    }
+
     public static function busTotalSeccion($idSec){
         $totSeccion = DB::connection("mysql")->select("SELECT SUM(valor) AS totseccion FROM  servicios_tratamiento WHERE seccion = ".$idSec." GROUP BY seccion");
         if($totSeccion){
