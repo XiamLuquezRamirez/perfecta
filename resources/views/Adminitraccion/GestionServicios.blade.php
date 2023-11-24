@@ -403,10 +403,10 @@
                 cancelar: function() {
                     $('#modalProfesional').modal('hide');
                 },
-                limpiar: function() {
-                
+                limpiar: function() {                
                     $("#nombre").val("");
                     $("#valor").val("");
+                    $("#valorVis").val("");
                     $("#descripcion").val("");
                     var checkbox = document.getElementById("customSwitch1");
                     checkbox.checked = false;

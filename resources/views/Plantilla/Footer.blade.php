@@ -40,5 +40,9 @@
 <script src="{{ asset('app-assets/vendors/js/forms/extended/inputmask/jquery.inputmask.bundle.min.js') }}"></script>
 <script src="{{ asset('app-assets/vendors/js/charts/apexcharts/apexcharts.min.js') }}"></script>
 <script src="{{ asset('app-assets/js/scripts/pages/app-email.js') }}"></script>
+<script src="{{ asset('app-assets/js/scripts/ckeditor/ckeditor.js')}}" type="text/javascript"></script>
+<script src="{{ asset('app-assets/js/scripts/ckeditor/styles.js')}}" type="text/javascript"></script>
+<script src="{{ asset('app-assets/vendors/js/forms/repeater/jquery.repeater.min.js') }}"></script>
+
 
 <!-- END: Page JS-->

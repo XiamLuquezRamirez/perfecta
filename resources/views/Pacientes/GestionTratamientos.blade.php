@@ -321,6 +321,104 @@
 
                                             </div>
                                         </div>
+                                        {{--  Modal nueva evolcion  --}}
+                                        <div class="modal fade text-left" id="modalEvoluciones" tabindex="-1"
+                                            role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title" id="tituloEvolucion">Agregar Evolución</h4>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true"
+                                                                style="font-size: 25px;">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="card-body">
+                                                            <form class="form" method="post" id="formGuardarEvolucion"
+                                                                action="{{ url('/') }}/AdminPacientes/GuardarEvolucion">
+                                                                <div class="form-body">
+                                                                    <div class="row">
+                                                                        <div class="col-md-9 col-sm-12">
+                                                                            <div class="form-group">
+                                                                                <label for="userinput5">Seleccione el profesional que realizó el servicio seleccionado:</label>
+                                                                                <select class="select2 form-control"
+                                                                                    id="profesionalEvolucion"
+                                                                                    name="profesionalEvolucion">
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-3 col-sm-12">
+                                                                            <div class="form-group">
+                                                                                <label for="userinput5"> % de avance:</label>
+                                                                                <select class="form-control" onchange="$.cambiarAvance(this.value)" id="pavance" name="pavance">
+                                                                                    <option value="0">0%</option>
+                                                                                    <option value="25">25%</option>
+                                                                                    <option value="50">50%</option>
+                                                                                    <option value="75">75%</option>
+                                                                                    <option value="100">(Realizar) 100%</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-12 col-sm-12">
+                                                                            <div class="form-group">
+                                                                                <label for="userinput5">Evolución escrita:</label>
+                                                                                <textarea cols="80" id="evolucion_escrita" name="evolucion_escrita" rows="10"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group col-12 mb-2 mt-2 file-repeater">
+                                                                            <div id="items-archivo" data-repeater-list="repeater-list">
+                                                                                <div  data-repeater-item>
+                                                                                    <div class="row mb-1">
+                                                                                        <div class="col-9 col-xl-10">
+                                                                                            <label class="file center-block">
+                                                                                                <input type="file"
+                                                                                                    accept=".jpg, .jpeg, .png, .gif, .mp4, .avi, .mov, .pdf"
+                                                                                                    name="multimedia" id="multimedia">
+                                                                                                <span class="file-custom"></span>
+                                                                                            </label>
+                                                                                        </div>
+                                                                                        <div class="col-2 col-xl-1">
+                                                                                            <button type="button"  data-repeater-delete title="Eliminar Archivo" class="btn btn-icon btn-pure danger mr-1"><i class="fa fa-trash-o"></i></button>
+                                                                                           
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                
+                                                                            <button type="button" data-repeater-create class="btn btn-primary">
+                                                                                <i class="icon-plus4"></i> Agregar archivo
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="col-md-12 col-sm-12">
+                                                                            <div class="form-actions right">
+                                                                                <button type="button"
+                                                                                    onclick="$.salirEvolucion();"
+                                                                                    class="btn btn-warning mr-1">
+                                                                                    <i
+                                                                                        class="feather icon-corner-up-left"></i>
+                                                                                    Salir
+                                                                                </button>
+                                                                                <button type="button" id="btnGuardarEvolucion"
+                                                                                    onclick="$.guardarEvolucion()"
+                                                                                    class="btn btn-success">
+                                                                                    <i class="fa fa-check-square-o"></i>
+                                                                                    Guardar
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
 
 
                                         <div class="card-body" id="detTratamiento" style="display: none">
@@ -378,7 +476,7 @@
                                                                 <button type="button" onclick="$.addSeccion();"
                                                                     class="btn btn-danger mr-1"><i class="fa fa-plus"></i>
                                                                     Agregar Sección</button>
-                                                                <button onclick="$.addServicioTrata();" type="button" class="btn btn-primary "><i
+                                                                <button style="display: none;" onclick="$.addServicioTrata();" type="button" class="btn btn-primary "><i
                                                                         class="fa fa-plus"></i> Agregar Servicio</button>
                                                             </div>
                                                             <div id="sesionesTratamiento" class="form-body pt-0">
@@ -559,10 +657,116 @@
 
 @section('scripts')
     <script>
+        (function(window, document, $) {
+            'use strict';
+
+            // Default
+            $('.repeater-default').repeater();
+
+            // Custom Show / Hide Configurations
+            $('.file-repeater, .contact-repeater').repeater({
+                show: function() {
+                    $(this).slideDown();
+                },
+                hide: function(remove) {
+                    var element = $(this);
+                    Swal.fire({
+                        title: "¿Está seguro?",
+                        text: "¡No podrás revertir esto!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Si, Eliminar!",
+                        cancelButtonText: "Cancelar",
+                        confirmButtonClass: "btn btn-primary",
+                        cancelButtonClass: "btn btn-danger ml-1",
+                        buttonsStyling: false
+                    }).then(function(result) {
+                        if (result.value) {
+                            element.slideUp(remove);
+                            Swal.fire({
+                                type: "success",
+                                title: "Eliminado!",
+                                text: "El archivo a sido eliminado.",
+                                confirmButtonClass: "btn btn-success"
+                            });
+                        }
+                    });
+                }
+            });
+
+
+
+        })(window, document, jQuery);
+
+         ///////////////////CONFIGURACION EDITOR
+
+         CKEDITOR.editorConfig = function(config) {
+            config.toolbarGroups = [{
+                    name: 'document',
+                    groups: ['mode', 'document', 'doctools']
+                },
+                {
+                    name: 'clipboard',
+                    groups: ['clipboard', 'undo']
+                },
+                {
+                    name: 'styles',
+                    groups: ['styles']
+                },
+                {
+                    name: 'editing',
+                    groups: ['find', 'selection', 'spellchecker', 'editing']
+                },
+                {
+                    name: 'forms',
+                    groups: ['forms']
+                },
+                {
+                    name: 'basicstyles',
+                    groups: ['basicstyles', 'cleanup']
+                },
+                {
+                    name: 'paragraph',
+                    groups: ['list', 'indent', 'blocks', 'align', 'bidi', 'paragraph']
+                },
+                {
+                    name: 'links',
+                    groups: ['links']
+                },
+                {
+                    name: 'insert',
+                    groups: ['insert']
+                },
+                {
+                    name: 'colors',
+                    groups: ['colors']
+                },
+                {
+                    name: 'tools',
+                    groups: ['tools']
+                },
+                {
+                    name: 'others',
+                    groups: ['others']
+                },
+                {
+                    name: 'about',
+                    groups: ['about']
+                }
+            ];
+
+            config.removeButtons =
+                'Source,Save,NewPage,ExportPdf,Preview,Print,Templates,Cut,Copy,Paste,PasteText,PasteFromWord,Undo,Redo,Replace,Find,Scayt,Form,Checkbox,Radio,TextField,Textarea,Select,SelectAll,Button,ImageButton,HiddenField,Strike,CopyFormatting,RemoveFormat,Indent,Blockquote,Outdent,CreateDiv,JustifyLeft,JustifyCenter,JustifyRight,JustifyBlock,BidiLtr,BidiRtl,Language,Link,Unlink,Anchor,Flash,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Format,BGColor,ShowBlocks,About,Underline,Italic';
+        };
+
+       
+
         $(document).ready(function() {
             $("#MenPaciente").removeClass("active");
 
-
+           
             var lastSelectedData = null;
 
 
@@ -603,6 +807,12 @@
                     $("#tituloTratamiento").html("Agregar tratamiento.");
                     $("#accion").val("agregar");
                     $.cargarProfesionales();
+                },
+                cambiarAvance: function(val) {
+                    var boton = document.getElementById('btnGuardarEvolucion');
+                    if (boton) {
+                      boton.innerHTML = '<i class="fa fa-check-square-o"></i> Guardar avance ('+val+'%)';
+                    }
                 },
                 editarTratamiento: function(id){
                     
@@ -673,8 +883,7 @@
 
                                 let porAvancTrat = item.avance;
 
-                                var formatoMoneda = formatCurrency(item.valor,
-                                    'es-CO', 'COP');
+                                var formatoMoneda = formatCurrency(item.valor,'es-CO', 'COP');
 
                                 servSEccion = '<tr id="tr-serv' + item.id + '">' +
                                     '<td class="align-middle">' +
@@ -682,7 +891,7 @@
                                     '" class="outerCircle"' +
                                     '        onclick="$.addEvolucion(' + item.id +
                                     ');"' +
-                                    '        style="display: flex; justify-content: center; align-items: center; padding: 0; height: 50px; width: 50px; border-radius: 100%; background-image: conic-gradient(#94d3a2 0deg, #94d3a2 162deg, #D3D3D3 162deg)">' +
+                                    '        style="cursor: pointer;display: flex; justify-content: center; align-items: center; padding: 0; height: 50px; width: 50px; border-radius: 100%; background-image: conic-gradient(#94d3a2 0deg, #94d3a2 162deg, #D3D3D3 162deg)">' +
                                     '        <div style="display: flex; justify-content: center; align-items: center; padding: 0; height: 40px; width: 40px; border-radius: 100%; background-color:white">' +
                                     '            <span id="porcentajeServ' + item
                                     .id + '">95%</span>' +
@@ -711,6 +920,11 @@
                                     '            x-placement="bottom-end"' +
                                     '            style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 18px, 0px);"' +
                                     '            x-out-of-boundaries="">' +
+                                    '        <a onclick="$.addEvolucion(' + item
+                                    .id + ');" class="dropdown-item">' +
+                                    '        <i class="feather icon-trending-up"></i>' +
+                                    '         Registrar Evolución' +
+                                    '        </a>' +
                                     '        <a onclick="$.editServSecc(' + item
                                     .id + ');" class="dropdown-item">' +
                                     '        <i class="feather icon-edit"></i>' +
@@ -767,6 +981,7 @@
                     });
 
                     $("#profesional").html(select);
+                    $("#profesionalEvolucion").html(select);
                 },
                 cargarServicios: function() {
 
@@ -784,8 +999,8 @@
                         success: function(respuesta) {
                             $.each(respuesta.servicios, function(i, item) {
 
-                                select += '<option value="' + item.id + '">' + item
-                                    .nombre + '</option>';
+                                select += '<option value="' + item.id + '"><strong>' + item
+                                    .nombre + '</strong> &nbsp;&nbsp;&nbsp;('+formatCurrency(item.valor,'es-CO', 'COP')+')</option>';
 
                             });
                         }
@@ -943,6 +1158,26 @@
                     $("#accion").val('agregar');
 
                 },
+                addEvolucion: function(idServ) {
+                    $("#modalEvoluciones").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+
+                    $('#pavance').val("0").trigger('change.select2');
+                    
+                    $("#items-archivo").html('');
+
+                    $("#idServicio").val(idServ);
+                    $.cargarProfesionales();
+                    $.iniciaEditor();
+                },
+                iniciaEditor: function() {
+                    CKEDITOR.replace('evolucion_escrita', {
+                        width: '100%',
+                        height: 150
+                    });
+                },
                 editarSeccion: function(id) {
                     $("#modalSesiones").modal({
                         backdrop: 'static',
@@ -977,6 +1212,9 @@
                 salirSeccion: function() {
                     $('#modalSesiones').modal('toggle');
                 },
+                salirEvolucion: function() {
+                    $('#modalEvoluciones').modal('toggle');
+                },
                 guardarSeccion: function() {
 
 
@@ -1010,7 +1248,6 @@
                     form.append("<input type='hidden' id='idtrata' name='idtrata'  value='" +
                         tratamiento +
                         "'>");
-
 
                     $.ajax({
                         type: "POST",
@@ -1266,7 +1503,7 @@
                             '    class="align-middle">' +
                             '    <div id="outerCircle' + item.id + '" class="outerCircle"' +
                             '        onclick="$.addEvolucion(' + item.id + ');"' +
-                            '        style="display: flex; justify-content: center; align-items: center; padding: 0; height: 50px; width: 50px; border-radius: 100%; background-image: conic-gradient(#94d3a2 0deg, #94d3a2 162deg, #D3D3D3 162deg)">' +
+                            '        style="cursor: pointer; display: flex; justify-content: center; align-items: center; padding: 0; height: 50px; width: 50px; border-radius: 100%; background-image: conic-gradient(#94d3a2 0deg, #94d3a2 162deg, #D3D3D3 162deg)">' +
                             '        <div style="display: flex; justify-content: center; align-items: center; padding: 0; height: 40px; width: 40px; border-radius: 100%; background-color:white">' +
                             '            <span' +
                             '                id="porcentajeServ' + item.id + '">0%</span>' +
@@ -1295,6 +1532,11 @@
                             '            x-placement="bottom-end"' +
                             '            style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 18px, 0px);"' +
                             '            x-out-of-boundaries="">' +
+                            '        <a onclick="$.addEvolucion(' + item
+                            .id + ');" class="dropdown-item">' +
+                            '        <i class="feather icon-trending-up"></i>' +
+                            '         Registrar Evolución' +
+                            '        </a>' +
                             '        <a onclick="$.editServSecc(' + item
                             .id + ');" class="dropdown-item">' +
                             '        <i class="feather icon-edit"></i>' +
@@ -1825,9 +2067,11 @@
                 },
 
             });
+            var editorEvolucion = CKEDITOR.instances.evolucion_escrita;
 
-        })
+        });
 
+       
 
         function formatCurrency(number, locale, currencySymbol) {
             return new Intl.NumberFormat(locale, {
