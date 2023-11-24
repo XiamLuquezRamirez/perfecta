@@ -76,3 +76,4 @@ Route::post('/AdminPacientes/busEditSecc', [PacientesController::class,'busEditS
 Route::post('/AdminPacientes/busEditTrata', [PacientesController::class,'busEditTrata']);
 Route::post('/AdminPacientes/EliminarServicio', [PacientesController::class,'EliminarServicio']);
 Route::post('/AdminPacientes/EliminarSeccion', [PacientesController::class,'EliminarSeccion']);
+Route::post('/AdminPacientes/EliminarTratamiento', [PacientesController::class,'EliminarTratamiento']);

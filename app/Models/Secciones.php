@@ -46,6 +46,7 @@ class Secciones extends Model
                 'avance' => '0',
                 'estado' => 'ACTIVO'
             ]);
+            
         }
      
         return $respuesta;
@@ -98,6 +99,14 @@ class Secciones extends Model
         ->first();
 
         return $respuestaSecc;
+    }
+
+    public static function buscSecc($idTrata){
+        $respuestaTrata = DB::connection('mysql')->table('secciones')
+        ->where('tratamiento', $idTrata)
+        ->get();
+
+        return $respuestaTrata;
     }
     public static function buscServSecc($idSec){
         $respuestaSecc = DB::connection('mysql')->table('servicios_tratamiento')

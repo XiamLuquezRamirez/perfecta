@@ -177,6 +177,32 @@ class PacientesController extends Controller
         } 
     }
 
+    public function EliminarTratamiento(){
+        if (Auth::check()) {
+           
+            $idTrata = request()->get('idTrata');
+
+            $Secciones = Secciones::buscSecc($idTrata);
+            $tratamientoStatus = "";
+        
+            if($Secciones->count()==0){
+                $trataEdit = Tratamientos::eliminarTrata($idTrata);
+                $tratamientoStatus="ok";
+            }else{
+                $tratamientoStatus="fail";
+                $trataEdit = "";
+            }
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'tratamientoStatus' => $tratamientoStatus,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        } 
+    }
+
     public function CargarDatosPacTrat()
     {
         if (Auth::check()) {
@@ -466,6 +492,9 @@ class PacientesController extends Controller
 
             if ($data['accion'] == "agregar") {
                 $respuesta = Secciones::guardarServ($data,$idSecc,$idTrata,$idPac);
+                if($data["origServicio"]=="trata"){
+                    $itemTatra = ItemsTratamiento::guardar($respuesta,'trata', $idTrata);
+                }
             } else {
                 $respuesta = Secciones::editarServ($data);
             }

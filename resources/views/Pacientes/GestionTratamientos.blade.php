@@ -377,11 +377,9 @@
                                                             <div class="card-body text-center">
                                                                 <button type="button" onclick="$.addSeccion();"
                                                                     class="btn btn-danger mr-1"><i class="fa fa-plus"></i>
-                                                                    Agregar
-                                                                    Sección</button>
-                                                                <button type="button" class="btn btn-primary "><i
-                                                                        class="fa fa-plus"></i> Agregar
-                                                                    Servicio</button>
+                                                                    Agregar Sección</button>
+                                                                <button onclick="$.addServicioTrata();" type="button" class="btn btn-primary "><i
+                                                                        class="fa fa-plus"></i> Agregar Servicio</button>
                                                             </div>
                                                             <div id="sesionesTratamiento" class="form-body pt-0">
                                                                 <div class="carwd-body">
@@ -515,8 +513,6 @@
         <!-- Tus campos del formulario aquí -->
     </form>
 
-
-
     <form action="{{ url('/Administracion/BuscarServicio') }}" id="formBuscaServicios" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
@@ -546,6 +542,10 @@
         <!-- Tus campos del formulario aquí -->
     </form>
     <form action="{{ url('/AdminPacientes/EliminarSeccion') }}" id="formEliminarSeccion" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/AdminPacientes/EliminarTratamiento') }}" id="formEliminarTratamiento" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
@@ -858,7 +858,7 @@
 
                                 $.each(respuesta.newTrata, function(i, item) {
 
-                                    newTrata = '<div class="row">' +
+                                    newTrata = '<div id="tratamiento'+item.id+'" class="row">' +
                                         '<div class="col-12 pt-2 pb-2 border-bottom-blue-grey border-bottom-lighten-5">' +
                                         '    <div class="info-time-tracking-title d-flex justify-content-between align-items-center">' +
                                         '        <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">' +
@@ -1129,14 +1129,24 @@
                     $("#nseccciones").append(divSecciones);
 
                 },
-                addServicio: function(id) {
+                addServicioTrata: function() {
                     $("#origServicio").val("trata");
-                    alert('agregar servicios a tratamiento ' + id);
+                    $("#modalServicios").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+                    $("#valorVis").val("");
+                    $("#valor").val("");
+                    $("#accion").val('agregar');
+
+                    $.cargarServicios();
                 },
                 addServicioSeccion: function(id) {
                     $("#origServicio").val("secc");
                     $("#servSeccion").val(id);
                     $("#idSeccion").val(id);
+                    $("#accion").val('agregar');
+
                     $("#modalServicios").modal({
                         backdrop: 'static',
                         keyboard: false
@@ -1302,6 +1312,20 @@
                             '</tr>';
 
                         $("#trServicioSeccion" + item.seccion).append(servicio);
+
+                        updatePercentageServicios(porAvancTrat, item.id);
+                    });
+                },
+                dibujarServicioTrat: function(respuesta) {
+
+                    $.each(respuesta.servSeccion, function(i, item) {
+                        let porAvancTrat = item.avance;
+                        var formatoMoneda = formatCurrency(item.valor,
+                            'es-CO', 'COP');
+
+                        let servicio = '';
+
+                      
 
                         updatePercentageServicios(porAvancTrat, item.id);
                     });
@@ -1528,6 +1552,70 @@
                         }
                     });
                 },
+                eliminarTratamiento: function(idTrata) {
+                   
+                    Swal.fire({
+                        title: "Esta seguro de Eliminar este registro?",
+                        text: "¡No podrás revertir esto!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Si, eliminar!",
+                        cancelButtonText: "Cancelar",
+                        confirmButtonClass: "btn btn-warning",
+                        cancelButtonClass: "btn btn-danger ml-1",
+                        buttonsStyling: false
+                    }).then(function(result) {
+                        if (result.value) {
+                            $.procederEliminarTratamiento(idTrata);
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                            Swal.fire({
+                                title: "Cancelado",
+                                text: "Tu registro está a salvo ;)",
+                                type: "error",
+                                confirmButtonClass: "btn btn-success"
+                            });
+                        }
+                    });
+                },
+                procederEliminarTratamiento: function(idTrata) {
+                    
+                    var form = $("#formEliminarTratamiento");
+
+                    $("#idTrata").remove();
+                    form.append("<input type='hidden' id='idTrata' name='idTrata'  value='" + idTrata +"'>");
+
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            if(respuesta.tratamientoStatus == "ok"){
+                                Swal.fire({
+                                    type: "success",
+                                    title: "Eliminado!",
+                                    text: "El registro fue eliminado correctamente.",
+                                    confirmButtonClass: "btn btn-success"
+                                });
+                                $("#tratamiento"+idTrata).remove();
+                            }else{
+                                Swal.fire({
+                                    type: "warning",
+                                    title: "Alerta!",
+                                    text: "El tratamiento no puede ser eliminada, tiene secciones cargadas.",
+                                    confirmButtonClass: "btn btn-warning"
+                                });
+
+                            }
+                        }
+                    });
+                },
                 buscInfGeneralPaciente: function(pac) {
                     $("#idPaciente").val(pac);
                     $("#div-trata-act").html('');
@@ -1594,7 +1682,7 @@
                             $("#div-trata-act").html('');
 
                             $.each(respuesta.tratamientosAct, function(i, item) {
-                                tratAct = '<div class="row">' +
+                                tratAct = '<div id="tratamiento'+item.id+'" class="row">' +
                                     '<div class="col-12 pt-2 pb-2 border-bottom-blue-grey border-bottom-lighten-5">' +
                                     '    <div class="info-time-tracking-title d-flex justify-content-between align-items-center">' +
                                     '        <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">' +
