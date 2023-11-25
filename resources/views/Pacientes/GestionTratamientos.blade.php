@@ -1164,9 +1164,12 @@
                         keyboard: false
                     });
 
-                    $('#pavance').val("0").trigger('change.select2');
-                    
+                    $('#pavance').val("0").trigger('change.select2');                    
                     $("#items-archivo").html('');
+                    var boton = document.getElementById('btnGuardarEvolucion');
+                    if (boton) {
+                      boton.innerHTML = '<i class="fa fa-check-square-o"></i> Guardar avance (0%)';
+                    }
 
                     $("#idServicio").val(idServ);
                     $.cargarProfesionales();
@@ -1471,6 +1474,100 @@
                                 $("#span-total" + idSeccion).html(totalServicios);
 
 
+
+                                var loader = document.getElementById('loader');
+                                loader.style.display = 'none';
+                            }
+                        },
+                        error: function() {
+                            Swal.fire({
+                                type: "errot",
+                                title: "Opsss...",
+                                text: "Ha ocurrido un error",
+                                confirmButtonClass: "btn btn-primary",
+                                timer: 1500,
+                                buttonsStyling: false
+                            });
+                        }
+                    });
+
+
+
+                },
+                guardarEvolucion: function() {
+
+                    for (var instanceName in CKEDITOR.instances) {
+                        CKEDITOR.instances[instanceName].updateElement();
+                    }
+
+                    if ($("#profesionalEvolucion").val().trim() === "") {
+                        Swal.fire({
+                            type: "warning",
+                            title: "Oops...",
+                            text: "Debes de seleccionar el profesional que realizo el servicio",
+                            confirmButtonClass: "btn btn-primary",
+                            timer: 1500,
+                            buttonsStyling: false
+                        });
+                        return;
+                    }
+                  
+
+                    var loader = document.getElementById('loader');
+                    loader.style.display = 'block';
+
+                    var form = $("#formGuardarEvolucion");
+                    var url = form.attr("action");
+                    var accion = $("#accio").val();
+                    var idSeccion = $("#idSeccion").val();
+                    var idTratamiento = $("#idTratamiento").val();
+                    var idPaciente = $("#idPaciente").val();
+                    var idServicio = $("#idServicio").val();
+                    var token = $("#token").val();
+                    $("#accion").remove();
+                    $("#idtoken").remove();
+                    $("#idSecc").remove();
+                    $("#idTrata").remove();
+                    $("#idPac").remove();
+                    $("#idSer").remove();
+                    form.append("<input type='hidden' id='accion' name='accion'  value='" + accion +
+                        "'>");
+                    form.append("<input type='hidden' id='idtoken' name='_token'  value='" + token +
+                        "'>");
+                    form.append("<input type='hidden' id='idSecc' name='idSecc'  value='" +
+                        idSeccion +
+                        "'>");
+                    form.append("<input type='hidden' id='idTrata' name='idTrata'  value='" +
+                        idTratamiento +
+                        "'>");
+                    form.append("<input type='hidden' id='idPac' name='idPac'  value='" +
+                        idPaciente +
+                        "'>");
+                    form.append("<input type='hidden' id='idSer' name='idSer'  value='" +
+                    idServicio +
+                        "'>");
+
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: new FormData($('#formGuardarServicio')[0]),
+                        processData: false,
+                        contentType: false,
+                        success: function(respuesta) {
+                            if (respuesta) {
+                                Swal.fire({
+                                    type: "success",
+                                    title: "",
+                                    text: "Operación realizada exitosamente",
+                                    confirmButtonClass: "btn btn-primary",
+                                    timer: 1500,
+                                    buttonsStyling: false
+                                });
+
+                                $.dibujarServicioSecc(respuesta);
+                                var totalServicios = formatCurrency(respuesta.totServ,'es-CO', 'COP');
+                                $("#span-total" + idSeccion).html(totalServicios);
 
                                 var loader = document.getElementById('loader');
                                 loader.style.display = 'none';

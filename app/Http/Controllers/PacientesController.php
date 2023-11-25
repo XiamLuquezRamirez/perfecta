@@ -9,6 +9,7 @@ use App\Models\Tratamientos;
 use App\Models\Secciones;
 use App\Models\ItemsTratamiento;
 use App\Models\Servicios;
+use App\Models\Evoluciones;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -499,6 +500,32 @@ class PacientesController extends Controller
                 $respuesta = Secciones::editarServ($data);
             }
 
+            $servSeccion = Secciones::buscServSecc($idSecc);
+            $totServ = Secciones::busTotalSeccion($idSecc);
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'servicios' => $respuesta,
+                    'totServ' => $totServ,
+                    'servSeccion' => $servSeccion,
+                    
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+    public function GuardarEvolucion()
+    {
+        if (Auth::check()) {
+            $data = request()->all();
+            $idSecc = $data['idSecc'];
+            $idTrata = $data['idTrata'];
+            $idPac = $data['idPac'];
+            $idSer = $data['idSer'];
+            
+            $respuesta = Evoluciones::guardar($data,$idSecc,$idTrata,$idPac,$idSer);
+               
             $servSeccion = Secciones::buscServSecc($idSecc);
             $totServ = Secciones::busTotalSeccion($idSecc);
 
