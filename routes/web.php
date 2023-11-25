@@ -78,3 +78,8 @@ Route::post('/AdminPacientes/busEditTrata', [PacientesController::class,'busEdit
 Route::post('/AdminPacientes/EliminarServicio', [PacientesController::class,'EliminarServicio']);
 Route::post('/AdminPacientes/EliminarSeccion', [PacientesController::class,'EliminarSeccion']);
 Route::post('/AdminPacientes/EliminarTratamiento', [PacientesController::class,'EliminarTratamiento']);
+
+
+// GESTIONAR RECAUDOS
+Route::get('/AdminPacientes/Recaudos', [PacientesController::class,'Recaudos']);
+

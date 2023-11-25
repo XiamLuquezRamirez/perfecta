@@ -75,7 +75,6 @@
                                                 <div class="card info-time-tracking">
                                                     <div class="card-content" id="div-trata-act">
 
-
                                                     </div>
                                                 </div>
                                             </div>
@@ -375,7 +374,7 @@
                                                                                             <label class="file center-block">
                                                                                                 <input type="file"
                                                                                                     accept=".jpg, .jpeg, .png, .gif, .mp4, .avi, .mov, .pdf"
-                                                                                                    name="multimedia" id="multimedia">
+                                                                                                    name="archivo" id="archivo">
                                                                                                 <span class="file-custom"></span>
                                                                                             </label>
                                                                                         </div>
@@ -887,14 +886,12 @@
 
                                 servSEccion = '<tr id="tr-serv' + item.id + '">' +
                                     '<td class="align-middle">' +
-                                    '    <div id="outerCircle' + item.id +
+                                    '    <div title="Agregar Avance" id="outerCircle' + item.id +
                                     '" class="outerCircle"' +
-                                    '        onclick="$.addEvolucion(' + item.id +
-                                    ');"' +
+                                    '        onclick="$.addEvolucion(' + item.id +','+item.seccion+');"' +
                                     '        style="cursor: pointer;display: flex; justify-content: center; align-items: center; padding: 0; height: 50px; width: 50px; border-radius: 100%; background-image: conic-gradient(#94d3a2 0deg, #94d3a2 162deg, #D3D3D3 162deg)">' +
                                     '        <div style="display: flex; justify-content: center; align-items: center; padding: 0; height: 40px; width: 40px; border-radius: 100%; background-color:white">' +
-                                    '            <span id="porcentajeServ' + item
-                                    .id + '">95%</span>' +
+                                    '            <span id="porcentajeServ' + item.id + '">95%</span>' +
                                     '        </div>' +
                                     '    </div>' +
                                     '</td>' +
@@ -904,9 +901,14 @@
                                     '<td class="align-middle">' +
                                     '    <span>' + formatoMoneda + '</span>' +
                                     '</td>' +
-                                    '<td class="align-middle">' +
-                                    '    <span class="badge badge-success">Activo</span>' +
-                                    '</td>' +
+                                    '<td class="align-middle">' ;
+                               if(item.estado_serv == 'Activo'){
+                                servSEccion += '    <span class="badge badge-info">'+item.estado_serv +'</span>' ;
+                               }else{
+                                servSEccion += '    <span class="badge badge-success">'+item.estado_serv +'</span>' ;
+                               }
+                               
+                                servSEccion += '</td>' +
                                     '<td class="align-middle">' +
                                     '    <div class="dropdown">' +
                                     '        <span class="feather icon-more-vertical dropdown-toggle"' +
@@ -920,8 +922,7 @@
                                     '            x-placement="bottom-end"' +
                                     '            style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 18px, 0px);"' +
                                     '            x-out-of-boundaries="">' +
-                                    '        <a onclick="$.addEvolucion(' + item
-                                    .id + ');" class="dropdown-item">' +
+                                    '        <a onclick="$.addEvolucion(' + item.id +','+item.seccion+');" class="dropdown-item">' +
                                     '        <i class="feather icon-trending-up"></i>' +
                                     '         Registrar Evolución' +
                                     '        </a>' +
@@ -1158,7 +1159,8 @@
                     $("#accion").val('agregar');
 
                 },
-                addEvolucion: function(idServ) {
+                addEvolucion: function(idServ,idSeccion) {
+
                     $("#modalEvoluciones").modal({
                         backdrop: 'static',
                         keyboard: false
@@ -1171,6 +1173,7 @@
                       boton.innerHTML = '<i class="fa fa-check-square-o"></i> Guardar avance (0%)';
                     }
 
+                    $("#idSeccion").val(idSeccion);
                     $("#idServicio").val(idServ);
                     $.cargarProfesionales();
                     $.iniciaEditor();
@@ -1551,7 +1554,7 @@
                     $.ajax({
                         type: "POST",
                         url: url,
-                        data: new FormData($('#formGuardarServicio')[0]),
+                        data: new FormData($('#formGuardarEvolucion')[0]),
                         processData: false,
                         contentType: false,
                         success: function(respuesta) {
@@ -1564,7 +1567,7 @@
                                     timer: 1500,
                                     buttonsStyling: false
                                 });
-
+                                $("#trServicioSeccion" + idSeccion).html('');
                                 $.dibujarServicioSecc(respuesta);
                                 var totalServicios = formatCurrency(respuesta.totServ,'es-CO', 'COP');
                                 $("#span-total" + idSeccion).html(totalServicios);
@@ -1598,8 +1601,8 @@
                         let servicio = '<tr id="tr-serv' + item.id + '">' +
                             '<td' +
                             '    class="align-middle">' +
-                            '    <div id="outerCircle' + item.id + '" class="outerCircle"' +
-                            '        onclick="$.addEvolucion(' + item.id + ');"' +
+                            '    <div title="Agregar Avance" id="outerCircle' + item.id + '" class="outerCircle"' +
+                            '        onclick="$.addEvolucion(' + item.id +','+item.seccion+');"' +
                             '        style="cursor: pointer; display: flex; justify-content: center; align-items: center; padding: 0; height: 50px; width: 50px; border-radius: 100%; background-image: conic-gradient(#94d3a2 0deg, #94d3a2 162deg, #D3D3D3 162deg)">' +
                             '        <div style="display: flex; justify-content: center; align-items: center; padding: 0; height: 40px; width: 40px; border-radius: 100%; background-color:white">' +
                             '            <span' +
@@ -1613,9 +1616,14 @@
                             '<td class="align-middle">' +
                             '    <span>' + formatoMoneda + '</span>' +
                             '</td>' +
-                            '<td class="align-middle">' +
-                            '    <span class="badge badge-success">Activo</span>' +
-                            '</td>' +
+                            '<td class="align-middle">' ;
+                                if(item.estado_serv == 'Activo'){
+                                    servicio += '    <span class="badge badge-info">'+item.estado_serv +'</span>' ;
+                                }else{
+                                    servicio += '    <span class="badge badge-success">'+item.estado_serv +'</span>' ;
+                                }
+                                
+                                servicio += '</td>' +
                             '<td  class="align-middle">' +
                             '    <div class="dropdown">' +
                             '        <span class="feather icon-more-vertical dropdown-toggle"' +
@@ -1629,8 +1637,7 @@
                             '            x-placement="bottom-end"' +
                             '            style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 18px, 0px);"' +
                             '            x-out-of-boundaries="">' +
-                            '        <a onclick="$.addEvolucion(' + item
-                            .id + ');" class="dropdown-item">' +
+                            '        <a onclick="$.addEvolucion(' + item.id +','+item.seccion+');" class="dropdown-item">' +
                             '        <i class="feather icon-trending-up"></i>' +
                             '         Registrar Evolución' +
                             '        </a>' +
@@ -2112,7 +2119,7 @@
                                     '                        class="fa fa-th-large"></span>' +
                                     '                    Especialidad:</h6>' +
                                     '                <p>' + item.especialidad +
-                                    '</p>' +
+                                    '            </p>' +
                                     '            </div>' +
                                     '            <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">' +
                                     '                <h6 class="pt-1"><span' +

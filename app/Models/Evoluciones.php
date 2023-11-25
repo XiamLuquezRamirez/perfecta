@@ -28,4 +28,18 @@ class Evoluciones extends Model
 
         return $respuestaSecc;
     }
+
+
+    public static function guardarArcEvol($data,$evo)
+    {
+
+        foreach ($data["archivo"] as $key => $val) {
+            $respuesta = DB::connection('mysql')->table('archivos_evolucion')->insert([
+                'evolucion' => $evo,
+                'archivo' => $data["archivo"][$key]
+            ]);
+        }
+
+        return $respuesta;
+    }
 }

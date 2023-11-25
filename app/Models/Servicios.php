@@ -33,6 +33,8 @@ class Servicios extends Model
         return "ok";
     }
 
+  
+
     public static function Eliminar($id)
     {
         return DB::connection('mysql')->table('servicios')->where('id', $id)->update([

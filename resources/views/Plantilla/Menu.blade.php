@@ -9,7 +9,7 @@
             </li>
             <li id="MenTratamientos" class="dropdown nav-item" data-menu="dropdown"><a class="nav-link" href="{{ url('/AdminPacientes/Tratamientos') }}"><i class="fa fa-universal-access"></i><span data-i18n="Templates">Tratamientos</span></a>
             </li>
-            <li id="MenRecaudo" class="dropdown nav-item" data-menu="dropdown"><a class="nav-link" href="#" data-toggle="dropdown"><i class="feather icon-shopping-cart"></i><span data-i18n="Templates">Recaudaciones</span></a>
+            <li id="MenRecaudo" class="dropdown nav-item" data-menu="dropdown"><a class="nav-link" href="{{ url('/AdminPacientes/Recaudos') }}"><i class="feather icon-shopping-cart"></i><span data-i18n="Templates">Recaudaciones</span></a>
             </li>
             <li id="MenCaja" class="dropdown nav-item" data-menu="dropdown"><a class="nav-link" href="#" data-toggle="dropdown"><i class="feather icon-grid"></i><span data-i18n="Layouts">Cajas</span></a>
             </li>

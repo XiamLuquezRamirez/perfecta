@@ -411,6 +411,15 @@ class PacientesController extends Controller
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
+    public function Recaudos()
+    {
+        $bandera = "";
+        if (Auth::check()) {
+            return view('Pacientes.GestionarRecaudos', compact('bandera'));
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
 
     public function CargarMunicipios(Request $request)
     {
@@ -519,19 +528,46 @@ class PacientesController extends Controller
     {
         if (Auth::check()) {
             $data = request()->all();
+           
             $idSecc = $data['idSecc'];
             $idTrata = $data['idTrata'];
             $idPac = $data['idPac'];
             $idSer = $data['idSer'];
+
+            $respuestaEvol = Evoluciones::guardar($data,$idSecc,$idTrata,$idPac,$idSer);
             
-            $respuesta = Evoluciones::guardar($data,$idSecc,$idTrata,$idPac,$idSer);
-               
+            if (request()->has('repeater-list')) {
+                $arc = [];
+                $repeaterList = $data['repeater-list'];
+                foreach ($repeaterList as $archivosEvo) {
+                    if (isset($archivosEvo['archivo'])) {
+
+                        $archivo = $archivosEvo['archivo'];
+                        $nombreOriginal = $archivo->getClientOriginalName();
+                       
+                        // Realiza acciones con el archivo, como moverlo a una ubicación deseada
+                        $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                        $nombreArchivo = self::sanear_string($prefijo . '_' . $nombreOriginal);
+                        $archivo->move(public_path() . '/app-assets/evoluciones/', $nombreArchivo);
+                        $arc[] = $nombreArchivo;
+                        // Aquí puedes trabajar con los datos del archivo, como almacenarlos en una base de datos
+                        $data['archivo'] = $arc;
+                    }
+                }
+            }
+
+            $updateServ = Secciones::updateServ($idSer,$data['pavance']);
+
+            if (isset($data['archivo'])) {
+            $evoArchivos = Evoluciones::guardarArcEvol($data,$respuestaEvol->id);
+             }
+
             $servSeccion = Secciones::buscServSecc($idSecc);
             $totServ = Secciones::busTotalSeccion($idSecc);
 
             if (request()->ajax()) {
                 return response()->json([
-                    'servicios' => $respuesta,
+                    'servicios' => $respuestaEvol,
                     'totServ' => $totServ,
                     'servSeccion' => $servSeccion,
                     

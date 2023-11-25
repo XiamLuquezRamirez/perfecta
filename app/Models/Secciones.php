@@ -18,15 +18,15 @@ class Secciones extends Model
         ]);
 
         $respuestaSecc = DB::connection('mysql')->table('secciones')
-        ->where('id', $respuesta)
-        ->first();
+            ->where('id', $respuesta)
+            ->first();
 
         return $respuestaSecc;
     }
 
-    public static function guardarServ($request,$idSecc,$idTrata,$idPac)
+    public static function guardarServ($request, $idSecc, $idTrata, $idPac)
     {
-        if($request["origServicio"]=="secc"){
+        if ($request["origServicio"] == "secc") {
             $respuesta = DB::connection('mysql')->table('servicios_tratamiento')->insertGetId([
                 'servicio' => $request['servicioTrat'],
                 'seccion' => $idSecc,
@@ -34,9 +34,10 @@ class Secciones extends Model
                 'paciente' => $idPac,
                 'valor' => $request['valor'],
                 'avance' => '0',
-                'estado' => 'ACTIVO'
+                'estado' => 'ACTIVO',
+                'estado_serv' => 'Activo'
             ]);
-        }else{
+        } else {
             $respuesta = DB::connection('mysql')->table('servicios_tratamiento')->insertGetId([
                 'servicio' => $request['servicioTrat'],
                 'seccion' => "0",
@@ -44,109 +45,128 @@ class Secciones extends Model
                 'paciente' => $idPac,
                 'valor' => $request['valor'],
                 'avance' => '0',
-                'estado' => 'ACTIVO'
+                'estado' => 'ACTIVO',
+                'estado_serv' => 'Activo'
             ]);
-            
         }
-     
+
         return $respuesta;
     }
 
 
-    public static function editarServ($data){
+    public static function editarServ($data)
+    {
 
         $respuesta = DB::connection('mysql')->table('servicios_tratamiento')->where('id', $data['idServicio'])->update([
             'servicio' => $data['servicioTrat'],
             'valor' => $data['valor']
         ]);
         return "ok";
-
     }
-    public static function editarSeccion($data){
+    public static function editarSeccion($data)
+    {
 
         $respuesta = DB::connection('mysql')->table('secciones')->where('id', $data['idSeccion'])->update([
             'nombre' => $data['nombreSeccion'],
             'descripcion' => $data['descripcionSeccion']
         ]);
         $respuestaSecc = DB::connection('mysql')->table('secciones')
-        ->where('id', $data['idSeccion'])
-        ->first();
+            ->where('id', $data['idSeccion'])
+            ->first();
 
         return $respuestaSecc;
-
     }
-    public static function eliminarServ($serv){
+    public static function eliminarServ($serv)
+    {
 
         $respuesta = DB::connection('mysql')->table('servicios_tratamiento')->where('id', $serv)->update([
             'estado' => 'ELIMINADO'
         ]);
         return "ok";
-
     }
 
-    public static function eliminarSeccion($secc){
+    public static function eliminarSeccion($secc)
+    {
 
         $respuesta = DB::connection('mysql')->table('secciones')->where('id', $secc)->update([
             'estado' => 'ELIMINADO'
         ]);
         return "ok";
-
     }
 
-    public static function buscSeccion($idSec){
+    public static function buscSeccion($idSec)
+    {
         $respuestaSecc = DB::connection('mysql')->table('secciones')
-        ->where('id', $idSec)
-        ->first();
+            ->where('id', $idSec)
+            ->first();
 
         return $respuestaSecc;
     }
 
-    public static function buscSecc($idTrata){
+    public static function buscSecc($idTrata)
+    {
         $respuestaTrata = DB::connection('mysql')->table('secciones')
-        ->where('tratamiento', $idTrata)
-        ->get();
+            ->where('tratamiento', $idTrata)
+            ->get();
 
         return $respuestaTrata;
     }
-    public static function buscServSecc($idSec){
+    public static function buscServSecc($idSec)
+    {
         $respuestaSecc = DB::connection('mysql')->table('servicios_tratamiento')
-        ->leftJoin("servicios","servicios.id","servicios_tratamiento.servicio")
-        ->select("servicios_tratamiento.*", "servicios.nombre")
-        ->where("servicios_tratamiento.estado","ACTIVO")
-        ->where('seccion', $idSec)
-        ->get();
-
-        return $respuestaSecc;
-    }
-    
-    public static function BuscarServicioEdit($idServ){
-        $respuestaSecc = DB::connection('mysql')->table('servicios_tratamiento')
-        ->leftJoin("servicios","servicios.id","servicios_tratamiento.servicio")
-        ->select("servicios_tratamiento.*", "servicios.descuento")
-        ->where('servicios_tratamiento.id', $idServ)
-        ->first();
+            ->leftJoin("servicios", "servicios.id", "servicios_tratamiento.servicio")
+            ->select("servicios_tratamiento.*", "servicios.nombre")
+            ->where("servicios_tratamiento.estado", "ACTIVO")
+            ->where('seccion', $idSec)
+            ->get();
 
         return $respuestaSecc;
     }
 
-    public static function busTotalSeccion($idSec){
-        $totSeccion = DB::connection("mysql")->select("SELECT SUM(valor) AS totseccion FROM  servicios_tratamiento WHERE seccion = ".$idSec." AND estado='ACTIVO' GROUP BY seccion");
-        if($totSeccion){
+    public static function BuscarServicioEdit($idServ)
+    {
+        $respuestaSecc = DB::connection('mysql')->table('servicios_tratamiento')
+            ->leftJoin("servicios", "servicios.id", "servicios_tratamiento.servicio")
+            ->select("servicios_tratamiento.*", "servicios.descuento")
+            ->where('servicios_tratamiento.id', $idServ)
+            ->first();
+
+        return $respuestaSecc;
+    }
+
+    public static function busTotalSeccion($idSec)
+    {
+        $totSeccion = DB::connection("mysql")->select("SELECT SUM(valor) AS totseccion FROM  servicios_tratamiento WHERE seccion = " . $idSec . " AND estado='ACTIVO' GROUP BY seccion");
+        if ($totSeccion) {
             return $totSeccion[0]->totseccion;
-        }else{
+        } else {
             return 0;
         }
-        
-        
     }
 
-    public static function allSeviciosTrat($idTrat){
+    public static function updateServ($idServ, $pavance)
+    {
+        if ($pavance == "100") {
+            $respuesta = DB::connection('mysql')->table('servicios_tratamiento')->where('id', $idServ)->update([
+                'avance' => $pavance,
+                'estado_serv' => 'Terminado'
+            ]);
+        } else {
+            $respuesta = DB::connection('mysql')->table('servicios_tratamiento')->where('id', $idServ)->update([
+                'avance' => $pavance,
+                'estado_serv' => 'Activo'
+            ]);
+        }
+
+        return "ok";
+    }
+
+    public static function allSeviciosTrat($idTrat)
+    {
         $respuestaServ = DB::connection('mysql')->table('servicios_tratamiento')
-        ->where('tratamiento', $idTrat)
-        ->get();
+            ->where('tratamiento', $idTrat)
+            ->get();
 
         return $respuestaServ;
     }
-    
-
 }
