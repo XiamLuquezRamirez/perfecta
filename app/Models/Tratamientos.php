@@ -93,8 +93,9 @@ class Tratamientos extends Model
 
     public static function TratamientosPacientesRecaudo($idPac)
     {
-        $respuestaTra = DB::connection("mysql")->select("SELECT st.*,tr.id, tr.nombre AS ntrara FROM servicios_tratamiento st 
+        $respuestaTra = DB::connection("mysql")->select("SELECT st.*,tr.id, tr.nombre AS ntrara, prof.nombre nprof FROM servicios_tratamiento st 
         LEFT JOIN tratamientos tr ON st.tratamiento= tr.id
+        LEFT JOIN profesionales prof ON tr.profesional= prof.id
         WHERE tr.paciente=".$idPac." AND st.estado='ACTIVO'");
        
         return $respuestaTra;

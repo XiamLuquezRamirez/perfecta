@@ -1666,12 +1666,9 @@
 
                     $.each(respuesta.servSeccion, function(i, item) {
                         let porAvancTrat = item.avance;
-                        var formatoMoneda = formatCurrency(item.valor,
-                            'es-CO', 'COP');
+                        var formatoMoneda = formatCurrency(item.valor,'es-CO', 'COP');
 
-                        let servicio = '';
-
-                      
+                        let servicio = '';                     
 
                         updatePercentageServicios(porAvancTrat, item.id);
                     });

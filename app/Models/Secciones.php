@@ -103,10 +103,25 @@ class Secciones extends Model
         return $respuestaSecc;
     }
 
+    public static function buscSeccServ($idTrat)
+    {
+        $respuestaSecc = DB::connection('mysql')->table('servicios_tratamiento')
+            ->leftJoin("secciones", "secciones.id", "servicios_tratamiento.seccion")
+            ->where('servicios_tratamiento.estado', "ACTIVO")
+            ->where('secciones.estado', "ACTIVO")
+            ->where('servicios_tratamiento.tratamiento', $idTrat)
+            ->select("secciones.id","secciones.nombre")
+            ->groupBy("secciones.id","secciones.nombre")
+            ->get();
+
+        return $respuestaSecc;
+    }
+
     public static function buscSecc($idTrata)
     {
         $respuestaTrata = DB::connection('mysql')->table('secciones')
             ->where('tratamiento', $idTrata)
+            ->where('estado', 'ACTIVO')
             ->get();
 
         return $respuestaTrata;
@@ -165,6 +180,7 @@ class Secciones extends Model
     {
         $respuestaServ = DB::connection('mysql')->table('servicios_tratamiento')
             ->where('tratamiento', $idTrat)
+            ->where('estado', 'ACTIVO')
             ->get();
 
         return $respuestaServ;

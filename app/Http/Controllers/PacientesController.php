@@ -128,7 +128,8 @@ class PacientesController extends Controller
         }
     }
 
-    public function EliminarServicio(){
+    public function EliminarServicio()
+    {
         if (Auth::check()) {
             $idServ = request()->get('idServ');
             $idSecc = request()->get('idSecc');
@@ -146,24 +147,25 @@ class PacientesController extends Controller
             }
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
-        } 
+        }
     }
 
-    public function EliminarSeccion(){
+    public function EliminarSeccion()
+    {
         if (Auth::check()) {
-           
+
             $idSecc = request()->get('idSecc');
 
             $servSeccion = Secciones::buscServSecc($idSecc);
             $seccionStatus = "";
-        
-            if($servSeccion->count()==0){
+
+            if ($servSeccion->count() == 0) {
                 $serviciosEdit = Secciones::eliminarSeccion($idSecc);
                 $serviciosEdit = ItemsTratamiento::eliminarSeccion($idSecc);
 
-                $seccionStatus="ok";
-            }else{
-                $seccionStatus="fail";
+                $seccionStatus = "ok";
+            } else {
+                $seccionStatus = "fail";
                 $serviciosEdit = "";
             }
 
@@ -175,22 +177,23 @@ class PacientesController extends Controller
             }
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
-        } 
+        }
     }
 
-    public function EliminarTratamiento(){
+    public function EliminarTratamiento()
+    {
         if (Auth::check()) {
-           
+
             $idTrata = request()->get('idTrata');
 
             $Secciones = Secciones::buscSecc($idTrata);
             $tratamientoStatus = "";
-        
-            if($Secciones->count()==0){
+
+            if ($Secciones->count() == 0) {
                 $trataEdit = Tratamientos::eliminarTrata($idTrata);
-                $tratamientoStatus="ok";
-            }else{
-                $tratamientoStatus="fail";
+                $tratamientoStatus = "ok";
+            } else {
+                $tratamientoStatus = "fail";
                 $trataEdit = "";
             }
 
@@ -201,7 +204,7 @@ class PacientesController extends Controller
             }
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
-        } 
+        }
     }
 
     public function CargarDatosPacTrat()
@@ -225,37 +228,39 @@ class PacientesController extends Controller
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
-    
+
     public function TratamientosRecaudo()
     {
         if (Auth::check()) {
             $idPac = request()->get('idPac');
             $tratamientosRecaudo = collect(Tratamientos::TratamientosPacientesRecaudo($idPac));
-            
+
 
             $resultadosAgrupados = collect();
 
             $tratamientosAgrupados = $tratamientosRecaudo->groupBy('tratamiento');
 
             // Recorrer la colección agrupada y calcular sumas\
-            $realizadoTratamiento=0;
+            $realizadoTratamiento = 0;
             $tratamientosAgrupados->each(function ($tratamientosPorTratamiento, $tratamiento) use ($resultadosAgrupados) {
                 $totalTratamiento = $tratamientosPorTratamiento->sum('valor');
                 $pagadoTratamiento = $tratamientosPorTratamiento->sum('pagado');
                 $saldoTratamiento = $totalTratamiento - $pagadoTratamiento;
 
                 $estado_serv = $tratamientosPorTratamiento->first()->estado_serv;
-                
-                if($estado_serv=="Terminado"){
+
+                if ($estado_serv == "Terminado") {
                     $realizadoTratamiento = $tratamientosPorTratamiento->sum('valor');
                 }
 
                 $nombreTratamiento = $tratamientosPorTratamiento->first()->ntrara;
-            
+                $nombreProfesional = $tratamientosPorTratamiento->first()->nprof;
+
                 // Agregar los resultados a la nueva colección
                 $resultadosAgrupados->push([
                     'tratamiento' => $tratamiento,
                     'nombreTratamiento' => $nombreTratamiento,
+                    'nombreProfesional' => $nombreProfesional,
                     'total' => $totalTratamiento,
                     'realizado' => $realizadoTratamiento,
                     'pagado' => $pagadoTratamiento,
@@ -273,45 +278,128 @@ class PacientesController extends Controller
         }
     }
 
+    public function TratamientosRecaudoDetalles()
+    {
+        if (Auth::check()) {
+            $data = request()->all();
+            $dataIdsJson = request()->get('dataIds');
+            $dataIdsArray = json_decode($dataIdsJson, true);
+
+            $detaTrata = "";
+
+            foreach ($dataIdsArray as $dataId) {
+                //cargar tratamientos
+                $tratamiento = Tratamientos::busTatamiento($dataId);
+
+                $detaTrata .= '<tr>' .                  
+                    '<th colspan="6" class="text-truncate">' .
+                    '    <div>' .
+                    '        <p class="mb-25 latest-update-item-name text-bold-600"><span class="bullet bullet-primary bullet-sm"></span> ' .
+                    $tratamiento->nombre .
+                    '        </p>' .
+                    '    </div></th>' .
+                    '</tr>';
+
+                //cargar secciones
+                $secciones = Secciones::buscSeccServ($tratamiento->id);
+                $secc = "";
+                foreach ($secciones as $dataSecc) {
+                    
+                    $secc = '<tr>' .                       
+                        '<th colspan="6" class="text-truncate">' .
+                        '    <div>' .
+                        '        <p class="mb-25 latest-update-item-name" style=" font-style: italic;">' .
+                        $dataSecc->nombre .
+                        '        </p>' .
+                        '    </div></th>'.
+                        '</tr>';
+                        $detaTrata .= $secc;
+                    //cargar servicios
+                    $servicios = Secciones::buscServSecc($dataSecc->id);
+                  
+                    foreach ($servicios as $dataServ) {
+                        $serv = "";
+                        $saldo = $dataServ->valor - $dataServ->pagado;
+                        $serv = '<tr>' .
+                            '<td  class="text-truncate">' .
+                            '    <input type="checkbox" data-valor="' . $dataServ->valor . '" data-id="' . $dataServ->id .
+                            '" id="checkRecaudo'.$dataServ->id.'"  class="icheck-activity-det">' .
+                            '</td>' .
+                            '<td  class="text-truncate">' .
+                            '    <div>' .
+                            '        <p>' .
+                            $dataServ->nombre .
+                            '        </p>' .
+                            '    </div>' .
+                            '</td>' .
+                            '<td class="text-truncate" style="vertical-align: middle; ">' .
+                            number_format($dataServ->valor, 2, ',', '.') .
+                            '</td>' .
+                            '<td class="text-truncate" style="vertical-align: middle; ">' .
+                            number_format($dataServ->pagado, 2, ',', '.') .
+                            '</td>' .
+                            '<td class="text-truncate" style="vertical-align: middle; ">' .
+                            $dataServ->estado_pago .
+                            '</td>' .
+                            '<td class="text-truncate" style="vertical-align: middle; ">' .
+                            number_format($saldo, 2, ',', '.')  .
+                            '</td>' .
+                            '</tr>';
+                            $detaTrata .= $serv;
+                    }
+                    
+                }
+            }
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'detaTrata' => $detaTrata
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
     public function SeccionesTratamientos()
     {
         if (Auth::check()) {
-           $idTrat = request()->get('tratSecc');
+            $idTrat = request()->get('tratSecc');
 
-           $Tratamientos = Tratamientos::busTatamiento($idTrat);
-           $ItemsTratamientos = ItemsTratamiento::consulAllItem($idTrat);
+            $Tratamientos = Tratamientos::busTatamiento($idTrat);
+            $ItemsTratamientos = ItemsTratamiento::consulAllItem($idTrat);
             $ContTratamientos = '';
 
-           $servTratamiento = Tratamientos::consulAllServ($idTrat);
+            $servTratamiento = Tratamientos::consulAllServ($idTrat);
 
-           foreach ($ItemsTratamientos as $i => $item) {
-            if($item->tip_servi=="seccion"){
+            foreach ($ItemsTratamientos as $i => $item) {
+                if ($item->tip_servi == "seccion") {
 
-                $seccion = Secciones::buscSeccion($item->id_servi);
+                    $seccion = Secciones::buscSeccion($item->id_servi);
 
-                $busTotalSeccion = Secciones::busTotalSeccion($seccion->id);
-                $total = number_format($busTotalSeccion, 2, ',', '.');
+                    $busTotalSeccion = Secciones::busTotalSeccion($seccion->id);
+                    $total = number_format($busTotalSeccion, 2, ',', '.');
 
-               
-                $ContTratamientos .='<div id="seccion'.$seccion->id.'" class="card collapse-header mb-0" role="tablist">
+
+                    $ContTratamientos .= '<div id="seccion' . $seccion->id . '" class="card collapse-header mb-0" role="tablist">
                 <div id="headingCollapse5"
                     class="card-header d-flex justify-content-between align-items-center m-1"
                     style="border-top-left-radius: 0.25rem; border-top-right-radius: 0.25rem; border: 1px solid #e4e7ed;"
                     data-toggle="collapse" role="tab"
-                    data-target="#collapse'.$seccion->id.'"
+                    data-target="#collapse' . $seccion->id . '"
                     aria-expanded="false"
-                    aria-controls="collapse'.$seccion->id.'">
+                    aria-controls="collapse' . $seccion->id . '">
                     <div class="collapse-title media">
 
                         <div class="media-body mt-25">
-                            <h4 id="nomSeccion'.$seccion->id.'">'.$seccion->nombre.'</h4>
+                            <h4 id="nomSeccion' . $seccion->id . '">' . $seccion->nombre . '</h4>
                         </div>
                     </div>
                     <div
                         class="information d-sm-flex d-none align-items-center">
                         <div class="collection mr-1">
                             <span class="bullet bullet-xs bullet-primary"></span>
-                            <span class="font-weight-bold" id="span-total'.$seccion->id.'">$ '.$total.'</span>
+                            <span class="font-weight-bold" id="span-total' . $seccion->id . '">$ ' . $total . '</span>
                         </div>
 
                         <div class="dropdown">
@@ -324,19 +412,19 @@ class PacientesController extends Controller
                             </a>
                             <div class="dropdown-menu dropdown-menu-right"
                                 aria-labelledby="fisrt-open-submenu">
-                                <a onclick="$.addServicioSeccion('.$seccion->id.');"
+                                <a onclick="$.addServicioSeccion(' . $seccion->id . ');"
                                     class="dropdown-item mail-reply">
                                     <i class="feather icon-plus"></i>
                                     Agregar Servicio
                                 </a>
                                 <div class="dropdown-divider">
                                 </div>
-                                <a onclick="$.editarSeccion('.$seccion->id.');" 
+                                <a onclick="$.editarSeccion(' . $seccion->id . ');" 
                                     class="dropdown-item">
                                     <i class="feather icon-edit"></i>
                                     Editar sección
                                 </a>
-                                <a onclick="$.eliminarSeccion('.$seccion->id.');"
+                                <a onclick="$.eliminarSeccion(' . $seccion->id . ');"
                                     class="dropdown-item">
                                     <i class="feather icon-trash-2"></i>
                                     Eliminar Sección
@@ -345,13 +433,13 @@ class PacientesController extends Controller
                         </div>
                     </div>
                 </div>
-                <div id="collapse'.$seccion->id.'" role="tabpanel"
+                <div id="collapse' . $seccion->id . '" role="tabpanel"
                     aria-labelledby="headingCollapse5"
                     class="collapse">
                     <div class="card-content">
                         <div class="card-body">
                           <table class="table mb-5">
-                                    <tbody id="trServicioSeccion'.$seccion->id.'">
+                                    <tbody id="trServicioSeccion' . $seccion->id . '">
                                         
 
                                     </tbody>
@@ -360,13 +448,9 @@ class PacientesController extends Controller
                     </div>
                 </div>
             </div>';
-          
-
-            }else{
-
+                } else {
+                }
             }
-
-           }
 
             if (request()->ajax()) {
                 return response()->json([
@@ -380,7 +464,6 @@ class PacientesController extends Controller
         }
     }
 
-    
 
     public function CargarPacientes()
     {
@@ -525,12 +608,12 @@ class PacientesController extends Controller
             $idTrat = $data['idtrata'];
 
             if ($data['accion'] == "agregar") {
-                $respuesta = Secciones::guardar($data,$idTrat);
-                $itemTatra = ItemsTratamiento::guardar($respuesta->id,'seccion', $idTrat);
+                $respuesta = Secciones::guardar($data, $idTrat);
+                $itemTatra = ItemsTratamiento::guardar($respuesta->id, 'seccion', $idTrat);
             } else {
                 $respuesta = Secciones::editarSeccion($data);
             }
-            
+
             if (request()->ajax()) {
                 return response()->json([
                     'seccion' => $respuesta
@@ -549,9 +632,9 @@ class PacientesController extends Controller
             $idPac = $data['idPac'];
 
             if ($data['accion'] == "agregar") {
-                $respuesta = Secciones::guardarServ($data,$idSecc,$idTrata,$idPac);
-                if($data["origServicio"]=="trata"){
-                    $itemTatra = ItemsTratamiento::guardar($respuesta,'trata', $idTrata);
+                $respuesta = Secciones::guardarServ($data, $idSecc, $idTrata, $idPac);
+                if ($data["origServicio"] == "trata") {
+                    $itemTatra = ItemsTratamiento::guardar($respuesta, 'trata', $idTrata);
                 }
             } else {
                 $respuesta = Secciones::editarServ($data);
@@ -565,7 +648,7 @@ class PacientesController extends Controller
                     'servicios' => $respuesta,
                     'totServ' => $totServ,
                     'servSeccion' => $servSeccion,
-                    
+
                 ]);
             }
         } else {
@@ -576,14 +659,14 @@ class PacientesController extends Controller
     {
         if (Auth::check()) {
             $data = request()->all();
-           
+
             $idSecc = $data['idSecc'];
             $idTrata = $data['idTrata'];
             $idPac = $data['idPac'];
             $idSer = $data['idSer'];
 
-            $respuestaEvol = Evoluciones::guardar($data,$idSecc,$idTrata,$idPac,$idSer);
-            
+            $respuestaEvol = Evoluciones::guardar($data, $idSecc, $idTrata, $idPac, $idSer);
+
             if (request()->has('repeater-list')) {
                 $arc = [];
                 $repeaterList = $data['repeater-list'];
@@ -592,7 +675,7 @@ class PacientesController extends Controller
 
                         $archivo = $archivosEvo['archivo'];
                         $nombreOriginal = $archivo->getClientOriginalName();
-                       
+
                         // Realiza acciones con el archivo, como moverlo a una ubicación deseada
                         $prefijo = substr(md5(uniqid(rand())), 0, 6);
                         $nombreArchivo = self::sanear_string($prefijo . '_' . $nombreOriginal);
@@ -604,11 +687,11 @@ class PacientesController extends Controller
                 }
             }
 
-            $updateServ = Secciones::updateServ($idSer,$data['pavance']);
+            $updateServ = Secciones::updateServ($idSer, $data['pavance']);
 
             if (isset($data['archivo'])) {
-            $evoArchivos = Evoluciones::guardarArcEvol($data,$respuestaEvol->id);
-             }
+                $evoArchivos = Evoluciones::guardarArcEvol($data, $respuestaEvol->id);
+            }
 
             $servSeccion = Secciones::buscServSecc($idSecc);
             $totServ = Secciones::busTotalSeccion($idSecc);
@@ -618,7 +701,7 @@ class PacientesController extends Controller
                     'servicios' => $respuestaEvol,
                     'totServ' => $totServ,
                     'servSeccion' => $servSeccion,
-                    
+
                 ]);
             }
         } else {
@@ -715,21 +798,22 @@ class PacientesController extends Controller
         }
     }
 
-    public function PacientesTratamientos(Request $request){
+    public function PacientesTratamientos(Request $request)
+    {
 
         $term = $request->input('q'); // Obtener el término de búsqueda
 
         // Consultar municipios desde la base de datos y filtrar por término de búsqueda
         $pacientes = DB::connection('mysql')
-        ->table('pacientes')
-        ->select('id', DB::raw('CONCAT(nombre, " ", apellido) AS text'))
-        ->where('estado', 'ACTIVO')
-        ->where(function ($query) use ($term) {
-            $query->where('nombre', 'LIKE', '%' . $term . '%')
-                ->orWhere('apellido', 'LIKE', '%' . $term . '%')
-                ->orWhere('identificacion', 'LIKE', '%' . $term . '%');
-        })
-        ->get();
+            ->table('pacientes')
+            ->select('id', DB::raw('CONCAT(nombre, " ", apellido) AS text'))
+            ->where('estado', 'ACTIVO')
+            ->where(function ($query) use ($term) {
+                $query->where('nombre', 'LIKE', '%' . $term . '%')
+                    ->orWhere('apellido', 'LIKE', '%' . $term . '%')
+                    ->orWhere('identificacion', 'LIKE', '%' . $term . '%');
+            })
+            ->get();
 
 
         // Formatear los resultados en un array
@@ -737,8 +821,7 @@ class PacientesController extends Controller
         foreach ($pacientes as $pacient) {
             $formattedPacientes[] = ['id' => $pacient->id, 'text' => $pacient->text];
         }
-           return response()->json(['data' => $pacientes]);
-    
+        return response()->json(['data' => $pacientes]);
     }
 
     public function sanear_string($string)

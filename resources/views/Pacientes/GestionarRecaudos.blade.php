@@ -19,25 +19,25 @@
                         <div class="bug-list-search-content">
                             <div class="sidebar-toggle d-block d-lg-none"><i class="feather icon-menu font-large-1"></i>
                             </div>
-                         
-                                <div class="position-relative">
-                                    <select class="select2-data-ajax form-control" id="paciente" name="paciente"></select>
-                                </div>
-                            
+
+                            <div class="position-relative">
+                                <select class="select2-data-ajax form-control" id="paciente" name="paciente"></select>
+                            </div>
+
                         </div>
                     </div>
                 </div>
                 <div class="content-body">
-                    
+
                     <section id="div-datTratameintos" style=" filter: blur(5px);" class="row all-contacts">
-                  
+
                         <div class="col-12">
-                    
+
                             <div class="card">
                                 <div>
                                     <h4 class="card-title ml-2">Planes de tratamiento del paciente</h4>
-                                       </div>
-                                <div class="card-content">
+                                </div>
+                            <div class="card-content" id="listRecaudo">
                                     <div id="daily-activity" class="table-responsive height-300">
                                         <table class="table table-hover mb-0">
                                             <thead>
@@ -54,23 +54,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="trTratamientos">
-                                                <tr>
-                                                    <td class="text-truncate">
-                                                        <input type="checkbox" id="icheck-input-1" class="icheck-activity"
-                                                            checked>
-                                                    </td>
-                                                    <td class="text-truncate">
-                                                        <div>
-                                                            <p class="mb-25 latest-update-item-name text-bold-600">
-                                                                Tratamiento</p>
-                                                            <small class="font-small-3">Profesional</small>
-                                                        </div>
-                                                    </td>
-                                                    <td class="text-truncate">$ 300.000,00</td>
-                                                    <td class="text-truncate">$ 300.000,00</td>
-                                                    <td class="text-truncate">$ 300.000,00</td>
-                                                    <td class="text-truncate">$ 300.000,00</td>
-                                                </tr>
+
                                             </tbody>
                                         </table>
 
@@ -84,6 +68,57 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                </div>
+                                <div class="card-content" style="display: none;" id="pagoRecaudo">
+                                    <div id="daily-activity" class="table-responsive" style="overflow: hidden;">
+                                        <table class="table table-hover mb-0" >
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                   </th>
+                                                    <th>Servicio</th>
+                                                    <th>Valor</th>
+                                                    <th>Abonado</th>
+                                                    <th>Estado</th>
+                                                    <th>Por Abonar</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="trDetTratamientos">
+
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-7 col-sm-7 mt-75">
+                                          
+                                        </div>
+                                        <div class="col-4 col-sm-4 d-flex justify-content-end mt-75">
+                                            <ul class="list-group cost-list">
+                                                <li class="list-group-item each-cost border-0 p-50 d-flex justify-content-between">
+                                                    <span class="cost-title text-bold-600 mr-2">Servicios Seleccionados:  </span>
+                                                    <span class="cost-value" id="totalServ">$ 0,00</span>
+                                                </li>
+                                                
+                                              
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <div class="form-actions">
+                                            <div class="text-right">
+                                                <button type="reset" onclick="$.atrasTratamiento();" class="btn btn-info">
+                                                    <i class="feather icon-chevron-left position-left"></i> Atras</button>
+                                                <button type="reset" onclick="$.pagarTratamiento();"
+                                                    class="btn btn-success"> Pagar Tratamiento<i
+                                                        class="feather icon-chevron-right position-right"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                   
 
                                 </div>
                             </div>
@@ -101,6 +136,10 @@
     </div>
 
     <form action="{{ url('/AdminPacientes/TratamientosRecaudo') }}" id="formCargarTratamientos" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/AdminPacientes/TratamientosRecaudoDetalles') }}" id="formBuscDetTrata" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
@@ -144,7 +183,7 @@
                     var url = form.attr("action");
                     var datos = form.serialize();
 
-                    let servSEccion = '';
+                    let tratamientos = '';
 
                     $.ajax({
                         type: "POST",
@@ -153,14 +192,136 @@
                         async: false,
                         dataType: "json",
                         success: function(respuesta) {
-                            $.each(respuesta.servTratamiento, function(i, item) {
-
+                            $.each(respuesta.tratamientosRecaudo, function(i, item) {
+                                tratamientos += '<tr >' +
+                                    '<td class="text-truncate" style="vertical-align: middle; ">' +
+                                    '    <input type="checkbox" data-id="' + item
+                                    .tratamiento +
+                                    '" id="checkRecaudo" class="icheck-activity classTrata">' +
+                                    '</td>' +
+                                    '<td class="text-truncate">' +
+                                    '    <div>' +
+                                    '        <p class="mb-25 latest-update-item-name text-bold-600">' +
+                                    item.nombreTratamiento +
+                                    '        </p>' +
+                                    '        <small class="font-small-3">Prof.: ' +
+                                    item.nombreProfesional + '</small>' +
+                                    '    </div>' +
+                                    '</td>' +
+                                    '<td class="text-truncate" style="vertical-align: middle; t">' +
+                                    formatCurrency(
+                                        item.total, 'es-CO', 'COP') + '</td>' +
+                                    '<td class="text-truncate" style="vertical-align: middle; ">' +
+                                    formatCurrency(
+                                        item.realizado, 'es-CO', 'COP') + '</td>' +
+                                    '<td class="text-truncate" style="vertical-align: middle; ">' +
+                                    formatCurrency(
+                                        item.pagado, 'es-CO', 'COP') + '</td>' +
+                                    '<td class="text-truncate" style="vertical-align: middle;">' +
+                                    formatCurrency(
+                                        item.saldo, 'es-CO', 'COP') + '</td>' +
+                                    '</tr>';
 
                             });
+                            $("#trTratamientos").html(tratamientos);
+                        }
+                    });
+
+                    $.checkRecaudos();
+
+                },
+                checkRecaudos: function() {
+                    $(".icheck-activity").iCheck({
+                        checkboxClass: "icheckbox_square-green",
+                        radioClass: "iradio_square-green"
+                    });
+
+                    var checkAll = $('input#icheck-input-all');
+                    var checkboxes = $('input.icheck-activity');
+
+                    checkAll.on('ifClicked', function() {
+                        if (checkAll.prop('checked')) {
+                            checkboxes.iCheck('uncheck');
+                        } else {
+                            checkboxes.iCheck('check');
                         }
                     });
                 },
+                checkDetaRecaudos: function() {
+                    $(".icheck-activity-det").iCheck({
+                        checkboxClass: "icheckbox_square-green",
+                        radioClass: "iradio_square-green"
+                    });
+                    var checkServ = $('input.icheck-activity-det');
+                    checkServ.on('ifChecked ifUnchecked', function () {
+  
+                        // Obtener valores de los atributos data
+                        var valor = $(this).data('valor');
+                        var id = $(this).data('id');
+
+                        $.recorrerServ();
+            
+                   });
+
+
+                    //secciones
+                },
+                recorrerServ: function() {
+                    var checkServ = document.getElementsByClassName('icheck-activity-det');
+                    $sumTotal = 0;
+                    $("#totalServ").html("0,00");
+                    for (var i = 0; i < checkServ.length; i++) {
+                        if (checkServ[i].checked) {
+                            // Obtiene el valor del atributo data-id y lo muestra en la consola
+                            var dataIdValor = parseInt(checkServ[i].getAttribute('data-valor'));
+                            $sumTotal=$sumTotal+dataIdValor;
+                        }
+                    }
+
+                    $("#totalServ").html(formatCurrency($sumTotal, 'es-CO', 'COP'));
+                },
+                atrasTratamiento: function() {
+                    $("#pagoRecaudo").hide();
+                    $("#listRecaudo").show();
+                },
                 pagarTratamiento: function() {
+
+                    $("#pagoRecaudo").show();
+                    $("#listRecaudo").hide();
+
+                    var checkboxes = document.getElementsByClassName('classTrata');
+                    var dataIds = [];
+                    // Itera sobre los checkboxes
+                    for (var i = 0; i < checkboxes.length; i++) {
+                        // Verifica si el checkbox está marcado
+                        if (checkboxes[i].checked) {
+                            // Obtiene el valor del atributo data-id y lo muestra en la consola
+                            var dataIdValue = checkboxes[i].getAttribute('data-id');
+                            dataIds.push(dataIdValue);
+                        }
+                    }
+
+                    var form = $("#formBuscDetTrata");
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    datos += "&dataIds=" + JSON.stringify(dataIds);
+
+                    let trDetalles = "";
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            $("#trDetTratamientos").html(respuesta.detaTrata);
+                        }
+                    });
+
+                    $.checkDetaRecaudos();
+
 
                 },
                 convertirFormato: function(fechaHora) {
