@@ -225,6 +225,54 @@ class PacientesController extends Controller
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
+    
+    public function TratamientosRecaudo()
+    {
+        if (Auth::check()) {
+            $idPac = request()->get('idPac');
+            $tratamientosRecaudo = collect(Tratamientos::TratamientosPacientesRecaudo($idPac));
+            
+
+            $resultadosAgrupados = collect();
+
+            $tratamientosAgrupados = $tratamientosRecaudo->groupBy('tratamiento');
+
+            // Recorrer la colección agrupada y calcular sumas\
+            $realizadoTratamiento=0;
+            $tratamientosAgrupados->each(function ($tratamientosPorTratamiento, $tratamiento) use ($resultadosAgrupados) {
+                $totalTratamiento = $tratamientosPorTratamiento->sum('valor');
+                $pagadoTratamiento = $tratamientosPorTratamiento->sum('pagado');
+                $saldoTratamiento = $totalTratamiento - $pagadoTratamiento;
+
+                $estado_serv = $tratamientosPorTratamiento->first()->estado_serv;
+                
+                if($estado_serv=="Terminado"){
+                    $realizadoTratamiento = $tratamientosPorTratamiento->sum('valor');
+                }
+
+                $nombreTratamiento = $tratamientosPorTratamiento->first()->ntrara;
+            
+                // Agregar los resultados a la nueva colección
+                $resultadosAgrupados->push([
+                    'tratamiento' => $tratamiento,
+                    'nombreTratamiento' => $nombreTratamiento,
+                    'total' => $totalTratamiento,
+                    'realizado' => $realizadoTratamiento,
+                    'pagado' => $pagadoTratamiento,
+                    'saldo' => $saldoTratamiento,
+                ]);
+            });
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'tratamientosRecaudo' => $resultadosAgrupados
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
     public function SeccionesTratamientos()
     {
         if (Auth::check()) {

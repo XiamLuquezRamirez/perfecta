@@ -78,6 +78,7 @@ class Tratamientos extends Model
             ->get();
         return $respuestaTra;
     }
+
     public static function TratamientosPacientesAct($idPac)
     {
         $respuestaTra = DB::connection('mysql')->table('tratamientos')
@@ -89,6 +90,16 @@ class Tratamientos extends Model
             ->get();
         return $respuestaTra;
     }
+
+    public static function TratamientosPacientesRecaudo($idPac)
+    {
+        $respuestaTra = DB::connection("mysql")->select("SELECT st.*,tr.id, tr.nombre AS ntrara FROM servicios_tratamiento st 
+        LEFT JOIN tratamientos tr ON st.tratamiento= tr.id
+        WHERE tr.paciente=".$idPac." AND st.estado='ACTIVO'");
+       
+        return $respuestaTra;
+    }
+
     public static function TratamientosPacientesOtr($idPac)
     {
         $respuestaTra = DB::connection('mysql')->table('tratamientos')

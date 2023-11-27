@@ -19,85 +19,92 @@
                         <div class="bug-list-search-content">
                             <div class="sidebar-toggle d-block d-lg-none"><i class="feather icon-menu font-large-1"></i>
                             </div>
-                            <form action="#">
+                         
                                 <div class="position-relative">
                                     <select class="select2-data-ajax form-control" id="paciente" name="paciente"></select>
                                 </div>
-                            </form>
+                            
                         </div>
                     </div>
+                </div>
+                <div class="content-body">
+                    
+                    <section id="div-datTratameintos" style=" filter: blur(5px);" class="row all-contacts">
+                  
+                        <div class="col-12">
+                    
+                            <div class="card">
+                                <div>
+                                    <h4 class="card-title ml-2">Planes de tratamiento del paciente</h4>
+                                       </div>
+                                <div class="card-content">
+                                    <div id="daily-activity" class="table-responsive height-300">
+                                        <table class="table table-hover mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        <input type="checkbox" id="icheck-input-all"
+                                                            class="icheck-activity">
+                                                    </th>
+                                                    <th>Tratamiento</th>
+                                                    <th>Total</th>
+                                                    <th>Realizado</th>
+                                                    <th>Pagado</th>
+                                                    <th>Saldo</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="trTratamientos">
+                                                <tr>
+                                                    <td class="text-truncate">
+                                                        <input type="checkbox" id="icheck-input-1" class="icheck-activity"
+                                                            checked>
+                                                    </td>
+                                                    <td class="text-truncate">
+                                                        <div>
+                                                            <p class="mb-25 latest-update-item-name text-bold-600">
+                                                                Tratamiento</p>
+                                                            <small class="font-small-3">Profesional</small>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-truncate">$ 300.000,00</td>
+                                                    <td class="text-truncate">$ 300.000,00</td>
+                                                    <td class="text-truncate">$ 300.000,00</td>
+                                                    <td class="text-truncate">$ 300.000,00</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-actions">
+                                            <div class="text-right">
+                                                <button type="reset" onclick="$.pagarTratamiento();"
+                                                    class="btn btn-success"> Pagar Tratamiento<i
+                                                        class="feather icon-chevron-right position-right"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </section>
                 </div>
             </div>
         </div>
     </section>
-    <div class="content-body">
-        <div class="app-content content">
-            <div class="content-overlay"></div>
-            <div class="content-wrapper">
-                <div class="content-header row">
-                </div>
-                <div class="content-detached">
-                    <div class="content-body">
-                        <section id="div-datTratameintos" style=" filter: blur(5px);" class="row all-contacts">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-content">
-                                        <div id="daily-activity" class="table-responsive height-350">
-                                            <table class="table table-hover mb-0">
-                                                <thead>
-                                                    <tr>
-                                                        <th>
-                                                            <input type="checkbox" id="icheck-input-all"
-                                                                class="icheck-activity">
-                                                        </th>
-                                                        <th>Tratamiento</th>
-                                                        <th>Total</th>
-                                                        <th>Realizado</th>
-                                                        <th>Pagado</th>
-                                                        <th>Saldo</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td class="text-truncate">
-                                                            <input type="checkbox" id="icheck-input-1"
-                                                                class="icheck-activity" checked>
-                                                        </td>
-                                                        <td class="text-truncate">
-                                                            <div>
-                                                                <p class="mb-25 latest-update-item-name text-bold-600">
-                                                                    Tratamiento</p>
-                                                                <small class="font-small-3">Profesional</small>
-                                                            </div>
-                                                        </td>
-                                                        <td class="text-truncate">$ 300.000,00</td>
-                                                        <td class="text-truncate">$ 300.000,00</td>
-                                                        <td class="text-truncate">$ 300.000,00</td>
-                                                        <td class="text-truncate">$ 300.000,00</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="form-actions">
-                                            <div class="text-right">
-                                                <button type="reset" onclick="$.pagarTratamiento();" class="btn btn-warning"> Pagar<i
-                                                        class="feather icon-chevron-right position-right"></i></button>
-                                            </div>
-                                        </div>
 
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="loader" class="loader-spinner" style="display: none;">
-            <img src="{{ asset('app-assets/images/mujer.gif') }}" width="150" />
-            <h2 class="parpadeo" style="color: #D08997; font-weight: bold;">Cargando...</h2>
-        </div>
+    <div id="loader" class="loader-spinner" style="display: none;">
+        <img src="{{ asset('app-assets/images/mujer.gif') }}" width="150" />
+        <h2 class="parpadeo" style="color: #D08997; font-weight: bold;">Cargando...</h2>
     </div>
+
+    <form action="{{ url('/AdminPacientes/TratamientosRecaudo') }}" id="formCargarTratamientos" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+
 @endsection
 
 @section('scripts')
@@ -129,10 +136,31 @@
             }
 
             $.extend({
-                buscInfTratamientos: function(idPac){
+                buscInfTratamientos: function(idPac) {
 
+                    var form = $("#formCargarTratamientos");
+                    $("#idPac").remove();
+                    form.append("<input type='hidden' id='idPac' name='idPac'  value='" + idPac + "'>");
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    let servSEccion = '';
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            $.each(respuesta.servTratamiento, function(i, item) {
+
+
+                            });
+                        }
+                    });
                 },
-                pagarTratamiento: function(){
+                pagarTratamiento: function() {
 
                 },
                 convertirFormato: function(fechaHora) {
