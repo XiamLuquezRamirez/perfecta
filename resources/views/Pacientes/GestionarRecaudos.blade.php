@@ -93,19 +93,30 @@
 
                                     <div class="row">
                                         <div class="col-7 col-sm-7 mt-75">
-                                          
+                                            <!-- Contenido de la primera columna -->
                                         </div>
                                         <div class="col-4 col-sm-4 d-flex justify-content-end mt-75">
                                             <ul class="list-group cost-list">
-                                                <li class="list-group-item each-cost border-0 p-50 d-flex justify-content-between">
-                                                    <span class="cost-title text-bold-600 mr-2">Servicios Seleccionados:  </span>
+                                                <!-- Elemento 1 -->
+                                            <li class="list-group-item each-cost border-0 p-50 d-flex justify-content-between">
+                                                    <span class="cost-title text-bold-600 mr-2">Servicios Seleccionados: </span>
                                                     <span class="cost-value" id="totalServ">$ 0,00</span>
                                                 </li>
-                                                
-                                              
+                                                <!-- Elemento 2 -->
+                                                <li class="list-group-item each-cost border-0 p-50 d-flex justify-content-between">
+                                                    <div class="form-check" style="width: 100%">
+                                                        <input type="checkbox" class="form-check-input" id="icheck-input-all">
+                                                        <label class="form-check-label" for="icheck-input-all">Ingresar abono</label>
+                                                    </div>
+                                                    
+                                                    <input type="text" disabled onchange="$.cambioFormato(this.id);" class="form-control" id="valorVis" name="valorVis">
+                                                    <input type="hidden" value="" id="valor" name="valor">
+                                                </li>
+                                                <!-- Otros elementos de la lista si los hay -->
                                             </ul>
                                         </div>
                                     </div>
+                                    
                                     <div class="col-12 mt-2">
                                         <div class="form-actions">
                                             <div class="text-right">
@@ -346,6 +357,13 @@
 
                     return nuevoFormato;
                 },
+                cambioFormato: function(id) {
+                    var numero = $("#"+id).val();
+                    $("#valor").val(numero);
+                    var formatoMoneda = formatCurrency(numero, 'es-CO', 'COP');
+                    $("#valorVis").val(formatoMoneda);
+        
+                }
 
             });
             var editorEvolucion = CKEDITOR.instances.evolucion_escrita;
@@ -359,6 +377,8 @@
                 minimumFractionDigits: 2
             }).format(number);
         }
+
+     
 
         // Llamar a la función con un porcentaje específico (puedes cambiar este valor)
     </script>
