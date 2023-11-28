@@ -132,6 +132,7 @@ class Secciones extends Model
             ->leftJoin("servicios", "servicios.id", "servicios_tratamiento.servicio")
             ->select("servicios_tratamiento.*", "servicios.nombre")
             ->where("servicios_tratamiento.estado", "ACTIVO")
+            ->where("servicios_tratamiento.estado_pago", "Pendiente")
             ->where('seccion', $idSec)
             ->get();
 

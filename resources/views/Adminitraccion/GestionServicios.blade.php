@@ -11,7 +11,6 @@
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ url('/Administracion') }}">Inicio</a>
                         </li>
-
                         <li class="breadcrumb-item active">Gestionar Servicios
                         </li>
                     </ol>
@@ -32,14 +31,12 @@
                         <div class="bug-list-search-content">
                             <div class="sidebar-toggle d-block d-lg-none"><i class="feather icon-menu font-large-1"></i>
                             </div>
-
                             <div class="position-relative">
                                 <input type="search" id="searchInput" class="form-control" placeholder="Busqueda...">
                                 <div class="form-control-position">
                                     <i class="fa fa-search text-size-base text-muted la-rotate-270"></i>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -94,7 +91,6 @@
                                 </div>
 
                                 <div class="row">
-
                                     <div class="col-12">
                                         <div class="form-group">
                                             <label for="userinput8">Nombre:</label>
@@ -105,7 +101,12 @@
                                     <div class="col-7">
                                         <div class="form-group">
                                             <label for="userinput8">Valor:</label>
-                                            <input type="text" onchange="$.cambioFormato(this.id);" class="form-control" id="valorVis" name="valorVis">
+                                            <input type="text" 
+                                            onchange="$.cambioFormato(this.id);"
+                                            onkeypress="return validartxtnum(event)"
+                                            class="form-control" 
+                                            id="valorVis"
+                                             name="valorVis">
                                             <input type="hidden" value="" id="valor" name="valor">
                                         </div>
                                     </div>
@@ -129,12 +130,7 @@
                                             </div>
                                         </div>
                                     </div>
-
-
-
-
                                 </div>
-
                         </div>
 
                         <div class="form-actions right">

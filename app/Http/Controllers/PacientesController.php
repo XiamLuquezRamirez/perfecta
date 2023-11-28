@@ -322,7 +322,7 @@ class PacientesController extends Controller
                         $saldo = $dataServ->valor - $dataServ->pagado;
                         $serv = '<tr>' .
                             '<td  class="text-truncate">' .
-                            '    <input type="checkbox" data-valor="' . $dataServ->valor . '" data-id="' . $dataServ->id .
+                            '    <input type="checkbox" data-valor="' . $saldo. '" data-id="' . $dataServ->id .
                             '" id="checkRecaudo'.$dataServ->id.'"  class="icheck-activity-det">' .
                             '</td>' .
                             '<td  class="text-truncate">' .
@@ -332,16 +332,16 @@ class PacientesController extends Controller
                             '        </p>' .
                             '    </div>' .
                             '</td>' .
-                            '<td class="text-truncate" style="vertical-align: middle; ">' .
+                            '<td class="text-truncate" style="vertical-align: middle; ">$ ' .
                             number_format($dataServ->valor, 2, ',', '.') .
                             '</td>' .
-                            '<td class="text-truncate" style="vertical-align: middle; ">' .
+                            '<td class="text-truncate" style="vertical-align: middle; ">$ ' .
                             number_format($dataServ->pagado, 2, ',', '.') .
                             '</td>' .
                             '<td class="text-truncate" style="vertical-align: middle; ">' .
                             $dataServ->estado_pago .
                             '</td>' .
-                            '<td class="text-truncate" style="vertical-align: middle; ">' .
+                            '<td class="text-truncate" style="vertical-align: middle; ">$ ' .
                             number_format($saldo, 2, ',', '.')  .
                             '</td>' .
                             '</tr>';
@@ -623,6 +623,18 @@ class PacientesController extends Controller
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
+
+    public function GuardarPagoTratamiento()
+    {
+        if (Auth::check()) {
+            $data = request()->all();
+            dd($data);
+            
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
     public function GuardarServicio()
     {
         if (Auth::check()) {
