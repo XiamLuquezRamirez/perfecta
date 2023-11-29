@@ -35,7 +35,7 @@
 
                             <div class="card">
                                 <div>
-                                    <h4 class="card-title ml-2">Planes de tratamiento del paciente</h4>
+                                    <h4 class="card-title ml-2" id="titTrataPac">Planes de tratamiento del paciente</h4>
                                 </div>
                                 <div class="card-content" id="listRecaudo">
                                     <div id="daily-activity" class="table-responsive height-300">
@@ -88,7 +88,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody id="trDetTratamientos">
- 
+
                                                 </tbody>
                                             </table>
 
@@ -291,6 +291,8 @@
 
                     let tratamientos = '';
 
+             
+
                     $.ajax({
                         type: "POST",
                         url: url,
@@ -298,6 +300,7 @@
                         async: false,
                         dataType: "json",
                         success: function(respuesta) {
+
                             $.each(respuesta.tratamientosRecaudo, function(i, item) {
                                 tratamientos += '<tr >' +
                                     '<td class="text-truncate" style="vertical-align: middle; ">' +
@@ -327,6 +330,12 @@
                                     formatCurrency(
                                         item.saldo, 'es-CO', 'COP') + '</td>' +
                                     '</tr>';
+
+                                $("#titTrataPac").html("Planes de tratamiento / " +
+                                    item.nombrePaciente);
+                                $("#valorAbonoPrev").val(item.saldoPrevio);
+                                $("#totalAbono").html(formatCurrency(item
+                                    .saldoPrevio, 'es-CO', 'COP'));
 
                             });
                             $("#trTratamientos").html(tratamientos);
@@ -383,7 +392,7 @@
                             sumTotal = sumTotal + dataIdValor;
                         }
                     }
-                    
+
                     $("#totalServ").html(formatCurrency(sumTotal, 'es-CO', 'COP'));
 
                     $.calTotal(sumTotal);
@@ -401,6 +410,16 @@
 
                     $("#pagoRecaudo").show();
                     $("#listRecaudo").hide();
+
+                    $("#selAbono").val("no");
+                    $("#valorAbono").val('0');
+                    $("#valorVisAbono").val('0,00');
+                    $("#valorVisPago1").val('0,00');
+                    $("#valorPago1").val('0');
+                    var miCheckbox = document.getElementById("checkAbono");
+                    miCheckbox.checked = false;
+                    let abono = document.getElementById("valorVisAbono");
+                    abono.disabled = true;
 
                     var checkboxes = document.getElementsByClassName('classTrata');
                     var dataIds = [];
@@ -430,6 +449,8 @@
                         dataType: "json",
                         success: function(respuesta) {
                             $("#trDetTratamientos").html(respuesta.detaTrata);
+                            $("#valorAbonoPrev").val(respuesta.saldo_previo);
+                            $("#totalAbono").html(formatCurrency(respuesta.saldo_previo,  'es-CO', 'COP'));
                         }
                     });
 
@@ -503,10 +524,9 @@
                     console.log(checkServ.length);
                     var sumTotal = 0;
                     var selServ = false;
-                  
+
                     for (var i = 0; i < checkServ.length; i++) {
                         if (checkServ[i].checked) {
-                            console.log("entra");
                             var dataIdValor = parseInt(checkServ[i].getAttribute('data-valor'));
                             sumTotal = sumTotal + dataIdValor;
                             selServ = true;
@@ -590,7 +610,7 @@
                                     timer: 1500,
                                     buttonsStyling: false
                                 });
-                             
+
                                 var loader = document.getElementById('loader');
                                 loader.style.display = 'none';
                             }

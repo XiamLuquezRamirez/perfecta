@@ -33,7 +33,52 @@ class Servicios extends Model
         return "ok";
     }
 
+  public static function updateSaldoServicio($data){
+
+    $valorTotal = $data['totalServText'];
+    $valorAbono = $data['valorAbono'];
+    $valorAbonoPrev = $data['valorAbonoPrev'];
+    $abonoPrev = 0;
   
+    if($data['selAbono']=="si"){
+        $abonoPrevCal = $valorTotal - $valorAbono;
+        if($abonoPrevCal < 0){
+            $abonoPrev = $valorAbono-$valorTotal;
+        }
+        $valorTotal = $valorAbono;
+    }
+
+    $valorTotal = $valorTotal + $valorAbonoPrev;
+    
+    
+
+    foreach ($data["dataIds"] as $key => $val) {
+     
+        $consulSaldo = DB::connection('mysql')->table('servicios_tratamiento')
+        ->where('id', $data["dataIds"][$key])
+        ->first();
+        
+        $saldoServ = $consulSaldo->valor - $consulSaldo->pagado;
+       
+        if($saldoServ <= $valorTotal){
+            $respuesta = DB::connection('mysql')->table('servicios_tratamiento')->where('id', $data["dataIds"][$key])->update([
+                'pagado' => $consulSaldo->valor,
+                'estado_pago' => 'Pagado',
+            ]);
+        }else{
+            $respuesta = DB::connection('mysql')->table('servicios_tratamiento')->where('id', $data["dataIds"][$key])->update([
+                'pagado' => $valorTotal
+            ]);
+        }
+
+        $valorTotal = $valorTotal - $saldoServ;
+        
+    }
+
+    return $valorTotal;
+
+
+  }
 
     public static function Eliminar($id)
     {
@@ -54,4 +99,7 @@ class Servicios extends Model
             ->where('estado', "ACTIVO")
             ->get();
     }
+
+
+
 }

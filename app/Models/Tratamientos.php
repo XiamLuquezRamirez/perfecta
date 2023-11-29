@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class Tratamientos extends Model
 {
@@ -17,6 +18,7 @@ class Tratamientos extends Model
             'especialidad' => $request['especialidad'],
             'estado' => 'pendiente',
             'estado_reg' => 'ACTIVO',
+            'estado_pago' => 'pendiente'
 
         ]);
 
@@ -30,8 +32,32 @@ class Tratamientos extends Model
 
     public static function guardarTransaccion($data){
 
+        $respuesta = DB::connection('mysql')->table('transaccion')->insertGetId([
+            'tratamiento' => $data['tratamientoSel'],
+            'pago_total' => $data['totalServText'],
+            'abono_libre' => $data['valorAbono'],
+            'usuario' => Auth::user()->id,
+            'estado' => 'ACTIVO'
+
+        ]);
+      
+        return $respuesta;
+
     }
-    public static function guardarMedisPago($data){
+    
+    public static function guardarMediosPago($data,$idTransaccion){
+        
+        foreach ($data["medioPago"] as $key => $val) {
+            $respuesta = DB::connection('mysql')->table('medio_pagos_tratamiento')->insert([
+                'transaccion' => $idTransaccion,
+                'tratamiento' =>  $data['tratamientoSel'],
+                'medio_pago' => $data["medioPago"][$key],
+                'valor' => $data["valorPago"][$key],
+                'referencia' => $data["referenciaPago"][$key]
+            ]);
+        }
+
+        return $respuesta;
 
     }
 
@@ -43,6 +69,27 @@ class Tratamientos extends Model
         ]);
         return "ok";
 
+    }
+
+    public static function updateTrata($idTrata,$aboPrev){
+
+        $consulEstadoServ = DB::connection('mysql')->table('servicios_tratamiento')
+        ->where('tratamiento', $idTrata)
+        ->get();
+
+        if($consulEstadoServ->count() > 0){
+            $respuesta = DB::connection('mysql')->table('tratamientos')->where('id', $idTrata)->update([
+                'saldo_previo' => $aboPrev
+            ]);
+        }else{
+            $respuesta = DB::connection('mysql')->table('tratamientos')->where('id', $idTrata)->update([
+                'saldo_previo' => $aboPrev,
+                'estado_pago' => 'Pagado'
+            ]);
+        }
+        
+       
+        return "ok";
     }
 
     public static function editar($request)
@@ -101,9 +148,10 @@ class Tratamientos extends Model
 
     public static function TratamientosPacientesRecaudo($idPac)
     {
-        $respuestaTra = DB::connection("mysql")->select("SELECT st.*,tr.id, tr.nombre AS ntrara, prof.nombre nprof FROM servicios_tratamiento st 
+        $respuestaTra = DB::connection("mysql")->select("SELECT st.*,tr.id, tr.saldo_previo sprev, tr.nombre AS ntrara, prof.nombre nprof, CONCAT(pac.identificacion,' - ',pac.nombre, ' ',pac.apellido) AS npac FROM servicios_tratamiento st 
         LEFT JOIN tratamientos tr ON st.tratamiento= tr.id
         LEFT JOIN profesionales prof ON tr.profesional= prof.id
+        LEFT JOIN pacientes pac ON tr.paciente= pac.id
         WHERE tr.paciente=".$idPac." AND st.estado='ACTIVO'");
        
         return $respuestaTra;

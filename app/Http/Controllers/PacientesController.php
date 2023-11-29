@@ -255,12 +255,16 @@ class PacientesController extends Controller
 
                 $nombreTratamiento = $tratamientosPorTratamiento->first()->ntrara;
                 $nombreProfesional = $tratamientosPorTratamiento->first()->nprof;
+                $nombrePaciente = $tratamientosPorTratamiento->first()->npac;
+                $saldoPrevio = $tratamientosPorTratamiento->first()->sprev;
 
                 // Agregar los resultados a la nueva colección
                 $resultadosAgrupados->push([
                     'tratamiento' => $tratamiento,
                     'nombreTratamiento' => $nombreTratamiento,
                     'nombreProfesional' => $nombreProfesional,
+                    'nombrePaciente' => $nombrePaciente,
+                    'saldoPrevio' => $saldoPrevio,
                     'total' => $totalTratamiento,
                     'realizado' => $realizadoTratamiento,
                     'pagado' => $pagadoTratamiento,
@@ -298,7 +302,7 @@ class PacientesController extends Controller
                     $tratamiento->nombre .
                     '        </p>' .
                     '    </div></th>' .
-                    '</tr>';
+                    '</tr><input type="hidden" name="tratamientoSel" value="'.$tratamiento->id.'"/><input type="hidden" name="tratamiento" value="'.$tratamiento->id.'"/>';
 
                 //cargar secciones
                 $secciones = Secciones::buscSeccServ($tratamiento->id);
@@ -339,7 +343,7 @@ class PacientesController extends Controller
                             number_format($dataServ->pagado, 2, ',', '.') .
                             '</td>' .
                             '<td class="text-truncate" style="vertical-align: middle; ">' .
-                            $dataServ->estado_pago .
+                            $dataServ->estado_serv .
                             '</td>' .
                             '<td class="text-truncate" style="vertical-align: middle; ">$ ' .
                             number_format($saldo, 2, ',', '.')  .
@@ -353,7 +357,8 @@ class PacientesController extends Controller
 
             if (request()->ajax()) {
                 return response()->json([
-                    'detaTrata' => $detaTrata
+                    'detaTrata' => $detaTrata,
+                    'saldo_previo' => $tratamiento->saldo_previo
                 ]);
             }
         } else {
@@ -628,11 +633,16 @@ class PacientesController extends Controller
     {
         if (Auth::check()) {
             $data = request()->all();
-
+         
             $transaccion = Tratamientos::guardarTransaccion($data);
-
-            $mediPago = Tratamientos::guardarMedisPago($data);
+            
+            $mediPago = Tratamientos::guardarMediosPago($data,$transaccion);
         
+            $pagoServ = Servicios::updateSaldoServicio($data);
+
+            $updatetrata = Tratamientos::updateTrata($data['tratamientoSel'],$pagoServ);
+
+            dd($pagoServ);
             
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
