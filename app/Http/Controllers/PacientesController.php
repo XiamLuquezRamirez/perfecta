@@ -628,7 +628,11 @@ class PacientesController extends Controller
     {
         if (Auth::check()) {
             $data = request()->all();
-            dd($data);
+
+            $transaccion = Tratamientos::guardarTransaccion($data);
+
+            $mediPago = Tratamientos::guardarMedisPago($data);
+        
             
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");

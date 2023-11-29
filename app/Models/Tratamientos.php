@@ -27,6 +27,14 @@ class Tratamientos extends Model
         return $respuestaTra;
     }
 
+
+    public static function guardarTransaccion($data){
+
+    }
+    public static function guardarMedisPago($data){
+
+    }
+
     public static function eliminarTrata($trat)
     {
 

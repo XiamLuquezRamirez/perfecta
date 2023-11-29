@@ -88,7 +88,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody id="trDetTratamientos">
-
+ 
                                                 </tbody>
                                             </table>
 
@@ -139,6 +139,8 @@
                                                             name="valorAbono">
                                                         <input type="hidden" value="0" id="totalServText"
                                                             name="totalServText">
+                                                        <input type="hidden" value="no" id="selAbono"
+                                                            name="selAbono">
                                                     </li>
 
                                                 </ul>
@@ -476,10 +478,14 @@
                     let abono = document.getElementById("valorVisAbono");
                     if (elemen.checked) {
                         abono.disabled = false;
+                        $("#selAbono").val("si");
+                        $("#valorAbono").val('0');
+                        $("#valorVisAbono").val('0,00');
                     } else {
                         abono.disabled = true;
                         $("#valorAbono").val('0');
                         $("#valorVisAbono").val('0,00');
+                        $("#selAbono").val("no");
                     }
                 },
                 cammbioMedioPago: function(id) {
