@@ -284,7 +284,8 @@
                                                                         <div class="col-md-3 col-sm-12">
                                                                             <div class="form-group">
                                                                                 <label for="userinput5">Valor:</label>
-                                                                                <input type="text"
+                                                                                <input type="text" 
+                                                                                onclick="this.select();"
                                                                                     onchange="$.cambioFormato(this.id);"
                                                                                     class="form-control" id="valorVis"
                                                                                     name="valorVis">

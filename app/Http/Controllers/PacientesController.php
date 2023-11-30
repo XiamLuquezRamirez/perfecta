@@ -639,10 +639,26 @@ class PacientesController extends Controller
             $mediPago = Tratamientos::guardarMediosPago($data,$transaccion);
         
             $pagoServ = Servicios::updateSaldoServicio($data);
+            $valorTotal = $pagoServ['valorTotal'];
+            $collectServTerm = $pagoServ['collectServTerm'];
 
-            $updatetrata = Tratamientos::updateTrata($data['tratamientoSel'],$pagoServ);
+            foreach ($collectServTerm as $id) {
+                $ServTerm = Servicios::guardarServTerm($id,$transaccion);
+            }
 
-            dd($pagoServ);
+            $updatetrata = Tratamientos::updateTrata($data['tratamientoSel'],$valorTotal);
+
+            //consultas 
+            $servTernminado = Servicios::ConultservTerminado($transaccion);
+            $mediPago = Tratamientos::MediosPago($transaccion);
+
+
+
+            if (request()->ajax()) {
+                return response()->json([
+                   'servTernminado' => $servTernminado,
+                ]);
+            }
             
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");

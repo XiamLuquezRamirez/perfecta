@@ -22,6 +22,26 @@ class Servicios extends Model
         return $respuesta;
     }
 
+    public static function guardarServTerm($ser,$tran){
+        $respuesta = DB::connection('mysql')->table('servicios_abonados')->insertGetId([
+            'transaccion' => $tran,
+            'servicio' => $ser
+         
+        ]);
+
+        return $respuesta;
+    }
+
+    public static function ConultservTerminado($tran) {
+        $serv = DB::connection("mysql")->select("select ser.nombre, st.valor from servicios_abonados sa 
+        left join servicios_tratamiento st on sa.servicio=st.id
+        left join servicios ser on st.servicio=ser.id
+        where sa.transaccion=".$tran);
+
+        return $serv;
+
+    }
+
     public static function editar($request)
     {
         $respuesta = DB::connection('mysql')->table('servicios')->where('id', $request['idServicio'])->update([
@@ -39,6 +59,7 @@ class Servicios extends Model
     $valorAbono = $data['valorAbono'];
     $valorAbonoPrev = $data['valorAbonoPrev'];
     $abonoPrev = 0;
+    $collectServTerm = collect();
   
     if($data['selAbono']=="si"){
         $abonoPrevCal = $valorTotal - $valorAbono;
@@ -65,7 +86,11 @@ class Servicios extends Model
                 'pagado' => $consulSaldo->valor,
                 'estado_pago' => 'Pagado',
             ]);
+            $collectServTerm->push($data["dataIds"][$key]);
         }else{
+            if($valorTotal<0){
+                $valorTotal = 0;
+            }
             $respuesta = DB::connection('mysql')->table('servicios_tratamiento')->where('id', $data["dataIds"][$key])->update([
                 'pagado' => $valorTotal
             ]);
@@ -75,7 +100,12 @@ class Servicios extends Model
         
     }
 
-    return $valorTotal;
+    $resultado = [
+        'valorTotal' => $valorTotal,
+        'collectServTerm' => $collectServTerm->toArray(),
+    ];
+
+    return $resultado;
 
 
   }

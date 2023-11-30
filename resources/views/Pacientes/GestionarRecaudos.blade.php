@@ -131,7 +131,7 @@
 
                                                         <input type="text" disabled valor="0,00"
                                                             onkeypress="return validartxtnum(event)"
-                                                            onchange="$.cambioFormato(this.id);" class="form-control"
+                                                            onchange="$.cambioFormato(this.id);" onclick="this.select();" class="form-control"
                                                             id="valorVisAbono" name="valorVisAbono">
                                                         <input type="hidden" value="10000" id="valorAbonoPrev"
                                                             name="valorAbonoPrev">
@@ -178,6 +178,7 @@
                                                                 <input type="text"
                                                                     onkeypress="return validartxtnum(event)"
                                                                     data-cons="1" valor="0,00"
+                                                                    onclick="this.select();"
                                                                     onchange="$.cambioFormatoPago(this.id);"
                                                                     class="form-control" id="valorVisPago1"
                                                                     name="valorVisPago">
@@ -656,7 +657,7 @@
                         '         <div class="controls">' +
                         '             <label>Valor:</label>' +
                         '             <input type="text"  valor="0,00" data-cons="' + consMedio +
-                        '" onchange="$.cambioFormatoPago(this.id);" class="form-control" id="valorVisPago' +
+                        '" onchange="$.cambioFormatoPago(this.id);" onclick="this.select();" class="form-control" id="valorVisPago' +
                         consMedio + '" name="valorVisPago">' +
                         '             <input type="hidden" class="montMedio" value="0" id="valorPago' +
                         consMedio + '" name="valorPago[]">' +

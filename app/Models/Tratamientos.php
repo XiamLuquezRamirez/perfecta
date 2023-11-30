@@ -42,7 +42,12 @@ class Tratamientos extends Model
         ]);
       
         return $respuesta;
+    }
 
+    public static function MediosPago($tran){
+        $serv = DB::connection("mysql")->select("");
+
+        return $serv;
     }
     
     public static function guardarMediosPago($data,$idTransaccion){
@@ -75,13 +80,19 @@ class Tratamientos extends Model
 
         $consulEstadoServ = DB::connection('mysql')->table('servicios_tratamiento')
         ->where('tratamiento', $idTrata)
+        ->where("estado_pago", "Pendiente")
         ->get();
+
+        if($aboPrev<0){
+            $aboPrev = 0; 
+        }
 
         if($consulEstadoServ->count() > 0){
             $respuesta = DB::connection('mysql')->table('tratamientos')->where('id', $idTrata)->update([
                 'saldo_previo' => $aboPrev
             ]);
         }else{
+
             $respuesta = DB::connection('mysql')->table('tratamientos')->where('id', $idTrata)->update([
                 'saldo_previo' => $aboPrev,
                 'estado_pago' => 'Pagado'
@@ -152,7 +163,7 @@ class Tratamientos extends Model
         LEFT JOIN tratamientos tr ON st.tratamiento= tr.id
         LEFT JOIN profesionales prof ON tr.profesional= prof.id
         LEFT JOIN pacientes pac ON tr.paciente= pac.id
-        WHERE tr.paciente=".$idPac." AND st.estado='ACTIVO'");
+        WHERE tr.paciente=".$idPac." AND st.estado='ACTIVO' AND tr.estado_pago='Pendiente'");
        
         return $respuestaTra;
     }
