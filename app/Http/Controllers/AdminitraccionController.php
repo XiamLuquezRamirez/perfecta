@@ -22,6 +22,7 @@ class AdminitraccionController extends Controller
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
+    
     public function Servicios()
     {
         if (Auth::check()) {
@@ -31,6 +32,17 @@ class AdminitraccionController extends Controller
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
+
+    public function Gastos()
+    {
+        if (Auth::check()) {
+            $bandera = "";
+            return view('Adminitraccion.GestionGastos', compact('bandera'));
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
     public function ValidarProfesional()
     {
         if (Auth::check()) {

@@ -49,6 +49,7 @@ Route::post('/Administracion/BuscarServicio', [AdminitraccionController::class,'
 Route::post('/Administracion/BuscarUsuario', [AdminitraccionController::class,'BuscarUsuario']);
 Route::post('/Administracion/EliminarProfesional', [AdminitraccionController::class,'EliminarProfesional']);
 Route::post('/Administracion/EliminarServicio', [AdminitraccionController::class,'EliminarServicio']);
+Route::get('/Administracion/Gastos', [AdminitraccionController::class,'Gastos']);
 
 
 //GESTIONAR CITAS

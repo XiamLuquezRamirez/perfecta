@@ -131,8 +131,8 @@
 
                                                         <input type="text" disabled valor="0,00"
                                                             onkeypress="return validartxtnum(event)"
-                                                            onchange="$.cambioFormato(this.id);" onclick="this.select();" class="form-control"
-                                                            id="valorVisAbono" name="valorVisAbono">
+                                                            onchange="$.cambioFormato(this.id);" onclick="this.select();"
+                                                            class="form-control" id="valorVisAbono" name="valorVisAbono">
                                                         <input type="hidden" value="10000" id="valorAbonoPrev"
                                                             name="valorAbonoPrev">
                                                         <input type="hidden" value="0" id="valorAbono"
@@ -227,13 +227,203 @@
                                         </div>
                                     </div>
                                 </form>
-                            </div>
-                        </div>
 
+                                <div class="card-content" id="listRecaudoComprobante" style="display: none;">
+                                    <section class="app-invoice-wrapper">
+                                        <div class="row">
+                                            <div class="col-xl-9 col-md-8 col-12 printable-content">
+                                                <!-- using a bootstrap card -->
+                                                <div class="card">
+                                                    <!-- card body -->
+                                                    <div class="card-body p-2">
+                                                        <!-- card-header -->
+                                                        <div class="card-header px-0">
+                                                            <div class="row">
+                                                                <div class="col-md-12 col-lg-7 col-xl-4 mb-50">
+                                                                    <span class="invoice-id font-weight-bold">Comprobante#
+                                                                    </span>
+                                                                    <span id="ncompro"></span>
+                                                                </div>
+                                                                <div class="col-md-12 col-lg-5 col-xl-8">
+                                                                    <div
+                                                                        class="d-flex align-items-center justify-content-end justify-content-xs-start">
+                                                                        <div class="issue-date pr-2">
+                                                                            <span class="font-weight-bold no-wrap">Fecha de
+                                                                                creación: </span>
+                                                                            <span id="fcreacion">07/02/2019</span>
+                                                                        </div>
+                                                                        <div class="due-date">
+                                                                            <span class="font-weight-bold no-wrap">Fecha de
+                                                                                impresión: </span>
+                                                                            <span id="fimpresion">06/04/2019</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- invoice logo and title -->
+                                                        <div class="invoice-logo-title row py-2">
+                                                            <div
+                                                                class="col-6 d-flex flex-column justify-content-center align-items-start">
+                                                                <h2 class="text-primary">Comprobante de pago</h2>
+                                                                <span>PERFECTA S.A.S</span>
+                                                            </div>
+                                                            <div class="col-6 d-flex justify-content-end invoice-logo">
+                                                                <img src="{{ asset('app-assets/images/logo/stack-logo-light.png') }}"
+                                                                    alt="company-logo" height="46" width="164">
+                                                            </div>
+                                                        </div>
+                                                        <hr>
+
+                                                        <!-- invoice address and contacts -->
+                                                        <div class="row invoice-adress-info py-2">
+                                                            <div class="col-12 mt-1 from-info">
+                                                                <div class="info-title mb-1">
+                                                                    <span class="font-weight-bold no-wrap" style="font-size: 20px;">Paciente</span>
+                                                                </div>
+                                                                <div class="company-name mb-1">
+                                                                    <div class="issue-date pr-2">
+                                                                        <span
+                                                                            class="font-weight-bold no-wrap">Identificación:
+                                                                        </span>
+                                                                        <span id="nidentificacion"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="company-address mb-1">
+                                                                    <span class="font-weight-bold no-wrap">Nombre Paciente:
+                                                                    </span>
+                                                                    <span id="npaciente"></span>
+                                                                </div>
+
+
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="row invoice-adress-info py-2">
+                                                            <div class="col-6 mt-1 from-info">
+                                                                <div class="info-title mb-1">
+                                                                    <span class="font-weight-bold no-wrap" style="font-size: 20px;" >Tratamiento</span>
+                                                                </div>
+                                                                <div class="company-name mb-1">
+                                                                    <span class="font-weight-bold no-wrap">Descripción:
+                                                                    </span>
+                                                                    <span id="ntratamiento"></span>
+                                                                </div>
+                                                                <div class="company-email  mb-1 mb-1">
+                                                                    <span class="font-weight-bold no-wrap">Profesional:
+                                                                    </span>
+                                                                    <span id="nprofesional"></span>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="col-6 mt-1 to-info">
+                                                                <div class="info-title mb-1">
+                                                                    <span>&nbsp;</span>
+                                                                </div>
+                                                                <div class="company-name mb-1">
+                                                                    <span class="font-weight-bold no-wrap">Abono: </span>
+                                                                    <span id="valorAbonoComp"></span>
+                                                                </div>
+                                                                <div class="company-name mb-1">
+                                                                    <span class="font-weight-bold no-wrap"></span>
+                                                                    <span></span>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+
+                                                        <!--product details table -->
+                                                        <h4>Detalles medio de pago</h4>
+                                                        <div class="product-details-table py-2 table-responsive">
+                                                            <table class="table table-borderless">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th scope="col">Medio de pago</th>
+                                                                        <th scope="col">Valor</th>
+                                                                        <th scope="col">Referencia de pago</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="tr-medioPago">
+
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <hr>
+                                                        <h4 id="titServAbon" style="display: none;">Detalles de servicios
+                                                            abonados</h4>
+                                                        <div id="tablaServAbon" style="display: none;"
+                                                            class="product-details-table py-2 table-responsive">
+                                                            <table class="table table-borderless">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th scope="col">#</th>
+                                                                        <th scope="col">Servicio</th>
+                                                                        <th scope="col">Valor</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="tr-servAbonado">
+
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <hr>
+                                                        <!-- invoice total -->
+                                                        <div class="invoice-total py-2">
+                                                            <div class="row">
+                                                                <div class="col-4 col-sm-6 mt-75">
+
+                                                                </div>
+                                                                <div
+                                                                    class="col-8 col-sm-6 d-flex justify-content-end mt-75">
+                                                                    <ul class="list-group cost-list">
+                                                                        <li
+                                                                            class="list-group-item each-cost border-0 p-50 d-flex justify-content-between">
+                                                                            <span
+                                                                                class="font-weight-bold no-wrap mr-2">Valor
+                                                                                Total: </span>
+                                                                            <span class="cost-value"
+                                                                                id="vtotal"></span>
+                                                                        </li>
+                                                                        <li class="dropdown-divider"></li>
+
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- buttons section -->
+                                            <div class="col-xl-3 col-md-4 col-12 action-btns">
+                                                <div class="card">
+                                                    <div class="card-body p-2">
+                                                        <a onclick="$.imprimirComprobante();"
+                                                            class="btn btn-info btn-block mb-1 print-invoice"> <i
+                                                                class="feather icon-printer mr-25 common-size"></i>
+                                                            Imprimir</a>
+                                                        <a onclick="$.otroPago();"
+                                                            class="btn btn-success btn-block mb-1"><i
+                                                                class="feather icon-credit-card mr-25 common-size"></i>
+                                                            Otro Pago</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
                     </section>
+
+
                 </div>
             </div>
         </div>
+
+    </section>
+    </div>
+    </div>
+    </div>
     </section>
 
     <div id="loader" class="loader-spinner" style="display: none;">
@@ -292,7 +482,7 @@
 
                     let tratamientos = '';
 
-             
+
 
                     $.ajax({
                         type: "POST",
@@ -344,7 +534,21 @@
                     });
 
                     $.checkRecaudos();
+                },
 
+                otroPago: function() {
+                    var datTratameintos = document.getElementById(
+                        'div-datTratameintos'
+                    ); // Reemplaza 'miDiv' con el ID de tu div
+                    datTratameintos.style.filter = 'none';
+                    let idPac = $("idPac").val();
+                   
+
+                    $.atrasTratamiento();
+                    $.buscInfTratamientos(idPac);
+                },
+                imprimirComprobante: function() {
+                    alert("Imprimir comprobante");
                 },
                 checkRecaudos: function() {
                     $(".icheck-activity").iCheck({
@@ -383,6 +587,7 @@
                     //secciones
                 },
                 recorrerServ: function() {
+                
                     var checkServ = document.getElementsByClassName('icheck-activity-det');
                     var sumTotal = 0;
                     $("#totalServ").html("0,00");
@@ -402,10 +607,29 @@
                     let gtotal = sumTotal - parseInt($("#valorAbonoPrev").val());
                     $("#totalPago").html(formatCurrency(gtotal, 'es-CO', 'COP'));
                     $("#totalServText").val(gtotal);
+
+
+                    let abono = document.getElementById("checkAbono");
+                    if (abono.checked) {
+                        $("#valorVisPago1").val(formatCurrency($("#valorAbono").val(), 'es-CO', 'COP'));
+                        $("#valorPago1").val($("#valorAbono").val());
+                    } else {
+                        $("#valorVisPago1").val(formatCurrency(gtotal, 'es-CO', 'COP'));
+                        $("#valorPago1").val(gtotal);
+                    }
+
+
+
                 },
                 atrasTratamiento: function() {
                     $("#pagoRecaudo").hide();
                     $("#listRecaudo").show();
+                    $("#listRecaudoComprobante").hide();
+                    $("#totalServ").html("0,00");
+                    $("#totalPago").html("0,00");
+                    $("#valorAbono").val("0");
+                    $("#totalServText").val("0");
+                    $("#selAbono").val("no");
                 },
                 pagarTratamiento: function() {
 
@@ -451,7 +675,8 @@
                         success: function(respuesta) {
                             $("#trDetTratamientos").html(respuesta.detaTrata);
                             $("#valorAbonoPrev").val(respuesta.saldo_previo);
-                            $("#totalAbono").html(formatCurrency(respuesta.saldo_previo,  'es-CO', 'COP'));
+                            $("#totalAbono").html(formatCurrency(respuesta.saldo_previo,
+                                'es-CO', 'COP'));
                         }
                     });
 
@@ -487,6 +712,11 @@
                     var formatoMoneda = formatCurrency(numero, 'es-CO', 'COP');
                     $("#valorVisAbono").val(formatoMoneda);
 
+                    $("#valorVisPago1").val(formatCurrency(numero, 'es-CO', 'COP'));
+                    $("#valorPago1").val(numero);
+
+
+
                 },
                 cambioFormatoPago: function(id) {
                     var numero = $("#" + id).val();
@@ -503,12 +733,20 @@
                         $("#selAbono").val("si");
                         $("#valorAbono").val('0');
                         $("#valorVisAbono").val('0,00');
+                        $("#valorVisPago1").val(formatCurrency(0, 'es-CO', 'COP'));
+                        $("#valorPago1").val(0);
                     } else {
                         abono.disabled = true;
                         $("#valorAbono").val('0');
                         $("#valorVisAbono").val('0,00');
                         $("#selAbono").val("no");
+
+                        $("#valorVisPago1").val(formatCurrency($("#totalServText").val(), 'es-CO', 'COP'));
+                        $("#valorPago1").val($("#totalServText").val());
+                       
                     }
+
+                  
                 },
                 cammbioMedioPago: function(id) {
                     let val = $("#medioPago" + id).val();
@@ -612,8 +850,66 @@
                                     buttonsStyling: false
                                 });
 
-                                var loader = document.getElementById('loader');
-                                loader.style.display = 'none';
+                                $("#ncompro").html(agregarCeros(respuesta.transaccion.id, 5));
+                                $("#fcreacion").html(convertirFormatoFechaHora(respuesta
+                                    .transaccion.created_at));
+                                $("#fimpresion").html(convertirFormatoFechaHora(
+                                    new Date()));
+
+                                $("#nidentificacion").html(respuesta.tratamiento
+                                    .identificacion);
+                                $("#npaciente").html(respuesta.tratamiento.npaciente + ' ' +
+                                    respuesta.tratamiento.apellido);
+
+                                $("#ntratamiento").html(respuesta.tratamiento.nombre);
+                                $("#nprofesional").html(respuesta.tratamiento.nprofe);
+                                $("#valorAbonoComp").html(formatCurrency(respuesta.transaccion
+                                    .pago_total, 'es-CO', 'COP'));
+
+                                //listar medio de pago
+                                let medioPago = '';
+                                let vtotal = 0;
+                                let referencia = '';
+                                $.each(respuesta.medioPago, function(i, item) {
+                                    referencia = item.referencia = item.referencia !== null ? item.referencia : "---";
+                                    medioPago += '<tr>' +
+                                        '<td>' + item.medpago + '</td>' +
+                                        '<td class="font-weight-bold">' +
+                                        formatCurrency(item.valor, 'es-CO', 'COP') +
+                                        '</td>' +
+                                        '<td>' + referencia + '</td>'
+                                    '</tr>';
+                                    vtotal = vtotal + item.valor;
+                                });
+                                $("#tr-medioPago").html(medioPago);
+
+                                //Listar servicios pagados con la transaccion
+                                if (respuesta.servTerminado.length > 0) {
+                                    $("#titServAbon").show();
+                                    $("#tablaServAbon").show();
+
+                                    let servAbonado = '';
+                                    $.each(respuesta.servTerminado, function(i, item) {
+                                        servAbonado += '<tr>' +
+                                            '<td>' + i + 1 + '</td>' +
+                                            '<td>' + item.nombre + '</td>' +
+                                            '<td class="font-weight-bold">' +
+                                            formatCurrency(item.valor, 'es-CO',
+                                                'COP') +
+                                            '</td>' +
+                                            '</tr>';
+                                    });
+
+                                    $("#tr-servAbonado").html(servAbonado);
+                                }
+
+                                $("#vtotal").html(formatCurrency(vtotal, 'es-CO', 'COP'));
+
+
+                                $("#pagoRecaudo").hide();
+                                $("#listRecaudo").hide();
+                                $("#listRecaudoComprobante").show();
+
                             }
                         },
                         error: function() {
@@ -706,7 +1002,6 @@
 
             });
             var editorEvolucion = CKEDITOR.instances.evolucion_escrita;
-
         });
 
         function formatCurrency(number, locale, currencySymbol) {
@@ -725,6 +1020,45 @@
             //        tecla = 44;
             //    }
             return (patron.test(te) || tecla == 9 || tecla == 8 || tecla == 37 || tecla == 39 || tecla == 44);
+        }
+
+        function convertirFormatoFechaHora(fechaHoraString) {
+            // Parsear la cadena de fecha y hora a un objeto Date
+            let fechaHora = new Date(fechaHoraString);
+
+            // Obtener los componentes de la fecha
+            let dia = fechaHora.getUTCDate();
+            let mes = fechaHora.getUTCMonth() + 1; // Los meses en JavaScript son indexados desde 0
+            let anio = fechaHora.getUTCFullYear();
+
+            // Formatear la cadena de fecha en el formato deseado
+            let fechaFormateada = `${dia}/${mes}/${anio}`;
+
+            // Obtener los componentes de la hora
+            let horas = fechaHora.getUTCHours();
+            let minutos = fechaHora.getUTCMinutes();
+            let segundos = fechaHora.getUTCSeconds();
+
+            // Formatear la cadena de hora en el formato deseado
+            let horaFormateada = `${horas}:${minutos}:${segundos}`;
+
+            // Obtener el formato AM/PM
+            let ampm = horas >= 12 ? 'PM' : 'AM';
+
+            // Ajustar las horas al formato de 12 horas
+            horas = horas % 12;
+            horas = horas ? horas : 12; // 0 debería mostrar como 12 en formato de 12 horas
+
+            // Formatear la cadena completa de fecha y hora
+            let fechaHoraFormateada = `${fechaFormateada} ${horaFormateada}`;
+
+            return fechaHoraFormateada;
+        }
+
+
+
+        function agregarCeros(numero, longitud) {
+            return numero.toString().padStart(longitud, '0');
         }
 
 

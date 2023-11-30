@@ -15,7 +15,7 @@
             </li>
             <li id="MenAdmin" class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="feather icon-sliders"></i><span data-i18n="Apps">Administracción</span></a>
                 <ul class="dropdown-menu">
-                    <li id="MenAdminGasto"  data-menu=""><a class="dropdown-item" href="app-email.html" data-i18n="Email Application" data-toggle="dropdown">Gestión de Gastos</a>
+                    <li id="MenAdminGasto"  data-menu=""><a class="dropdown-item" href="{{ url('/Administracion/Gastos') }}" data-i18n="Email Application" data-toggle="dropdown">Gestión de Gastos</a>
                     </li>
                     <li  id="MenAdminServicios"  data-menu=""><a class="dropdown-item" href="{{ url('/Administracion/Servicios') }}" data-i18n="Chat Application" data-toggle="dropdown">Gestión de Servicios</a>
                     </li>

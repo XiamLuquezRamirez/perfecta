@@ -45,7 +45,13 @@ class Tratamientos extends Model
     }
 
     public static function MediosPago($tran){
-        $serv = DB::connection("mysql")->select("");
+        $serv = DB::connection("mysql")->select("SELECT  CASE WHEN medio_pago = 'e' THEN 'Efectivo' 
+        WHEN medio_pago = 'tc' THEN 'Tarjeta de crédito'
+        WHEN medio_pago = 'td' THEN 'Tarjeta de débito' 
+        WHEN medio_pago = 't' THEN 'Transferencia' 
+        END AS medpago, valor, referencia
+         FROM medio_pagos_tratamiento  
+        WHERE  transaccion=".$tran);
 
         return $serv;
     }
@@ -125,6 +131,14 @@ class Tratamientos extends Model
         return $respuestaTra;
     }
 
+    public static function buscTransaccion($tran)
+    {
+        $respuestaTra = DB::connection('mysql')->table('transaccion')
+            ->where('id', $tran)
+            ->first();
+        return $respuestaTra;
+    }
+
     public static function consulAllServ($idTrat)
     {
         $respuestaTra = DB::connection('mysql')->table('servicios_tratamiento')
@@ -142,6 +156,16 @@ class Tratamientos extends Model
             ->leftJoin("profesionales", "profesionales.id", "tratamientos.profesional")
             ->select("tratamientos.*", "profesionales.nombre AS nprofe")
             ->get();
+        return $respuestaTra;
+    }
+    public static function busTatamientoRecaudo($trata)
+    {
+        $respuestaTra = DB::connection('mysql')->table('tratamientos')
+            ->leftJoin("profesionales", "profesionales.id", "tratamientos.profesional")
+            ->leftJoin("pacientes", "pacientes.id", "tratamientos.paciente")
+            ->select("tratamientos.*", "profesionales.nombre AS nprofe","pacientes.nombre AS npaciente","pacientes.apellido", "pacientes.identificacion")
+            ->where("tratamientos.id", $trata)
+            ->first();
         return $respuestaTra;
     }
 

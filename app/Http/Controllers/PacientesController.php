@@ -649,14 +649,18 @@ class PacientesController extends Controller
             $updatetrata = Tratamientos::updateTrata($data['tratamientoSel'],$valorTotal);
 
             //consultas 
-            $servTernminado = Servicios::ConultservTerminado($transaccion);
-            $mediPago = Tratamientos::MediosPago($transaccion);
-
+            $servTerminado = Servicios::ConultservTerminado($transaccion);
+            $medioPago = Tratamientos::MediosPago($transaccion);
+            $tratamiento = Tratamientos::busTatamientoRecaudo($data['tratamientoSel']);
+            $transaccion = Tratamientos::buscTransaccion($transaccion);
 
 
             if (request()->ajax()) {
                 return response()->json([
-                   'servTernminado' => $servTernminado,
+                   'servTerminado' => $servTerminado,
+                   'medioPago' => $medioPago,
+                   'tratamiento' => $tratamiento,
+                   'transaccion' => $transaccion
                 ]);
             }
             
