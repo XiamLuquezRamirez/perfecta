@@ -3,6 +3,7 @@
 @section('Contenido')
     <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
     <input type="hidden" id="Ruta" data-ruta="{{ asset('/app-assets/') }}" />
+    <input type="hidden" id="conTrata" name="conTrata" value="" />
     <div class="content-header row">
         <div class="content-header-left col-md-6 col-12 mb-2">
             <h3 class="content-header-title mb-0">Gestionar Pacientes</h3>
@@ -95,13 +96,13 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link d-flex disabled" id="account-pill-tratamiento" data-toggle="pill"
+                                    <a class="nav-link d-flex disabled"  onclick="$.cargarTratamientos();" id="account-pill-tratamiento" data-toggle="pill"
                                         href="#account-vertical-tratamiento" aria-expanded="false">
                                         <i class="fa fa-universal-access"></i>
                                         Tratamientos
                                     </a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item" style="display: none;">
                                     <a class="nav-link d-flex disabled" id="account-pill-recaudos" data-toggle="pill"
                                         href="#account-vertical-recaudos" aria-expanded="false">
                                         <i class="fa fa-calculator"></i>
@@ -595,105 +596,33 @@
                                             </div>
                                             <div class="tab-pane fade " id="account-vertical-tratamiento" role="tabpanel"
                                                 aria-labelledby="account-pill-social" aria-expanded="false">
-                                                <form>
-                                                    <div class="card-header">
-                                                        <h4 class="card-title">Planes de tratamiento</h4>
-                                                        <div class="heading-elements mt-0">
-                                                            <button class="btn btn-primary btn-md" data-toggle="modal" data-target="#AddContactModal"><i class="d-md-none d-block feather icon-plus white"></i>
-                                                                <span class="d-md-block d-none"> <li class="fa fa-share"></li> Ir a tratamientos</span></button>
-                                                            <span class="dropdown">
-                                                                <button id="btnSearchDrop1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-warning dropdown-menu-right dropdown-toggle btn-md">
-                                                                    <i class="fa fa-eye white"></i> </button>
-                                                                <span aria-labelledby="btnSearchDrop1" class="dropdown-menu dropdown-menu-right mt-1" x-placement="bottom-end" style="position: absolute; transform: translate3d(-108px, 32px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                                                    <a href="#" class="dropdown-item"><i class="fa fa-eye"></i> Todos los tratamientos</a>
-                                                                    <a href="#" class="dropdown-item"><i class="fa fa-eye"></i> Tratamietos Activos</a>
-                                                                    <a href="#" class="dropdown-item"><i class="fa fa-eye"></i> Tratamietos finalizados</a>
-                                                                </span>
-                                                            </span>
-                                                            <button class="btn btn-default btn-sm"><i class="feather icon-settings white"></i></button>
+                                                <div class="card-content">
+                                                    <div class="card-body" id="listTratamientos">
+                                                        <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">Tratamientos Activos
+                                                        </h4>
+                                                        <hr>
+                                                        <div class="col-xxl-8 col-xl-12 col-lg-12 col-md-12 col-12">
+                                                            <div class="card info-time-tracking">
+                                                                <div class="card-content" id="div-trata-act">
+            
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    </div>
-
-                                                    <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">Tratamientos Activos</h4>
-                                                    <hr>
-
-                                                    <div class="col-xxl-8 col-xl-12 col-lg-12 col-md-12 col-12">
-                                                        <div class="card info-time-tracking">
-                                                            <div class="card-content">
-                                                                <div class="row">
-                                                                    <div class="col-12 pt-2 pb-2 border-bottom-blue-grey border-bottom-lighten-5">
-                                                                        <div class="info-time-tracking-title d-flex justify-content-between align-items-center">
-                                                                            <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">Tratamiento de depilacion laser</h4>
-                                                                       
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-12">
-                                                                        <div class="card-body">
-                                                                            <div class="row justify-content-center align-items-center">
-                                                                                <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">
-                                                                                    <h6 class="pt-1"><span class="fa fa-user"></span> Profesional:</h6>
-                                                                                    <p>Mairen Pumarejo</p>
-                                                                                </div>
-                                                                                <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">
-                                                                                    <h6 class="pt-1"><span class="fa fa-th-large"></span> Especialidad:</h6>
-                                                                                    <p>Consulta General</p>
-                                                                                </div>
-                                                                                <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">
-                                                                                    <h6 class="pt-1"><span class="fa fa-calendar"></span> Ultima Cita:</h6>
-                                                                                    <p>23/11/2023 08:00 AM</p>
-                                                                                </div>
-                                                                                <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">
-                                                                                    <div id="general_task_radial_bar_chart"></div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
+            
+                                                        <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">Otros Tratamientos
+                                                        </h4>
+                                                        <hr>
+            
+                                                        <div class="col-xxl-8 col-xl-12 col-lg-12 col-md-12 col-12">
+                                                            <div class="card info-time-tracking">
+                                                                <div class="card-content" id="div-trata-otr">
+            
+            
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-
-                                                    <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">Otros Tratamientos</h4>
-                                                    <hr>
-
-                                                    <div class="col-xxl-8 col-xl-12 col-lg-12 col-md-12 col-12">
-                                                        <div class="card info-time-tracking">
-                                                            <div class="card-content">
-                                                                <div class="row">
-                                                                    <div class="col-12 pt-2 pb-2 border-bottom-blue-grey border-bottom-lighten-5">
-                                                                        <div class="info-time-tracking-title d-flex justify-content-between align-items-center">
-                                                                            <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">Tratamiento de depilacion laser</h4>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-12">
-                                                                        <div class="card-body">
-                                                                            <div class="row justify-content-center align-items-center">
-                                                                                <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">
-                                                                                    <h6 class="pt-1"><span class="fa fa-user"></span> Profesional:</h6>
-                                                                                    <p>Mairen Pumarejo</p>
-                                                                                </div>
-                                                                                <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">
-                                                                                    <h6 class="pt-1"><span class="fa fa-th-large"></span> Especialidad:</h6>
-                                                                                    <p>Consulta General</p>
-                                                                                </div>
-                                                                                <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">
-                                                                                    <h6 class="pt-1"><span class="fa fa-calendar"></span> Ultima Cita:</h6>
-                                                                                    <p>15/11/2023 09:00 AM</p>
-                                                                                </div>
-                                                                                <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">
-                                                                                    <div id="general_task_radial_bar_chart2"></div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                     </div>
-
-
-
-                                                </form>
                                             </div>
                                             <div class="tab-pane fade" id="account-vertical-recaudos" role="tabpanel"
                                                 aria-labelledby="account-pill-connections" aria-expanded="false">
@@ -770,6 +699,11 @@
         <!-- Tus campos del formulario aquí -->
     </form>
 
+    <form action="{{ url('/AdminPacientes/CargarDatosPacTrat') }}" id="formCargarDatosPacTrat" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+
 @endsection
 
 @section('scripts')
@@ -799,86 +733,6 @@
                 checkboxClass: 'icheckbox_flat-green',
                 radioClass: 'iradio_flat-green'
             });
-
-            var general_task_radial_bar_chart_options = {
-                chart: {
-                  height: 145,
-                  width: 170,
-                  type: 'radialBar',
-                  offsetY: 30,
-                  toolbar: {
-                    show: false
-                  }
-                },
-            
-                plotOptions: {
-                  radialBar: {
-                    hollow: {
-                      margin: 0,
-                      size: '80%',
-                    },
-                    track: {
-                      background: '#eee',
-                      strokeWidth: '80%',
-                      margin: 0, // margin is in pixels
-            
-                    },
-            
-                    dataLabels: {
-                      showOn: 'always',
-                      name: {
-                        show: false,
-                      },
-                      value: {
-                        formatter: function (val) {
-                          return parseInt(val) + '%';
-                        },
-                        offsetY: 8,
-                        color: $info,
-                        fontSize: '20px',
-                        show: true,
-                      }
-                    }
-                  }
-                },
-                responsive: [
-                  {
-                    breakpoint: 768,
-                    options: {
-                      chart: {
-                        width: 80,
-                        offsetX: -15
-                      },
-                      legend: {
-                        show: false
-                      }
-                    }
-                  }
-                ],
-                fill: {
-                  colors: [$primary]
-                },
-                series: [67],
-                stroke: {
-                  lineCap: 'flat'
-                },
-                labels: ['Percent'],
-            
-              }
-            
-              var general_task_radial_bar_chart = new ApexCharts(
-                document.querySelector("#general_task_radial_bar_chart"),
-                general_task_radial_bar_chart_options
-              );
-            
-              var general_task_radial_bar_chart2 = new ApexCharts(
-                document.querySelector("#general_task_radial_bar_chart2"),
-                general_task_radial_bar_chart_options
-              );
-            
-              general_task_radial_bar_chart.render();
-              general_task_radial_bar_chart2.render();
-            
 
             let fechaHoraSelCita;
             let fechaHoraInicio;
@@ -1269,12 +1123,12 @@
                         return;
                     }
 
-                    const notifCliente = document.getElementById('notifCliente');
+                    let notifCliente = document.getElementById('notifCliente');
 
                     if (notifCliente.checked) {
-                        notifCliente = "si";
+                        notifClie = "si";
                     } else {
-                        notifCliente = "no";
+                        notifClie = "no";
                     }
 
                     var loader = document.getElementById('loader');
@@ -1296,8 +1150,9 @@
                     form.append("<input type='hidden' id='idpac' name='idpac'  value='" + idPac +
                         "'>");
                     form.append("<input type='hidden' id='notCliente' name='notCliente'  value='" +
-                        notifCliente +
+                    notifClie +
                         "'>");
+                        form.append("<input type='hidden' id='opc' name='opc'  value='2'>");
 
                     $.ajax({
                         type: "POST",
@@ -1535,7 +1390,7 @@
                         dataType: "json",
                         success: function(response) {
                             $.each(response.CitasPaciente, function(i, item) {
-                                citas += '<td><span class="invoice-amount">' + item.motivo + '</span></td>';
+                                citas += '<tr><td><span class="invoice-amount">' + item.motivo + '</span></td>';
                                 citas += '<td><span class="invoice-amount">' + item.nomprof  + '</span></td>';
                                 var fechaHora = $.convertirFormato(item.inicio);
                                 citas += '<td><span class="invoice-amount">' + fechaHora+ '</span></td>';
@@ -1545,7 +1400,7 @@
                                     +'<option value="Confirmada" class="confirmada">Confirmada</option>'
                                     +'<option value="No Confirmada" class="no-confirmada">No Confirmada</option>'
                                     +'<option value="Anulada" class="anulada">Anulada</option>'
-                                    +'</select></span></td>';
+                                    +'</select></span></td></tr>';
                             });
 
                         
@@ -1553,6 +1408,139 @@
                     });
 
                     $("#trRegistrosCitas").html(citas)
+                },
+                cargarTratamientos: function() {
+                  var idPac = $("#idPac").val();
+                  $.buscInfGeneralPaciente(idPac);
+
+                },
+                buscInfGeneralPaciente: function(pac) {
+                    $("#idPaciente").val(pac);
+                    $("#div-trata-act").html('');
+                    var form = $("#formCargarDatosPacTrat");
+                    $("#pacTrat").remove();
+                    form.append("<input type='hidden' id='pacTrat' name='pacTrat'  value='" + pac +
+                        "'>");
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                           
+                            ////datos tratamiento activos
+                            let tratAct = '';
+                            let consTrata = 1;
+                            $("#div-trata-act").html('');
+
+                            $.each(respuesta.tratamientosAct, function(i, item) {
+                                tratAct = '<div id="tratamiento'+item.id+'" class="row">' +
+                                    '<div class="col-12 pt-2 pb-2 border-bottom-blue-grey border-bottom-lighten-5">' +
+                                    '    <div class="info-time-tracking-title d-flex justify-content-between align-items-center">' +
+                                    '        <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">' +
+                                    '            ' + item.nombre + '</h4>' +
+
+                                    '    </div>' +
+                                    '</div>' +
+                                    '<div class="col-12 hvr-grow-shadow" style="cursor: pointer;">' +
+                                    '    <div class="card-body ">' +
+                                    '        <div class="row justify-content-center align-items-center">' +
+                                    '            <div class="col-xl-4 col-lg-6 col-md-12 text-center clearfix">' +
+                                    '                <h6 class="pt-1"><span' +
+                                    '                        class="fa fa-user"></span> Profesional:' +
+                                    '                </h6>' +
+                                    '                <p>Mairen Pumarejo</p>' +
+                                    '            </div>' +
+                                    '            <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">' +
+                                    '                <h6 class="pt-1"><span' +
+                                    '                        class="fa fa-th-large"></span>' +
+                                    '                    Especialidad:</h6>' +
+                                    '                <p>' + item.especialidad +
+                                    '</p>' +
+                                    '            </div>' +
+                                    '            <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">' +
+                                    '                <h6 class="pt-1"><span' +
+                                    '                        class="fa fa-calendar"></span> Fecha última atención</h6>' +
+                                    '                <p>---</p>' +
+                                    '            </div>' +
+                                    '            <div class="col-xl-2 col-lg-6 col-md-12 text-center clearfix">' +
+                                    '                <div id="outerCircleTrata' +
+                                    consTrata + '" class="outerCircleTrata"' +
+                                    '                style="display: flex; justify-content: center; align-items: center; padding: 0; height: 50px; width: 50px; border-radius: 100%; background-image: conic-gradient(rgb(36, 190, 192) 0deg, rgb(36, 190, 192) 0deg, rgb(240, 240, 240) 0deg);">' +
+                                    '                <div style="display: flex; justify-content: center; align-items: center; padding: 0; height: 40px; width: 40px; border-radius: 100%; background-color:white">' +
+                                    '                    <span id="porcentajeTrata' +
+                                    consTrata + '">0%</span>' +
+                                    '                </div>' +
+                                    '            </div>' +
+                                    '           </div>' +
+                                    '        </div>' +
+                                    '    </div>' +
+                                    '</div>' +
+                                    '</div>';
+                                $("#div-trata-act").append(tratAct);
+                                updatePercentageTratamientos(0, consTrata);
+                                consTrata++;
+                            });
+
+                            $('#conTrata').val(consTrata);
+                            ////datos otros tratamiento
+                            let tratOtr = '';
+                            let consTrataOtro = 1;
+
+                            $.each(respuesta.tratamientosOtr, function(i, item) {
+                                tratOtr += '<div class="row">' +
+                                    '<div class="col-12 pt-2 pb-2 border-bottom-blue-grey border-bottom-lighten-5">' +
+                                    '    <div class="info-time-tracking-title d-flex justify-content-between align-items-center">' +
+                                    '        <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">' +
+                                    '            ' + item.nombre + '</h4>' +
+                                    '    </div>' +
+                                    '</div>' +
+                                    '<div class="col-12 hvr-grow-shadow" style="cursor: pointer;">' +
+                                    '    <div class="card-body ">' +
+                                    '        <div class="row justify-content-center align-items-center">' +
+                                    '            <div class="col-xl-4 col-lg-6 col-md-12 text-center clearfix">' +
+                                    '                <h6 class="pt-1"><span' +
+                                    '                        class="fa fa-user"></span> Profesional:' +
+                                    '                </h6>' +
+                                    '                <p>Mairen Pumarejo</p>' +
+                                    '            </div>' +
+                                    '            <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">' +
+                                    '                <h6 class="pt-1"><span' +
+                                    '                        class="fa fa-th-large"></span>' +
+                                    '                    Especialidad:</h6>' +
+                                    '                <p>' + item.especialidad +
+                                    '            </p>' +
+                                    '            </div>' +
+                                    '            <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">' +
+                                    '                <h6 class="pt-1"><span' +
+                                    '                        class="fa fa-calendar"></span> Fecha última atención</h6>' +
+                                    '                <p>---</p>' +
+                                    '            </div>' +
+                                    '            <div class="col-xl-2 col-lg-6 col-md-12 text-center clearfix">' +
+                                    '                <div id="outerCircleTrata' +
+                                    consTrataOtro + '" class="outerCircleTrata"' +
+                                    '                style="display: flex; justify-content: center; align-items: center; padding: 0; height: 50px; width: 50px; border-radius: 100%; background-image: conic-gradient(rgb(36, 190, 192) 0deg, rgb(36, 190, 192) 0deg, rgb(240, 240, 240) 0deg);">' +
+                                    '                <div style="display: flex; justify-content: center; align-items: center; padding: 0; height: 40px; width: 40px; border-radius: 100%; background-color:white">' +
+                                    '                    <span id="porcentajeTrata' +
+                                    consTrataOtro + '">0%</span>' +
+                                    '                </div>' +
+                                    '            </div>' +
+                                    '           </div>' +
+                                    '        </div>' +
+                                    '    </div>' +
+                                    '</div>' +
+                                    '</div>';
+                                $("#div-trata-otr").append(tratOtr);
+                                updatePercentageTratamientos(0, consTrataOtro);
+                                consTrataOtro++;
+                            });
+                        }
+                    });
                 },
                 convertirFormato: function(fechaHora) {
                     // Crear un objeto Date a partir de la cadena de fecha y hora
@@ -1619,6 +1607,11 @@
             //        tecla = 44;
             //    }
             return (patron.test(te) || tecla == 9 || tecla == 8 || tecla == 37 || tecla == 39 || tecla == 44);
+        }
+        function updatePercentageTratamientos(porcentaje, consTrata) {
+            $('#porcentajeTrata' + consTrata).text(porcentaje + '%');
+            $('#outerCircleTrata' + consTrata).css('background-image',
+                `conic-gradient(#24BEC0 0deg, #24BEC0 ${3.6 * porcentaje}deg, #F0F0F0 ${3.6 * porcentaje}deg)`);
         }
 
         function validartxt(e) {

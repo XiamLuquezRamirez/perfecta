@@ -65,6 +65,8 @@ class PacientesController extends Controller
         }
     }
 
+  
+
     public function AllServicios()
     {
         if (Auth::check()) {

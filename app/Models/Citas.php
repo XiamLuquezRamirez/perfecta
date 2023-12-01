@@ -33,6 +33,14 @@ class Citas extends Model
             ->where('citas.estado', '!=', 'Anulada')
             ->get();
     }
+    public static function AllCitasHoy()
+    {
+        return DB::connection('mysql')->table('citas')
+            ->where('citas.estado', '!=', 'Anulada')
+            ->whereDate('citas.inicio', now()->format('Y-m-d'))
+            ->get();
+    }
+
     public static function buscaDetCitas($idCita)
     {
         return DB::connection('mysql')->table('citas')

@@ -840,6 +840,7 @@
                         processData: false,
                         contentType: false,
                         success: function(respuesta) {
+                            
                             if (respuesta) {
                                 Swal.fire({
                                     type: "success",

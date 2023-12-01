@@ -30,34 +30,44 @@ class Tratamientos extends Model
     }
 
 
-    public static function guardarTransaccion($data){
+    public static function guardarTransaccion($data)
+    {
+        $pagoRealizado = 0;
+        if ($data['selAbono'] == "no") {
+            $pagoRealizado = $data['totalServText'];
+        } else {
+            $pagoRealizado = $data['valorAbono'];
+        }
 
         $respuesta = DB::connection('mysql')->table('transaccion')->insertGetId([
             'tratamiento' => $data['tratamientoSel'],
             'pago_total' => $data['totalServText'],
             'abono_libre' => $data['valorAbono'],
+            'pago_realizado' => $pagoRealizado,
             'usuario' => Auth::user()->id,
             'estado' => 'ACTIVO'
 
         ]);
-      
+
         return $respuesta;
     }
 
-    public static function MediosPago($tran){
+    public static function MediosPago($tran)
+    {
         $serv = DB::connection("mysql")->select("SELECT  CASE WHEN medio_pago = 'e' THEN 'Efectivo' 
         WHEN medio_pago = 'tc' THEN 'Tarjeta de crédito'
         WHEN medio_pago = 'td' THEN 'Tarjeta de débito' 
         WHEN medio_pago = 't' THEN 'Transferencia' 
         END AS medpago, valor, referencia
          FROM medio_pagos_tratamiento  
-        WHERE  transaccion=".$tran);
+        WHERE  transaccion=" . $tran);
 
         return $serv;
     }
-    
-    public static function guardarMediosPago($data,$idTransaccion){
-        
+
+    public static function guardarMediosPago($data, $idTransaccion)
+    {
+
         foreach ($data["medioPago"] as $key => $val) {
             $respuesta = DB::connection('mysql')->table('medio_pagos_tratamiento')->insert([
                 'transaccion' => $idTransaccion,
@@ -69,7 +79,6 @@ class Tratamientos extends Model
         }
 
         return $respuesta;
-
     }
 
     public static function eliminarTrata($trat)
@@ -79,33 +88,33 @@ class Tratamientos extends Model
             'estado_reg' => 'ELIMINADO',
         ]);
         return "ok";
-
     }
 
-    public static function updateTrata($idTrata,$aboPrev){
+    public static function updateTrata($idTrata, $aboPrev)
+    {
 
         $consulEstadoServ = DB::connection('mysql')->table('servicios_tratamiento')
-        ->where('tratamiento', $idTrata)
-        ->where("estado_pago", "Pendiente")
-        ->get();
+            ->where('tratamiento', $idTrata)
+            ->where("estado_pago", "Pendiente")
+            ->get();
 
-        if($aboPrev<0){
-            $aboPrev = 0; 
+        if ($aboPrev < 0) {
+            $aboPrev = 0;
         }
 
-        if($consulEstadoServ->count() > 0){
+        if ($consulEstadoServ->count() > 0) {
             $respuesta = DB::connection('mysql')->table('tratamientos')->where('id', $idTrata)->update([
                 'saldo_previo' => $aboPrev
             ]);
-        }else{
+        } else {
 
             $respuesta = DB::connection('mysql')->table('tratamientos')->where('id', $idTrata)->update([
                 'saldo_previo' => $aboPrev,
                 'estado_pago' => 'Pagado'
             ]);
         }
-        
-       
+
+
         return "ok";
     }
 
@@ -163,7 +172,7 @@ class Tratamientos extends Model
         $respuestaTra = DB::connection('mysql')->table('tratamientos')
             ->leftJoin("profesionales", "profesionales.id", "tratamientos.profesional")
             ->leftJoin("pacientes", "pacientes.id", "tratamientos.paciente")
-            ->select("tratamientos.*", "profesionales.nombre AS nprofe","pacientes.nombre AS npaciente","pacientes.apellido", "pacientes.identificacion")
+            ->select("tratamientos.*", "profesionales.nombre AS nprofe", "pacientes.nombre AS npaciente", "pacientes.apellido", "pacientes.identificacion")
             ->where("tratamientos.id", $trata)
             ->first();
         return $respuestaTra;
@@ -187,9 +196,20 @@ class Tratamientos extends Model
         LEFT JOIN tratamientos tr ON st.tratamiento= tr.id
         LEFT JOIN profesionales prof ON tr.profesional= prof.id
         LEFT JOIN pacientes pac ON tr.paciente= pac.id
-        WHERE tr.paciente=".$idPac." AND st.estado='ACTIVO' AND tr.estado_pago='Pendiente'");
-       
+        WHERE tr.paciente=" . $idPac . " AND st.estado='ACTIVO' AND tr.estado_pago='Pendiente'");
+
         return $respuestaTra;
+    }
+
+    public static function recaudosHoy()
+    {
+        $recaudoHoy = DB::connection('mysql')
+            ->table('transaccion')
+            ->whereDate('created_at', now()->format('Y-m-d'))
+            ->sum('pago_realizado');
+
+
+        return $recaudoHoy;
     }
 
     public static function TratamientosPacientesOtr($idPac)

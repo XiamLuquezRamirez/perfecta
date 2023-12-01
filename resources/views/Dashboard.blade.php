@@ -4,6 +4,7 @@
     <div class="content-header row">
     </div>
     <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
+    <input type="hidden" id="Ruta" data-ruta="{{ asset('/app-assets/') }}" />
 
     <div class="content-body">
         <!-- Grouped multiple cards for statistics starts here -->
@@ -19,7 +20,7 @@
                                         <i class="icon p-1 icon-user customize-icon font-large-2 p-1"></i>
                                     </span>
                                     <div class="stats-amount mr-3">
-                                        <h3 class="heading-text text-bold-600">80</h3>
+                                        <h3 id="cantPacientes" class="heading-text text-bold-600">80</h3>
                                         <p class="sub-heading">Pacientes Activos</p>
                                     </div>
 
@@ -32,7 +33,7 @@
                                         <i class="icon p-1 fa fa-calendar customize-icon font-large-2 p-1"></i>
                                     </span>
                                     <div class="stats-amount mr-3">
-                                        <h3 class="heading-text text-bold-600">25</h3>
+                                        <h3 id="cantCitas" class="heading-text text-bold-600">25</h3>
                                         <p class="sub-heading">Citas hoy</p>
                                     </div>
 
@@ -44,11 +45,11 @@
                                         <i class="icon p-1 fa fa-usd customize-icon font-large-2 p-1"></i>
                                     </span>
                                     <div class="stats-amount mr-3">
-                                        <h3 class="heading-text text-bold-600">$ 350.000</h3>
+                                        <h3 id="recaudoHoy" class="heading-text text-bold-600">$ 0,00</h3>
                                         <p class="sub-heading">Recaudo hoy</p>
                                     </div>
                                     <span class="inc-dec-percentage">
-                                        <small class="success"><i class="fa fa-long-arrow-up"></i> 10.0%</small>
+                                        <small class="success"><i class="fa fa-long-arrow-up"></i> 0%</small>
                                     </span>
                                 </div>
                             </div>
@@ -58,11 +59,11 @@
                                         <i class="icon p-1 fa fa-usd  customize-icon font-large-2 p-1"></i>
                                     </span>
                                     <div class="stats-amount mr-3">
-                                        <h3 class="heading-text text-bold-600">$ 1.500.000</h3>
+                                        <h3 class="heading-text text-bold-600">$ 0,00</h3>
                                         <p class="sub-heading">Recaudo Mes</p>
                                     </div>
                                     <span class="inc-dec-percentage">
-                                        <small class="danger"><i class="fa fa-long-arrow-down"></i> 13.6%</small>
+                                        <small class="danger"><i class="fa fa-long-arrow-down"></i> 0%</small>
                                     </span>
                                 </div>
                             </div>
@@ -516,10 +517,10 @@
                             <div class="media-left pr-1"><span class="avatar avatar-online avatar-sm rounded-circle"
                                     style="width: 60px !important;  height: 60px !important;"><img
                                         src="../../../app-assets/images/FotosPacientes/avatar-s-1.png"
-                                        alt="avatar"><i></i></span></div>
+                                        alt="avatar" id="previewImageDetCita"><i></i></span></div>
                             <div class="media-body media-middle">
-                                <h5 class="media-heading">77097205 - Xiamir Luquez Ramirez</h5>
-                                <p>Edad: 25 Años</p>
+                                <h5 id="npacientedetCita" class="media-heading">77097205 - Xiamir Luquez Ramirez</h5>
+                                <p id="edadDetaCita"></p>
                             </div>
                         </div>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -687,6 +688,10 @@
         <!-- Tus campos del formulario aquí -->
     </form>
     <form action="{{ url('/AdminCitas/VerDetallesCita') }}" id="formVerDetallesCita" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/Administracion/CargarDatos') }}" id="formCargarDatos" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
@@ -1028,7 +1033,7 @@
 
                     });
 
-                    console.log(disponibilidadJSON);
+                  
 
                     fcAgendaViews.removeAllEvents();
                     fcAgendaViews.addEventSource(disponibilidadJSON);
@@ -1442,7 +1447,7 @@
                         dataType: "json",
                         success: function(response) {
                             //datos de citas
-                            console.log(response.detaCita.motivo);
+                          
                             $("#motivoCita").html(response.detaCita.motivo);
                             $("#profesionalCita").html(response.detaCita.nomprof);
                             var nuevoFormatoIni = $.convertirFormato(response.detaCita.inicio);
@@ -1453,6 +1458,7 @@
                             //datos de paciente
                             $("#identificacionCita").html(response.paciente.tipo_identificacion+" "+response.paciente.identificacion);
                             $("#nombreCita").html(response.paciente.nombre+" "+response.paciente.apellido);
+                            $("#npacientedetCita").html(response.paciente.nombre+" "+response.paciente.apellido);
                             $("#sexoCita").html(response.paciente.sexo);
                             var fechNaci = $.convertirFormatoNac(response.paciente.fecha_nacimiento);
                             $("#nacimientoCita").html(fechNaci);
@@ -1460,7 +1466,14 @@
                             $("#telefonoCita").html(response.paciente.telefono);
                             $("#direccionCita").html(response.paciente.direccion);
 
+                            var foto = response.paciente.foto;
+                            const previewImage = document.getElementById('previewImageDetCita');
+                            let url = $('#Ruta').data("ruta");
+                            previewImage.src = url + "/images/FotosPacientes/" + foto;
 
+
+                            var edad = calcularEdad(response.paciente.fecha_nacimiento)
+                            $("#edadDetaCita").html(edad + " Años");
 
                             //datos de tratameintos
 
@@ -1541,10 +1554,31 @@
                 procederCambiarEstado: function(estado){
                     var idcita = $("#idCita").val();
 
+                },
+                cargarDatos: function(){
+                    var form = $("#formCargarDatos");
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            $('#cantPacientes').html(respuesta.pacientes);
+                            $('#cantCitas').html(respuesta.citasHoy);
+                            $('#recaudoHoy').html(formatCurrency(respuesta.recaudosHoy,'es-CO', 'COP'));
+                        }
+                    });
+
+                    $("#paciente").html(select);
                 }
             });
 
             $.cargarCita();
+            $.cargarDatos();
 
         });
 
@@ -1558,6 +1592,14 @@
             return (patron.test(te) || tecla == 9 || tecla == 8 || tecla == 37 || tecla == 39 || tecla == 44);
         }
 
+        function formatCurrency(number, locale, currencySymbol) {
+            return new Intl.NumberFormat(locale, {
+                style: 'currency',
+                currency: currencySymbol,
+                minimumFractionDigits: 2
+            }).format(number);
+        }
+
         function validartxt(e) {
             tecla = e.which || e.keyCode;
             patron = /[a-zA-Z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF\s]+$/;
@@ -1568,6 +1610,23 @@
         function miFuncionEspecifica(id) {
             // Haz lo que necesites con el parámetro "id"
             console.log("Evento con ID: " + id + " ha sido clicado.");
+        }
+
+        function calcularEdad(fechaNacimiento) {
+            // Convierte la cadena de fecha de nacimiento a un objeto Date
+            var fechaNacimiento = new Date(fechaNacimiento);
+
+            // Obtiene la fecha actual
+            var fechaActual = new Date();
+
+            // Calcula la diferencia en milisegundos entre la fecha actual y la fecha de nacimiento
+            var diferencia = fechaActual - fechaNacimiento;
+
+            // Convierte la diferencia de milisegundos a años
+            var edadEnMilisegundos = new Date(diferencia);
+            var edad = Math.abs(edadEnMilisegundos.getUTCFullYear() - 1970);
+
+            return edad;
         }
     </script>
 

@@ -436,40 +436,33 @@
                                                             <div
                                                                 class="statistics-chart-data d-flex justify-content-center ml-auto mr-auto pb-50 mb-0">
                                                                 <div class="collection mr-1">
-                                                                    <span
-                                                                        class="list-group-item-icon d-inline font-weight-bold">
-                                                                        <i
-                                                                            class="icon text-primary bg-light-primary icon-wallet total-products-icon rounded-circle p-50"></i>
+                                                                    <span class="list-group-item-icon d-inline font-weight-bold">
+                                                                        <i class="icon text-primary bg-light-primary icon-wallet total-products-icon rounded-circle p-50"></i>
                                                                         Total:
                                                                     </span>
-                                                                    <span>$ 3.000.000,00</span>
+                                                                    <span id="infTotal"></span>
                                                                 </div>
                                                                 <div class="collection mr-1">
-                                                                    <span
-                                                                        class="list-group-item-icon d-inline font-weight-bold">
-                                                                        <i
-                                                                            class="icon text-primary bg-light-primary icon-check total-products-icon rounded-circle p-50"></i>
+                                                                    <span class="list-group-item-icon d-inline font-weight-bold">
+                                                                        <i class="icon text-primary bg-light-primary icon-check total-products-icon rounded-circle p-50"></i>
                                                                         Realizado:
                                                                     </span>
-                                                                    <span>$ 3.000.000,00</span>
+                                                                    <span id="infRealizado"></span>
+                                                                </div>
+                                                             
+                                                                <div class="collection mr-1">
+                                                                    <span class="list-group-item-icon d-inline font-weight-bold">
+                                                                        <i class="icon text-danger bg-light-danger icon-basket-loaded total-products-icon rounded-circle p-50"></i>
+                                                                        Pagado:
+                                                                    </span>
+                                                                    <span id="infPagado"></span>
                                                                 </div>
                                                                 <div class="collection mr-1">
-                                                                    <span
-                                                                        class="list-group-item-icon d-inline font-weight-bold">
-                                                                        <i
-                                                                            class="icon text-primary bg-light-primary icon-graph total-products-icon rounded-circle p-50"></i>
+                                                                    <span class="list-group-item-icon d-inline font-weight-bold">
+                                                                        <i class="icon text-primary bg-light-primary icon-graph total-products-icon rounded-circle p-50"></i>
                                                                         Saldo:
                                                                     </span>
-                                                                    <span>$ 3.000.000,00</span>
-                                                                </div>
-                                                                <div class="collection mr-1">
-                                                                    <span
-                                                                        class="list-group-item-icon d-inline font-weight-bold">
-                                                                        <i
-                                                                            class="icon text-danger bg-light-danger icon-basket-loaded total-products-icon rounded-circle p-50"></i>
-                                                                        Deudas:
-                                                                    </span>
-                                                                    <span>$ 3.000.000,00</span>
+                                                                    <span id="infSaldo"></span>
                                                                 </div>
                                                             </div>
                                                             <div class="card-body text-center">
@@ -621,6 +614,7 @@
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
+
     <form action="{{ url('/AdminPacientes/SeccionesTratamientos') }}" id="formCargarSeccionesTratamientos"
         method="POST">
         @csrf
@@ -868,6 +862,9 @@
                     var datos = form.serialize();
 
                     let servSEccion = '';
+                    let totalTrata = 0;
+                    let pagado = 0;
+                    let realizado = 0;
 
                     $.ajax({
                         type: "POST",
@@ -881,8 +878,14 @@
 
                             $.each(respuesta.servTratamiento, function(i, item) {
 
-                                let porAvancTrat = item.avance;
 
+                                totalTrata = totalTrata + parseInt(item.valor);
+                                pagado = pagado + parseInt(item.pagado);
+                                if(item.estado_serv == "Terminado") {
+                                    realizado = realizado + parseInt(item.valor);
+                                }
+
+                                let porAvancTrat = item.avance;
                                 var formatoMoneda = formatCurrency(item.valor,'es-CO', 'COP');
 
                                 servSEccion = '<tr id="tr-serv' + item.id + '">' +
@@ -949,6 +952,16 @@
                                 updatePercentageServicios(porAvancTrat,
                                     item.id);
                             });
+
+                            let saldo = totalTrata - pagado;
+
+                            //informacion de presupuesto tratamiento
+                            $("#infTotal").html(formatCurrency(totalTrata, 'es-CO', 'COP'));
+                            $("#infRealizado").html(formatCurrency(realizado, 'es-CO', 'COP'));
+                            $("#infPagado").html(formatCurrency(pagado, 'es-CO', 'COP'));
+                            $("#infSaldo").html(formatCurrency(saldo, 'es-CO', 'COP'));
+
+
                         }
                     });
 
@@ -1737,9 +1750,7 @@
                         async: false,
                         dataType: "json",
                         success: function(respuesta) {
-                            var valorServicio = formatCurrency(respuesta.serviciosEdit
-                                .valor,
-                                'es-CO', 'COP');
+                            var valorServicio = formatCurrency(respuesta.serviciosEdit.valor,'es-CO', 'COP');
 
                             $('#servicioTrat').val(respuesta.serviciosEdit.servicio)
                                 .trigger('change.select2');

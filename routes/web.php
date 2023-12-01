@@ -46,11 +46,18 @@ Route::post('/Administracion/GuardarProfesional', [AdminitraccionController::cla
 Route::post('/Administracion/GuardarServicio', [AdminitraccionController::class,'GuardarServicio']);
 Route::post('/Administracion/ValidarProfesional', [AdminitraccionController::class,'ValidarProfesional']);
 Route::post('/Administracion/BuscarProfesional', [AdminitraccionController::class,'BuscarProfesional']);
+Route::post('/Administracion/BuscarGastos', [AdminitraccionController::class,'BuscarGastos']);
 Route::post('/Administracion/BuscarServicio', [AdminitraccionController::class,'BuscarServicio']);
 Route::post('/Administracion/BuscarUsuario', [AdminitraccionController::class,'BuscarUsuario']);
 Route::post('/Administracion/EliminarProfesional', [AdminitraccionController::class,'EliminarProfesional']);
 Route::post('/Administracion/EliminarServicio', [AdminitraccionController::class,'EliminarServicio']);
+Route::post('/Administracion/EliminarCategoria', [AdminitraccionController::class,'EliminarCategoria']);
+Route::post('/Administracion/EliminarGastos', [AdminitraccionController::class,'EliminarGastos']);
 Route::get('/Administracion/Gastos', [AdminitraccionController::class,'Gastos']);
+Route::post('/Administracion/cargarCategorias', [AdminitraccionController::class,'cargarCategorias']);
+Route::post('/Administracion/GuardarCategoria', [AdminitraccionController::class,'GuardarCategoria']);
+Route::post('/Administracion/GuardarGasto', [AdminitraccionController::class,'GuardarGasto']);
+Route::post('/Administracion/CargarDatos', [AdminitraccionController::class,'CargarDatos']);
 
 
 //GESTIONAR CITAS
