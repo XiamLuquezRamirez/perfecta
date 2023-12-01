@@ -50,8 +50,10 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Descripción</th>
-                                    <th>Descuento</th>
+                                    <th>Categoria</th>
                                     <th>Valor</th>
+                                    <th>Fecha</th>
+                                    <th>Fecha de pago</th>
                                     <th>Acción</th>
                                 </tr>
                             </thead>
@@ -68,7 +70,7 @@
         </div>
 
         {{--  Modal nuevo profesional  --}}
-        <div class="modal fade text-left" id="modalServicios" tabindex="-1" role="dialog"
+        <div class="modal fade text-left" id="modalGastos" tabindex="-1" role="dialog"
             aria-labelledby="myModalLabel1" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -161,7 +163,7 @@
 
     </div>
 
-    <form action="{{ url('/Administracion/CargarServicios') }}" id="formCargarServicios" method="POST">
+    <form action="{{ url('/Administracion/CargarGastos') }}" id="formCargarGastos" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
@@ -195,7 +197,7 @@
             $("#MenPaciente").removeClass("active");
             $.extend({
                 cargar: function(page, searchTerm = '') {
-                    var form = $("#formCargarServicios");
+                    var form = $("#formCargarGastos");
                     var url = form.attr("action");
                     $('#page').remove();
                     $('#searchTerm').remove();
@@ -227,13 +229,13 @@
 
 
 
-                addServicio: function() {
+                addGasto: function() {
 
-                    $("#modalServicios").modal({
+                    $("#modalGastos").modal({
                         backdrop: 'static',
                         keyboard: false
                     });
-                    $("#tituloServicio").html("Crear Servicio");
+                    $("#tituloServicio").html("Agregar Gasto");
                     $("#accion").val("agregar");
                     $("#btnGuardar").show();
                     $("#btnNuevo").hide();

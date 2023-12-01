@@ -40,6 +40,7 @@ Route::post('/AdminPacientes/AllProfesionales', [PacientesController::class,'All
 Route::get('/Administracion/Profesionales', [AdminitraccionController::class,'Profesionales']);
 Route::get('/Administracion/Servicios', [AdminitraccionController::class,'Servicios']);
 Route::post('/Administracion/CargarProfesionales', [AdminitraccionController::class,'CargarProfesionales']);
+Route::post('/Administracion/CargarGastos', [AdminitraccionController::class,'CargarGastos']);
 Route::post('/Administracion/CargarServicios', [AdminitraccionController::class,'CargarServicios']);
 Route::post('/Administracion/GuardarProfesional', [AdminitraccionController::class,'GuardarProfesional']);
 Route::post('/Administracion/GuardarServicio', [AdminitraccionController::class,'GuardarServicio']);

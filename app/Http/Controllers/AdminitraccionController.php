@@ -115,7 +115,7 @@ class AdminitraccionController extends Controller
                 }
             }
 
-            $pagination = $ListProfesionales->links('Pacientes.PaginacionPacientes')->render();
+            $pagination = $ListProfesionales->links('Administraccion.Paginacion')->render();
 
             return response()->json([
                 'profesionales' => $tdTable,
@@ -176,7 +176,75 @@ class AdminitraccionController extends Controller
                 }
             }
 
-            $pagination = $ListServicios->links('Pacientes.PaginacionPacientes')->render();
+            $pagination = $ListServicios->links('Administraccion.Paginacion')->render();
+
+            return response()->json([
+                'servicios' => $tdTable,
+                'links' => $pagination,
+            ]);
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+    public function CargarGastos()
+    {
+        if (Auth::check()) {
+            $perPage = 5; // Número de posts por página
+            $page = request()->get('page', 1);
+            $search = request()->get('search');
+            if (!is_numeric($page)) {
+                $page = 1; // Establecer un valor predeterminado si no es numérico
+            }
+
+            $gastos = DB::connection('mysql')
+                ->table('gastos')
+                ->leftJoin("categorias", "categorias.id","gastos.categoria")
+                ->where('gastos.estado', 'ACTIVO')
+                ->select('gastos.*','categorias.descripcion AS desgasto');
+            if ($search) {
+                $gastos->where('gastos.descripcion', 'LIKE', '%' . $search . '%');
+                $gastos->where('categorias.descripcion', 'LIKE', '%' . $search . '%');
+            }
+
+            $ListGastos = $gastos->paginate($perPage, ['*'], 'page', $page);
+
+            $tdTable = '';
+            $j = 1;
+            $x = ($page - 1) * $perPage + 1;
+
+            foreach ($ListGastos as $i => $item) {
+                if (!is_null($item)) {
+
+                    $numero_formateado = number_format($item->valor, 2, ',', '.');
+                    $fecha_gasto = date('d/m/Y', strtotime($item->fecha_gasto));
+                    $fecha_pago = date('d/m/Y', strtotime($item->fecha_pago));
+
+                    $tdTable .= '<tr>
+                <td><span class="invoice-date">' . $j . '</span></td>
+                <td><span class="invoice-date">' . $item->descripcion . '</span></td>
+                <td><span class="invoice-date">' . $item->desgasto . '</span></td>
+                <td><span class="invoice-date">$ ' . $numero_formateado . '</span></td>
+                <td><span class="invoice-date">' . $fecha_gasto . '</span></td>
+                <td><span class="invoice-date">' . $fecha_pago . '</span></td>
+                <td>
+                    <div class="invoice-action">
+
+                    <a onclick="$.editar(' . $item->id . ');" title="Editar" class="invoice-action-edit cursor-pointer mr-1">
+                        <i class="feather icon-edit-1"></i>
+                    </a>
+                    <a onclick="$.eliminar(' . $item->id . ');" title="Eliminar" class="invoice-action-edit cursor-pointer">
+                        <i class="feather icon-trash"></i>
+                    </a>
+                    </div>
+                </td>
+            </tr>';
+
+                    $x++;
+                    $j++;
+                }
+            }
+
+            $pagination = $ListGastos->links('Adminitraccion.Paginacion')->render();
 
             return response()->json([
                 'servicios' => $tdTable,
