@@ -58,7 +58,9 @@ Route::get('/Administracion/Cajas', [AdminitraccionController::class,'Cajas']);
 Route::post('/Administracion/cargarCategorias', [AdminitraccionController::class,'cargarCategorias']);
 Route::post('/Administracion/GuardarCategoria', [AdminitraccionController::class,'GuardarCategoria']);
 Route::post('/Administracion/GuardarGasto', [AdminitraccionController::class,'GuardarGasto']);
+Route::post('/Administracion/GuardarCaja', [AdminitraccionController::class,'GuardarCaja']);
 Route::post('/Administracion/CargarDatos', [AdminitraccionController::class,'CargarDatos']);
+Route::post('/Administracion/CargarCajas', [AdminitraccionController::class,'CargarCajas']);
 
 
 //GESTIONAR CITAS

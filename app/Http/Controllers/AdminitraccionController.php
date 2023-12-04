@@ -10,6 +10,7 @@ use App\Models\Pacientes;
 use App\Models\Usuario;
 use App\Models\Citas;
 use App\Models\Tratamientos;
+use App\Models\Cajas;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -214,6 +215,90 @@ class AdminitraccionController extends Controller
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
+
+    public function CargarCajas()
+    {
+        if (Auth::check()) {
+            $perPage = 5; // Número de posts por página
+            $page = request()->get('page', 1);
+            if (!is_numeric($page)) {
+                $page = 1; // Establecer un valor predeterminado si no es numérico
+            }
+
+            $servicios = DB::connection('mysql')
+                ->table('cajas')
+                ->leftJoin("users", "users.id","cajas.usuario")
+                ->select("cajas.*", "users.nombre_usuario")
+                ->where('estado_reg', 'ACTIVO')
+                ->where('estado_caja', 'Abierta');
+
+                $ultimaCaja = DB::connection('mysql')
+                ->table('cajas')
+                ->latest()
+                ->first();
+                $saldoAnterior = 0;
+                if($ultimaCaja){
+                    $saldoAnterior = $ultimaCaja->saldo_cierre;
+                }
+
+            $ListServicios = $servicios->paginate($perPage, ['*'], 'page', $page);
+
+            $tdTable = '';
+            $j = 1;
+            $x = ($page - 1) * $perPage + 1;
+
+            foreach ($ListServicios as $i => $item) {
+                if (!is_null($item)) {
+                    $saldo_inicial = $item->saldo_inicial + $item->abono_inicial;
+                    $saldo_inicial = number_format($saldo_inicial, 2, ',', '.');
+
+                    $saldo_acomulado=0;
+                    $gastos=0;
+                    $saldo=0;
+
+                    $tdTable .= '<tr>
+                <td><span class="invoice-date">' . $j . '</span></td>
+                <td><span class="invoice-date">' . $item->fecha_apertura . '</span></td>
+                <td><span class="invoice-date">' . $item->fecha_cierre . '</span></td>
+                <td><span class="invoice-date">$ ' . number_format($item->saldo_inicial, 2, ',', '.'). '</span></td>
+                <td><span class="invoice-date">$ ' . number_format($saldo_acomulado, 2, ',', '.') . '</span></td>
+                <td><span class="invoice-date">$ ' . number_format($gastos, 2, ',', '.')  . '</span></td>
+                <td><span class="invoice-date">$ ' . number_format($saldo, 2, ',', '.') . '</span></td>';
+                if($item->estado_caja == "Abierta"){
+                    $tdTable.='<td><span class="invoice-date"><span class="badge badge-success"> ' . $item->estado_caja . '</span></span></td>';
+                }else{
+                    $tdTable.='<td><span class="invoice-date"><span class="badge badge-warning"> ' . $item->estado_caja . '</span></span></td>';
+                  
+                }
+                
+                $tdTable.='<td>
+                    <div class="invoice-action">
+
+                    <a onclick="$.verDetalle(' . $item->id . ');" title="Editar" class="invoice-action-edit cursor-pointer mr-1">
+                        <i class="fa fa-search"></i> Ver detalles
+                    </a>
+                   
+                    </div>
+                </td>
+            </tr>';
+
+                    $x++;
+                    $j++;
+                }
+            }
+
+            $pagination = $ListServicios->links('Adminitraccion.Paginacion')->render();
+
+            return response()->json([
+                'servicios' => $tdTable,
+                'links' => $pagination,
+                'saldoAnterior' => $saldoAnterior
+            ]);
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
     public function CargarGastos()
     {
         if (Auth::check()) {
@@ -457,6 +542,36 @@ class AdminitraccionController extends Controller
                 $idGastos = $respuesta;
             } else {
               
+                $respuesta = Gastos::editar($data);
+            }
+
+            if ($respuesta) {
+                $estado = "ok";
+            } else {
+                $estado = "fail";
+            }
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => $estado,
+                    'id' => $idGastos,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+    public function GuardarCaja()
+    {
+        if (Auth::check()) {
+            $data = request()->all();
+            $idGastos = $data['idCaja'];
+
+            if ($data['accion'] == "agregar") {
+                $respuesta = Cajas::guardar($data);
+                $idGastos = $respuesta;
+            } else {
                 $respuesta = Gastos::editar($data);
             }
 
