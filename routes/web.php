@@ -54,6 +54,7 @@ Route::post('/Administracion/EliminarServicio', [AdminitraccionController::class
 Route::post('/Administracion/EliminarCategoria', [AdminitraccionController::class,'EliminarCategoria']);
 Route::post('/Administracion/EliminarGastos', [AdminitraccionController::class,'EliminarGastos']);
 Route::get('/Administracion/Gastos', [AdminitraccionController::class,'Gastos']);
+Route::get('/Administracion/Cajas', [AdminitraccionController::class,'Cajas']);
 Route::post('/Administracion/cargarCategorias', [AdminitraccionController::class,'cargarCategorias']);
 Route::post('/Administracion/GuardarCategoria', [AdminitraccionController::class,'GuardarCategoria']);
 Route::post('/Administracion/GuardarGasto', [AdminitraccionController::class,'GuardarGasto']);
@@ -68,6 +69,7 @@ Route::post('/AdminCitas/CargarPacientesCita', [PacientesController::class,'Carg
 Route::post('/AdminCitas/CargarAllCitas', [CitasController::class,'CargarAllCitas']);
 Route::post('/AdminCitas/VerDetallesCita', [CitasController::class,'VerDetallesCita']);
 Route::post('/AdminCitas/VerCitasPac', [CitasController::class,'VerCitasPac']);
+Route::post('/AdminCitas/CambioEstadocita', [CitasController::class,'CambioEstadocita']);
 
 
 

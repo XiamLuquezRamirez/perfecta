@@ -35,7 +35,7 @@
 
                         </div>
                         <div class="date-picker">
-                            <input type="text" onchange="$.cambioFechaGastos();" id="fecha" name="fecha"
+                            <input type="text" onchange="cambioFecha();" id="fecha" name="fecha"
                                 class="pickadate form-control pl-1" placeholder="Fecha de gastos">
                         </div>
                     </div>
@@ -64,15 +64,24 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Categoria</th>
-                                    <th>Descripción</th>
-                                    <th>Valor</th>
+                                    <th>Descripción</th>                               
                                     <th>Fecha</th>
                                     <th>Fecha de pago</th>
+                                    <th>Valor</th>
                                     <th>Acción</th>
                                 </tr>
                             </thead>
                             <tbody id="trRegistros">
                             </tbody>
+                            <tfoot>
+                                               
+                                <tr>
+                                    <td colspan="4"></td> <!-- Si necesitas celdas combinadas -->
+                                    <td ><b>Total:</b></td>
+                                    <td><b id="totalGastos"></b></td>
+                                    <td colspan="2"></td> <!-- Para ajustar a la cantidad de columnas -->
+                                </tr>
+                            </tfoot>
                         </table>
 
                         <div id="pagination-links" class="text-center ml-1 mt-2">
@@ -240,6 +249,8 @@
                                             </thead>
                                             <tbody id="trRegistrosCategoria">
                                             </tbody>
+
+                                         
                                         </table>
                                     </div>
 
@@ -351,6 +362,8 @@
                             ); // Rellenamos la tabla con las filas generadas
                             $('#pagination-links').html(response
                                 .links); // Colocamos los enlaces de paginación
+                           
+                            $("#totalGastos").html(formatCurrency(response.total, 'es-CO', 'COP'));
                         }
                     });
                 },
@@ -389,10 +402,7 @@
                     miDiv.style.setProperty("overflow-y", "auto", "important");
 
                 },
-                cambioFechaGastos: function() {
-                    var searchTerm = $("#searchInput").val();
-                    $.cargar(1, searchTerm);
-                },
+            
                 guardar: function() {
 
 
@@ -845,6 +855,11 @@
             const fechaFormateada = `${dia.padStart(2, '0')}/${mes.padStart(2, '0')}/${año}`;
 
             return fechaFormateada;
+        }
+
+        function cambioFecha(){
+            var searchTerm = $("#searchInput").val();
+            $.cargar(1, searchTerm);
         }
     </script>
 

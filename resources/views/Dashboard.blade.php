@@ -59,7 +59,7 @@
                                         <i class="icon p-1 fa fa-usd  customize-icon font-large-2 p-1"></i>
                                     </span>
                                     <div class="stats-amount mr-3">
-                                        <h3 class="heading-text text-bold-600">$ 0,00</h3>
+                                        <h3 id="recaudoMes" class="heading-text text-bold-600">$ 0,00</h3>
                                         <p class="sub-heading">Recaudo Mes</p>
                                     </div>
                                     <span class="inc-dec-percentage">
@@ -516,8 +516,8 @@
                         <div class="media p-1">
                             <div class="media-left pr-1"><span class="avatar avatar-online avatar-sm rounded-circle"
                                     style="width: 60px !important;  height: 60px !important;"><img
-                                        src="../../../app-assets/images/FotosPacientes/avatar-s-1.png"
-                                        alt="avatar" id="previewImageDetCita"><i></i></span></div>
+                                        src="../../../app-assets/images/FotosPacientes/avatar-s-1.png" alt="avatar"
+                                        id="previewImageDetCita"><i></i></span></div>
                             <div class="media-body media-middle">
                                 <h5 id="npacientedetCita" class="media-heading">77097205 - Xiamir Luquez Ramirez</h5>
                                 <p id="edadDetaCita"></p>
@@ -580,14 +580,18 @@
                                                 <tr>
                                                     <td>Cambiar estado:</td>
                                                     <td id="final">
-                                                        <select class="select2-bg form-control" onchange="$.cambioEstado(this.value);" id="bg-select">
-                                                            <option value="Por Atender" class="por-atender">Por Atender</option>
+                                                        <select class="select2-bg form-control"
+                                                            onchange="$.cambioEstado(this.value);" id="bg-select">
+                                                            <option value="Por Atender" class="por-atender">Por Atender
+                                                            </option>
                                                             <option value="Atendida" class="atendida">Atendida</option>
-                                                            <option value="Confirmada" class="confirmada">Confirmada</option>
-                                                            <option value="No Confirmada" class="no-confirmada">No Confirmada</option>
+                                                            <option value="Confirmada" class="confirmada">Confirmada
+                                                            </option>
+                                                            <option value="No Confirmada" class="no-confirmada">No
+                                                                Confirmada</option>
                                                             <option value="Anulada" class="anulada">Anulada</option>
                                                         </select>
-                                                        
+
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -628,21 +632,21 @@
                                                     <td>nombre:</td>
                                                     <td id="nombreCita"></td>
                                                 </tr>
-                                             
+
                                                 <tr>
                                                     <td>Sexo:</td>
                                                     <td id="sexoCita"></td>
                                                     <td>Fecha Nacimiento:</td>
                                                     <td id="nacimientoCita"></td>
                                                 </tr>
-                                               
+
                                                 <tr>
                                                     <td>Teléfono:</td>
                                                     <td id="telefonoCita"></td>
                                                     <td>Email:</td>
                                                     <td id="emailCita"></td>
                                                 </tr>
-                                              
+
                                                 <tr>
                                                     <td>Dirección:</td>
                                                     <td id="direccionCita" colspan="3"></td>
@@ -692,6 +696,10 @@
         <!-- Tus campos del formulario aquí -->
     </form>
     <form action="{{ url('/Administracion/CargarDatos') }}" id="formCargarDatos" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/AdminCitas/CambioEstadocita') }}" id="formCambioEstadocita" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
@@ -777,24 +785,58 @@
                     day: "Día",
                     more: "Mas"
                 },
+                viewDidMount: function(viewInfo) {
+                    // Aplicar estilos después de que la vista se haya montado
+                    applyStylesAfterViewMount(viewInfo);
+                },
 
                 eventRender: function(info) {
                     // Cambiar el tamaño de fuente de los eventos aquí
                     info.el.style.fontSize = '9px'; // Ajustar el tamaño de fuente según tus necesidades
 
                     // Agregar el campo "prof" al contenido del evento
-
+                  
                     var prof = info.event.extendedProps.prof;
+                    var estado = info.event.extendedProps.estado;
                     var id = info.event.extendedProps.id;
 
                     if (prof) {
                         var profElement = document.createElement('div');
                         profElement.className = 'fc-event-prof';
                         profElement.textContent = 'Prof: ' + prof;
-
-
                         info.el.appendChild(profElement);
                     }
+                    if (estado) {
+                        var estadoElement = document.createElement('div');
+                        estadoElement.className = 'fc-event-estado';
+                        estadoElement.textContent = 'Estado: ' + estado;
+                        estadoElement.style.fontSize = '9px'; 
+                        info.el.appendChild(estadoElement);
+                    }
+
+                    info.el.style.color = '#ffff';
+                    if (estado) {
+                        // ... (código existente)
+                
+                        // Cambiar el color de fondo según el estado
+                        switch (estado) {
+                            case 'Por atender':
+                                info.el.style.backgroundColor = '#00B5B8'; // Color para estado pendiente
+                                break;
+                            case 'Atendida':
+                                info.el.style.backgroundColor = '#2196F3'; // Color para estado confirmado
+                                break;
+                            case 'Confirmada':
+                                info.el.style.backgroundColor = '#10C888'; // Color para estado cancelado
+                                break;
+                            // Añade más casos según sea necesario para otros estados
+                            default:
+                                info.el.style.backgroundColor = '#2DCEE3'; // Color predeterminado si no hay coincidencia
+                        }
+
+                        }
+
+                    applyStyles(info.el);
                 },
                 eventClick: function(info) {
                     // Obtiene el valor del campo "id" del evento clicado
@@ -1026,6 +1068,7 @@
                                     "end": item.final,
                                     "title": item.nombre + " " + item.apellido,
                                     "prof": item.nomprof,
+                                    "estado": item.estado,
                                     "idCita": item.id
                                 };
                             });
@@ -1033,7 +1076,7 @@
 
                     });
 
-                  
+
 
                     fcAgendaViews.removeAllEvents();
                     fcAgendaViews.addEventSource(disponibilidadJSON);
@@ -1447,27 +1490,35 @@
                         dataType: "json",
                         success: function(response) {
                             //datos de citas
-                          
+
                             $("#motivoCita").html(response.detaCita.motivo);
                             $("#profesionalCita").html(response.detaCita.nomprof);
-                            var nuevoFormatoIni = $.convertirFormato(response.detaCita.inicio);
+                            var nuevoFormatoIni = $.convertirFormato(response.detaCita
+                                .inicio);
                             $("#inicioCita").html(nuevoFormatoIni);
-                            var nuevoFormatoFinal = $.convertirFormato(response.detaCita.final);
+                            var nuevoFormatoFinal = $.convertirFormato(response.detaCita
+                                .final);
                             $("#finalcita").html(nuevoFormatoFinal);
                             $("#cometarioCita").html(response.detaCita.comentario);
                             //datos de paciente
-                            $("#identificacionCita").html(response.paciente.tipo_identificacion+" "+response.paciente.identificacion);
-                            $("#nombreCita").html(response.paciente.nombre+" "+response.paciente.apellido);
-                            $("#npacientedetCita").html(response.paciente.nombre+" "+response.paciente.apellido);
+                            $("#identificacionCita").html(response.paciente
+                                .tipo_identificacion + " " + response.paciente
+                                .identificacion);
+                            $("#nombreCita").html(response.paciente.nombre + " " + response
+                                .paciente.apellido);
+                            $("#npacientedetCita").html(response.paciente.nombre + " " +
+                                response.paciente.apellido);
                             $("#sexoCita").html(response.paciente.sexo);
-                            var fechNaci = $.convertirFormatoNac(response.paciente.fecha_nacimiento);
+                            var fechNaci = $.convertirFormatoNac(response.paciente
+                                .fecha_nacimiento);
                             $("#nacimientoCita").html(fechNaci);
                             $("#emailCita").html(response.paciente.email);
                             $("#telefonoCita").html(response.paciente.telefono);
                             $("#direccionCita").html(response.paciente.direccion);
 
                             var foto = response.paciente.foto;
-                            const previewImage = document.getElementById('previewImageDetCita');
+                            const previewImage = document.getElementById(
+                                'previewImageDetCita');
                             let url = $('#Ruta').data("ruta");
                             previewImage.src = url + "/images/FotosPacientes/" + foto;
 
@@ -1515,17 +1566,17 @@
                     var mes = fecha.getMonth() + 1; // Los meses comienzan desde 0, por lo que sumamos 1
                     var anio = fecha.getFullYear();
 
-                   
+
 
                     // Crear la cadena formateada
                     var nuevoFormato = `${dia}/${mes}/${anio}`;
 
                     return nuevoFormato;
                 },
-                cambioEstado: function(estado){
+                cambioEstado: function(estado) {
 
                     Swal.fire({
-                        title: "Esta seguro de cambiar el estado a "+estado+" ?",
+                        title: "Esta seguro de cambiar el estado a " + estado + " ?",
                         text: "¡No podrás revertir esto!",
                         type: "warning",
                         showCancelButton: true,
@@ -1551,11 +1602,42 @@
                     });
 
                 },
-                procederCambiarEstado: function(estado){
-                    var idcita = $("#idCita").val();
+                procederCambiarEstado: function(estado) {
+                    var idCita = $("#idCita").val();
 
+                    var form = $("#formCambioEstadocita");
+                    $('#idCita').remove();
+                    form.append("<input type='hidden' id='idCita' name='idCita'  value='" + idCita +
+                        "'>");
+                    form.append("<input type='hidden' id='estadoCita' name='estadoCita'  value='" +
+                        estado +
+                        "'>");
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            if (respuesta.estado == "ok") {
+                                Swal.fire({
+                                    type: "success",
+                                    title: "",
+                                    text: "El estado de la cita fue cambiada a " +
+                                        estado + " exitosamente",
+                                    confirmButtonClass: "btn btn-primary",
+                                    timer: 1500,
+                                    buttonsStyling: false
+                                });
+                                $.cargarCita();
+                            }
+                        }
+                    });
                 },
-                cargarDatos: function(){
+                cargarDatos: function() {
                     var form = $("#formCargarDatos");
                     var url = form.attr("action");
                     var datos = form.serialize();
@@ -1569,11 +1651,14 @@
                         success: function(respuesta) {
                             $('#cantPacientes').html(respuesta.pacientes);
                             $('#cantCitas').html(respuesta.citasHoy);
-                            $('#recaudoHoy').html(formatCurrency(respuesta.recaudosHoy,'es-CO', 'COP'));
+                            $('#recaudoHoy').html(formatCurrency(respuesta.recaudosHoy,
+                                'es-CO', 'COP'));
+                            $('#recaudoMes').html(formatCurrency(respuesta.recaudosMes,
+                                'es-CO', 'COP'));
                         }
                     });
 
-                    $("#paciente").html(select);
+
                 }
             });
 
@@ -1610,6 +1695,22 @@
         function miFuncionEspecifica(id) {
             // Haz lo que necesites con el parámetro "id"
             console.log("Evento con ID: " + id + " ha sido clicado.");
+        }
+
+        function applyStylesAfterViewMount(viewInfo) {
+            // Obtener todos los eventos y aplicar estilos
+            var events = fcAgendaViews2.getEvents();
+            events.forEach(function(event) {
+                applyStyles(event.el);
+            });
+        }
+
+        function applyStyles(el) {
+            el.style.overflow = 'hidden';
+            el.style.whiteSpace = 'nowrap';
+            el.style.textOverflow = 'ellipsis';
+
+            el.style.fontSize = '9px'; 
         }
 
         function calcularEdad(fechaNacimiento) {

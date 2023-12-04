@@ -211,6 +211,19 @@ class Tratamientos extends Model
 
         return $recaudoHoy;
     }
+    public static function recaudosMes()
+    {
+        $primerDiaDelMes = now()->startOfMonth();
+        $ultimoDiaDelMes = now()->endOfMonth();
+        
+        $recaudoMes = DB::connection('mysql')
+            ->table('transaccion')
+            ->whereBetween('created_at', [$primerDiaDelMes, $ultimoDiaDelMes])
+            ->sum('pago_realizado');
+        
+        return $recaudoMes;
+        
+    }
 
     public static function TratamientosPacientesOtr($idPac)
     {

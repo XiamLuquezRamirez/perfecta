@@ -58,9 +58,19 @@ class Citas extends Model
             ->get();
     }
 
+    public static function CambioEstadocita($idCita, $estado)
+    {
+
+        $respuesta = DB::connection('mysql')->table('citas')->where('id', $idCita)->update([
+            'estado' => $estado,
+        ]);
+        return "ok";
+
+    }
+
     public static function GuardarCitas($request)
     {
-       
+
         $respuesta = DB::connection('mysql')->table('citas')->insertGetId([
             'paciente' => $request['idpac'],
             'profesional' => $request['profesional'],
@@ -73,4 +83,3 @@ class Citas extends Model
         return $respuesta;
     }
 }
- 

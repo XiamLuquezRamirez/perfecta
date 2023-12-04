@@ -11,7 +11,7 @@
             </li>
             <li id="MenRecaudo" class="dropdown nav-item" data-menu="dropdown"><a class="nav-link" href="{{ url('/AdminPacientes/Recaudos') }}"><i class="feather icon-shopping-cart"></i><span data-i18n="Templates">Recaudaciones</span></a>
             </li>
-            <li id="MenCaja" class="dropdown nav-item" data-menu="dropdown"><a class="nav-link" href="#" data-toggle="dropdown"><i class="feather icon-grid"></i><span data-i18n="Layouts">Cajas</span></a>
+            <li id="MenCaja" class="dropdown nav-item" data-menu="dropdown"><a class="nav-link" href="{{ url('/Administracion/Cajas') }}" data-toggle="dropdown"><i class="feather icon-grid"></i><span data-i18n="Layouts">Cajas</span></a>
             </li>
             <li id="MenAdmin" class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="feather icon-sliders"></i><span data-i18n="Apps">Administracción</span></a>
                 <ul class="dropdown-menu">

@@ -46,6 +46,15 @@ class AdminitraccionController extends Controller
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
+    public function Cajas()
+    {
+        if (Auth::check()) {
+            $bandera = "";
+            return view('Adminitraccion.GestionCajas', compact('bandera'));
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
 
     public function cargarCategorias()
     {
@@ -208,7 +217,7 @@ class AdminitraccionController extends Controller
     public function CargarGastos()
     {
         if (Auth::check()) {
-            $perPage = 5; // Número de posts por página
+            $perPage = 20; // Número de posts por página
             $page = request()->get('page', 1);
             $search = request()->get('search');
             $fecha = request()->get('fecBusc');
@@ -234,10 +243,11 @@ class AdminitraccionController extends Controller
             $tdTable = '';
             $j = 1;
             $x = ($page - 1) * $perPage + 1;
+            $total = 0;
 
             foreach ($ListGastos as $i => $item) {
                 if (!is_null($item)) {
-
+                    $total= $total+$item->valor;
                     $numero_formateado = number_format($item->valor, 2, ',', '.');
                     $fecha_gasto = date('d/m/Y', strtotime($item->fecha_gasto));
                     $fecha_pago = date('d/m/Y', strtotime($item->fecha_pago));
@@ -245,10 +255,10 @@ class AdminitraccionController extends Controller
                     $tdTable .= '<tr>
                 <td><span class="invoice-date">' . $j . '</span></td>
                 <td><span class="invoice-date">' . $item->desgasto . '</span></td>
-                <td><span class="invoice-date">' . $descripcion  . '</span></td>
-                <td><span class="invoice-date">$ ' . $numero_formateado . '</span></td>
+                <td><span class="invoice-date">' . $descripcion  . '</span></td>               
                 <td><span class="invoice-date">' . $fecha_gasto . '</span></td>
                 <td><span class="invoice-date">' . $fecha_pago . '</span></td>
+                <td><span class="invoice-date">$ ' . $numero_formateado . '</span></td>
                 <td>
                     <div class="invoice-action">
 
@@ -272,6 +282,7 @@ class AdminitraccionController extends Controller
             return response()->json([
                 'servicios' => $tdTable,
                 'links' => $pagination,
+                'total' => $total,
             ]);
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
@@ -353,6 +364,7 @@ class AdminitraccionController extends Controller
             $pacientes = Pacientes::BuscarPacienteCita();
             $citasHoy = Citas::AllCitasHoy();
             $recaudosHoy = Tratamientos::recaudosHoy();
+            $recaudosMes = Tratamientos::recaudosMes();
             
           
             if (request()->ajax()) {
@@ -360,6 +372,7 @@ class AdminitraccionController extends Controller
                     'pacientes' => $pacientes->count(),
                     'citasHoy' => $citasHoy->count(),
                     'recaudosHoy' => $recaudosHoy,
+                    'recaudosMes' => $recaudosMes,
                 ]);
             }
         } else {

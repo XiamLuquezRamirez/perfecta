@@ -78,6 +78,24 @@ class CitasController extends Controller
     }
     }
 
+    public function CambioEstadocita()
+    {
+        if (Auth::check()) {
+        $idCita = request()->get('idCita');
+        $estadoCita = request()->get('estadoCita');
+        $CitasPaciente = Citas::CambioEstadocita($idCita,$estadoCita);
+
+
+        if (request()->ajax()) {
+            return response()->json([
+                'CitasPaciente' => $CitasPaciente
+            ]);
+        }
+    } else {
+        return redirect("/")->with("error", "Su Sesión ha Terminado");
+    }
+    }
+
     public function GuardarCita()
     {
         if (Auth::check()) {
