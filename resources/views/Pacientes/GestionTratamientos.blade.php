@@ -519,9 +519,9 @@
                                 <!-- contacts view -->
                                 <div class="card-body border-top-blue-grey border-top-lighten-5">
                                     <div class="list-group">
-                                        <a href="#" class="list-group-item active">Todos</a>
-                                        <a href="#" class="list-group-item list-group-item-action">Activos</a>
-                                        <a href="#" class="list-group-item list-group-item-action">Otros</a>
+                                        <a id="lisTodos" class="list-group-item active" onclick="$.mostrarTodos(this);">Todos</a>
+                                        <a id="lisActivos" class="list-group-item " onclick="$.mostrarActivos(this);">Activos</a>
+                                        <a id="lisOtros" class="list-group-item " onclick="$.mostrarOtros(this );">Otros</a>
                                     </div>
                                 </div>
 
@@ -1287,7 +1287,8 @@
                                 });
 
                                 if (accion == "agregar") {
-                                    $.dibujarSeccion(respuesta);
+                                 //$.dibujarSeccion(respuesta);
+                                 $.verTratamiento($("#idTratamiento").val());
                                 } else {
                                     $("#nomSeccion" + respuesta.seccion.id).html(respuesta
                                         .seccion.nombre);
@@ -1436,7 +1437,7 @@
 
                     var form = $("#formGuardarServicio");
                     var url = form.attr("action");
-                    var accion = $("#accio").val();
+                    var accion = $("#accion").val();
                     var idSeccion = $("#idSeccion").val();
                     var idTratamiento = $("#idTratamiento").val();
                     var idPaciente = $("#idPaciente").val();
@@ -1479,8 +1480,9 @@
                                 });
 
                                 if ($("#origServicio").val() == "secc") {
-                                    $("#trServicioSeccion" + idSeccion).html('');
-                                    $.dibujarServicioSecc(respuesta);
+                                    //$("#trServicioSeccion" + idSeccion).html('');
+                                    ///$.dibujarServicioSecc(respuesta);
+                                    $.verTratamiento($("#idTratamiento").val());
                                 } else {
                                     $.dibujarServicioTrat(respuesta);
                                 }
@@ -1535,7 +1537,7 @@
 
                     var form = $("#formGuardarEvolucion");
                     var url = form.attr("action");
-                    var accion = $("#accio").val();
+                    var accion = $("#accion").val();
                     var idSeccion = $("#idSeccion").val();
                     var idTratamiento = $("#idTratamiento").val();
                     var idPaciente = $("#idPaciente").val();
@@ -1830,12 +1832,8 @@
                                 confirmButtonClass: "btn btn-success"
                             });
 
-                            $("#trServicioSeccion" + idSecc).html('');
-                            $.dibujarServicioSecc(respuesta);
-                            var totalServicios = formatCurrency(respuesta.totServ,
-                                'es-CO', 'COP');
-
-                            $("#span-total" + idSecc).html(totalServicios);
+                            $.verTratamiento($("#idTratamiento").val());
+                           
 
 
                         }
@@ -1894,7 +1892,7 @@
                                     text: "El registro fue eliminado correctamente.",
                                     confirmButtonClass: "btn btn-success"
                                 });
-                                $("#seccion"+idSecc).remove();
+                                $.verTratamiento($("#idTratamiento").val());
                             }else{
                                 Swal.fire({
                                     type: "warning",
@@ -2037,6 +2035,15 @@
                             $("#div-trata-act").html('');
 
                             $.each(respuesta.tratamientosAct, function(i, item) {
+                                
+                                const serviciosPorTratamiento = respuesta.servi.filter(servicio => servicio.tratamiento == item.id);
+                                const serviciosTerminadosPorTratamiento = serviciosPorTratamiento.filter(servicio => servicio.estado_serv === "Terminado");
+                                const totalServiciosPorTratamiento = serviciosPorTratamiento.length;
+                                const porcentajeTerminado = (serviciosTerminadosPorTratamiento.length / totalServiciosPorTratamiento) * 100;
+                              
+                                
+                               
+
                                 tratAct = '<div id="tratamiento'+item.id+'" class="row">' +
                                     '<div class="col-12 pt-2 pb-2 border-bottom-blue-grey border-bottom-lighten-5">' +
                                     '    <div class="info-time-tracking-title d-flex justify-content-between align-items-center">' +
@@ -2089,7 +2096,7 @@
                                     '</div>' +
                                     '</div>';
                                 $("#div-trata-act").append(tratAct);
-                                updatePercentageTratamientos(0, consTrata);
+                                updatePercentageTratamientos(porcentajeTerminado, consTrata);
                                 consTrata++;
                             });
 

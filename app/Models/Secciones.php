@@ -33,9 +33,11 @@ class Secciones extends Model
                 'tratamiento' => $idTrata,
                 'paciente' => $idPac,
                 'valor' => $request['valor'],
-                'avance' => '0',
+                'pagado' => '0',
+                'avance' => '0',                
                 'estado' => 'ACTIVO',
-                'estado_serv' => 'Activo'
+                'estado_serv' => 'Activo',
+                'estado_pago' => 'Pendiente'
             ]);
         } else {
             $respuesta = DB::connection('mysql')->table('servicios_tratamiento')->insertGetId([
@@ -181,6 +183,16 @@ class Secciones extends Model
     {
         $respuestaServ = DB::connection('mysql')->table('servicios_tratamiento')
             ->where('tratamiento', $idTrat)
+            ->where('estado', 'ACTIVO')
+            ->get();
+
+        return $respuestaServ;
+    }
+
+    public static function allSevicios($idPac)
+    {
+        $respuestaServ = DB::connection('mysql')->table('servicios_tratamiento')
+            ->where('paciente', $idPac)
             ->where('estado', 'ACTIVO')
             ->get();
 

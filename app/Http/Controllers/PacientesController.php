@@ -217,6 +217,7 @@ class PacientesController extends Controller
             $tratamientosAct = Tratamientos::TratamientosPacientesAct($idPac);
             $tratamientosOtr = Tratamientos::TratamientosPacientesOtr($idPac);
             $citas = Citas::CitasPaciente($idPac);
+            $servi = Secciones::allSevicios($idPac);
 
             if (request()->ajax()) {
                 return response()->json([
@@ -224,6 +225,7 @@ class PacientesController extends Controller
                     'tratamientosAct' => $tratamientosAct,
                     'tratamientosOtr' => $tratamientosOtr,
                     'citas' => $citas,
+                    'servi' => $servi
                 ]);
             }
         } else {
@@ -689,6 +691,7 @@ class PacientesController extends Controller
             }
 
             $servSeccion = Secciones::buscServSecc($idSecc);
+            
             $totServ = Secciones::busTotalSeccion($idSecc);
 
             if (request()->ajax()) {
