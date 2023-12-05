@@ -6,8 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Citas;
 use App\Models\Pacientes;
-
-
+use App\Models\Tratamientos;
 
 class CitasController extends Controller
 {
@@ -50,10 +49,13 @@ class CitasController extends Controller
 
         $paciente = Pacientes::BuscarPaciente($detaCita->paciente);
 
+        $tratamientos = Tratamientos::TratamientosPacientes($detaCita->paciente);
+
         if (request()->ajax()) {
             return response()->json([
                 'detaCita' => $detaCita,
                 'paciente' => $paciente,
+                'tratamientos' => $tratamientos,
             ]);
         }
     } else {

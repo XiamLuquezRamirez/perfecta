@@ -190,6 +190,17 @@ class Tratamientos extends Model
         return $respuestaTra;
     }
 
+    public static function TratamientosPacientes($idPac)
+    {
+        $respuestaTra = DB::connection('mysql')->table('tratamientos')
+            ->leftJoin("profesionales", "profesionales.id", "tratamientos.profesional")
+            ->select("tratamientos.*", "profesionales.nombre AS nprofe")
+            ->where("paciente", $idPac)
+            ->where('tratamientos.estado_reg', 'ACTIVO')
+            ->get();
+        return $respuestaTra;
+    }
+
     public static function TratamientosPacientesRecaudo($idPac)
     {
         $respuestaTra = DB::connection("mysql")->select("SELECT st.*,tr.id, tr.saldo_previo sprev, tr.nombre AS ntrara, prof.nombre nprof, CONCAT(pac.identificacion,' - ',pac.nombre, ' ',pac.apellido) AS npac FROM servicios_tratamiento st 

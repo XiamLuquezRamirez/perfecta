@@ -316,6 +316,8 @@
         $(document).ready(function() {
             $("#MenPaciente").removeClass("active");
 
+            localStorage.clear();
+
             var picker = $('.pickadate').daterangepicker({
                 singleDatePicker: true,
                 showDropdowns: true,

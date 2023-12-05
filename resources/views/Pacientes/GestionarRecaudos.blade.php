@@ -280,7 +280,8 @@
                                                         <div class="row invoice-adress-info py-2">
                                                             <div class="col-12 mt-1 from-info">
                                                                 <div class="info-title mb-1">
-                                                                    <span class="font-weight-bold no-wrap" style="font-size: 20px;">Paciente</span>
+                                                                    <span class="font-weight-bold no-wrap"
+                                                                        style="font-size: 20px;">Paciente</span>
                                                                 </div>
                                                                 <div class="company-name mb-1">
                                                                     <div class="issue-date pr-2">
@@ -304,7 +305,8 @@
                                                         <div class="row invoice-adress-info py-2">
                                                             <div class="col-6 mt-1 from-info">
                                                                 <div class="info-title mb-1">
-                                                                    <span class="font-weight-bold no-wrap" style="font-size: 20px;" >Tratamiento</span>
+                                                                    <span class="font-weight-bold no-wrap"
+                                                                        style="font-size: 20px;">Tratamiento</span>
                                                                 </div>
                                                                 <div class="company-name mb-1">
                                                                     <span class="font-weight-bold no-wrap">Descripción:
@@ -403,11 +405,15 @@
                                                         <a onclick="$.imprimirComprobante();"
                                                             class="btn btn-info btn-block mb-1 print-invoice"> <i
                                                                 class="feather icon-printer mr-25 common-size"></i>
-                                                            Imprimir</a>
+                                                            Imprimir comprobante</a>
+                                                        <a onclick="$.enviarComprobante();"
+                                                            class="btn btn-success btn-block mb-1 print-invoice"> <i
+                                                                class="feather icon-navigation mr-25 common-size"></i>
+                                                            Enviar comprobante</a>
                                                         <a onclick="$.otroPago();"
                                                             class="btn btn-success btn-block mb-1"><i
                                                                 class="feather icon-credit-card mr-25 common-size"></i>
-                                                            Otro Pago</a>
+                                                            Realizar Pago</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -472,7 +478,7 @@
             }
 
             $.extend({
-                buscInfTratamientos: function(idPac) {
+                buscInfTratamientos: function(idPac,idTrata) {
 
                     var form = $("#formCargarTratamientos");
                     $("#idPac").remove();
@@ -493,13 +499,40 @@
                         success: function(respuesta) {
 
                             $.each(respuesta.tratamientosRecaudo, function(i, item) {
-                                tratamientos += '<tr >' +
-                                    '<td class="text-truncate" style="vertical-align: middle; ">' +
-                                    '    <input type="checkbox" data-id="' + item
-                                    .tratamiento +
-                                    '" id="checkRecaudo" class="icheck-activity classTrata">' +
-                                    '</td>' +
-                                    '<td class="text-truncate">' +
+                                tratamientos += '<tr >';
+
+                                    if (typeof idTrata != 'undefined') {
+                                       
+                                        if(item.tratamiento==idTrata){
+                                            tratamientos+='<td class="text-truncate"  style="vertical-align: middle; ">' +
+                                                '    <input type="checkbox" checked data-id="' + item
+                                                .tratamiento +
+                                                '" id="checkRecaudo' + item.tratamiento +
+                                                '" class="icheck-activity classTrata">' +
+                                                '</td>';
+                                        }else{
+                                            tratamientos+='<td class="text-truncate" style="vertical-align: middle; ">' +
+                                                '    <input type="checkbox"  data-id="' + item
+                                                .tratamiento +
+                                                '" id="checkRecaudo' + item.tratamiento +
+                                                '" class="icheck-activity classTrata">' +
+                                                '</td>'; 
+                                        }
+
+                                    }else{
+
+                                        tratamientos+='<td class="text-truncate" style="vertical-align: middle; ">' +
+                                            '    <input type="checkbox"  data-id="' + item
+                                            .tratamiento +
+                                            '" id="checkRecaudo' + item.tratamiento +
+                                            '" class="icheck-activity classTrata">' +
+                                            '</td>';
+
+                                    }
+                                   
+
+
+                                    tratamientos+='<td class="text-truncate">' +
                                     '    <div>' +
                                     '        <p class="mb-25 latest-update-item-name text-bold-600">' +
                                     item.nombreTratamiento +
@@ -542,7 +575,7 @@
                     ); // Reemplaza 'miDiv' con el ID de tu div
                     datTratameintos.style.filter = 'none';
                     let idPac = $("idPac").val();
-                   
+
 
                     $.atrasTratamiento();
                     $.buscInfTratamientos(idPac);
@@ -587,7 +620,7 @@
                     //secciones
                 },
                 recorrerServ: function() {
-                
+
                     var checkServ = document.getElementsByClassName('icheck-activity-det');
                     var sumTotal = 0;
                     $("#totalServ").html("0,00");
@@ -741,12 +774,13 @@
                         $("#valorVisAbono").val('0,00');
                         $("#selAbono").val("no");
 
-                        $("#valorVisPago1").val(formatCurrency($("#totalServText").val(), 'es-CO', 'COP'));
+                        $("#valorVisPago1").val(formatCurrency($("#totalServText").val(), 'es-CO',
+                            'COP'));
                         $("#valorPago1").val($("#totalServText").val());
-                       
+
                     }
 
-                  
+
                 },
                 cammbioMedioPago: function(id) {
                     let val = $("#medioPago" + id).val();
@@ -840,7 +874,7 @@
                         processData: false,
                         contentType: false,
                         success: function(respuesta) {
-                            
+
                             if (respuesta) {
                                 Swal.fire({
                                     type: "success",
@@ -851,7 +885,8 @@
                                     buttonsStyling: false
                                 });
 
-                                $("#ncompro").html(agregarCeros(respuesta.transaccion.id, 5));
+                                $("#ncompro").html(agregarCeros(respuesta.transaccion.id,
+                                    5));
                                 $("#fcreacion").html(convertirFormatoFechaHora(respuesta
                                     .transaccion.created_at));
                                 $("#fimpresion").html(convertirFormatoFechaHora(
@@ -864,7 +899,8 @@
 
                                 $("#ntratamiento").html(respuesta.tratamiento.nombre);
                                 $("#nprofesional").html(respuesta.tratamiento.nprofe);
-                                $("#valorAbonoComp").html(formatCurrency(respuesta.transaccion
+                                $("#valorAbonoComp").html(formatCurrency(respuesta
+                                    .transaccion
                                     .pago_total, 'es-CO', 'COP'));
 
                                 //listar medio de pago
@@ -872,7 +908,9 @@
                                 let vtotal = 0;
                                 let referencia = '';
                                 $.each(respuesta.medioPago, function(i, item) {
-                                    referencia = item.referencia = item.referencia !== null ? item.referencia : "---";
+                                    referencia = item.referencia = item
+                                        .referencia !== null ? item.referencia :
+                                        "---";
                                     medioPago += '<tr>' +
                                         '<td>' + item.medpago + '</td>' +
                                         '<td class="font-weight-bold">' +
@@ -1002,7 +1040,27 @@
                 }
 
             });
-            var editorEvolucion = CKEDITOR.instances.evolucion_escrita;
+            var editorEvolucion = CKEDITOR.instances.evolucion_escrita; 
+
+            //leer variable localStorage tratamientos
+            var ultimaParteURLAnterior = document.referrer.split('/').filter(Boolean).pop();
+            if (ultimaParteURLAnterior == "Administracion") {
+                if (localStorage.getItem('idTratamiento')) {
+                    let idTratamiento = localStorage.getItem('idTratamiento');                   
+                    $.buscInfTratamientos(localStorage.getItem('idPaciente'),idTratamiento);
+                    var datTratameintos = document.getElementById('div-datTratameintos'); // Reemplaza 'miDiv' con el ID de tu div
+                    datTratameintos.style.filter = 'none';
+                    $.pagarTratamiento();
+                
+
+                } else if (localStorage.getItem('idPaciente')) {
+                    $.buscInfTratamientos(localStorage.getItem('idPaciente'));
+                    var datTratameintos = document.getElementById('div-datTratameintos'); // Reemplaza 'miDiv' con el ID de tu div
+                    datTratameintos.style.filter = 'none';
+                }
+
+            }
+
         });
 
         function formatCurrency(number, locale, currencySymbol) {

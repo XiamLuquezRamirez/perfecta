@@ -3,7 +3,7 @@
     <div class="navbar-container main-menu-content" data-menu="menu-container">
         
         <ul class="nav navbar-nav" id="main-menu-navigation" data-menu="menu-navigation">
-            <li id="MenAdmin" class="dropdown nav-item" data-menu="dropdown"><a class="nav-link" href="{{ url('/Administracion') }}" ><i class="feather icon-home"></i><span data-i18n="Dashboard">Inicio</span></a>
+            <li id="MenInicio" class="dropdown nav-item" data-menu="dropdown"><a class="nav-link" href="{{ url('/Administracion') }}" ><i class="feather icon-home"></i><span data-i18n="Dashboard">Inicio</span></a>
             </li>
             <li id="MenPaciente" class="dropdown nav-item" data-menu="dropdown"><a class="nav-link" href="{{ url('/AdminPacientes/Pacientes') }}"><i class="feather icon-users"></i><span data-i18n="Templates">Pacientes</span></a>
             </li>

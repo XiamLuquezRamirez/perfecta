@@ -193,6 +193,7 @@
     <script>
         $(document).ready(function() {
             $("#MenPaciente").removeClass("active");
+            localStorage.clear();
             $.extend({
                 cargar: function(page, searchTerm = '') {
                     var form = $("#formCargarServicios");

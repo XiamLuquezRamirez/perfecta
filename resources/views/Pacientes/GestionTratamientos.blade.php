@@ -68,7 +68,8 @@
                                     </div>
                                     <div class="card-content">
                                         <div class="card-body" id="listTratamientos">
-                                            <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">Tratamientos Activos
+                                            <h4 id="tit-div-trata-act"
+                                                class="pl-2 mb-0 title-info-time-heading text-bold-500">Tratamientos Activos
                                             </h4>
                                             <hr>
                                             <div class="col-xxl-8 col-xl-12 col-lg-12 col-md-12 col-12">
@@ -79,7 +80,8 @@
                                                 </div>
                                             </div>
 
-                                            <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">Otros Tratamientos
+                                            <h4 id="tit-div-trata-otr"
+                                                class="pl-2 mb-0 title-info-time-heading text-bold-500">Otros Tratamientos
                                             </h4>
                                             <hr>
 
@@ -284,8 +286,8 @@
                                                                         <div class="col-md-3 col-sm-12">
                                                                             <div class="form-group">
                                                                                 <label for="userinput5">Valor:</label>
-                                                                                <input type="text" 
-                                                                                onclick="this.select();"
+                                                                                <input type="text"
+                                                                                    onclick="this.select();"
                                                                                     onchange="$.cambioFormato(this.id);"
                                                                                     class="form-control" id="valorVis"
                                                                                     name="valorVis">
@@ -327,7 +329,8 @@
                                             <div class="modal-dialog modal-lg" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title" id="tituloEvolucion">Agregar Evolución</h4>
+                                                        <h4 class="modal-title" id="tituloEvolucion">Agregar Evolución
+                                                        </h4>
                                                         <button type="button" class="close" data-dismiss="modal"
                                                             aria-label="Close">
                                                             <span aria-hidden="true"
@@ -342,7 +345,9 @@
                                                                     <div class="row">
                                                                         <div class="col-md-9 col-sm-12">
                                                                             <div class="form-group">
-                                                                                <label for="userinput5">Seleccione el profesional que realizó el servicio seleccionado:</label>
+                                                                                <label for="userinput5">Seleccione el
+                                                                                    profesional que realizó el servicio
+                                                                                    seleccionado:</label>
                                                                                 <select class="select2 form-control"
                                                                                     id="profesionalEvolucion"
                                                                                     name="profesionalEvolucion">
@@ -351,43 +356,58 @@
                                                                         </div>
                                                                         <div class="col-md-3 col-sm-12">
                                                                             <div class="form-group">
-                                                                                <label for="userinput5"> % de avance:</label>
-                                                                                <select class="form-control" onchange="$.cambiarAvance(this.value)" id="pavance" name="pavance">
+                                                                                <label for="userinput5"> % de
+                                                                                    avance:</label>
+                                                                                <select class="form-control"
+                                                                                    onchange="$.cambiarAvance(this.value)"
+                                                                                    id="pavance" name="pavance">
                                                                                     <option value="0">0%</option>
                                                                                     <option value="25">25%</option>
                                                                                     <option value="50">50%</option>
                                                                                     <option value="75">75%</option>
-                                                                                    <option value="100">(Realizar) 100%</option>
+                                                                                    <option value="100">(Realizar) 100%
+                                                                                    </option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-md-12 col-sm-12">
                                                                             <div class="form-group">
-                                                                                <label for="userinput5">Evolución escrita:</label>
+                                                                                <label for="userinput5">Evolución
+                                                                                    escrita:</label>
                                                                                 <textarea cols="80" id="evolucion_escrita" name="evolucion_escrita" rows="10"></textarea>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="form-group col-12 mb-2 mt-2 file-repeater">
-                                                                            <div id="items-archivo" data-repeater-list="repeater-list">
-                                                                                <div  data-repeater-item>
+                                                                        <div
+                                                                            class="form-group col-12 mb-2 mt-2 file-repeater">
+                                                                            <div id="items-archivo"
+                                                                                data-repeater-list="repeater-list">
+                                                                                <div data-repeater-item>
                                                                                     <div class="row mb-1">
                                                                                         <div class="col-9 col-xl-10">
-                                                                                            <label class="file center-block">
+                                                                                            <label
+                                                                                                class="file center-block">
                                                                                                 <input type="file"
                                                                                                     accept=".jpg, .jpeg, .png, .gif, .mp4, .avi, .mov, .pdf"
-                                                                                                    name="archivo" id="archivo">
-                                                                                                <span class="file-custom"></span>
+                                                                                                    name="archivo"
+                                                                                                    id="archivo">
+                                                                                                <span
+                                                                                                    class="file-custom"></span>
                                                                                             </label>
                                                                                         </div>
                                                                                         <div class="col-2 col-xl-1">
-                                                                                            <button type="button"  data-repeater-delete title="Eliminar Archivo" class="btn btn-icon btn-pure danger mr-1"><i class="fa fa-trash-o"></i></button>
-                                                                                           
+                                                                                            <button type="button"
+                                                                                                data-repeater-delete
+                                                                                                title="Eliminar Archivo"
+                                                                                                class="btn btn-icon btn-pure danger mr-1"><i
+                                                                                                    class="fa fa-trash-o"></i></button>
+
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                
-                                                                            <button type="button" data-repeater-create class="btn btn-primary">
+
+                                                                            <button type="button" data-repeater-create
+                                                                                class="btn btn-primary">
                                                                                 <i class="icon-plus4"></i> Agregar archivo
                                                                             </button>
                                                                         </div>
@@ -400,7 +420,8 @@
                                                                                         class="feather icon-corner-up-left"></i>
                                                                                     Salir
                                                                                 </button>
-                                                                                <button type="button" id="btnGuardarEvolucion"
+                                                                                <button type="button"
+                                                                                    id="btnGuardarEvolucion"
                                                                                     onclick="$.guardarEvolucion()"
                                                                                     class="btn btn-success">
                                                                                     <i class="fa fa-check-square-o"></i>
@@ -436,30 +457,38 @@
                                                             <div
                                                                 class="statistics-chart-data d-flex justify-content-center ml-auto mr-auto pb-50 mb-0">
                                                                 <div class="collection mr-1">
-                                                                    <span class="list-group-item-icon d-inline font-weight-bold">
-                                                                        <i class="icon text-primary bg-light-primary icon-wallet total-products-icon rounded-circle p-50"></i>
+                                                                    <span
+                                                                        class="list-group-item-icon d-inline font-weight-bold">
+                                                                        <i
+                                                                            class="icon text-primary bg-light-primary icon-wallet total-products-icon rounded-circle p-50"></i>
                                                                         Total:
                                                                     </span>
                                                                     <span id="infTotal"></span>
                                                                 </div>
                                                                 <div class="collection mr-1">
-                                                                    <span class="list-group-item-icon d-inline font-weight-bold">
-                                                                        <i class="icon text-primary bg-light-primary icon-check total-products-icon rounded-circle p-50"></i>
+                                                                    <span
+                                                                        class="list-group-item-icon d-inline font-weight-bold">
+                                                                        <i
+                                                                            class="icon text-primary bg-light-primary icon-check total-products-icon rounded-circle p-50"></i>
                                                                         Realizado:
                                                                     </span>
                                                                     <span id="infRealizado"></span>
                                                                 </div>
-                                                             
+
                                                                 <div class="collection mr-1">
-                                                                    <span class="list-group-item-icon d-inline font-weight-bold">
-                                                                        <i class="icon text-danger bg-light-danger icon-basket-loaded total-products-icon rounded-circle p-50"></i>
+                                                                    <span
+                                                                        class="list-group-item-icon d-inline font-weight-bold">
+                                                                        <i
+                                                                            class="icon text-danger bg-light-danger icon-basket-loaded total-products-icon rounded-circle p-50"></i>
                                                                         Pagado:
                                                                     </span>
                                                                     <span id="infPagado"></span>
                                                                 </div>
                                                                 <div class="collection mr-1">
-                                                                    <span class="list-group-item-icon d-inline font-weight-bold">
-                                                                        <i class="icon text-primary bg-light-primary icon-graph total-products-icon rounded-circle p-50"></i>
+                                                                    <span
+                                                                        class="list-group-item-icon d-inline font-weight-bold">
+                                                                        <i
+                                                                            class="icon text-primary bg-light-primary icon-graph total-products-icon rounded-circle p-50"></i>
                                                                         Saldo:
                                                                     </span>
                                                                     <span id="infSaldo"></span>
@@ -469,8 +498,10 @@
                                                                 <button type="button" onclick="$.addSeccion();"
                                                                     class="btn btn-danger mr-1"><i class="fa fa-plus"></i>
                                                                     Agregar Sección</button>
-                                                                <button style="display: none;" onclick="$.addServicioTrata();" type="button" class="btn btn-primary "><i
-                                                                        class="fa fa-plus"></i> Agregar Servicio</button>
+                                                                <button style="display: none;"
+                                                                    onclick="$.addServicioTrata();" type="button"
+                                                                    class="btn btn-primary "><i class="fa fa-plus"></i>
+                                                                    Agregar Servicio</button>
                                                             </div>
                                                             <div id="sesionesTratamiento" class="form-body pt-0">
                                                                 <div class="carwd-body">
@@ -519,9 +550,12 @@
                                 <!-- contacts view -->
                                 <div class="card-body border-top-blue-grey border-top-lighten-5">
                                     <div class="list-group">
-                                        <a id="lisTodos" class="list-group-item active" onclick="$.mostrarTodos(this);">Todos</a>
-                                        <a id="lisActivos" class="list-group-item " onclick="$.mostrarActivos(this);">Activos</a>
-                                        <a id="lisOtros" class="list-group-item " onclick="$.mostrarOtros(this );">Otros</a>
+                                        <a id="lisTodos" class="list-group-item tagEstados active" data-id="1"
+                                            onclick="$.mostrarTratamientos(this);">Todos</a>
+                                        <a id="lisActivos" class="list-group-item tagEstados" data-id="2"
+                                            onclick="$.mostrarTratamientos(this);">Activos</a>
+                                        <a id="lisOtros" class="list-group-item tagEstados" data-id="3"
+                                            onclick="$.mostrarTratamientos(this );">Otros</a>
                                     </div>
                                 </div>
 
@@ -694,9 +728,9 @@
 
         })(window, document, jQuery);
 
-         ///////////////////CONFIGURACION EDITOR
+        ///////////////////CONFIGURACION EDITOR
 
-         CKEDITOR.editorConfig = function(config) {
+        CKEDITOR.editorConfig = function(config) {
             config.toolbarGroups = [{
                     name: 'document',
                     groups: ['mode', 'document', 'doctools']
@@ -755,13 +789,13 @@
                 'Source,Save,NewPage,ExportPdf,Preview,Print,Templates,Cut,Copy,Paste,PasteText,PasteFromWord,Undo,Redo,Replace,Find,Scayt,Form,Checkbox,Radio,TextField,Textarea,Select,SelectAll,Button,ImageButton,HiddenField,Strike,CopyFormatting,RemoveFormat,Indent,Blockquote,Outdent,CreateDiv,JustifyLeft,JustifyCenter,JustifyRight,JustifyBlock,BidiLtr,BidiRtl,Language,Link,Unlink,Anchor,Flash,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Format,BGColor,ShowBlocks,About,Underline,Italic';
         };
 
-       
-
         $(document).ready(function() {
             $("#MenPaciente").removeClass("active");
 
-           
+
             var lastSelectedData = null;
+
+           
 
 
             $('#paciente').on('select2:select', function(e) {
@@ -779,8 +813,6 @@
 
             function mostrarInformacionUltimoSeleccionado() {
                 if (lastSelectedData) {
-                    console.log(lastSelectedData.id);
-                    console.log(lastSelectedData.text);
                     $.buscInfGeneralPaciente(lastSelectedData.id);
                 }
             }
@@ -796,7 +828,7 @@
                     $("#nombre_tratamiento").val('');
                     $('#profesional').val('').trigger('change.select2');
                     $('#especialidad').val('').trigger('change.select2');
-                
+
 
                     $("#tituloTratamiento").html("Agregar tratamiento.");
                     $("#accion").val("agregar");
@@ -805,11 +837,12 @@
                 cambiarAvance: function(val) {
                     var boton = document.getElementById('btnGuardarEvolucion');
                     if (boton) {
-                      boton.innerHTML = '<i class="fa fa-check-square-o"></i> Guardar avance ('+val+'%)';
+                        boton.innerHTML = '<i class="fa fa-check-square-o"></i> Guardar avance (' +
+                            val + '%)';
                     }
                 },
-                editarTratamiento: function(id){
-                    
+                editarTratamiento: function(id) {
+
                     $("#modalTratamiento").modal({
                         backdrop: 'static',
                         keyboard: false
@@ -836,8 +869,10 @@
                         dataType: "json",
                         success: function(respuesta) {
                             $("#nombre_tratamiento").val(respuesta.tratraEdit.nombre);
-                            $('#profesional').val(respuesta.tratraEdit.profesional).trigger('change.select2');
-                            $('#especialidad').val(respuesta.tratraEdit.especialidad).trigger('change.select2');
+                            $('#profesional').val(respuesta.tratraEdit.profesional).trigger(
+                                'change.select2');
+                            $('#especialidad').val(respuesta.tratraEdit.especialidad)
+                                .trigger('change.select2');
                         }
                     });
 
@@ -881,21 +916,25 @@
 
                                 totalTrata = totalTrata + parseInt(item.valor);
                                 pagado = pagado + parseInt(item.pagado);
-                                if(item.estado_serv == "Terminado") {
+                                if (item.estado_serv == "Terminado") {
                                     realizado = realizado + parseInt(item.valor);
                                 }
 
                                 let porAvancTrat = item.avance;
-                                var formatoMoneda = formatCurrency(item.valor,'es-CO', 'COP');
+                                var formatoMoneda = formatCurrency(item.valor,
+                                    'es-CO', 'COP');
 
                                 servSEccion = '<tr id="tr-serv' + item.id + '">' +
                                     '<td class="align-middle">' +
-                                    '    <div title="Agregar Avance" id="outerCircle' + item.id +
+                                    '    <div title="Agregar Avance" id="outerCircle' +
+                                    item.id +
                                     '" class="outerCircle"' +
-                                    '        onclick="$.addEvolucion(' + item.id +','+item.seccion+');"' +
+                                    '        onclick="$.addEvolucion(' + item.id +
+                                    ',' + item.seccion + ');"' +
                                     '        style="cursor: pointer;display: flex; justify-content: center; align-items: center; padding: 0; height: 50px; width: 50px; border-radius: 100%; background-image: conic-gradient(#94d3a2 0deg, #94d3a2 162deg, #D3D3D3 162deg)">' +
                                     '        <div style="display: flex; justify-content: center; align-items: center; padding: 0; height: 40px; width: 40px; border-radius: 100%; background-color:white">' +
-                                    '            <span id="porcentajeServ' + item.id + '">95%</span>' +
+                                    '            <span id="porcentajeServ' + item
+                                    .id + '">95%</span>' +
                                     '        </div>' +
                                     '    </div>' +
                                     '</td>' +
@@ -905,13 +944,17 @@
                                     '<td class="align-middle">' +
                                     '    <span>' + formatoMoneda + '</span>' +
                                     '</td>' +
-                                    '<td class="align-middle">' ;
-                               if(item.estado_serv == 'Activo'){
-                                servSEccion += '    <span class="badge badge-info">'+item.estado_serv +'</span>' ;
-                               }else{
-                                servSEccion += '    <span class="badge badge-success">'+item.estado_serv +'</span>' ;
-                               }
-                               
+                                    '<td class="align-middle">';
+                                if (item.estado_serv == 'Activo') {
+                                    servSEccion +=
+                                        '    <span class="badge badge-info">' + item
+                                        .estado_serv + '</span>';
+                                } else {
+                                    servSEccion +=
+                                        '    <span class="badge badge-success">' +
+                                        item.estado_serv + '</span>';
+                                }
+
                                 servSEccion += '</td>' +
                                     '<td class="align-middle">' +
                                     '    <div class="dropdown">' +
@@ -926,7 +969,9 @@
                                     '            x-placement="bottom-end"' +
                                     '            style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 18px, 0px);"' +
                                     '            x-out-of-boundaries="">' +
-                                    '        <a onclick="$.addEvolucion(' + item.id +','+item.seccion+');" class="dropdown-item">' +
+                                    '        <a onclick="$.addEvolucion(' + item
+                                    .id + ',' + item.seccion +
+                                    ');" class="dropdown-item">' +
                                     '        <i class="feather icon-trending-up"></i>' +
                                     '         Registrar Evolución' +
                                     '        </a>' +
@@ -957,7 +1002,8 @@
 
                             //informacion de presupuesto tratamiento
                             $("#infTotal").html(formatCurrency(totalTrata, 'es-CO', 'COP'));
-                            $("#infRealizado").html(formatCurrency(realizado, 'es-CO', 'COP'));
+                            $("#infRealizado").html(formatCurrency(realizado, 'es-CO',
+                                'COP'));
                             $("#infPagado").html(formatCurrency(pagado, 'es-CO', 'COP'));
                             $("#infSaldo").html(formatCurrency(saldo, 'es-CO', 'COP'));
 
@@ -1014,8 +1060,11 @@
                         success: function(respuesta) {
                             $.each(respuesta.servicios, function(i, item) {
 
-                                select += '<option value="' + item.id + '"><strong>' + item
-                                    .nombre + '</strong> &nbsp;&nbsp;&nbsp;('+formatCurrency(item.valor,'es-CO', 'COP')+')</option>';
+                                select += '<option value="' + item.id +
+                                    '"><strong>' + item
+                                    .nombre + '</strong> &nbsp;&nbsp;&nbsp;(' +
+                                    formatCurrency(item.valor, 'es-CO', 'COP') +
+                                    ')</option>';
 
                             });
                         }
@@ -1088,22 +1137,28 @@
 
                                 $.each(respuesta.newTrata, function(i, item) {
 
-                                    newTrata = '<div id="tratamiento'+item.id+'" class="row">' +
+                                    newTrata = '<div id="tratamiento' + item.id +
+                                        '" class="row">' +
                                         '<div class="col-12 pt-2 pb-2 border-bottom-blue-grey border-bottom-lighten-5">' +
                                         '    <div class="info-time-tracking-title d-flex justify-content-between align-items-center">' +
                                         '        <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">' +
                                         '            ' + item.nombre + '</h4>' +
                                         '        <span class="pr-2 fonticon-wrap"' +
                                         '            style="cursor: pointer; ">' +
-                                        '            <i onclick="$.editarTratamiento('+item.id+');" style="transition: all .2s ease-in-out;" title="Editar Tratamiento"' +
+                                        '            <i onclick="$.editarTratamiento(' +
+                                        item.id +
+                                        ');" style="transition: all .2s ease-in-out;" title="Editar Tratamiento"' +
                                         '                class="fa fa-pencil font-medium-5 hvr-grow-shadow mr-1"></i>' +
-                                        '            <i onclick="$.eliminarTratamiento('+item.id+');" title="Eliminar Tratamiento"' +
+                                        '            <i onclick="$.eliminarTratamiento(' +
+                                        item.id +
+                                        ');" title="Eliminar Tratamiento"' +
                                         '                class="fa fa-trash-o  font-medium-5 hvr-grow-shadow"></i>' +
                                         '        </span>' +
                                         '    </div>' +
                                         '</div>' +
                                         '<div class="col-12 hvr-grow-shadow" style="cursor: pointer;"' +
-                                        '    onclick="$.verTratamiento(' + item.id +');">' +
+                                        '    onclick="$.verTratamiento(' + item.id +
+                                        ');">' +
                                         '    <div class="card-body ">' +
                                         '        <div class="row justify-content-center align-items-center">' +
                                         '            <div class="col-xl-4 col-lg-6 col-md-12 text-center clearfix">' +
@@ -1121,9 +1176,8 @@
                                         '            </div>' +
                                         '            <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">' +
                                         '                <h6 class="pt-1"><span' +
-                                        '                        class="fa fa-calendar"></span> Ultima' +
-                                        '                    Cita:</h6>' +
-                                        '                <p>---</p>' +
+                                        '                        class="fa fa-list"></span> Servicios Activos:</h6>' +
+                                        '                <p>0</p>' +
                                         '            </div>' +
                                         '            <div class="col-xl-2 col-lg-6 col-md-12 text-center clearfix">' +
                                         '                <div id="outerCircleTrata' +
@@ -1173,18 +1227,18 @@
                     $("#accion").val('agregar');
 
                 },
-                addEvolucion: function(idServ,idSeccion) {
+                addEvolucion: function(idServ, idSeccion) {
 
                     $("#modalEvoluciones").modal({
                         backdrop: 'static',
                         keyboard: false
                     });
 
-                    $('#pavance').val("0").trigger('change.select2');                    
+                    $('#pavance').val("0").trigger('change.select2');
                     $("#items-archivo").html('');
                     var boton = document.getElementById('btnGuardarEvolucion');
                     if (boton) {
-                      boton.innerHTML = '<i class="fa fa-check-square-o"></i> Guardar avance (0%)';
+                        boton.innerHTML = '<i class="fa fa-check-square-o"></i> Guardar avance (0%)';
                     }
 
                     $("#idSeccion").val(idSeccion);
@@ -1287,8 +1341,8 @@
                                 });
 
                                 if (accion == "agregar") {
-                                 //$.dibujarSeccion(respuesta);
-                                 $.verTratamiento($("#idTratamiento").val());
+                                    //$.dibujarSeccion(respuesta);
+                                    $.verTratamiento($("#idTratamiento").val());
                                 } else {
                                     $("#nomSeccion" + respuesta.seccion.id).html(respuesta
                                         .seccion.nombre);
@@ -1316,7 +1370,8 @@
 
                     let conSeccion = $("#conSeccion").val();
                     conSeccion++;
-                    let divSecciones = '<div id="seccion'+respuesta.seccion.id+'" class="card collapse-header" role="tablist">' +
+                    let divSecciones = '<div id="seccion' + respuesta.seccion.id +
+                        '" class="card collapse-header" role="tablist">' +
                         '<div id="headingCollapse5"' +
                         '    class="card-header d-flex justify-content-between align-items-center hvr-grow-shadow m-1"' +
                         '    style="border-top-left-radius: 0.25rem; border-top-right-radius: 0.25rem; border: 1px solid #e4e7ed;"' +
@@ -1530,7 +1585,7 @@
                         });
                         return;
                     }
-                  
+
 
                     var loader = document.getElementById('loader');
                     loader.style.display = 'block';
@@ -1563,7 +1618,7 @@
                         idPaciente +
                         "'>");
                     form.append("<input type='hidden' id='idSer' name='idSer'  value='" +
-                    idServicio +
+                        idServicio +
                         "'>");
 
 
@@ -1585,7 +1640,8 @@
                                 });
                                 $("#trServicioSeccion" + idSeccion).html('');
                                 $.dibujarServicioSecc(respuesta);
-                                var totalServicios = formatCurrency(respuesta.totServ,'es-CO', 'COP');
+                                var totalServicios = formatCurrency(respuesta.totServ,
+                                    'es-CO', 'COP');
                                 $("#span-total" + idSeccion).html(totalServicios);
 
                                 var loader = document.getElementById('loader');
@@ -1617,8 +1673,10 @@
                         let servicio = '<tr id="tr-serv' + item.id + '">' +
                             '<td' +
                             '    class="align-middle">' +
-                            '    <div title="Agregar Avance" id="outerCircle' + item.id + '" class="outerCircle"' +
-                            '        onclick="$.addEvolucion(' + item.id +','+item.seccion+');"' +
+                            '    <div title="Agregar Avance" id="outerCircle' + item.id +
+                            '" class="outerCircle"' +
+                            '        onclick="$.addEvolucion(' + item.id + ',' + item.seccion +
+                            ');"' +
                             '        style="cursor: pointer; display: flex; justify-content: center; align-items: center; padding: 0; height: 50px; width: 50px; border-radius: 100%; background-image: conic-gradient(#94d3a2 0deg, #94d3a2 162deg, #D3D3D3 162deg)">' +
                             '        <div style="display: flex; justify-content: center; align-items: center; padding: 0; height: 40px; width: 40px; border-radius: 100%; background-color:white">' +
                             '            <span' +
@@ -1632,14 +1690,16 @@
                             '<td class="align-middle">' +
                             '    <span>' + formatoMoneda + '</span>' +
                             '</td>' +
-                            '<td class="align-middle">' ;
-                                if(item.estado_serv == 'Activo'){
-                                    servicio += '    <span class="badge badge-info">'+item.estado_serv +'</span>' ;
-                                }else{
-                                    servicio += '    <span class="badge badge-success">'+item.estado_serv +'</span>' ;
-                                }
-                                
-                                servicio += '</td>' +
+                            '<td class="align-middle">';
+                        if (item.estado_serv == 'Activo') {
+                            servicio += '    <span class="badge badge-info">' + item
+                                .estado_serv + '</span>';
+                        } else {
+                            servicio += '    <span class="badge badge-success">' + item
+                                .estado_serv + '</span>';
+                        }
+
+                        servicio += '</td>' +
                             '<td  class="align-middle">' +
                             '    <div class="dropdown">' +
                             '        <span class="feather icon-more-vertical dropdown-toggle"' +
@@ -1653,7 +1713,8 @@
                             '            x-placement="bottom-end"' +
                             '            style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 18px, 0px);"' +
                             '            x-out-of-boundaries="">' +
-                            '        <a onclick="$.addEvolucion(' + item.id +','+item.seccion+');" class="dropdown-item">' +
+                            '        <a onclick="$.addEvolucion(' + item.id + ',' + item
+                            .seccion + ');" class="dropdown-item">' +
                             '        <i class="feather icon-trending-up"></i>' +
                             '         Registrar Evolución' +
                             '        </a>' +
@@ -1682,9 +1743,9 @@
 
                     $.each(respuesta.servSeccion, function(i, item) {
                         let porAvancTrat = item.avance;
-                        var formatoMoneda = formatCurrency(item.valor,'es-CO', 'COP');
+                        var formatoMoneda = formatCurrency(item.valor, 'es-CO', 'COP');
 
-                        let servicio = '';                     
+                        let servicio = '';
 
                         updatePercentageServicios(porAvancTrat, item.id);
                     });
@@ -1752,7 +1813,8 @@
                         async: false,
                         dataType: "json",
                         success: function(respuesta) {
-                            var valorServicio = formatCurrency(respuesta.serviciosEdit.valor,'es-CO', 'COP');
+                            var valorServicio = formatCurrency(respuesta.serviciosEdit
+                                .valor, 'es-CO', 'COP');
 
                             $('#servicioTrat').val(respuesta.serviciosEdit.servicio)
                                 .trigger('change.select2');
@@ -1833,7 +1895,7 @@
                             });
 
                             $.verTratamiento($("#idTratamiento").val());
-                           
+
 
 
                         }
@@ -1841,7 +1903,7 @@
 
                 },
                 eliminarSeccion: function(idSecc) {
-                   
+
                     Swal.fire({
                         title: "Esta seguro de Eliminar este registro?",
                         text: "¡No podrás revertir esto!",
@@ -1868,12 +1930,13 @@
                     });
                 },
                 procederEliminarSeccion: function(idSecc) {
-                    
+
 
                     var form = $("#formEliminarSeccion");
 
                     $("#idSecc").remove();
-                    form.append("<input type='hidden' id='idSecc' name='idSecc'  value='" + idSecc +"'>");
+                    form.append("<input type='hidden' id='idSecc' name='idSecc'  value='" + idSecc +
+                        "'>");
 
                     var url = form.attr("action");
                     var datos = form.serialize();
@@ -1885,7 +1948,7 @@
                         async: false,
                         dataType: "json",
                         success: function(respuesta) {
-                            if(respuesta.seccionStatus == "ok"){
+                            if (respuesta.seccionStatus == "ok") {
                                 Swal.fire({
                                     type: "success",
                                     title: "Eliminado!",
@@ -1893,7 +1956,7 @@
                                     confirmButtonClass: "btn btn-success"
                                 });
                                 $.verTratamiento($("#idTratamiento").val());
-                            }else{
+                            } else {
                                 Swal.fire({
                                     type: "warning",
                                     title: "Alerta!",
@@ -1906,7 +1969,7 @@
                     });
                 },
                 eliminarTratamiento: function(idTrata) {
-                   
+
                     Swal.fire({
                         title: "Esta seguro de Eliminar este registro?",
                         text: "¡No podrás revertir esto!",
@@ -1933,11 +1996,12 @@
                     });
                 },
                 procederEliminarTratamiento: function(idTrata) {
-                    
+
                     var form = $("#formEliminarTratamiento");
 
                     $("#idTrata").remove();
-                    form.append("<input type='hidden' id='idTrata' name='idTrata'  value='" + idTrata +"'>");
+                    form.append("<input type='hidden' id='idTrata' name='idTrata'  value='" + idTrata +
+                        "'>");
 
                     var url = form.attr("action");
                     var datos = form.serialize();
@@ -1949,15 +2013,15 @@
                         async: false,
                         dataType: "json",
                         success: function(respuesta) {
-                            if(respuesta.tratamientoStatus == "ok"){
+                            if (respuesta.tratamientoStatus == "ok") {
                                 Swal.fire({
                                     type: "success",
                                     title: "Eliminado!",
                                     text: "El registro fue eliminado correctamente.",
                                     confirmButtonClass: "btn btn-success"
                                 });
-                                $("#tratamiento"+idTrata).remove();
-                            }else{
+                                $("#tratamiento" + idTrata).remove();
+                            } else {
                                 Swal.fire({
                                     type: "warning",
                                     title: "Alerta!",
@@ -1968,6 +2032,36 @@
                             }
                         }
                     });
+                },
+                mostrarTratamientos: function(elemento) {
+                    var elementosLista = document.querySelectorAll('.tagEstados');
+
+                    elementosLista.forEach(function(elementoLista) {
+                        elementoLista.classList.remove('active');
+                    });
+
+
+                    elemento.classList.add('active');
+
+                    var opc = elemento.getAttribute('data-id');
+
+                    if (opc == 1) {
+                        $("#div-trata-act").show();
+                        $("#tit-div-trata-act").show();
+                        $("#div-trata-otr").show();
+                        $("#tit-div-trata-otr").show();
+                    } else if (opc == 2) {
+                        $("#div-trata-act").show();
+                        $("#tit-div-trata-act").show();
+                        $("#div-trata-otr").hide();
+                        $("#tit-div-trata-otr").hide();
+                    } else {
+                        $("#div-trata-act").hide();
+                        $("#tit-div-trata-act").hide();
+                        $("#div-trata-otr").show();
+                        $("#tit-div-trata-otr").show();
+                    }
+
                 },
                 buscInfGeneralPaciente: function(pac) {
                     $("#idPaciente").val(pac);
@@ -1997,7 +2091,8 @@
 
                             var foto = respuesta.paciente.foto;
                             if (foto == "") {
-                                foto = "../../../app-assets/images/FotosPacientes/avatar-s-1.png";
+                                foto =
+                                    "../../../app-assets/images/FotosPacientes/avatar-s-1.png";
                             }
 
                             const previewImage = document.getElementById('previewImage');
@@ -2035,25 +2130,37 @@
                             $("#div-trata-act").html('');
 
                             $.each(respuesta.tratamientosAct, function(i, item) {
-                                
-                                const serviciosPorTratamiento = respuesta.servi.filter(servicio => servicio.tratamiento == item.id);
-                                const serviciosTerminadosPorTratamiento = serviciosPorTratamiento.filter(servicio => servicio.estado_serv === "Terminado");
-                                const totalServiciosPorTratamiento = serviciosPorTratamiento.length;
-                                const porcentajeTerminado = (serviciosTerminadosPorTratamiento.length / totalServiciosPorTratamiento) * 100;
-                              
-                                
-                               
 
-                                tratAct = '<div id="tratamiento'+item.id+'" class="row">' +
+                                const serviciosPorTratamiento = respuesta.servi
+                                    .filter(servicio => servicio.tratamiento == item
+                                        .id);
+                                const serviciosTerminadosPorTratamiento =
+                                    serviciosPorTratamiento.filter(servicio =>
+                                        servicio.estado_serv === "Terminado");
+                                const totalServiciosPorTratamiento =
+                                    serviciosPorTratamiento.length;
+                                const porcentajeTerminado = (
+                                    serviciosTerminadosPorTratamiento.length /
+                                    totalServiciosPorTratamiento) * 100;
+
+                                let totalActivos = totalServiciosPorTratamiento -
+                                    serviciosTerminadosPorTratamiento.length;
+
+
+                                tratAct = '<div id="tratamiento' + item.id +
+                                    '" class="row">' +
                                     '<div class="col-12 pt-2 pb-2 border-bottom-blue-grey border-bottom-lighten-5">' +
                                     '    <div class="info-time-tracking-title d-flex justify-content-between align-items-center">' +
                                     '        <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">' +
                                     '            ' + item.nombre + '</h4>' +
                                     '        <span class="pr-2 fonticon-wrap"' +
                                     '            style="cursor: pointer; ">' +
-                                    '            <i onclick="$.editarTratamiento('+item.id+');" style="transition: all .2s ease-in-out;" title="Editar Tratamiento"' +
+                                    '            <i onclick="$.editarTratamiento(' +
+                                    item.id +
+                                    ');" style="transition: all .2s ease-in-out;" title="Editar Tratamiento"' +
                                     '                class="fa fa-pencil font-medium-5 hvr-grow-shadow mr-1"></i>' +
-                                    '            <i onclick="$.eliminarTratamiento('+item.id+');" title="Eliminar Tratamiento"' +
+                                    '            <i onclick="$.eliminarTratamiento(' +
+                                    item.id + ');" title="Eliminar Tratamiento"' +
                                     '                class="fa fa-trash-o  font-medium-5 hvr-grow-shadow"></i>' +
                                     '        </span>' +
                                     '    </div>' +
@@ -2078,8 +2185,8 @@
                                     '            </div>' +
                                     '            <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">' +
                                     '                <h6 class="pt-1"><span' +
-                                    '                        class="fa fa-calendar"></span> Fecha última atención</h6>' +
-                                    '                <p>---</p>' +
+                                    '                        class="fa fa-list"></span> Servicios activos:</h6>' +
+                                    '                <p>' + totalActivos + '</p>' +
                                     '            </div>' +
                                     '            <div class="col-xl-2 col-lg-6 col-md-12 text-center clearfix">' +
                                     '                <div id="outerCircleTrata' +
@@ -2096,7 +2203,8 @@
                                     '</div>' +
                                     '</div>';
                                 $("#div-trata-act").append(tratAct);
-                                updatePercentageTratamientos(porcentajeTerminado, consTrata);
+                                updatePercentageTratamientos(porcentajeTerminado,
+                                    consTrata);
                                 consTrata++;
                             });
 
@@ -2106,6 +2214,22 @@
                             let consTrataOtro = 1;
 
                             $.each(respuesta.tratamientosOtr, function(i, item) {
+
+                                const serviciosPorTratamiento2 = respuesta.servi
+                                    .filter(servicio => servicio.tratamiento == item
+                                        .id);
+                                const serviciosTerminadosPorTratamiento2 =
+                                    serviciosPorTratamiento2.filter(servicio =>
+                                        servicio.estado_serv === "Terminado");
+                                const totalServiciosPorTratamiento2 =
+                                    serviciosPorTratamiento2.length;
+                                const porcentajeTerminado2 = (
+                                    serviciosTerminadosPorTratamiento2.length /
+                                    totalServiciosPorTratamiento2) * 100;
+
+                                let totalActivos2 = totalServiciosPorTratamiento2 -
+                                    serviciosTerminadosPorTratamiento2.length;
+
                                 tratOtr += '<div class="row">' +
                                     '<div class="col-12 pt-2 pb-2 border-bottom-blue-grey border-bottom-lighten-5">' +
                                     '    <div class="info-time-tracking-title d-flex justify-content-between align-items-center">' +
@@ -2139,8 +2263,8 @@
                                     '            </div>' +
                                     '            <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">' +
                                     '                <h6 class="pt-1"><span' +
-                                    '                        class="fa fa-calendar"></span> Fecha última atención</h6>' +
-                                    '                <p>---</p>' +
+                                    '                        class="fa fa-list"></span> Servicios activos:</h6>' +
+                                    '                <p>' + totalActivos2 + '</p>' +
                                     '            </div>' +
                                     '            <div class="col-xl-2 col-lg-6 col-md-12 text-center clearfix">' +
                                     '                <div id="outerCircleTrata' +
@@ -2157,7 +2281,8 @@
                                     '</div>' +
                                     '</div>';
                                 $("#div-trata-otr").append(tratOtr);
-                                updatePercentageTratamientos(0, consTrataOtro);
+                                updatePercentageTratamientos(porcentajeTerminado2,
+                                    consTrataOtro);
                                 consTrataOtro++;
                             });
                         }
@@ -2187,11 +2312,22 @@
                 },
 
             });
-            var editorEvolucion = CKEDITOR.instances.evolucion_escrita;
 
+            var editorEvolucion = CKEDITOR.instances.evolucion_escrita;
+            //leer variable localStorage tratamientos
+            var ultimaParteURLAnterior = document.referrer.split('/').filter(Boolean).pop();
+            if(ultimaParteURLAnterior == "Administracion"){
+                if (localStorage.getItem('idTratamiento')) {
+                    $.buscInfGeneralPaciente(localStorage.getItem('idPaciente'));
+                    $.verTratamiento(localStorage.getItem('idTratamiento'));
+                }else if(localStorage.getItem('idPaciente')){
+                    $.buscInfGeneralPaciente(localStorage.getItem('idPaciente'));
+                }
+
+            }
         });
 
-       
+
 
         function formatCurrency(number, locale, currencySymbol) {
             return new Intl.NumberFormat(locale, {
@@ -2236,6 +2372,8 @@
             $('#outerCircle' + consServ).css('background-image',
                 `conic-gradient(#24BEC0 0deg, #24BEC0 ${3.6 * porcentaje}deg, #F0F0F0 ${3.6 * porcentaje}deg)`);
         }
+
+       
 
         // Llamar a la función con un porcentaje específico (puedes cambiar este valor)
     </script>

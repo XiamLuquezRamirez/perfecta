@@ -102,7 +102,7 @@
                                         Tratamientos
                                     </a>
                                 </li>
-                                <li class="nav-item" style="display: none;">
+                                <li class="nav-item">
                                     <a class="nav-link d-flex disabled" id="account-pill-recaudos" data-toggle="pill"
                                         href="#account-vertical-recaudos" aria-expanded="false">
                                         <i class="fa fa-calculator"></i>
@@ -709,6 +709,7 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
+            localStorage.clear();
             var $primary = "#00b5b8",
             $secondary = "#2c3648",
             $success = "#0f8e67",
@@ -716,18 +717,7 @@
             $warning = "#ffb997",
             $danger = "#ff8f9e"
 
-            var disponibilidadJSON = [{
-                    "start": "2023-10-09T08:00:00",
-                    "end": "2023-10-09T09:00:00",
-                    "title": "Nombre del paciente 1"
-                },
-                {
-                    "start": "2023-10-10T10:00:00",
-                    "end": "2023-10-10T11:00:00",
-                    "title": "Nombre del paciente 2"
-                }
-
-            ];
+            var disponibilidadJSON = [];
 
             $('#notifCliente').iCheck({
                 checkboxClass: 'icheckbox_flat-green',

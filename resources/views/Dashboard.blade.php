@@ -5,7 +5,6 @@
     </div>
     <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
     <input type="hidden" id="Ruta" data-ruta="{{ asset('/app-assets/') }}" />
-
     <div class="content-body">
         <!-- Grouped multiple cards for statistics starts here -->
         <div class="row grouped-multiple-statistics-card">
@@ -23,7 +22,6 @@
                                         <h3 id="cantPacientes" class="heading-text text-bold-600">80</h3>
                                         <p class="sub-heading">Pacientes Activos</p>
                                     </div>
-
                                 </div>
                             </div>
                             <div class="col-lg-6 col-xl-3 col-sm-6 col-12">
@@ -36,7 +34,6 @@
                                         <h3 id="cantCitas" class="heading-text text-bold-600">25</h3>
                                         <p class="sub-heading">Citas hoy</p>
                                     </div>
-
                                 </div>
                             </div>
                             <div class="col-lg-6 col-xl-3 col-sm-6 col-12">
@@ -118,16 +115,10 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-
-
-                    <input type="hidden" name="idPaciente" id="idPaciente" value="">
-
                     <div class="modal-body">
                         <div class="card-body">
-
                             <form class="form" method="post" id="formGuardarCita"
                                 action="{{ url('/') }}/AdminCitas/GuardarCita">
-
                                 <div class="row">
                                     <div class="col-4">
                                         <div class="form-body">
@@ -272,8 +263,9 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="tab-pane in" id="profileIcon" <input type="hidden"
-                                                        name="idPaciente" id="idPaciente" value="">
+                                                    <div class="tab-pane in" id="profileIcon">
+                                                        <input type="hidden" name="idPaciente" id="idPaciente"
+                                                            value="">
                                                         <input type="hidden" name="accion" id="accion"
                                                             value="agregar">
                                                         <input type="hidden" name="fotoCargada" id="fotoCargada"
@@ -616,7 +608,31 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="infTrata" aria-labelledby="profileIcon-tab" role="tabpanel">
-                                    <p>Listado tratamiento</p>
+                                    <div class="card-content">
+                                        <div class="card-body">
+                                            <p><span class="float-right"><a
+                                                        style="color: #009c9f;text-decoration: none; background-color: transparent;"
+                                                        onclick="$.verTratamientos();" target="_blank">Ver Tratamientos <i
+                                                            class="feather icon-arrow-right"></i></a></span></p>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table id="recent-orders"
+                                                class="table table-hover mb-0 ps-container ps-theme-default">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Tratamiento</th>
+                                                        <th>Nombre</th>
+                                                        <th>Profesional</th>
+                                                        <th>Estado</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tratamientos-citas">
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="tab-pane" id="infDatos" aria-labelledby="dropdownIcon1-tab"
                                     role="tabpanel">
@@ -657,7 +673,32 @@
                                 </div>
                                 <div class="tab-pane" id="infReca" aria-labelledby="dropdownIcon2-tab"
                                     role="tabpanel">
-                                    <p>Listado recaudo</p>
+                                    <div class="card-content">
+                                        <div class="card-body">
+                                            <p><span class="float-right"><a
+                                                        style="color: #009c9f;text-decoration: none; background-color: transparent;"
+                                                        onclick="$.verRecaudos();" target="_blank">Ver Recaudos <i
+                                                            class="feather icon-arrow-right"></i></a></span></p>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table id="recent-orders"
+                                                class="table table-hover mb-0 ps-container ps-theme-default">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>No. tratamiento</th>
+                                                        <th>Tratamiento</th>
+                                                        <th>Profesional</th>
+                                                        <th>Total</th>
+                                                        <th>Saldo</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tratamientosRecaudo-citas">
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
 
                             </div>
@@ -703,13 +744,18 @@
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
+    <form action="{{ url('/AdminPacientes/TratamientosRecaudo') }}" id="formCargarTratamientos" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
 
 @endsection
 
 @section('scripts')
     <script>
         $(document).ready(function() {
-            $("#MenAdmin").removeClass("active");
+            
+            localStorage.clear();
 
             var disponibilidadJSON = [{
                     "start": "2023-11-02T08:00:00",
@@ -795,7 +841,7 @@
                     info.el.style.fontSize = '9px'; // Ajustar el tamaño de fuente según tus necesidades
 
                     // Agregar el campo "prof" al contenido del evento
-                  
+
                     var prof = info.event.extendedProps.prof;
                     var estado = info.event.extendedProps.estado;
                     var id = info.event.extendedProps.id;
@@ -810,31 +856,35 @@
                         var estadoElement = document.createElement('div');
                         estadoElement.className = 'fc-event-estado';
                         estadoElement.textContent = 'Estado: ' + estado;
-                        estadoElement.style.fontSize = '9px'; 
+                        estadoElement.style.fontSize = '9px';
                         info.el.appendChild(estadoElement);
                     }
 
                     info.el.style.color = '#ffff';
                     if (estado) {
                         // ... (código existente)
-                
+
                         // Cambiar el color de fondo según el estado
                         switch (estado) {
                             case 'Por atender':
-                                info.el.style.backgroundColor = '#00B5B8'; // Color para estado pendiente
+                                info.el.style.backgroundColor =
+                                    '#00B5B8'; // Color para estado pendiente
                                 break;
                             case 'Atendida':
-                                info.el.style.backgroundColor = '#2196F3'; // Color para estado confirmado
+                                info.el.style.backgroundColor =
+                                    '#2196F3'; // Color para estado confirmado
                                 break;
                             case 'Confirmada':
-                                info.el.style.backgroundColor = '#10C888'; // Color para estado cancelado
+                                info.el.style.backgroundColor =
+                                    '#10C888'; // Color para estado cancelado
                                 break;
-                            // Añade más casos según sea necesario para otros estados
+                                // Añade más casos según sea necesario para otros estados
                             default:
-                                info.el.style.backgroundColor = '#2DCEE3'; // Color predeterminado si no hay coincidencia
+                                info.el.style.backgroundColor =
+                                    '#2DCEE3'; // Color predeterminado si no hay coincidencia
                         }
 
-                        }
+                    }
 
                     applyStyles(info.el);
                 },
@@ -1501,6 +1551,7 @@
                             $("#finalcita").html(nuevoFormatoFinal);
                             $("#cometarioCita").html(response.detaCita.comentario);
                             //datos de paciente
+                            $("#idPaciente").val(response.paciente.id);
                             $("#identificacionCita").html(response.paciente
                                 .tipo_identificacion + " " + response.paciente
                                 .identificacion);
@@ -1527,13 +1578,70 @@
                             $("#edadDetaCita").html(edad + " Años");
 
                             //datos de tratameintos
+                            let trTratamientos = '';
+                            $.each(response.tratamientos, function(i, item) {
 
+                                trTratamientos += ' <tr>' +
+                                    '<td class="text-truncate">' + i + 1 + '</td>' +
+                                    '<td class="text-truncate"><a style="color: #009c9f;text-decoration: none; background-color: transparent;" onclick="$.verTratmiento(' +
+                                    item.id + ',' + item.paciente + ')">' +
+                                    agregarCeros(item.id, 5) + '</a></td>' +
+                                    '<td class="text-truncate">' + item.nombre +
+                                    '</td>' +
+                                    '<td class="text-truncate">' + item.nprofe +
+                                    '</td>';
+                                if (item.estado == 'Pendiente') {
+                                    trTratamientos +=
+                                        '<td class="text-truncate"><span class="badge badge-success">' +
+                                        item.estado + '</span></td>';
+                                } else {
+                                    trTratamientos +=
+                                        '<td class="text-truncate"><span class="badge badge-warning">' +
+                                        item.estado + '</span></td>';
+                                }
+                                trTratamientos += '</tr>';
+                            });
+
+                            $('#tratamientos-citas').html(trTratamientos);
 
                             //datos de recaudo
+                            $.buscInfTratamientos(response.paciente.id);
 
                         }
                     });
 
+                },
+                verTratmiento: function(trata, paci) {
+                    localStorage.clear();
+                    localStorage.setItem('idTratamiento', trata);
+                    localStorage.setItem('idPaciente', paci);
+                    PEDGITALURL = '{{ url('/AdminPacientes/Tratamientos') }}';
+                    const nuevaPestana = window.open(PEDGITALURL, '_blank');
+                    nuevaPestana.focus();
+
+                },
+                verRecaudo: function(trata, paci) {
+                    localStorage.clear();
+                    localStorage.setItem('idTratamiento', trata);
+                    localStorage.setItem('idPaciente', paci);
+                    PEDGITALURL = '{{ url('/AdminPacientes/Recaudos') }}';
+                    const nuevaPestana = window.open(PEDGITALURL, '_blank');
+                    nuevaPestana.focus();
+
+                },
+                verTratamientos: function() {
+                    localStorage.clear();
+                    let paci = $('#idPaciente').val();
+                    localStorage.setItem('idPaciente', paci);
+                    PEDGITALURL = '{{ url('/AdminPacientes/Tratamientos') }}';
+                    const nuevaPestana = window.open(PEDGITALURL, '_blank');
+                },
+                verRecaudos: function() {
+                    localStorage.clear();
+                    let paci = $('#idPaciente').val();
+                    localStorage.setItem('idPaciente', paci);
+                    PEDGITALURL = '{{ url('/AdminPacientes/Recaudos') }}';
+                    const nuevaPestana = window.open(PEDGITALURL, '_blank');
                 },
                 convertirFormato: function(fechaHora) {
                     // Crear un objeto Date a partir de la cadena de fecha y hora
@@ -1602,6 +1710,59 @@
                     });
 
                 },
+                buscInfTratamientos: function(idPac) {
+
+                    var form = $("#formCargarTratamientos");
+                    $("#idPac").remove();
+                    form.append("<input type='hidden' id='idPac' name='idPac'  value='" + idPac + "'>");
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    let tratamientos = '';
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+
+                            $.each(respuesta.tratamientosRecaudo, function(i, item) {
+                                tratamientos += '<tr >' +
+                                    '<td class="text-truncate">' + parseInt(i + 1) +
+                                    '</td>' +
+                                    '<td class="text-truncate mb-25 latest-update-item-name text-bold-600"><a style="color: #009c9f;text-decoration: none; background-color: transparent;" onclick="$.verRecaudo(' +
+                                    item.tratamiento + ',' + idPac + ')">' +
+                                    agregarCeros(item.tratamiento, 5) +
+                                    '</a></td>' +
+                                    '<td class="text-truncate">' +
+                                    '    <div>' +
+                                    '        <p class="mb-25 latest-update-item-name text-bold-600">' +
+                                    item.nombreTratamiento +
+                                    '        </p>' +
+                                    '    </div>' +
+                                    '</td>' +
+                                    '<td class="text-truncate">' +
+                                    '    <div>' +
+                                    item.nombreProfesional +
+                                    '    </div>' +
+                                    '</td>' +
+                                    '<td class="text-truncate" style="vertical-align: middle;">' +
+                                    formatCurrency(
+                                        item.total, 'es-CO', 'COP') + '</td>' +
+                                    '<td class="text-truncate" style="vertical-align: middle;">' +
+                                    formatCurrency(
+                                        item.saldo, 'es-CO', 'COP') + '</td>' +
+                                    '</tr>';
+
+                            });
+                            $("#tratamientosRecaudo-citas").html(tratamientos);
+                        }
+                    });
+
+                    $.checkRecaudos();
+                },
+
                 procederCambiarEstado: function(estado) {
                     var idCita = $("#idCita").val();
 
@@ -1710,7 +1871,7 @@
             el.style.whiteSpace = 'nowrap';
             el.style.textOverflow = 'ellipsis';
 
-            el.style.fontSize = '9px'; 
+            el.style.fontSize = '9px';
         }
 
         function calcularEdad(fechaNacimiento) {
@@ -1728,6 +1889,10 @@
             var edad = Math.abs(edadEnMilisegundos.getUTCFullYear() - 1970);
 
             return edad;
+        }
+
+        function agregarCeros(numero, longitud) {
+            return numero.toString().padStart(longitud, '0');
         }
     </script>
 
