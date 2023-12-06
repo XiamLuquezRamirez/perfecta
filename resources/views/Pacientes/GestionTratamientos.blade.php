@@ -790,13 +790,9 @@
         };
 
         $(document).ready(function() {
-            $("#MenPaciente").removeClass("active");
-
+            $("#MenTratamientos").addClass("active");
 
             var lastSelectedData = null;
-
-           
-
 
             $('#paciente').on('select2:select', function(e) {
                 // Obtener la información del elemento seleccionado
@@ -808,8 +804,6 @@
                     mostrarInformacionUltimoSeleccionado();
                 }
             });
-
-
 
             function mostrarInformacionUltimoSeleccionado() {
                 if (lastSelectedData) {
@@ -2316,7 +2310,7 @@
             var editorEvolucion = CKEDITOR.instances.evolucion_escrita;
             //leer variable localStorage tratamientos
             var ultimaParteURLAnterior = document.referrer.split('/').filter(Boolean).pop();
-            if(ultimaParteURLAnterior == "Administracion"){
+            if(ultimaParteURLAnterior == "Administracion"  || ultimaParteURLAnterior == "Pacientes"){
                 if (localStorage.getItem('idTratamiento')) {
                     $.buscInfGeneralPaciente(localStorage.getItem('idPaciente'));
                     $.verTratamiento(localStorage.getItem('idTratamiento'));

@@ -162,6 +162,7 @@
                                                                 <option value="15">15 minutos</option>
                                                                 <option value="30">30 minutos</option>
                                                                 <option value="60">1 hora</option>
+                                                                <option value="120">2 horas</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -754,7 +755,7 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-            
+            $("#MenInicio").addClass("active");
             localStorage.clear();
 
             var disponibilidadJSON = [{
@@ -998,8 +999,7 @@
                             end: nuevaCitaEnd,
                         };
 
-                        console.log('Fecha y hora de inicio de la nueva cita: ', nuevaCita.start);
-                        console.log('Fecha y hora de finalización de la nueva cita: ', nuevaCita.end);
+                   
                         const fechaHora = new Date(nuevaCita.start);
 
                         // Obtiene el día, mes y año
@@ -1582,7 +1582,7 @@
                             $.each(response.tratamientos, function(i, item) {
 
                                 trTratamientos += ' <tr>' +
-                                    '<td class="text-truncate">' + i + 1 + '</td>' +
+                                    '<td class="text-truncate">' + parseInt(i + 1) + '</td>' +
                                     '<td class="text-truncate"><a style="color: #009c9f;text-decoration: none; background-color: transparent;" onclick="$.verTratmiento(' +
                                     item.id + ',' + item.paciente + ')">' +
                                     agregarCeros(item.id, 5) + '</a></td>' +

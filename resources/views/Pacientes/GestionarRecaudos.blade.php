@@ -451,7 +451,7 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-            $("#MenRecaudo").removeClass("active");
+            $("#MenRecaudo").addClass("active");
 
             var lastSelectedData = null;
 
@@ -1044,7 +1044,8 @@
 
             //leer variable localStorage tratamientos
             var ultimaParteURLAnterior = document.referrer.split('/').filter(Boolean).pop();
-            if (ultimaParteURLAnterior == "Administracion") {
+           
+            if (ultimaParteURLAnterior == "Administracion" || ultimaParteURLAnterior == "Pacientes") {
                 if (localStorage.getItem('idTratamiento')) {
                     let idTratamiento = localStorage.getItem('idTratamiento');                   
                     $.buscInfTratamientos(localStorage.getItem('idPaciente'),idTratamiento);

@@ -192,7 +192,8 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-            $("#MenPaciente").removeClass("active");
+            $("#MenAdmin").addClass("active");
+            $("#MenAdminServicios").addClass("active");
             localStorage.clear();
             $.extend({
                 cargar: function(page, searchTerm = '') {

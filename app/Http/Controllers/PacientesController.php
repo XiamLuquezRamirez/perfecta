@@ -500,19 +500,24 @@ class PacientesController extends Controller
 
             foreach ($ListPacientes as $i => $item) {
                 if (!is_null($item)) {
+                    $conse = $i+1;
+
+                    $servTermi =  Servicios::buscSeccServPac($item->id);
+
                     $tdTable .= '<tr>
+                <td>'.$conse.'</td>
                 <td>
                     <a style="color:#009c9f; font-weight: bold" onclick="$.ver(' . $item->id . ');" >' . $item->identificacion . '</a>
                 </td>
-                <td><span class="invoice-amount">' . $item->nombre . '</span></td>
-                <td><span class="invoice-date">' . $item->apellido . '</span></td>
-
-                <td>
-                    <span class="bullet bullet-secondary bullet-sm"></span>
-                    Tratamiento Actual
-                </td>
-                <td><span class="badge badge-warning badge-pill">Pendientes</span></td>
-                <td>
+                <td><span class="invoice-amount" style="text-transform: capitalize;">' . $item->nombre. ' ' .$item->apellido. '</span></td>
+                <td><span class="invoice-date">' . $item->telefono . '</span></td>';
+                  if($servTermi->count() > 0) {
+                    $tdTable .='<td><span class="badge badge-warning badge-pill">Pendiente</span></td>';
+                  }else{
+                    $tdTable .='<td><span class="badge badge-success badge-pill">Ninguna</span></td>';
+                  }  
+                
+                $tdTable.='<td>
                     <div class="invoice-action">
                     <a onclick="$.ver(' . $item->id . ');"  title="Ver" class="invoice-action-view mr-1">
                     <i class="feather icon-eye"></i>
@@ -520,7 +525,7 @@ class PacientesController extends Controller
                     <a onclick="$.editar(' . $item->id . ');" title="Editar" class="invoice-action-edit cursor-pointer mr-1">
                         <i class="feather icon-edit-1"></i>
                     </a>
-                    <a onclick="$.eliminar(' . $item->id . ');" title="Tratamientos" class="invoice-action-edit cursor-pointer">
+                    <a onclick="$.VerTratamientosList(' . $item->id . ');" title="Tratamientos" class="invoice-action-edit cursor-pointer">
                         <i class="feather icon-heart"></i>
                     </a>
                     </div>
@@ -822,11 +827,15 @@ class PacientesController extends Controller
     {
         if (Auth::check()) {
             $idPaciente = request()->get('idPac');
+            $detaCita = Citas::buscaCitasPacientes($idPaciente);
             $paciente = Pacientes::BuscarPaciente($idPaciente);
-
+            $tratamientos = Tratamientos::TratamientosPacientes($idPaciente);
+    
             if (request()->ajax()) {
                 return response()->json([
+                    'detaCita' => $detaCita,
                     'paciente' => $paciente,
+                    'tratamientos' => $tratamientos,
                 ]);
             }
         } else {

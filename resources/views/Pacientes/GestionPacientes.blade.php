@@ -52,13 +52,12 @@
                         <table id="app-invoice-table" class="table" style="width: 100%;">
                             <thead class="border-bottom border-dark">
                                 <tr>
-
+                                    <th>#</th>
                                     <th>
                                         <span class="align-middle">Identidicación</span>
                                     </th>
                                     <th>Nombre</th>
-                                    <th>Apellido</th>
-                                    <th>Tratamiento</th>
+                                    <th>Teléfono </th>
                                     <th>Deudas</th>
                                     <th>Acción</th>
                                 </tr>
@@ -89,14 +88,14 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link d-flex disabled"  onclick="$.cargarCitas();" id="account-pill-citas" data-toggle="pill"
+                                    <a class="nav-link d-flex disabled" id="account-pill-citas" data-toggle="pill"
                                         href="#account-vertical-citas" aria-expanded="false">
                                         <i class="fa fa-calendar-check-o"></i>
                                         Citas
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link d-flex disabled"  onclick="$.cargarTratamientos();" id="account-pill-tratamiento" data-toggle="pill"
+                                    <a class="nav-link d-flex disabled" id="account-pill-tratamiento" data-toggle="pill"
                                         href="#account-vertical-tratamiento" aria-expanded="false">
                                         <i class="fa fa-universal-access"></i>
                                         Tratamientos
@@ -314,16 +313,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div
-                                                            class="col-12 d-flex flex-sm-row flex-column justify-content-end">
-                                                            <button type="button" id="btnGuardar" onclick="$.guardar()"
-                                                                class="btn btn-primary mr-sm-1 mb-1 mb-sm-0"> <i
-                                                                    class="fa fa-save"></i> Guardar
-                                                                Cambios</button>
-                                                            <button type="reset" onclick="$.ListPacientes()"
-                                                                class="btn btn-light"><i class="fa fa-reply"></i>
-                                                                Atras</button>
-                                                        </div>
+
                                                     </div>
                                                 </form>
                                             </div>
@@ -349,13 +339,10 @@
                                                             <table id="table-citas" class="table" style="width: 100%;">
                                                                 <thead class="border-bottom border-dark">
                                                                     <tr>
-                                                                        <th>
-                                                                            <span class="align-middle">Motivo de la
-                                                                                consulta</span>
-                                                                        </th>
                                                                         <th>Profesional</th>
                                                                         <th>Fecha y Hora</th>
                                                                         <th>Estado</th>
+                                                                        <th>Opción</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody id="trRegistrosCitas">
@@ -368,6 +355,8 @@
                                                         </div>
                                                         <form class="form" method="post" id="formGuardarCita"
                                                             action="{{ url('/') }}/AdminCitas/GuardarCita">
+                                                            <input type="hidden" name="accionCita" id="accionCita"
+                                                                value="">
 
                                                             <div id="div-addCitas" style="display: none;">
                                                                 <div class="row">
@@ -416,6 +405,7 @@
                                                                                     <option value="30">30 minutos
                                                                                     </option>
                                                                                     <option value="60">1 hora</option>
+                                                                                    <option value="120">2 horas</option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>
@@ -433,11 +423,18 @@
                                                                                     id="fechaHoraFinal"
                                                                                     name="fechaHoraFinal"
                                                                                     placeholder="Fecha cita">
-                                                                                <input disabled type="text"
-                                                                                    class="form-control"
-                                                                                    id="fechaHoraSelCita"
-                                                                                    name="fechaHoraSelCita"
-                                                                                    placeholder="Fecha cita">
+                                                                                    <fieldset>
+                                                                                        <div class="input-group">
+                                                                                            <input type="text" class="form-control"
+                                                                                            id="fechaHoraSelCita"
+                                                                                            name="fechaHoraSelCita"
+                                                                                            placeholder="Fecha cita">
+                                                                                            <div id="div-fechaCita" class="input-group-append" id="button-addon4">
+                                                                                                <button class="btn btn-primary" onclick="$.cambiaFecha();" title="Cambiar fecha" type="button"><i class="fa fa-calendar-plus-o"></i></button>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </fieldset>
+                                                                                
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -468,7 +465,7 @@
                                                                     </div>
                                                                     <div
                                                                         class="col-12 d-flex flex-sm-row flex-column justify-content-end">
-                                                                        <button type="button" id="btnGuardar"
+                                                                        <button type="button" id="btnGuardarCita"
                                                                             onclick="$.guardarCita()"
                                                                             class="btn btn-primary mr-sm-1 mb-1 mb-sm-0"
                                                                             style=""> <i
@@ -487,172 +484,87 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="tab-pane fade" id="account-vertical-recaudo" role="tabpanel"
-                                                aria-labelledby="account-pill-info" aria-expanded="false">
-                                                <form novalidate>
-                                                    <div class="row">
-                                                        <div class="col-12">
-                                                            <div class="form-group">
-                                                                <label for="accountTextarea">Bio</label>
-                                                                <textarea class="form-control" id="accountTextarea" rows="3" placeholder="Your Bio data here..."></textarea>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-12">
-                                                            <div class="form-group">
-                                                                <div class="controls">
-                                                                    <label for="account-birth-date">Birth date</label>
-                                                                    <input type="text"
-                                                                        class="form-control birthdate-picker" required
-                                                                        placeholder="Birth date" id="account-birth-date"
-                                                                        data-validation-required-message="This birthdate field is required">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-12">
-                                                            <div class="form-group">
-                                                                <label for="accountSelect">Country</label>
-                                                                <select class="form-control" id="accountSelect">
-                                                                    <option>USA</option>
-                                                                    <option>India</option>
-                                                                    <option>Canada</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-12">
-                                                            <div class="form-group">
-                                                                <label for="languageselect2">Languages</label>
-                                                                <select class="form-control" id="languageselect2"
-                                                                    multiple="multiple">
-                                                                    <option value="English" selected>English</option>
-                                                                    <option value="Spanish">Spanish</option>
-                                                                    <option value="French">French</option>
-                                                                    <option value="Russian">Russian</option>
-                                                                    <option value="German">German</option>
-                                                                    <option value="Arabic" selected>Arabic</option>
-                                                                    <option value="Sanskrit">Sanskrit</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-12">
-                                                            <div class="form-group">
-                                                                <div class="controls">
-                                                                    <label for="account-phone">Phone</label>
-                                                                    <input type="text" class="form-control"
-                                                                        id="account-phone" required
-                                                                        placeholder="Phone number" value="(+656) 254 2568"
-                                                                        data-validation-required-message="This phone number field is required">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-12">
-                                                            <div class="form-group">
-                                                                <label for="account-website">Website</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="account-website" placeholder="Website address">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-12">
-                                                            <div class="form-group">
-                                                                <label for="musicselect2">Favourite Music</label>
-                                                                <select class="form-control" id="musicselect2"
-                                                                    multiple="multiple">
-                                                                    <option value="Rock">Rock</option>
-                                                                    <option value="Jazz" selected>Jazz</option>
-                                                                    <option value="Disco">Disco</option>
-                                                                    <option value="Pop">Pop</option>
-                                                                    <option value="Techno">Techno</option>
-                                                                    <option value="Folk" selected>Folk</option>
-                                                                    <option value="Hip hop">Hip hop</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-12">
-                                                            <div class="form-group">
-                                                                <label for="moviesselect2">Favourite movies</label>
-                                                                <select class="form-control" id="moviesselect2"
-                                                                    multiple="multiple">
-                                                                    <option value="The Dark Knight" selected>The Dark
-                                                                        Knight
-                                                                    </option>
-                                                                    <option value="Harry Potter" selected>Harry Potter
-                                                                    </option>
-                                                                    <option value="Airplane!">Airplane!</option>
-                                                                    <option value="Perl Harbour">Perl Harbour</option>
-                                                                    <option value="Spider Man">Spider Man</option>
-                                                                    <option value="Iron Man" selected>Iron Man</option>
-                                                                    <option value="Avatar">Avatar</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div
-                                                            class="col-12 d-flex flex-sm-row flex-column justify-content-end">
-                                                            <button type="submit"
-                                                                class="btn btn-primary mr-sm-1 mb-1 mb-sm-0">Save
-                                                                changes</button>
-                                                            <button type="reset" class="btn btn-light">Cancel</button>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
+
                                             <div class="tab-pane fade " id="account-vertical-tratamiento" role="tabpanel"
                                                 aria-labelledby="account-pill-social" aria-expanded="false">
                                                 <div class="card-content">
-                                                    <div class="card-body" id="listTratamientos">
-                                                        <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">Tratamientos Activos
+                                                    <div class="card-header">
+                                                        <h4 id="tit-citas" class="card-title">Tratamientos de paciente
                                                         </h4>
-                                                        <hr>
-                                                        <div class="col-xxl-8 col-xl-12 col-lg-12 col-md-12 col-12">
-                                                            <div class="card info-time-tracking">
-                                                                <div class="card-content" id="div-trata-act">
-            
-                                                                </div>
-                                                            </div>
-                                                        </div>
-            
-                                                        <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">Otros Tratamientos
-                                                        </h4>
-                                                        <hr>
-            
-                                                        <div class="col-xxl-8 col-xl-12 col-lg-12 col-md-12 col-12">
-                                                            <div class="card info-time-tracking">
-                                                                <div class="card-content" id="div-trata-otr">
-            
-            
-                                                                </div>
-                                                            </div>
+                                                        <div class="heading-elements mt-0">
+                                                            <p><span class="float-right"><a
+                                                                        style="color: #009c9f;text-decoration: none; background-color: transparent;"
+                                                                        onclick="$.verTratamientos();" target="_blank">Ver
+                                                                        Tratamientos <i
+                                                                            class="feather icon-arrow-right"></i></a></span>
+                                                            </p>
                                                         </div>
                                                     </div>
+
+                                                    <div class="table-responsive">
+                                                        <table id="recent-orders"
+                                                            class="table table-hover mb-0 ps-container ps-theme-default">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>#</th>
+                                                                    <th>No. Tratamiento</th>
+                                                                    <th>Tratamiento</th>
+                                                                    <th>Profesional</th>
+                                                                    <th>Estado</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="tratamientos-citas">
+
+                                                            </tbody>
+                                                        </table>
                                                     </div>
+                                                </div>
                                             </div>
                                             <div class="tab-pane fade" id="account-vertical-recaudos" role="tabpanel"
                                                 aria-labelledby="account-pill-connections" aria-expanded="false">
-                                                <div class="row">
-                                                    <div class="col-12 mb-3">
-                                                        <a href="javascript: void(0);" class="btn btn-info">Connect to
-                                                            <strong>Twitter</strong></a>
+                                                <div class="card-header">
+                                                    <h4 id="tit-citas" class="card-title">Recaudos de paciente</h4>
+                                                    <div class="heading-elements mt-0">
+                                                        <p><span class="float-right"><a
+                                                                    style="color: #009c9f;text-decoration: none; background-color: transparent;"
+                                                                    onclick="$.verRecaudos();" target="_blank">Ver
+                                                                    Recaudos <i
+                                                                        class="feather icon-arrow-right"></i></a></span>
+                                                        </p>
                                                     </div>
-                                                    <div class="col-12 mb-3">
-                                                        <button class=" btn btn-sm btn-secondary float-right">edit</button>
-                                                        <h6>You are connected to facebook.</h6>
-                                                        <span>Johndoe@gmail.com</span>
+                                                </div>
+                                                <div class="card-content">
+
+                                                    <div class="table-responsive">
+                                                        <table id="recent-orders"
+                                                            class="table table-hover mb-0 ps-container ps-theme-default">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>#</th>
+                                                                    <th>No. Tratamiento</th>
+                                                                    <th>Tratamiento</th>
+                                                                    <th>Profesional</th>
+                                                                    <th>Total</th>
+                                                                    <th>Saldo</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="tratamientosRecaudo-citas">
+
+                                                            </tbody>
+                                                        </table>
                                                     </div>
-                                                    <div class="col-12 mb-3">
-                                                        <a href="javascript: void(0);" class="btn btn-danger">Connect
-                                                            to
-                                                            <strong>Google</strong>
-                                                        </a>
-                                                    </div>
-                                                    <div class="col-12 mb-2">
-                                                        <button class=" btn btn-sm btn-secondary float-right">edit</button>
-                                                        <h6>You are connected to Instagram.</h6>
-                                                        <span>Johndoe@gmail.com</span>
-                                                    </div>
-                                                    <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
-                                                        <button type="submit"
-                                                            class="btn btn-primary mr-sm-1 mb-1 mb-sm-0">Save
-                                                            changes</button>
-                                                        <button type="reset" class="btn btn-light">Cancel</button>
-                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mt-1">
+                                                <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
+                                                    <button type="button" id="btnGuardar" onclick="$.guardar()"
+                                                        class="btn btn-primary mr-sm-1 mb-1 mb-sm-0"> <i
+                                                            class="fa fa-save"></i> Guardar
+                                                        Cambios</button>
+                                                    <button type="button" onclick="$.ListPacientes()"
+                                                        class="btn btn-warning "><i class="fa fa-reply"></i>
+                                                        Atras</button>
                                                 </div>
                                             </div>
 
@@ -704,6 +616,20 @@
         <!-- Tus campos del formulario aquí -->
     </form>
 
+    <form action="{{ url('/AdminPacientes/TratamientosRecaudo') }}" id="formCargarTratamientos" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+
+    <form action="{{ url('/AdminCitas/CambioEstadocita') }}" id="formCambioEstadocita" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/AdminCitas/InformacionCita') }}" id="formInfoCita" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+
 @endsection
 
 @section('scripts')
@@ -711,13 +637,15 @@
         $(document).ready(function() {
             localStorage.clear();
             var $primary = "#00b5b8",
-            $secondary = "#2c3648",
-            $success = "#0f8e67",
-            $info = "#179bad",
-            $warning = "#ffb997",
-            $danger = "#ff8f9e"
+                $secondary = "#2c3648",
+                $success = "#0f8e67",
+                $info = "#179bad",
+                $warning = "#ffb997",
+                $danger = "#ff8f9e"
 
             var disponibilidadJSON = [];
+
+            $("#MenPaciente").addClass("active");
 
             $('#notifCliente').iCheck({
                 checkboxClass: 'icheckbox_flat-green',
@@ -782,9 +710,36 @@
                         });
 
                         if (seSuperpone) {
-                            alert(
-                                'La nueva cita se superpone con una cita existente. Por favor, elige otra hora.'
-                            );
+                            Swal.fire({
+                                type: "warning",
+                                title: "Oops...",
+                                text: "La nueva cita se superpone con alguna cita existente, verifica la duración de la nueva",
+                                confirmButtonClass: "btn btn-primary",
+                                buttonsStyling: false
+                            });
+                            return;
+                        }
+
+
+                        if ($("#profesional").val() == "") {
+                            Swal.fire({
+                                type: "warning",
+                                title: "Oops...",
+                                text: "Debes de seleccionar el profesional",
+                                confirmButtonClass: "btn btn-primary",
+                                buttonsStyling: false
+                            });
+                            return;
+                            fcAgendaViews2.removeAllEvents();
+                        }
+                        if ($("#motivo").val() == "") {
+                            Swal.fire({
+                                type: "warning",
+                                title: "Oops...",
+                                text: "Debes de seleccionar el motivo de la consulta",
+                                confirmButtonClass: "btn btn-primary",
+                                buttonsStyling: false
+                            });
                             return;
                         }
 
@@ -796,8 +751,6 @@
                             end: nuevaCitaEnd,
                         };
 
-                        console.log('Fecha y hora de inicio de la nueva cita: ', nuevaCita.start);
-                        console.log('Fecha y hora de finalización de la nueva cita: ', nuevaCita.end);
                         const fechaHora = new Date(nuevaCita.start);
 
                         // Obtiene el día, mes y año
@@ -893,7 +846,7 @@
                     $('#tdTable').empty();
 
                     let x = 1;
-                let tdTable = '';
+                    let tdTable = '';
                     $.ajax({
                         type: "POST",
                         url: url,
@@ -1140,9 +1093,9 @@
                     form.append("<input type='hidden' id='idpac' name='idpac'  value='" + idPac +
                         "'>");
                     form.append("<input type='hidden' id='notCliente' name='notCliente'  value='" +
-                    notifClie +
+                        notifClie +
                         "'>");
-                        form.append("<input type='hidden' id='opc' name='opc'  value='2'>");
+                    form.append("<input type='hidden' id='opc' name='opc'  value='2'>");
 
                     $.ajax({
                         type: "POST",
@@ -1165,7 +1118,9 @@
                                 loader.style.display = 'none';
                             }
 
-                            $.cargar(1);
+                            //cargar citas
+                            $.cargarCitas();
+                            $.cancelarProCita();
                         },
                         error: function() {
                             Swal.fire({
@@ -1179,6 +1134,55 @@
                         }
                     });
                 },
+                cargarCitas: function() {
+
+                    var idPac = $("#idPac").val();
+                    var form = $("#formVerCitasPac");
+                    var url = form.attr("action");
+                    $('#idCita').remove();
+                    form.append("<input type='hidden' id='idPac' name='idPac'  value='" + idPac +
+                        "'>");
+                    var datos = form.serialize();
+
+                    var citas = "";
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(response) {
+                            $.each(response.CitasPaciente, function(i, item) {
+                                citas += '<tr><td><span class="invoice-amount">' +
+                                    item.nomprof + '</span></td>';
+                                var fechaHora = $.convertirFormato(item.inicio);
+                                citas += '<td><span class="invoice-amount">' +
+                                    fechaHora + '</span></td>';
+                                citas +=
+                                    '<td><span class="invoice-amount"><select class="select2-bg form-control" onchange="$.cambioEstado(this.value);" id="estadoCita">' +
+                                    '<option value="Por Atender" class="por-atender">Por Atender</option>' +
+                                    '<option value="Atendida" class="atendida">Atendida</option>' +
+                                    '<option value="Confirmada" class="confirmada">Confirmada</option>' +
+                                    '<option value="No Confirmada" class="no-confirmada">No Confirmada</option>' +
+                                    '<option value="Anulada" class="anulada">Anulada</option>' +
+                                    '</select></span></td>' +
+                                    '<td>' +
+                                    '<div class="invoice-action">' +
+                                    '  <a onclick="$.editarCita(' + item.id +
+                                    ');" title="Editar cita" class="invoice-action-edit cursor-pointer">' +
+                                    '      <i class="feather icon-rotate-ccw"></i>' +
+                                    '   </a>' +
+                                    ' </div>' +
+                                    '</td>' +
+                                    ' </tr>';
+                            });
+
+
+                        }
+                    });
+
+                    $("#trRegistrosCitas").html(citas)
+                },
                 editar: function(id) {
                     $('#cont-crear').show();
                     $('#cont-lista').hide();
@@ -1189,9 +1193,9 @@
 
                     $("#idPaciente").val(id);
 
-                    citas.classList.remove("disabled");
-                    tratamiento.classList.remove("disabled");
-                    recaudos.classList.remove("disabled");
+                    citas.classList.add("disabled");
+                    tratamiento.classList.add("disabled");
+                    recaudos.classList.add("disabled");
 
                     var form = $("#formBuscarPaciente");
                     $("#idPac").remove();
@@ -1200,7 +1204,7 @@
                     var url = form.attr("action");
                     var datos = form.serialize();
 
-                    let multimedia = "";
+
 
                     $.ajax({
                         type: "POST",
@@ -1233,13 +1237,15 @@
                         }
                     });
 
-                    $("#trMultimedia").html(multimedia);
+
                 },
                 ver: function(id) {
                     $('#cont-crear').show();
                     $('#cont-lista').hide();
                     $("#idPaciente").val(id);
                     $("#btnGuardar").hide();
+
+                    $.cancelarProCita();
 
                     document.getElementById("div-media").style.pointerEvents = "none";
 
@@ -1254,8 +1260,6 @@
                     var url = form.attr("action");
                     var datos = form.serialize();
 
-                    let multimedia = "";
-
                     $.ajax({
                         type: "POST",
                         url: url,
@@ -1282,25 +1286,287 @@
                             const previewImage = document.getElementById('previewImage');
                             let url = $('#Ruta').data("ruta");
                             previewImage.src = url + "/images/FotosPacientes/" + foto;
+                            //cargar citas
+                            let citasPac = "";
+                            $("#trRegistrosCitas").html('')
+                            $.each(respuesta.detaCita, function(i, item) {
+                                citasPac +=
+                                    '<tr><td><span class="invoice-amount">' + item
+                                    .nomprof + '</span></td>';
+                                var fechaHora = $.convertirFormato(item.inicio);
+                                citasPac += '<td><span class="invoice-amount">' +
+                                    fechaHora + '</span></td>';
+                                citasPac +=
+                                    '<td><span class="invoice-amount"><select class="select2-bg form-control" data-id="' +
+                                    item.id + '" data-estado="' + item.estado +
+                                    '" onchange="$.cambioEstado(this);" id="estadoCita">' +
+                                    '<option value="Por Atender" class="por-atender" ' +
+                                    (item.estado === 'Por Atender' ? 'selected' :
+                                        '') + '>Por Atender</option>' +
+                                    '<option value="Atendida" class="atendida" ' + (
+                                        item.estado === 'Atendida' ? 'selected' : ''
+                                    ) + '>Atendida</option>' +
+                                    '<option value="Confirmada" class="confirmada" ' +
+                                    (item.estado === 'Confirmada' ? 'selected' :
+                                        '') + '>Confirmada</option>' +
+                                    '<option value="No Confirmada" class="no-confirmada" ' +
+                                    (item.estado === 'No Confirmada' ? 'selected' :
+                                        '') + '>No Confirmada</option>' +
+                                    '<option value="Anulada" class="anulada" ' + (
+                                        item.estado === 'Anulada' ? 'selected' : ''
+                                    ) + '>Anulada</option>' +
+                                    '</select></span></td>' +
+                                    '<td>' +
+                                    '<div class="invoice-action text-center">' +
+                                    '  <a onclick="$.editarCita(' + item.id +
+                                    ');" title="Cambiar cita" class="invoice-action-edit cursor-pointer">' +
+                                    '      <i class="feather icon-rotate-ccw"></i>' +
+                                    '   </a>' +
+                                    ' </div>' +
+                                    '</td>' +
+                                    '</tr>';
+                            });
 
+                            $("#trRegistrosCitas").html(citasPac)
+
+                            //datos de tratameintos
+                            let trTratamientos = '';
+                            $("#tratamientos-citas").html('')
+                            $.each(respuesta.tratamientos, function(i, item) {
+
+                                trTratamientos += ' <tr>' +
+                                    '<td class="text-truncate">' + parseInt(i + 1) +
+                                    '</td>' +
+                                    '<td class="text-truncate"><a style="color: #009c9f;text-decoration: none; background-color: transparent;" onclick="$.verTratmiento(' +
+                                    item.id + ',' + item.paciente + ')">' +
+                                    agregarCeros(item.id, 5) + '</a></td>' +
+                                    '<td class="text-truncate">' + item.nombre +
+                                    '</td>' +
+                                    '<td class="text-truncate">' + item.nprofe +
+                                    '</td>';
+                                if (item.estado == 'Pendiente') {
+                                    trTratamientos +=
+                                        '<td class="text-truncate"><span class="badge badge-success">' +
+                                        item.estado + '</span></td>';
+                                } else {
+                                    trTratamientos +=
+                                        '<td class="text-truncate"><span class="badge badge-warning">' +
+                                        item.estado + '</span></td>';
+                                }
+                                trTratamientos += '</tr>';
+                            });
+
+                            $('#tratamientos-citas').html(trTratamientos);
+
+                            //datos de recaudo
+                            $.buscInfTratamientos(respuesta.paciente.id);
 
                         }
                     });
 
-                    $("#trMultimedia").html(multimedia);
+                },
+                cambioEstado: function(elemento) {
+
+                    let idCita = elemento.dataset.id;
+                    let estado = elemento.value;
+                    alert(estado)
+
+
+                    Swal.fire({
+                        title: "Esta seguro de cambiar el estado a " + estado + " ?",
+                        text: "¡No podrás revertir esto!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Si, cambiar!",
+                        cancelButtonText: "Cancelar",
+                        confirmButtonClass: "btn btn-warning",
+                        cancelButtonClass: "btn btn-danger ml-1",
+                        buttonsStyling: false
+                    }).then(function(result) {
+                        if (result.value) {
+                            $.procederCambiarEstado(estado, idCita);
+                            $.cargarCita();
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                            Swal.fire({
+                                title: "Cancelado",
+                                text: "La cita no ha cambiado ;)",
+                                type: "error",
+                                confirmButtonClass: "btn btn-success"
+                            });
+                        }
+                    });
+
+                },
+                procederCambiarEstado: function(estado, idCita) {
+
+
+                    var form = $("#formCambioEstadocita");
+                    $('#idCita').remove();
+                    form.append("<input type='hidden' id='idCita' name='idCita'  value='" + idCita +
+                        "'>");
+                    form.append("<input type='hidden' id='estadoCita' name='estadoCita'  value='" +
+                        estado +
+                        "'>");
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            if (respuesta.estado == "ok") {
+                                Swal.fire({
+                                    type: "success",
+                                    title: "",
+                                    text: "El estado de la cita fue cambiada a " +
+                                        estado + " exitosamente",
+                                    confirmButtonClass: "btn btn-primary",
+                                    timer: 1500,
+                                    buttonsStyling: false
+                                });
+                                $.cargarCitas();
+                            }
+                        }
+                    });
+                },
+                buscInfTratamientos: function(idPac) {
+
+                    var form = $("#formCargarTratamientos");
+                    $("#idPac").remove();
+                    form.append("<input type='hidden' id='idPac' name='idPac'  value='" + idPac + "'>");
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    let tratamientos = '';
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+
+                            $.each(respuesta.tratamientosRecaudo, function(i, item) {
+                                tratamientos += '<tr >' +
+                                    '<td class="text-truncate">' + parseInt(i + 1) +
+                                    '</td>' +
+                                    '<td class="text-truncate mb-25 latest-update-item-name text-bold-600"><a style="color: #009c9f;text-decoration: none; background-color: transparent;" onclick="$.verRecaudo(' +
+                                    item.tratamiento + ',' + idPac + ')">' +
+                                    agregarCeros(item.tratamiento, 5) +
+                                    '</a></td>' +
+                                    '<td class="text-truncate">' +
+                                    '    <div>' +
+                                    '        <p class="mb-25 latest-update-item-name text-bold-600">' +
+                                    item.nombreTratamiento +
+                                    '        </p>' +
+                                    '    </div>' +
+                                    '</td>' +
+                                    '<td class="text-truncate">' +
+                                    '    <div>' +
+                                    item.nombreProfesional +
+                                    '    </div>' +
+                                    '</td>' +
+                                    '<td class="text-truncate" style="vertical-align: middle;">' +
+                                    formatCurrency(
+                                        item.total, 'es-CO', 'COP') + '</td>' +
+                                    '<td class="text-truncate" style="vertical-align: middle;">' +
+                                    formatCurrency(
+                                        item.saldo, 'es-CO', 'COP') + '</td>' +
+                                    '</tr>';
+
+                            });
+                            $("#tratamientosRecaudo-citas").html(tratamientos);
+                        }
+                    });
+
+
                 },
                 addCita: function() {
                     $('#div-listCitas').hide();
                     $('#btn-addCitas').hide();
+                    $('#div-fechaCita').hide();
                     $('#div-addCitas').show();
-                    $('#tit-citas').html('Agregar Cita');
+                    $("#accionCita").val("agregar");
+                    $('#tit-citas').html('Agregar cita');
+                    var agenda = document.getElementsByClassName('fc-view-container');
+                    var primeClase = agenda[0];
+                    primeClase.style.overflow =
+                        'auto'; // Puedes ajustar 'auto' a otro valor como 'hidden' o 'scroll'
+                    primeClase.style.height = '400px';
+                    $.cargarProfesionales();
+
+
+                },
+
+                editarCita: function(idCita) {
+
+                    $.cargarProfesionales();
+                    $('#tit-citas').html('Editar cita');
+                    $("#accionCita").val("editar");
+                    $('#div-listCitas').hide();
+                    $('#btn-addCitas').hide();
+                    $('#div-fechaCita').show();
+                    $('#div-addCitas').show();
                     var agenda = document.getElementsByClassName('fc-view-container');
                     var primeClase = agenda[0];
                     primeClase.style.overflow =
                         'auto'; // Puedes ajustar 'auto' a otro valor como 'hidden' o 'scroll'
                     primeClase.style.height = '400px';
 
-                    $.cargarProfesionales();
+
+                    var form = $("#formInfoCita");
+                    $("#idCita").remove();
+                    form.append("<input type='hidden' id='idCitaPac' name='idCitaPac'  value='" +
+                        idCita +
+                        "'>");
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            $('#profesional').val(respuesta.CitasPaciente.profesional).trigger(
+                                'change.select2');
+                            $('#motivo').val(respuesta.CitasPaciente.motivo).trigger('change.select2');
+                            $('#duracionCita').val(respuesta.CitasPaciente.duracion).trigger(
+                                'change.select2');
+
+                            $('#fechaHoraInicio').val(respuesta.CitasPaciente.inicio);
+                            $('#fechaHoraFinal').val(respuesta.CitasPaciente.final);
+                            $.convertFechaCita(respuesta.CitasPaciente.inicio);
+                        }
+
+                    });
+
+                },
+                convertFechaCita: function(inicio) {
+                    const fechaHora = new Date(inicio);
+
+                    // Obtiene el día, mes y año
+                    const dia = fechaHora.getDate().toString().padStart(2,
+                        '0'); // Asegura que el día tenga dos dígitos
+                    const mes = (fechaHora.getMonth() + 1).toString().padStart(2,
+                        '0'); // El mes se indexa desde 0
+                    const año = fechaHora.getFullYear();
+
+                    // Obtiene la hora y los minutos
+                    const hora = fechaHora.getHours().toString().padStart(2,
+                        '0'); // Asegura que la hora tenga dos dígitos
+                    const minutos = fechaHora.getMinutes().toString().padStart(2,
+                        '0'); // Asegura que los minutos tengan dos dígitos
+                    const segundos = fechaHora.getSeconds().toString().padStart(2, '0');
+                    // Combina los componentes para formar la fecha y hora en el formato deseado
+                    fechaHoraSelCita = `${dia}/${mes}/${año} ${hora}:${minutos}`;
+                    document.getElementById('fechaHoraSelCita').value = fechaHoraSelCita;
 
                 },
                 cargarProfesionales: function() {
@@ -1328,6 +1594,47 @@
 
                     $("#profesional").html(select);
                 },
+
+                verTratmiento: function(trata, paci) {
+                    localStorage.clear();
+                    localStorage.setItem('idTratamiento', trata);
+                    localStorage.setItem('idPaciente', paci);
+                    PEDGITALURL = '{{ url('/AdminPacientes/Tratamientos') }}';
+                    const nuevaPestana = window.open(PEDGITALURL, '_blank');
+                    nuevaPestana.focus();
+
+                },
+                verRecaudo: function(trata, paci) {
+                    localStorage.clear();
+                    localStorage.setItem('idTratamiento', trata);
+                    localStorage.setItem('idPaciente', paci);
+                    PEDGITALURL = '{{ url('/AdminPacientes/Recaudos') }}';
+                    const nuevaPestana = window.open(PEDGITALURL, '_blank');
+                    nuevaPestana.focus();
+
+                },
+                verTratamientos: function() {
+                    localStorage.clear();
+                    let paci = $('#idPaciente').val();
+                    localStorage.setItem('idPaciente', paci);
+                    PEDGITALURL = '{{ url('/AdminPacientes/Tratamientos') }}';
+                    const nuevaPestana = window.open(PEDGITALURL, '_blank');
+                },
+                verRecaudos: function() {
+                    localStorage.clear();
+                    let paci = $('#idPaciente').val();
+                    localStorage.setItem('idPaciente', paci);
+                    PEDGITALURL = '{{ url('/AdminPacientes/Recaudos') }}';
+                    const nuevaPestana = window.open(PEDGITALURL, '_blank');
+                },
+                VerTratamientosList: function(pac) {
+                    $('#idPaciente').val(pac);
+                    $.verTratamientos();
+                },
+                cambiaFecha: function(){
+                    let prof = $('#profesional').val();
+                   $.cargarDisponibilidad2(prof); 
+                },
                 cargarDisponibilidad: function(id) {
 
                     var form = $("#formCargarDisponibilidad");
@@ -1344,66 +1651,81 @@
                         async: false,
                         dataType: "json",
                         success: function(respuesta) {
+                            disponibilidadJSON = respuesta.disponibilidad.map(function(
+                                item) {
+                                return {
+                                    "start": item.inicio,
+                                    "end": item.final,
+                                    "title": item.nombre + " " + item.apellido,
+                                    "id": item.id
+                                };
+                            });
 
+                            console.log(disponibilidadJSON);
                         }
+
                     });
 
                     fcAgendaViews.removeAllEvents();
                     fcAgendaViews.addEventSource(disponibilidadJSON);
 
                 },
-                cancelarProCita: function() {
-                    fcAgendaViews.removeAllEvents();
-                    fcAgendaViews.addEventSource(disponibilidadJSON);
-
-                    $('#div-listCitas').show();
-                    $('#btn-addCitas').show();
-                    $('#div-addCitas').hide();
-                    $('#tit-citas').html('Historial de Citas');
-                },
-                cargarCitas: function() {
-                    
-                  var idPac = $("#idPac").val();
-                  var form = $("#formVerCitasPac");
-                    var url = form.attr("action");
-                    $('#idCita').remove();
-                    form.append("<input type='hidden' id='idPac' name='idPac'  value='" + idPac +
+                cargarDisponibilidad2: function(id) {
+                    var form = $("#formCargarDisponibilidad");
+                    $("#idProf").remove();
+                    form.append("<input type='hidden' id='idProf' name='idProf'  value='" + id +
                         "'>");
+                    var url = form.attr("action");
                     var datos = form.serialize();
 
-                    var citas = "";
+                    idCita = $("#idCitaPac").val();
+                    alert(idCita);
+
                     $.ajax({
                         type: "POST",
                         url: url,
                         data: datos,
                         async: false,
                         dataType: "json",
-                        success: function(response) {
-                            $.each(response.CitasPaciente, function(i, item) {
-                                citas += '<tr><td><span class="invoice-amount">' + item.motivo + '</span></td>';
-                                citas += '<td><span class="invoice-amount">' + item.nomprof  + '</span></td>';
-                                var fechaHora = $.convertirFormato(item.inicio);
-                                citas += '<td><span class="invoice-amount">' + fechaHora+ '</span></td>';
-                                citas += '<td><span class="invoice-amount"><select class="select2-bg form-control" onchange="$.cambioEstado(this.value);" id="estadoCita">'
-                                    +'<option value="Por Atender" class="por-atender">Por Atender</option>'
-                                    +'<option value="Atendida" class="atendida">Atendida</option>'
-                                    +'<option value="Confirmada" class="confirmada">Confirmada</option>'
-                                    +'<option value="No Confirmada" class="no-confirmada">No Confirmada</option>'
-                                    +'<option value="Anulada" class="anulada">Anulada</option>'
-                                    +'</select></span></td></tr>';
+                        success: function(respuesta) {
+
+                            var disponibilidadFiltrada = respuesta.disponibilidad.filter(function(item) {
+                                return item.id !== idCita;
                             });
 
-                        
+                             disponibilidadJSON = disponibilidadFiltrada.map(function(item) {
+                                return {
+                                    "start": item.inicio,
+                                    "end": item.final,
+                                    "title": item.nombre + " " + item.apellido,
+                                    "id": item.id
+                                };
+                            });
+
+                            fcAgendaViews.removeAllEvents();
+                            fcAgendaViews.addEventSource(disponibilidadJSON);
+
+                            
                         }
+
                     });
 
-                    $("#trRegistrosCitas").html(citas)
-                },
-                cargarTratamientos: function() {
-                  var idPac = $("#idPac").val();
-                  $.buscInfGeneralPaciente(idPac);
+                   
 
                 },
+                cancelarProCita: function() {
+                    fcAgendaViews.removeAllEvents();
+
+                    $('#div-listCitas').show();
+                    $('#btn-addCitas').show();
+                    $('#div-addCitas').hide();
+                    $('#tit-citas').html('Historial de Citas');
+                    $('#profesional').val("").trigger('change.select2');
+                    $('#motivo').val("").trigger('change.select2');
+                    $('#duracion').val("15").trigger('change.select2');
+                    $('#fechaHoraSelCita').val("");
+                },
+
                 buscInfGeneralPaciente: function(pac) {
                     $("#idPaciente").val(pac);
                     $("#div-trata-act").html('');
@@ -1422,14 +1744,15 @@
                         async: false,
                         dataType: "json",
                         success: function(respuesta) {
-                           
+
                             ////datos tratamiento activos
                             let tratAct = '';
                             let consTrata = 1;
                             $("#div-trata-act").html('');
 
                             $.each(respuesta.tratamientosAct, function(i, item) {
-                                tratAct = '<div id="tratamiento'+item.id+'" class="row">' +
+                                tratAct = '<div id="tratamiento' + item.id +
+                                    '" class="row">' +
                                     '<div class="col-12 pt-2 pb-2 border-bottom-blue-grey border-bottom-lighten-5">' +
                                     '    <div class="info-time-tracking-title d-flex justify-content-between align-items-center">' +
                                     '        <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">' +
@@ -1598,6 +1921,7 @@
             //    }
             return (patron.test(te) || tecla == 9 || tecla == 8 || tecla == 37 || tecla == 39 || tecla == 44);
         }
+
         function updatePercentageTratamientos(porcentaje, consTrata) {
             $('#porcentajeTrata' + consTrata).text(porcentaje + '%');
             $('#outerCircleTrata' + consTrata).css('background-image',
@@ -1610,15 +1934,19 @@
             te = String.fromCharCode(tecla);
             return (patron.test(te) || tecla == 9 || tecla == 8 || tecla == 37 || tecla == 39 || tecla == 46);
         }
+
+        function agregarCeros(numero, longitud) {
+            return numero.toString().padStart(longitud, '0');
+        }
+
+        function formatCurrency(number, locale, currencySymbol) {
+            return new Intl.NumberFormat(locale, {
+                style: 'currency',
+                currency: currencySymbol,
+                minimumFractionDigits: 2
+            }).format(number);
+        }
     </script>
-
-    document.addEventListener('DOMContentLoaded', function() {
-    var menuPaciente = document.getElementById('MenPaciente');
-    if (menuPaciente) {
-    menuPaciente.classList.add('active');
-    }
-    });
-
 
     </script>
 @endsection

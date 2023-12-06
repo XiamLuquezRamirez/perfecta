@@ -314,7 +314,8 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-            $("#MenPaciente").removeClass("active");
+            $("#MenAdmin").addClass("active");
+            $("#MenAdminGasto").addClass("active");
 
             localStorage.clear();
 

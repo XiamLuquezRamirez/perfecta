@@ -53,22 +53,22 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 
 
 .por-atender {
-    background-color: #CCCCCC;
+    background-color: #00B5B8;
     color: black; /* Ajusta el color del texto para que sea legible en el fondo */
 }
 
 .atendida {
-    background-color: #4CAF50;
-    color: white;
-}
-
-.confirmada {
     background-color: #2196F3;
     color: white;
 }
 
+.confirmada {
+    background-color: #10C888;
+    color: white;
+}
+
 .no-confirmada {
-    background-color: #FFC107;
+    background-color: #2DCEE3;
     color: black;
 }
 

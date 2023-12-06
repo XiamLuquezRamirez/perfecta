@@ -118,6 +118,7 @@ class Secciones extends Model
 
         return $respuestaSecc;
     }
+   
 
     public static function buscSecc($idTrata)
     {

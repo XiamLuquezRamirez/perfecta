@@ -330,7 +330,7 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-            $("#MenPaciente").removeClass("active");
+            $("#MenCaja").addClass("active");
             localStorage.clear();
             $.extend({
                 cargar: function(page, searchTerm = '') {

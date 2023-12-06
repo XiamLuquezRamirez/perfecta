@@ -1,7 +1,6 @@
 <div class="header-navbar navbar-expand-sm navbar navbar-horizontal navbar-fixed navbar-light navbar-without-dd-arrow navbar-shadow menu-border" role="navigation" data-menu="menu-wrapper">
     <!-- Horizontal menu content-->
-    <div class="navbar-container main-menu-content" data-menu="menu-container">
-        
+    <div class="navbar-container main-menu-content" data-menu="menu-container">        
         <ul class="nav navbar-nav" id="main-menu-navigation" data-menu="menu-navigation">
             <li id="MenInicio" class="dropdown nav-item" data-menu="dropdown"><a class="nav-link" href="{{ url('/Administracion') }}" ><i class="feather icon-home"></i><span data-i18n="Dashboard">Inicio</span></a>
             </li>

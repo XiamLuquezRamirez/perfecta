@@ -110,6 +110,17 @@ class Servicios extends Model
 
   }
 
+  public static function buscSeccServPac($idPaci)
+  {
+      $respuestaSecc = DB::connection('mysql')->table('servicios_tratamiento')          
+          ->where('estado', "ACTIVO")
+          ->where('paciente', $idPaci)
+          ->where('estado_serv', "Terminado")
+          ->get();
+
+      return $respuestaSecc;
+  }
+
     public static function Eliminar($id)
     {
         return DB::connection('mysql')->table('servicios')->where('id', $id)->update([

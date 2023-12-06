@@ -72,6 +72,7 @@ Route::post('/AdminCitas/CargarAllCitas', [CitasController::class,'CargarAllCita
 Route::post('/AdminCitas/VerDetallesCita', [CitasController::class,'VerDetallesCita']);
 Route::post('/AdminCitas/VerCitasPac', [CitasController::class,'VerCitasPac']);
 Route::post('/AdminCitas/CambioEstadocita', [CitasController::class,'CambioEstadocita']);
+Route::post('/AdminCitas/InformacionCita', [CitasController::class,'InformacionCita']);
 
 
 

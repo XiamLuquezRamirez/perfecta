@@ -77,7 +77,8 @@ class Citas extends Model
             'motivo' => $request['motivo'],
             'inicio' => $request['fechaHoraInicio'],
             'final' => $request['fechaHoraFinal'],
-            'estado' => "Por atender",
+            'duracion' => $request['duracionCita'],
+            'estado' => "Por atender"
         ]);
 
         return $respuesta;
