@@ -31,7 +31,7 @@
                                         <i class="icon p-1 fa fa-calendar customize-icon font-large-2 p-1"></i>
                                     </span>
                                     <div class="stats-amount mr-3">
-                                        <h3 id="cantCitas" class="heading-text text-bold-600">25</h3>
+                                        <h3 id="cantCitas" class="heading-text text-bold-600"></h3>
                                         <p class="sub-heading">Citas hoy</p>
                                     </div>
                                 </div>
@@ -256,13 +256,6 @@
                                                                             placeholder="Ingrese un comentario"></textarea>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="col-12" id="div-tratamiento"
-                                                                style="display: none;">
-                                                                <h4 class="form-section"><i
-                                                                        class="fa fa-universal-access"></i>
-                                                                    Información de Tratamientos
-                                                                </h4>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -514,7 +507,7 @@
                                         src="../../../app-assets/images/FotosPacientes/avatar-s-1.png" alt="avatar"
                                         id="previewImageDetCita"><i></i></span></div>
                             <div class="media-body media-middle">
-                                <h5 id="npacientedetCita" class="media-heading">77097205 - Xiamir Luquez Ramirez</h5>
+                                <h5 id="npacientedetCita" style="text-transform: capitalize;" class="media-heading text-bold-600">77097205 - Xiamir Luquez Ramirez</h5>
                                 <p id="edadDetaCita"></p>
                             </div>
                         </div>
@@ -553,27 +546,27 @@
                                         <table class="table table-borderless">
                                             <tbody>
                                                 <tr>
-                                                    <td>Motivo de la cita:</td>
+                                                    <td class="text-bold-600">Motivo de la cita:</td>
                                                     <td id="motivoCita"></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Profesional:</td>
+                                                    <td class="text-bold-600">Profesional:</td>
                                                     <td id="profesionalCita"></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Fecha y hora de Inicio:</td>
+                                                    <td class="text-bold-600">Fecha y hora de Inicio:</td>
                                                     <td id="inicioCita">deanstanley@gmail.com</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Fecha y hora de finalización:</td>
+                                                    <td class="text-bold-600">Fecha y hora de finalización:</td>
                                                     <td id="finalcita"></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Comentario:</td>
-                                                    <td id="cometarioCita">Sin Comentario</td>
+                                                    <td class="text-bold-600">Comentario:</td>
+                                                    <td style="white-space: pre-line;" id="cometarioCita">Sin Comentario</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Cambiar estado:</td>
+                                                    <td class="text-bold-600">Cambiar estado:</td>
                                                     <td id="final">
                                                         <select class="select2-bg form-control"
                                                             onchange="$.cambioEstado(this.value);" id="bg-select">
@@ -596,7 +589,7 @@
                                                             <button type="button" class="btn btn-warning mr-1">
                                                                 <i class="  feather icon-bell"></i> Notificar al Cliente
                                                             </button>
-                                                            <button type="submit" class="btn btn-primary">
+                                                            <button type="button" onclick="$.addComentario();" class="btn btn-primary">
                                                                 <i class="feather icon-message-square"></i> Agregar
                                                                 Comentario
                                                             </button>
@@ -646,28 +639,28 @@
                                         <table class="table table-borderless mb-0">
                                             <tbody>
                                                 <tr>
-                                                    <td>Identificación:</td>
+                                                    <td class="text-bold-600">Identificación:</td>
                                                     <td id="identificacionCita"></td>
-                                                    <td>nombre:</td>
+                                                    <td class="text-bold-600">nombre:</td>
                                                     <td id="nombreCita"></td>
                                                 </tr>
 
                                                 <tr>
-                                                    <td>Sexo:</td>
+                                                    <td class="text-bold-600">Sexo:</td>
                                                     <td id="sexoCita"></td>
-                                                    <td>Fecha Nacimiento:</td>
+                                                    <td class="text-bold-600">Fecha Nacimiento:</td>
                                                     <td id="nacimientoCita"></td>
                                                 </tr>
 
                                                 <tr>
-                                                    <td>Teléfono:</td>
+                                                    <td class="text-bold-600">Teléfono:</td>
                                                     <td id="telefonoCita"></td>
-                                                    <td>Email:</td>
+                                                    <td class="text-bold-600">Email:</td>
                                                     <td id="emailCita"></td>
                                                 </tr>
 
                                                 <tr>
-                                                    <td>Dirección:</td>
+                                                    <td class="text-bold-600">Dirección:</td>
                                                     <td id="direccionCita" colspan="3"></td>
                                                 </tr>
                                             </tbody>
@@ -711,6 +704,57 @@
 
             </div>
         </div>
+        {{--  Modal comentarios  --}}
+        <div class="modal fade text-left" id="modalComentarios" tabindex="-1" role="dialog"
+            aria-labelledby="myModalLabel1" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Comentarios</h4>
+                       
+                    </div>
+                    <div class="modal-body">
+                        <div class="card-body">
+
+                            <form class="form" method="post" id="formGuardarComentario"
+                                action="{{ url('/') }}/AdminCitas/GuardarComentario">
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="userinput8">Comentario:</label>
+                                            <div class="d-flex align-items-start">
+                                                <textarea name="comentarioCitaVal" class="form-control textarea-maxlength" id="comentarioCitaVal"
+                                                placeholder="Ingrese un comentario.." maxlength="250" rows="5"></textarea>
+                                               
+                                            </div>
+                                        </div>
+                                    </div>
+               
+
+                                    <div class="col-12">
+                                        <div class="form-actions right">
+                                            <button type="button" onclick="$.guardarComentario();"
+                                                class="btn btn-success mr-1">
+                                                <i class="feather  icon-check"></i>
+                                                Guardar
+                                            </button>
+                                            <button type="button" onclick="$.salirComentario();"
+                                                class="btn btn-warning mr-1">
+                                                <i class="feather icon-corner-up-left"></i>
+                                                Salir
+                                            </button>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
 
     </div>
 
@@ -748,6 +792,10 @@
         <!-- Tus campos del formulario aquí -->
     </form>
     <form action="{{ url('/AdminPacientes/TratamientosRecaudo') }}" id="formCargarTratamientos" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/AdminCitas/cargarComentario') }}" id="formCargarComentarios" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
@@ -838,7 +886,7 @@
                     // Aplicar estilos después de que la vista se haya montado
                     applyStylesAfterViewMount(viewInfo);
                 },
-
+                
                 eventRender: function(info) {
                     // Cambiar el tamaño de fuente de los eventos aquí
                     info.el.style.fontSize = '9px'; // Ajustar el tamaño de fuente según tus necesidades
@@ -901,8 +949,9 @@
                 },
                 slotDuration: '00:15:00', // Duración de cada intervalo en la vista semanal (aquí es de una hora)
                 slotLabelInterval: "00:15", // Mostrar etiquetas de hora cada una hora
-                minTime: "07:00:00",
-                maxTime: "19:00:00",
+                minTime: "08:00:00",
+                maxTime: "18:00:00",
+                hiddenDays: [0], 
                 locale: "es",
                 events: disponibilidadJSON,
 
@@ -941,8 +990,9 @@
                 },
                 slotDuration: '00:15:00', // Duración de cada intervalo en la vista semanal (aquí es de una hora)
                 slotLabelInterval: "00:15", // Mostrar etiquetas de hora cada una hora
-                minTime: "07:00:00",
-                maxTime: "19:00:00",
+                minTime: "08:00:00",
+                maxTime: "18:00:00",
+                hiddenDays: [0], 
                 locale: "es",
                 dateClick: function(event) {
                     console.log('clicked on the date: ', event);
@@ -1129,8 +1179,6 @@
                         }
 
                     });
-
-
 
                     fcAgendaViews.removeAllEvents();
                     fcAgendaViews.addEventSource(disponibilidadJSON);
@@ -1453,6 +1501,59 @@
                         }
                     });
                 },
+                guardarComentario: function() {
+
+                   var loader = document.getElementById('loader');
+                    loader.style.display = 'block';
+
+
+                    var form = $("#formGuardarComentario");
+                    var url = form.attr("action");
+                    var idCita = $("#idCita").val();
+                    var token = $("#token").val();
+                    $("#idtoken").remove();
+                    $("#accionC").remove();
+                    form.append("<input type='hidden' id='idCit' name='idCit'  value='" + idCita +
+                        "'>");
+                    form.append("<input type='hidden' id='idtoken' name='_token'  value='" + token +
+                        "'>");
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: new FormData($('#formGuardarComentario')[0]),
+                        processData: false,
+                        contentType: false,
+                        success: function(respuesta) {
+                            if (respuesta.estado == "ok") {
+                                Swal.fire({
+                                    type: "success",
+                                    title: "",
+                                    text: "Operación realizada exitosamente",
+                                    confirmButtonClass: "btn btn-primary",
+                                    timer: 1500,
+                                    buttonsStyling: false
+                                });
+
+                                var loader = document.getElementById('loader');
+                                loader.style.display = 'none';
+                              
+                                $("#cometarioCita").html(respuesta.comentario);
+                            }
+                        },
+                        error: function() {
+                            Swal.fire({
+                                type: "errot",
+                                title: "Opsss...",
+                                text: "Ha ocurrido un error",
+                                confirmButtonClass: "btn btn-primary",
+                                timer: 1500,
+                                buttonsStyling: false
+                            });
+                        }
+                    });
+
+                },
                 habNueva: function() {
                     var btnGuardar = document.getElementById("btnGuardar");
                     btnGuardar.textContent = " Nueva Cita";
@@ -1521,6 +1622,48 @@
 
                         }
                     });
+                },
+                addComentario: function() {
+                    $("#modalComentarios").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+                    $('#modalCitasDeta').modal('toggle');
+
+                    // CARGAR COMENTARIO
+                    var idCita = $("#idCita").val();
+                    var form = $("#formCargarComentarios");
+                    var url = form.attr("action");
+                    
+                    
+                    form.append("<input type='hidden' id='idCit' name='idCit'  value='" + idCita +
+                        "'>");
+                    var datos = form.serialize();
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            $("#comentarioCitaVal").val(respuesta.comentario);
+
+                        }
+                    });
+
+
+                },
+                salirComentario: function() {
+                    $("#modalCitasDeta").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+
+                    $('#modalComentarios').modal('toggle');
+                    var miDiv = document.getElementById("modalCitasDeta");
+                    miDiv.style.setProperty("overflow-y", "auto", "important");
+
                 },
                 verCita: function(idCita) {
                     $("#modalCitasDeta").modal({
@@ -1764,7 +1907,7 @@
                         }
                     });
 
-                    $.checkRecaudos();
+                    
                 },
 
                 procederCambiarEstado: function(estado) {

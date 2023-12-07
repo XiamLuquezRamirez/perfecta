@@ -28,4 +28,13 @@ class Cajas extends Model
 
         return $respuesta;
     }
+
+    public static function BuscarCajas($idCaja)
+    {
+        return DB::connection('mysql')->table('cajas')
+            ->leftJoin("users", "users.id", "cajas.usuario")
+            ->select("cajas.*", "users.nombre_usuario")
+            ->where('cajas.id', $idCaja)
+            ->first();
+    }
 }

@@ -391,7 +391,6 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
-
                                                                     <div class="col-3">
                                                                         <div class="form-group">
                                                                             <div class="controls">
@@ -423,18 +422,25 @@
                                                                                     id="fechaHoraFinal"
                                                                                     name="fechaHoraFinal"
                                                                                     placeholder="Fecha cita">
-                                                                                    <fieldset>
-                                                                                        <div class="input-group">
-                                                                                            <input type="text" class="form-control"
+                                                                                <fieldset>
+                                                                                    <div class="input-group">
+                                                                                        <input type="text"
+                                                                                            class="form-control"
                                                                                             id="fechaHoraSelCita"
                                                                                             name="fechaHoraSelCita"
                                                                                             placeholder="Fecha cita">
-                                                                                            <div id="div-fechaCita" class="input-group-append" id="button-addon4">
-                                                                                                <button class="btn btn-primary" onclick="$.cambiaFecha();" title="Cambiar fecha" type="button"><i class="fa fa-calendar-plus-o"></i></button>
-                                                                                            </div>
+                                                                                        <div id="div-fechaCita"
+                                                                                            class="input-group-append"
+                                                                                            id="button-addon4">
+                                                                                            <button class="btn btn-primary"
+                                                                                                onclick="$.cambiaFecha();"
+                                                                                                title="Cambiar fecha"
+                                                                                                type="button"><i
+                                                                                                    class="fa fa-calendar-plus-o"></i></button>
                                                                                         </div>
-                                                                                    </fieldset>
-                                                                                
+                                                                                    </div>
+                                                                                </fieldset>
+
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -460,6 +466,16 @@
                                                                         <div class="card-body">
                                                                             <div id='fc-agenda-views'
                                                                                 style=" width: 100%;  height: 600px;">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-12">
+                                                                        <div class="form-group">
+                                                                            <div class="controls">
+                                                                                <label
+                                                                                    for="account-username">Comentario:</label>
+                                                                                <textarea class="form-control" id="comentario" name="comentario" rows="3"
+                                                                                    placeholder="Ingrese un comentario"></textarea>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -686,12 +702,12 @@
                 },
                 slotDuration: '00:15:00', // Duración de cada intervalo en la vista semanal (aquí es de una hora)
                 slotLabelInterval: "00:15", // Mostrar etiquetas de hora cada una hora
-                minTime: "07:00:00",
-                maxTime: "19:00:00",
+                minTime: "08:00:00",
+                maxTime: "18:00:00",
+                hiddenDays: [0],
                 locale: "es",
-                {{--  events: disponibilidadJSON,  --}}
                 dateClick: function(event) {
-                    console.log('clicked on the date: ', event);
+
                     if (event) {
 
                         fcAgendaViews.removeAllEvents();
@@ -1014,8 +1030,6 @@
                             }
 
                             $.cargar(1);
-
-
                         },
                         error: function() {
                             Swal.fire({
@@ -1079,14 +1093,16 @@
 
                     var form = $("#formGuardarCita");
                     var url = form.attr("action");
+                    var accion = $("#accion").val();
                     var idCitaPac = $("#idCitaPac").val();
                     var token = $("#token").val();
                     var idPac = $("#idPaciente").val()
                     $("#idtoken").remove();
                     $("#accion").remove();
                     $("#idpac").remove();
+                    $("#idCitaPac").remove();
                     $("#notCliente").remove();
-                    form.append("<input type='hidden' id='idCit' name='idCit'  value='" + idCitaPac +
+                    form.append("<input type='hidden' id='accion' name='accion'  value='" + accion +
                         "'>");
                     form.append("<input type='hidden' id='idtoken' name='_token'  value='" + token +
                         "'>");
@@ -1096,6 +1112,8 @@
                         notifClie +
                         "'>");
                     form.append("<input type='hidden' id='opc' name='opc'  value='2'>");
+                    form.append("<input type='hidden' id='idCitaPac' name='idCitaPac'  value='" +
+                        idCitaPac + "'>");
 
                     $.ajax({
                         type: "POST",
@@ -1190,7 +1208,6 @@
                     document.getElementById("div-media").style.pointerEvents = "auto";
 
                     $("#btnGuardar").show();
-
                     $("#idPaciente").val(id);
 
                     citas.classList.add("disabled");
@@ -1203,8 +1220,6 @@
 
                     var url = form.attr("action");
                     var datos = form.serialize();
-
-
 
                     $.ajax({
                         type: "POST",
@@ -1232,12 +1247,8 @@
                             const previewImage = document.getElementById('previewImage');
                             let url = $('#Ruta').data("ruta");
                             previewImage.src = url + "/images/FotosPacientes/" + foto;
-
-
                         }
                     });
-
-
                 },
                 ver: function(id) {
                     $('#cont-crear').show();
@@ -1369,8 +1380,6 @@
 
                     let idCita = elemento.dataset.id;
                     let estado = elemento.value;
-                    alert(estado)
-
 
                     Swal.fire({
                         title: "Esta seguro de cambiar el estado a " + estado + " ?",
@@ -1400,7 +1409,6 @@
 
                 },
                 procederCambiarEstado: function(estado, idCita) {
-
 
                     var form = $("#formCambioEstadocita");
                     $('#idCita').remove();
@@ -1483,8 +1491,6 @@
                             $("#tratamientosRecaudo-citas").html(tratamientos);
                         }
                     });
-
-
                 },
                 addCita: function() {
                     $('#div-listCitas').hide();
@@ -1521,7 +1527,7 @@
 
                     var form = $("#formInfoCita");
                     $("#idCita").remove();
-                    form.append("<input type='text' id='idCitaPac' name='idCitaPac'  value='" +
+                    form.append("<input type='hidden' id='idCitaPac' name='idCitaPac'  value='" +
                         idCita +
                         "'>");
                     var url = form.attr("action");
@@ -1534,14 +1540,18 @@
                         async: false,
                         dataType: "json",
                         success: function(respuesta) {
-                            $('#profesional').val(respuesta.CitasPaciente.profesional).trigger(
+                            $('#profesional').val(respuesta.CitasPaciente.profesional)
+                                .trigger(
+                                    'change.select2');
+                            $('#motivo').val(respuesta.CitasPaciente.motivo).trigger(
                                 'change.select2');
-                            $('#motivo').val(respuesta.CitasPaciente.motivo).trigger('change.select2');
-                            $('#duracionCita').val(respuesta.CitasPaciente.duracion).trigger(
-                                'change.select2');
+                            $('#duracionCita').val(respuesta.CitasPaciente.duracion)
+                                .trigger(
+                                    'change.select2');
 
                             $('#fechaHoraInicio').val(respuesta.CitasPaciente.inicio);
                             $('#fechaHoraFinal').val(respuesta.CitasPaciente.final);
+                            $('#comentario').val(respuesta.CitasPaciente.comentario);
                             $.convertFechaCita(respuesta.CitasPaciente.inicio);
                         }
 
@@ -1587,7 +1597,6 @@
 
                                 select += '<option value="' + item.id + '">' + item
                                     .nombre + '</option>';
-
                             });
                         }
                     });
@@ -1631,9 +1640,10 @@
                     $('#idPaciente').val(pac);
                     $.verTratamientos();
                 },
-                cambiaFecha: function(){
+                cambiaFecha: function() {
                     let prof = $('#profesional').val();
-                   $.cargarDisponibilidad2(prof); 
+                    $('#fechaHoraSelCita').val('');
+                    $.cargarDisponibilidad2(prof);
                 },
                 cargarDisponibilidad: function(id) {
 
@@ -1660,8 +1670,6 @@
                                     "id": item.id
                                 };
                             });
-
-                            console.log(disponibilidadJSON);
                         }
 
                     });
@@ -1679,7 +1687,7 @@
                     var datos = form.serialize();
 
                     idCita = $("#idCitaPac").val();
-                    
+
                     $.ajax({
                         type: "POST",
                         url: url,
@@ -1688,12 +1696,12 @@
                         dataType: "json",
                         success: function(respuesta) {
 
-                            var disponibilidadFiltrada = respuesta.disponibilidad.filter(function(item) {
-                                return item.id !== parseInt(idCita);
-                            });
+                            var disponibilidadFiltrada = respuesta.disponibilidad.filter(
+                                function(item) {
+                                    return item.id !== parseInt(idCita);
+                                });
 
-
-                             disponibilidadJSON = disponibilidadFiltrada.map(function(item) {
+                            disponibilidadJSON = disponibilidadFiltrada.map(function(item) {
                                 return {
                                     "start": item.inicio,
                                     "end": item.final,
@@ -1704,14 +1712,9 @@
 
                             fcAgendaViews.removeAllEvents();
                             fcAgendaViews.addEventSource(disponibilidadJSON);
-
-                            
                         }
 
                     });
-
-                   
-
                 },
                 cancelarProCita: function() {
                     fcAgendaViews.removeAllEvents();
@@ -1735,7 +1738,6 @@
                         "'>");
                     var url = form.attr("action");
                     var datos = form.serialize();
-
 
                     $.ajax({
                         type: "POST",
@@ -1905,8 +1907,8 @@
         function convertirFecha(fecha) {
             // Dividir la fecha en año, mes y día
             const [año, mes, dia] = fecha.split('-');
-        
-                        // Formatear la fecha en el formato dd/mm/yyyy
+
+            // Formatear la fecha en el formato dd/mm/yyyy
             const fechaFormateada = `${dia.padStart(2, '0')}/${mes.padStart(2, '0')}/${año}`;
 
             return fechaFormateada;
@@ -1947,6 +1949,6 @@
             }).format(number);
         }
     </script>
-                
+
     </script>
 @endsection

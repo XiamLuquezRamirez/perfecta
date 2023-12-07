@@ -162,16 +162,13 @@
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title" id="tituloCaja"></h4>
+                        <h4 class="modal-title text-bold-600" id="tituloCaja"></h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <div class="card-body">
-
-                           
-
                             <div class="row">
                              <div class="col-12">
                                 <div class="card-header latest-update-heading d-flex justify-content-between">
@@ -324,6 +321,10 @@
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
+    <form action="{{ url('/Administracion/ConsultarCaja') }}" id="formConsultarCaja" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
 
 @endsection
 
@@ -378,10 +379,30 @@
                     $("#btnNuevo").hide();
                     $.limpiar();
                 },
-                verDetalle: function() {
+                verDetalle: function(caja) {
                     $("#modaldetCaja").modal({
                         backdrop: 'static',
                         keyboard: false
+                    });
+
+                    var form = $("#formConsultarCaja");
+
+                    $("#idCaja").remove();
+                    form.append("<input type='hidden' id='idCaja' name='idCaja'  value='" + caja +
+                        "'>");
+
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            $("#tituloCaja").html("Caja #"+agregarCeros(respuesta.caja.id,5));
+                        }
                     });
                 },
                 guardar: function() {
@@ -548,6 +569,10 @@
                 currency: currencySymbol,
                 minimumFractionDigits: 2
             }).format(number);
+        }
+
+        function agregarCeros(numero, longitud) {
+            return numero.toString().padStart(longitud, '0');
         }
 
 

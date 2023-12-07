@@ -77,6 +77,7 @@ class Citas extends Model
             'motivo' => $request['motivo'],
             'inicio' => $request['fechaHoraInicio'],
             'final' => $request['fechaHoraFinal'],
+            'comentario' => $request['comentario'],
             'duracion' => $request['duracionCita'],
             'estado' => "Por atender"
         ]);
@@ -85,12 +86,19 @@ class Citas extends Model
     }
 
     public static function EditarCitas($request){
-        $respuesta = DB::connection('mysql')->table('citas')->where('id', $request['idCit'])->update([
+        $respuesta = DB::connection('mysql')->table('citas')->where('id', $request['idCitaPac'])->update([
             'profesional' => $request['profesional'],
             'motivo' => $request['motivo'],
             'inicio' => $request['fechaHoraInicio'],
             'final' => $request['fechaHoraFinal'],
-            'duracion' => $request['duracionCita']
+            'duracion' => $request['duracionCita'],
+            'comentario' => $request['comentario']
+        ]);
+        return "ok";
+    }
+    public static function GuardarComentario($request){
+        $respuesta = DB::connection('mysql')->table('citas')->where('id', $request['idCit'])->update([
+            'comentario' => $request['comentarioCitaVal'],
         ]);
         return "ok";
     }

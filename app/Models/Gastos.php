@@ -25,6 +25,22 @@ class Gastos extends Model
         return $respuesta;
     }
 
+    public static function GastosCaja($fecIni)
+    {
+        // Convierte la fecha de inicio a un objeto DateTime
+        $fechaInicio = new  \DateTime($fecIni);
+
+        // Utiliza la fecha y hora actual como el último momento
+        $fechaFin = new  \DateTime();
+
+        $recaudoMes = DB::connection('mysql')
+            ->table('gastos')
+            ->whereBetween('fecha_pago', [$fechaInicio->format('Y-m-d'), $fechaFin->format('Y-m-d')])
+            ->sum('valor');
+
+        return $recaudoMes;
+    }
+
     public static function editar($request)
     {
 

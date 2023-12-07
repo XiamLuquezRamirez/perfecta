@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
+
 class Tratamientos extends Model
 {
     public static function guardar($request)
@@ -226,14 +227,28 @@ class Tratamientos extends Model
     {
         $primerDiaDelMes = now()->startOfMonth();
         $ultimoDiaDelMes = now()->endOfMonth();
-        
+
         $recaudoMes = DB::connection('mysql')
             ->table('transaccion')
             ->whereBetween('created_at', [$primerDiaDelMes, $ultimoDiaDelMes])
             ->sum('pago_realizado');
-        
+
         return $recaudoMes;
-        
+    }
+    public static function recaudoCaja($fecIni)
+    {
+        // Convierte la fecha de inicio a un objeto DateTime
+        $fechaInicio = new  \DateTime($fecIni);
+
+        // Utiliza la fecha y hora actual como el último momento
+        $fechaFin = new  \DateTime();
+
+        $recaudoMes = DB::connection('mysql')
+            ->table('transaccion')
+            ->whereBetween('created_at', [$fechaInicio->format('Y-m-d H:i:s'), $fechaFin->format('Y-m-d H:i:s')])
+            ->sum('pago_realizado');
+
+        return $recaudoMes;
     }
 
     public static function TratamientosPacientesOtr($idPac)

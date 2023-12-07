@@ -61,6 +61,7 @@ Route::post('/Administracion/GuardarGasto', [AdminitraccionController::class,'Gu
 Route::post('/Administracion/GuardarCaja', [AdminitraccionController::class,'GuardarCaja']);
 Route::post('/Administracion/CargarDatos', [AdminitraccionController::class,'CargarDatos']);
 Route::post('/Administracion/CargarCajas', [AdminitraccionController::class,'CargarCajas']);
+Route::post('/Administracion/ConsultarCaja', [AdminitraccionController::class,'ConsultarCaja']);
 
 
 //GESTIONAR CITAS
@@ -73,6 +74,8 @@ Route::post('/AdminCitas/VerDetallesCita', [CitasController::class,'VerDetallesC
 Route::post('/AdminCitas/VerCitasPac', [CitasController::class,'VerCitasPac']);
 Route::post('/AdminCitas/CambioEstadocita', [CitasController::class,'CambioEstadocita']);
 Route::post('/AdminCitas/InformacionCita', [CitasController::class,'InformacionCita']);
+Route::post('/AdminCitas/GuardarComentario', [CitasController::class,'GuardarComentario']);
+Route::post('/AdminCitas/cargarComentario', [CitasController::class,'cargarComentario']);
 
 
 

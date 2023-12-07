@@ -250,18 +250,23 @@ class AdminitraccionController extends Controller
             foreach ($ListServicios as $i => $item) {
                 if (!is_null($item)) {
                     $saldo_inicial = $item->saldo_inicial + $item->abono_inicial;
-                    $saldo_inicial = number_format($saldo_inicial, 2, ',', '.');
 
-                    $saldo_acomulado=0;
-                    $gastos=0;
-                    $saldo=0;
+                    $fechaApertura = $item->fecha_apertura;
+
+                    $saldo_acomulado = Tratamientos::recaudoCaja($fechaApertura);
+                    $gastos = Gastos::GastosCaja($fechaApertura);   
+                       
+                    $saldo=($saldo_inicial+$saldo_acomulado);
+                   
+                    $saldo=$saldo-$gastos;
+                  
 
                     $tdTable .= '<tr>
-                <td><span class="invoice-date">' . $j . '</span></td>
-                <td><span class="invoice-date">' . $item->fecha_apertura . '</span></td>
+                <td><span class="invoice-date">' .str_pad($j, 5, '0', STR_PAD_LEFT) . '</span></td>
+                <td><span class="invoice-date">' . $fechaApertura . '</span></td>
                 <td><span class="invoice-date">' . $item->fecha_cierre . '</span></td>
                 <td><span class="invoice-date">$ ' . number_format($item->saldo_inicial, 2, ',', '.'). '</span></td>
-                <td><span class="invoice-date">$ ' . number_format($saldo_acomulado, 2, ',', '.') . '</span></td>
+                <td><span class="invoice-date">$ ' . number_format($saldo_acomulado, 2, ',', '.'). '</span></td>
                 <td><span class="invoice-date">$ ' . number_format($gastos, 2, ',', '.')  . '</span></td>
                 <td><span class="invoice-date">$ ' . number_format($saldo, 2, ',', '.') . '</span></td>';
                 if($item->estado_caja == "Abierta"){
@@ -383,6 +388,21 @@ class AdminitraccionController extends Controller
             if (request()->ajax()) {
                 return response()->json([
                     'profesional' => $profesional,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+    public function ConsultarCaja()
+    {
+        if (Auth::check()) {
+            $idCaja = request()->get('idCaja');
+            $caja = Cajas::BuscarCajas($idCaja);
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'caja' => $caja,
                 ]);
             }
         } else {
