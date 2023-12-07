@@ -118,6 +118,7 @@ class CitasController extends Controller
     {
         if (Auth::check()) {
             $data = request()->all();
+          
             if($data["opc"]=="1") {
                 if (isset($data['fotoPaciente'])) {
 
@@ -138,9 +139,13 @@ class CitasController extends Controller
                 $data['idpac'] = $respuesta;
          
             }
-          
+            if($data['accionCita'] == "agregar"){
+                $cita = Citas::GuardarCitas($data);
+            }else{
+                $cita = Citas::EditarCitas($data);
+            }
 
-            $cita = Citas::GuardarCitas($data);
+          
             if ($cita) {
                 if ($data['notCliente'] == "si") {
                 }

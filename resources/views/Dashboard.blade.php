@@ -119,6 +119,8 @@
                         <div class="card-body">
                             <form class="form" method="post" id="formGuardarCita"
                                 action="{{ url('/') }}/AdminCitas/GuardarCita">
+                                <input type="hidden" name="accionCita" id="accionCita"
+                                value="">
                                 <div class="row">
                                     <div class="col-4">
                                         <div class="form-body">
@@ -1089,6 +1091,8 @@
                     backdrop: 'static',
                     keyboard: false
                 });
+
+                $("#accionCita").val("agregar");
 
                 $('#fechaHoraSelCita').val("");
                 $.cargarProfesionales();

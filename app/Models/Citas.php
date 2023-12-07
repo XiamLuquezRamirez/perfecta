@@ -83,4 +83,15 @@ class Citas extends Model
 
         return $respuesta;
     }
+
+    public static function EditarCitas($request){
+        $respuesta = DB::connection('mysql')->table('citas')->where('id', $request['idCit'])->update([
+            'profesional' => $request['profesional'],
+            'motivo' => $request['motivo'],
+            'inicio' => $request['fechaHoraInicio'],
+            'final' => $request['fechaHoraFinal'],
+            'duracion' => $request['duracionCita']
+        ]);
+        return "ok";
+    }
 }

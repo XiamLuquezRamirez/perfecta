@@ -1079,14 +1079,14 @@
 
                     var form = $("#formGuardarCita");
                     var url = form.attr("action");
-                    var accion = $("#accion").val();
+                    var idCitaPac = $("#idCitaPac").val();
                     var token = $("#token").val();
                     var idPac = $("#idPaciente").val()
                     $("#idtoken").remove();
                     $("#accion").remove();
                     $("#idpac").remove();
                     $("#notCliente").remove();
-                    form.append("<input type='hidden' id='accion' name='accion'  value='" + accion +
+                    form.append("<input type='hidden' id='idCit' name='idCit'  value='" + idCitaPac +
                         "'>");
                     form.append("<input type='hidden' id='idtoken' name='_token'  value='" + token +
                         "'>");
@@ -1521,7 +1521,7 @@
 
                     var form = $("#formInfoCita");
                     $("#idCita").remove();
-                    form.append("<input type='hidden' id='idCitaPac' name='idCitaPac'  value='" +
+                    form.append("<input type='text' id='idCitaPac' name='idCitaPac'  value='" +
                         idCita +
                         "'>");
                     var url = form.attr("action");
@@ -1679,8 +1679,7 @@
                     var datos = form.serialize();
 
                     idCita = $("#idCitaPac").val();
-                    alert(idCita);
-
+                    
                     $.ajax({
                         type: "POST",
                         url: url,
@@ -1690,8 +1689,9 @@
                         success: function(respuesta) {
 
                             var disponibilidadFiltrada = respuesta.disponibilidad.filter(function(item) {
-                                return item.id !== idCita;
+                                return item.id !== parseInt(idCita);
                             });
+
 
                              disponibilidadJSON = disponibilidadFiltrada.map(function(item) {
                                 return {
@@ -1905,8 +1905,8 @@
         function convertirFecha(fecha) {
             // Dividir la fecha en año, mes y día
             const [año, mes, dia] = fecha.split('-');
-
-            // Formatear la fecha en el formato dd/mm/yyyy
+        
+                        // Formatear la fecha en el formato dd/mm/yyyy
             const fechaFormateada = `${dia.padStart(2, '0')}/${mes.padStart(2, '0')}/${año}`;
 
             return fechaFormateada;
@@ -1947,6 +1947,6 @@
             }).format(number);
         }
     </script>
-
+                
     </script>
 @endsection
