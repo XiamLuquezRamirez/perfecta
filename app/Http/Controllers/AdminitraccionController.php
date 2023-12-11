@@ -279,7 +279,7 @@ class AdminitraccionController extends Controller
                 $tdTable.='<td>
                     <div class="invoice-action">
 
-                    <a onclick="$.verDetalle(' . $item->id . ');" title="Editar" class="invoice-action-edit cursor-pointer mr-1">
+                    <a onclick="$.verDetalle(' . $item->id . ');" style="color:#009c9f; title="Editar" class="invoice-action-edit cursor-pointer mr-1">
                         <i class="fa fa-search"></i> Ver detalles
                     </a>
                    
@@ -400,9 +400,18 @@ class AdminitraccionController extends Controller
             $idCaja = request()->get('idCaja');
             $caja = Cajas::BuscarCajas($idCaja);
 
+           //recaudo
+            $recaudos = Tratamientos::recaudosCajaResumen($caja->fecha_apertura);
+            
+           //gastos
+           $gastos = Gastos::GastosCaja($caja->fecha_apertura); 
+
+
             if (request()->ajax()) {
                 return response()->json([
                     'caja' => $caja,
+                    'recaudos' => $recaudos,
+                    'gastos' => $gastos,
                 ]);
             }
         } else {
@@ -692,6 +701,20 @@ class AdminitraccionController extends Controller
         if (Auth::check()) {
             $idGast = request()->get('idGast');
             $gastos = Gastos::Eliminar($idGast);
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => "ok",
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+    public function CierreCaja()
+    {
+        if (Auth::check()) {
+            $idCaja = request()->get('idCaja');
+            $gastos = Cajas::Eliminar($idGast);
             if (request()->ajax()) {
                 return response()->json([
                     'estado' => "ok",

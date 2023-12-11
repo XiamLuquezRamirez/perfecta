@@ -156,7 +156,7 @@
 
             </div>
         </div>
-
+        {{--  Modal detalle caja  --}}
         <div class="modal fade text-left" id="modaldetCaja" tabindex="-1" role="dialog"
             aria-labelledby="myModalLabel1" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
@@ -170,114 +170,116 @@
                     <div class="modal-body">
                         <div class="card-body">
                             <div class="row">
-                             <div class="col-12">
-                                <div class="card-header latest-update-heading d-flex justify-content-between">
-                                    <h4 class="latest-update-heading-title text-bold-500">Latest Update</h4>
-                                    <div class="dropdown update-year-menu pb-1">
-                                        <a class="bg-transparent dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">2019</a>
-                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                                            <a class="dropdown-item" href="#">2018</a>
-                                            <a class="dropdown-item" href="#">2017</a>
-                                            <a class="dropdown-item" href="#">2016</a>
+                                <div class="col-12">
+                                    <div class="invoice-logo-title row py-2 mt-0">
+                                        <div class="col-6 d-flex flex-column justify-content-center align-items-start">
+                                            &nbsp;
+                                        </div>
+                                        <div class="col-6 d-flex justify-content-end invoice-logo">
+                                            <h2 class="text-primary" id="valTotalGeneral">$ 240.000,00</h2>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-content latest-update-tracking-list pt-0 pb-1 px-2 position-relative">
-                                    <ul class="list-group">
-                                        <li class="list-group-item pt-0 px-0 latest-updated-item border-0 d-flex justify-content-between">
-                                            <div class="d-flex align-items-center">
-                                                <span class="list-group-item-icon d-inline mr-1">
-                                                    <i class="icon text-primary bg-light-primary icon-bag total-products-icon rounded-circle p-50"></i>
-                                                </span>
-                                                <div>
-                                                    <p class="mb-25 latest-update-item-name text-bold-600">Total Products</p>
-                                                    <small class="font-small-3">1.2k Products</small>
-                                                </div>
-                                            </div>
-                                            <span class="update-profit text-bold-600">$10.5k</span>
-                                        </li>
-                                        <li class="list-group-item px-0 latest-updated-item border-0 d-flex justify-content-between">
-                                            <div class="d-flex align-items-center">
-                                                <span class="list-group-item-icon d-inline mr-1">
-                                                    <i class="icon icon-graph bg-light-info text-info total-sales-icon rounded-circle p-50"></i>
-                                                </span>
-                                                <div>
-                                                    <p class="mb-25 latest-update-item-name text-bold-600">Total Sales</p>
-                                                    <small class="font-small-3">39.2k Sales</small>
-                                                </div>
-                                            </div>
-                                            <span class="update-profit text-bold-600">26M</span>
-                                        </li>
-                                        <li class="list-group-item px-0 latest-updated-item border-0 d-flex justify-content-between">
-                                            <div class="d-flex align-items-center">
-                                                <span class="list-group-item-icon d-inline mr-1">
-                                                    <i class="icon icon-bag bg-light-danger text-danger total-products-icon rounded-circle p-50"></i>
-                                                </span>
-                                                <div>
-                                                    <p class="mb-25 latest-update-item-name text-bold-600">Total Products</p>
-                                                    <small class="font-small-3">1.2k Products</small>
-                                                </div>
-                                            </div>
-                                            <span class="update-profit text-bold-600">$10.5k</span>
-                                        </li>
-                                        <li class="list-group-item px-0 latest-updated-item border-0 d-flex justify-content-between">
-                                            <div class="d-flex align-items-center">
-                                                <div class="list-group-item-icon d-inline mr-1">
-                                                    <i class="icon icon-credit-card bg-light-primary text-primary total-revenue-icon rounded-circle p-50"></i>
-                                                </div>
-                                                <div>
-                                                    <p class="mb-25 latest-update-item-name text-bold-600">Total Revenue</p>
-                                                    <small class="font-small-3">45.5k New Revenue</small>
-                                                </div>
-                                            </div>
-                                            <span class="update-profit text-bold-600">15.6M</span>
-                                        </li>
-                                        <li class="list-group-item px-0 latest-updated-item border-0 d-flex justify-content-between">
-                                            <div class="d-flex align-items-center">
-                                                <span class="list-group-item-icon d-inline mr-1">
-                                                    <i class="icon icon-graph bg-light-info text-info total-sales-icon rounded-circle p-50"></i>
-                                                </span>
-                                                <div>
-                                                    <p class="mb-25 latest-update-item-name text-bold-600">Total Sales</p>
-                                                    <small class="font-small-3">39.2k Sales</small>
-                                                </div>
-                                            </div>
-                                            <span class="update-profit text-bold-600">26M</span>
-                                        </li>
-                                        <li class="list-group-item px-0 latest-updated-item border-0 pb-0 d-flex justify-content-between">
-                                            <div class="d-flex align-items-center">
-                                                <div class="list-group-item-icon d-inline mr-1">
-                                                    <i class="icon icon-credit-card bg-light-danger text-danger total-revenue-icon rounded-circle p-50"></i>
-                                                </div>
-                                                <div>
-                                                    <p class="mb-25 latest-update-item-name text-bold-600">Total Revenue</p>
-                                                    <small class="font-small-3">45.5k New Revenue</small>
-                                                </div>
-                                            </div>
-                                            <span class="update-profit text-bold-600">15.6M</span>
-                                        </li>
-                                    </ul>
+
+                                <div class="row invoice-adress-info py-2 p-2" style="width: 100%;">
+                                    <div class="col-6 mt-1 from-info">
+                                        <div class="company-name mb-1">
+                                            <span class="font-weight-bold no-wrap">Fecha de apertura:
+                                            </span>
+                                            <span id="fecApertura"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 mt-1 to-info">
+                                        <div class="company-name mb-1">
+                                            <span class="font-weight-bold no-wrap">Usuario apertura: </span>
+                                            <span id="usuApertura"></span>
+                                        </div>
+                                    </div>
                                 </div>
-                             </div>
+                                <div class="table-responsive">
+                                    <table class="table mb-0">
+                                        <tbody>
+                                            <tr>
+                                                <td style="width: 55%">Saldo anterior</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td id="infSaldoAnterior">$ 0,00</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 55%">Abono inicial</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td id="infAbonoInicial">$ 0,00</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot class="bg-teal bg-lighten-4 height-50">
+                                            <tr>
+                                                <th style="width: 55%">Saldo inicial total</th>
+                                                <th></th>
+                                                <th></th>
+                                                <th id="infSaldoInicial">$ 0,00</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table mb-0">
+                                        <tbody id="tr-mediosPago">
 
+                                        </tbody>
+                                        <tfoot class="bg-teal bg-lighten-4 height-50">
+                                            <tr>
+                                                <th style="width: 55%">Recaudos</th>
+                                                <th></th>
+                                                <th></th>
+                                                <th id="totalMedioPago">$ 0,00/th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table mb-0">
+                                        <tbody>
+                                            <tr>
+                                                <td style="width: 55%">Gastos (-)</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td id="infGastos">$ 0,00</td>
+                                            </tr>
 
-                                <div class="col-12">
+                                        </tbody>
+                                        <tfoot class="bg-teal bg-lighten-4 height-50">
+                                            <tr>
+                                                <th style="width: 55%">Total caja (saldo inicial + recaudado - gastos):
+                                                </th>
+                                                <th></th>
+                                                <th></th>
+                                                <th id="infTotalCaja">$ 0,00</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
 
+                            </div>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-12" style="text-align: right">
                                     <div class="form-actions right">
-                                        <button type="button" onclick="$.cancelar();" class="btn btn-warning mr-1">
-                                            <i class="feather icon-x"></i> Cancelar
+                                        <button type="button" onclick="$.salirDetCaja()" class="btn btn-warning ">
+                                            <i class="fa fa-reply"></i> Salir
                                         </button>
-                                        <button type="button" id="btnGuardar" onclick="$.guardar()"
-                                            class="btn btn-success">
-                                            <i class="fa fa-check-square-o"></i> Guardar
+                                        <button type="button" onclick="$.imprimir()" class="btn btn-info ">
+                                            <i class="fa fa-print"></i> Imprir
                                         </button>
-                                        <button type="button" id="btnNuevo" style="display: none;" onclick="$.nuevo()"
-                                            class="btn btn-primary">
-                                            <i class="feather icon-plus"></i> Nuevo
+                                        <button type="button" onclick="$.cerrarCaja();" class="btn btn-primary">
+                                            <i class="fa fa-check-square-o"></i> Cerrar caja
                                         </button>
                                     </div>
                                 </div>
                             </div>
+
+
                         </div>
 
 
@@ -287,11 +289,80 @@
 
             </div>
         </div>
+        {{--  Modal cierre caja  --}}
+        <div class="modal fade text-left" id="modalCierre" tabindex="-1" role="dialog"
+            aria-labelledby="myModalLabel1" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Cierre de caja</h4>
+
+                    </div>
+                    <div class="modal-body">
+                        <div class="card-body">
+
+                            <form class="form" method="post" id="formGuardarCierreCaja"
+                                action="{{ url('/') }}/Administracion/CierreCaja">
+                                @csrf
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="userinput8">Fecha de ciere:</label>
+
+                                        <div class="form-group d-flex align-items-center position-relative">
+                                            <!-- date picker -->
+                                            <div class="date-icon mr-50 font-medium-3">
+
+                                                <i class='feather icon-calendar'></i>
+
+                                            </div>
+                                            <div class="date-picker">
+                                                <input type="text" id="fecGasto" name="fecGasto"
+                                                    class="pickadate form-control pl-1" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label for="userinput8">Monto en caja:</label>
+                                            <input type="text" onchange="$.cambioFormato(this.id);"
+                                                onkeypress="return validartxtnum(event)" onclick="this.select()"
+                                                class="form-control" id="valorVisMontoCierre" value="0,00"
+                                                name="valorVisMontoCierre">
+                                            <input type="hidden" value="" id="valorMontoCierre"
+                                                name="valorMontoCierre">
+                                            <input type="hidden" value="" id="valorMontoGastos"
+                                                name="valorMontoGastos">
+                                            <input type="hidden" value="" id="valorMontoRecaudos"
+                                                name="valorMontoRecaudos">
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-actions right">
+                                            <button type="button" onclick="$.salirConfcierre();"
+                                                class="btn btn-warning mr-1">
+                                                <i class="fa fa-reply"></i>
+                                                Salir
+                                            </button>
+                                            <button type="button" onclick="$.confirmarCierre();"
+                                                class="btn btn-success mr-1">
+                                                <i class="fa fa-check-square-o"></i>
+                                                Confirmar cierre
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
 
         <div id="loader" class="loader-spinner" style="display: none;">
             <img src="{{ asset('app-assets/images/mujer.gif') }}" width="150" />
             <h2 class="parpadeo" style="color: #D08997; font-weight: bold;">Cargando...</h2>
-
         </div>
 
     </div>
@@ -303,8 +374,7 @@
 
     <form action="{{ url('/Administracion/ValidarProfesional') }}" id="formValidarProfesional" method="POST">
         @csrf
-        <!-- Tus c
-                    ampos del formulario aquí -->
+        <!-- Tus campos del formulario aquí -->
     </form>
 
     <form action="{{ url('/Administracion/BuscarServicio') }}" id="formBuscarServicio" method="POST">
@@ -333,6 +403,18 @@
         $(document).ready(function() {
             $("#MenCaja").addClass("active");
             localStorage.clear();
+
+            var picker = $('.pickadate').daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                locale: {
+                    format: 'DD/MM/YYYY',
+                    daysOfWeek: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+                    monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto',
+                        'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+                    ],
+                }
+            });
             $.extend({
                 cargar: function(page, searchTerm = '') {
                     var form = $("#formCargarCajas");
@@ -401,7 +483,88 @@
                         async: false,
                         dataType: "json",
                         success: function(respuesta) {
-                            $("#tituloCaja").html("Caja #"+agregarCeros(respuesta.caja.id,5));
+                            $("#tituloCaja").html("Caja #" + agregarCeros(respuesta.caja.id,
+                                5));
+                            $("#fecApertura").html(respuesta.caja.fecha_apertura);
+                            $("#usuApertura").html(respuesta.caja.nombre_usuario);
+                            $("#infSaldoAnterior").html(formatCurrency(parseInt(respuesta
+                                .caja.saldo_anterior), 'es-CO', 'COP'));
+                            $("#infAbonoInicial").html(formatCurrency(respuesta.caja
+                                .abono_inicial, 'es-CO', 'COP'));
+                            $("#infSaldoInicial").html(formatCurrency(respuesta.caja
+                                .saldo_inicial, 'es-CO', 'COP'));
+
+                            //informacion recaudos
+
+                            var totals = {};
+
+                            // Iterar sobre los recaudos y acumular los totales
+                            respuesta.recaudos.forEach(function(recaudo) {
+                                // Mapear los medios de pago a nombres deseados
+                                var medioPagoNombre = {
+                                    "e": "Efectivo",
+                                    "tc": "Tarjeta de crédito",
+                                    "td": "Tarjeta de débito",
+                                    "t": "Transferencia"
+                                    // Puedes agregar más mapeos según tus necesidades
+                                } [recaudo.medio_pago];
+
+                                // Obtener o crear la entrada para el medio de pago
+                                if (!totals[medioPagoNombre]) {
+                                    totals[medioPagoNombre] = {
+                                        count: 0,
+                                        total: 0
+                                    };
+                                }
+
+                                // Incrementar la cantidad y sumar al total
+                                totals[medioPagoNombre].count++;
+                                totals[medioPagoNombre].total += parseInt(recaudo
+                                    .valor);
+                            });
+
+                            // Mostrar los resultados
+
+                            let mediosPago = '';
+                            let totalMedioPago = 0;
+                            for (var medioPagoNombre in totals) {
+                                mediosPago += '<tr>' +
+                                    '<td style="width: 55%">' + medioPagoNombre + ' (' +
+                                    totals[medioPagoNombre].count + ')</td>' +
+                                    '<td></td>' +
+                                    '<td></td>' +
+                                    '<td>' + formatCurrency(totals[medioPagoNombre].total,
+                                        'es-CO', 'COP') + '</td>' +
+                                    '</tr>';
+
+                                totalMedioPago += totals[medioPagoNombre].total;
+
+                                if(medioPagoNombre == 'Efectivo'){
+                                    $("#valorMontoCierre").val(totals[medioPagoNombre].total);
+                                    $("#valorVisMontoCierre").val(formatCurrency(totals[medioPagoNombre].total, 'es-CO', 'COP'));
+
+                                }
+
+
+                            }
+
+                            $("#tr-mediosPago").html(mediosPago);
+                            $("#totalMedioPago").html(formatCurrency(totalMedioPago,
+                                'es-CO', 'COP'));
+
+
+                            //informacion gastos
+                            $("#infGastos").html(formatCurrency(respuesta.gastos, 'es-CO',
+                                'COP'));
+
+                            // total caja
+                            let totalCaja = parseInt(respuesta.caja.saldo_inicial) +
+                                parseInt(totalMedioPago);
+                            totalCaja = totalCaja - parseInt(respuesta.gastos);
+
+                            $("#infTotalCaja").html(formatCurrency(totalCaja, 'es-CO',
+                                'COP'));
+
                         }
                     });
                 },
@@ -473,7 +636,73 @@
                     $("#abonoIni").val(formatoMoneda);
 
                 },
-                
+                confirmarCierre: function(){
+                    Swal.fire({
+                        title: "Esta seguro de cerrar esta caja?",
+                        text: "¡No podrás revertir esto!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Si, cerrar!",
+                        cancelButtonText: "Cancelar",
+                        confirmButtonClass: "btn btn-warning",
+                        cancelButtonClass: "btn btn-danger ml-1",
+                        buttonsStyling: false
+                    }).then(function(result) {
+                        if (result.value) {
+                            $.procederCerrar();
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                            Swal.fire({
+                                title: "Cancelado",
+                                text: "Tu caja sigue abierta ;)",
+                                type: "error",
+                                confirmButtonClass: "btn btn-success"
+                            });
+                        }
+                    }); 
+                },
+                procederCerrar: function(){
+
+                    var form = $("#formGuardarCierreCaja");
+                    let caja = $("#idCaja").val();
+
+                    $("#idCaja").remove();
+                    form.append("<input type='hidden' id='idCaja' name='idCaja'  value='" + caja +
+                        "'>");
+
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: new FormData($('#formGuardarCierreCaja')[0]),
+                        processData: false,
+                        contentType: false,
+                        success: function(respuesta) {
+                            Swal.fire({
+                                type: "success",
+                                title: "Cerrada!",
+                                text: "La caja fue cerrada de forma exitosa.",
+                                confirmButtonClass: "btn btn-success"
+                            });
+                            $.cargar(1);
+                        }
+                    });
+
+                },
+                salirConfcierre: function() {
+                    $("#modaldetCaja").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+
+                    $('#modalCierre').modal('toggle');
+                    var miDiv = document.getElementById("modaldetCaja");
+                    miDiv.style.setProperty("overflow-y", "auto", "important");
+                },
+
                 salir: function() {
                     $('#modalCaja').modal('hide');
                     $.limpiar();
@@ -486,6 +715,16 @@
                     $("#btnGuardar").show();
                     $("#btnNuevo").hide();
                     $.limpiar();
+                },
+                cerrarCaja: function() {
+                    $("#modalCierre").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+                    $('#modaldetCaja').modal('toggle');
+                },
+                salirDetCaja: function() {
+                    $('#modaldetCaja').modal('toggle');
                 },
 
                 eliminar: function(id) {

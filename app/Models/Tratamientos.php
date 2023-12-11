@@ -223,6 +223,8 @@ class Tratamientos extends Model
 
         return $recaudoHoy;
     }
+
+
     public static function recaudosMes()
     {
         $primerDiaDelMes = now()->startOfMonth();
@@ -250,6 +252,24 @@ class Tratamientos extends Model
 
         return $recaudoMes;
     }
+    
+    public static function recaudosCajaResumen($fecIni)
+    {
+        // Convierte la fecha de inicio a un objeto DateTime
+        $fechaInicio = new  \DateTime($fecIni);
+
+        // Utiliza la fecha y hora actual como el último momento
+        $fechaFin = new  \DateTime();
+
+        $recaudoMes = DB::connection('mysql')
+            ->table('medio_pagos_tratamiento')
+            ->whereBetween('created_at', [$fechaInicio->format('Y-m-d H:i:s'), $fechaFin->format('Y-m-d H:i:s')])
+            ->get();
+
+        return $recaudoMes;
+    }
+
+
 
     public static function TratamientosPacientesOtr($idPac)
     {

@@ -37,4 +37,18 @@ class Cajas extends Model
             ->where('cajas.id', $idCaja)
             ->first();
     }
+
+    public static function CambioEstado($idCaja, $request)
+    {
+
+        $respuesta = DB::connection('mysql')->table('cajas')->where('id', $idCaja)->update([
+            'fecha_cierre' => $request[''],
+            'recaudos' => $request[''],
+            'gastos' => $request[''],
+            'saldo_cierre' => $request[''],
+            'estado_caja' => 'Cerrada'
+        ]);
+        return "ok";
+
+    }
 }

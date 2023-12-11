@@ -35,7 +35,7 @@
 
                         </div>
                         <div class="date-picker">
-                            <input type="text" onchange="cambioFecha();" id="fecha" name="fecha"
+                            <input type="text" onchange="$.cambioFecha();" id="fecha" name="fecha"
                                 class="pickadate form-control pl-1" placeholder="Fecha de gastos">
                         </div>
                     </div>
@@ -183,7 +183,7 @@
                                     <div class="col-12">
                                         <div class="form-actions right">
                                             <button type="button" onclick="$.cancelar();" class="btn btn-warning mr-1">
-                                                <i class="feather icon-corner-up"></i> Salir
+                                                <i class="feather icon-corner-up-left"></i> Salir
                                             </button>
                                             <button type="button" id="btnGuardar" onclick="$.guardar()"
                                                 class="btn btn-success">
@@ -211,9 +211,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title">Gestionar categorias</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                      
                     </div>
                     <div class="modal-body">
                         <div class="card-body">
@@ -381,8 +379,6 @@
                     $("#btnGuardar").show();
                     $("#btnNuevo").hide();
                     $.limpiar();
-
-
                 },
                 addCategoria: function() {
                     $("#accionCate").val("agregar");
@@ -798,6 +794,10 @@
                     });
 
                 },
+                cambioFecha: function() {
+                    var searchTerm = $("#searchInput").val();
+                    $.cargar(1, searchTerm);
+                }
 
             });
 
@@ -860,10 +860,7 @@
             return fechaFormateada;
         }
 
-        function cambioFecha(){
-            var searchTerm = $("#searchInput").val();
-            $.cargar(1, searchTerm);
-        }
+       
     </script>
 
     </script>
