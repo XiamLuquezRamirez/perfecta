@@ -229,8 +229,7 @@ class AdminitraccionController extends Controller
                 ->table('cajas')
                 ->leftJoin("users", "users.id","cajas.usuario")
                 ->select("cajas.*", "users.nombre_usuario")
-                ->where('estado_reg', 'ACTIVO')
-                ->where('estado_caja', 'Abierta');
+                ->where('estado_reg', 'ACTIVO');
 
                 $ultimaCaja = DB::connection('mysql')
                 ->table('cajas')
@@ -700,7 +699,7 @@ class AdminitraccionController extends Controller
     {
         if (Auth::check()) {
             $idGast = request()->get('idGast');
-            $gastos = Gastos::Eliminar($idGast);
+            $gastos = Gastos::CambioEstado($idGast);
             if (request()->ajax()) {
                 return response()->json([
                     'estado' => "ok",
@@ -713,8 +712,9 @@ class AdminitraccionController extends Controller
     public function CierreCaja()
     {
         if (Auth::check()) {
-            $idCaja = request()->get('idCaja');
-            $gastos = Cajas::Eliminar($idGast);
+           
+            $data = request()->all();
+            $gastos = Cajas::CambioEstado($data);
             if (request()->ajax()) {
                 return response()->json([
                     'estado' => "ok",

@@ -163,103 +163,110 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title text-bold-600" id="tituloCaja"></h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <h2 class="text-primary" id="valTotalGeneral">$ 0,00</h2>
                     </div>
                     <div class="modal-body">
                         <div class="card-body">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="invoice-logo-title row py-2 mt-0">
-                                        <div class="col-6 d-flex flex-column justify-content-center align-items-start">
-                                            &nbsp;
-                                        </div>
-                                        <div class="col-6 d-flex justify-content-end invoice-logo">
-                                            <h2 class="text-primary" id="valTotalGeneral">$ 240.000,00</h2>
-                                        </div>
+                            <div class="row invoice-adress-info py-2 p-2" style="width: 100%;">
+                                <div class="col-4 mt-1 from-info">
+                                    <div class="company-name mb-1">
+                                        <span class="font-weight-bold no-wrap">Fecha de apertura:
+                                        </span><br>
+                                        <span id="fecApertura"></span>
                                     </div>
                                 </div>
-
-                                <div class="row invoice-adress-info py-2 p-2" style="width: 100%;">
-                                    <div class="col-6 mt-1 from-info">
-                                        <div class="company-name mb-1">
-                                            <span class="font-weight-bold no-wrap">Fecha de apertura:
-                                            </span>
-                                            <span id="fecApertura"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-6 mt-1 to-info">
-                                        <div class="company-name mb-1">
-                                            <span class="font-weight-bold no-wrap">Usuario apertura: </span>
-                                            <span id="usuApertura"></span>
-                                        </div>
+                                <div class="col-4 mt-1 from-info">
+                                    <div id="div-infoCierre" class="company-name mb-1" style="display: none;">
+                                        <span class="font-weight-bold no-wrap">Fecha de cierre:
+                                        </span><br>
+                                        <span id="fecCierre"></span>
                                     </div>
                                 </div>
-                                <div class="table-responsive">
-                                    <table class="table mb-0">
-                                        <tbody>
-                                            <tr>
-                                                <td style="width: 55%">Saldo anterior</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td id="infSaldoAnterior">$ 0,00</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="width: 55%">Abono inicial</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td id="infAbonoInicial">$ 0,00</td>
-                                            </tr>
-                                        </tbody>
-                                        <tfoot class="bg-teal bg-lighten-4 height-50">
-                                            <tr>
-                                                <th style="width: 55%">Saldo inicial total</th>
-                                                <th></th>
-                                                <th></th>
-                                                <th id="infSaldoInicial">$ 0,00</th>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
+                                <div class="col-4 mt-1 to-info">
+                                    <div class="company-name mb-1">
+                                        <span class="font-weight-bold no-wrap">Usuario apertura: </span><br>
+                                        <span id="usuApertura"></span>
+                                    </div>
                                 </div>
-                                <div class="table-responsive">
-                                    <table class="table mb-0">
-                                        <tbody id="tr-mediosPago">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table mb-0">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 55%">Saldo anterior</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td id="infSaldoAnterior">$ 0,00</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 55%">Abono inicial</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td id="infAbonoInicial">$ 0,00</td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot class="bg-teal bg-lighten-4 height-50">
+                                        <tr>
+                                            <th style="width: 55%">Saldo inicial total</th>
+                                            <th></th>
+                                            <th></th>
+                                            <th id="infSaldoInicial">$ 0,00</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table mb-0">
+                                    <tbody id="tr-mediosPago">
 
-                                        </tbody>
-                                        <tfoot class="bg-teal bg-lighten-4 height-50">
-                                            <tr>
-                                                <th style="width: 55%">Recaudos</th>
-                                                <th></th>
-                                                <th></th>
-                                                <th id="totalMedioPago">$ 0,00/th>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                                <div class="table-responsive">
-                                    <table class="table mb-0">
-                                        <tbody>
-                                            <tr>
-                                                <td style="width: 55%">Gastos (-)</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td id="infGastos">$ 0,00</td>
-                                            </tr>
+                                    </tbody>
+                                    <tfoot class="bg-teal bg-lighten-4 height-50">
+                                        <tr>
+                                            <th style="width: 55%">Recaudos</th>
+                                            <th></th>
+                                            <th></th>
+                                            <th id="totalMedioPago">$ 0,00/th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table mb-0">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 55%">Gastos (-)</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td id="infGastos">$ 0,00</td>
+                                        </tr>
 
-                                        </tbody>
-                                        <tfoot class="bg-teal bg-lighten-4 height-50">
-                                            <tr>
-                                                <th style="width: 55%">Total caja (saldo inicial + recaudado - gastos):
-                                                </th>
-                                                <th></th>
-                                                <th></th>
-                                                <th id="infTotalCaja">$ 0,00</th>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
+                                    </tbody>
+                                    <tfoot class="bg-teal bg-lighten-4 height-50">
+                                        <tr>
+                                            <th style="width: 55%">Total caja (saldo inicial + recaudado - gastos):
+                                            </th>
+                                            <th></th>
+                                            <th></th>
+                                            <th id="infTotalCaja">$ 0,00</th>
+                                        </tr>
+                                    </tfoot>
 
+                                </table>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table mb-0">
+                                    <tfoot id="div-saldoCierre" style="display: none;"
+                                        class="bg-teal bg-lighten-4 height-50">
+                                        <tr>
+                                            <th style="width: 55%">Saldo cierre::
+                                            </th>
+                                            <th></th>
+                                            <th></th>
+                                            <th id="infSaldoCierre">$ 0,00</th>
+                                        </tr>
+                                    </tfoot>
+
+                                </table>
                             </div>
                             <hr>
 
@@ -272,7 +279,8 @@
                                         <button type="button" onclick="$.imprimir()" class="btn btn-info ">
                                             <i class="fa fa-print"></i> Imprir
                                         </button>
-                                        <button type="button" onclick="$.cerrarCaja();" class="btn btn-primary">
+                                        <button type="button" id="btn-cierre" onclick="$.cerrarCaja();"
+                                            class="btn btn-primary">
                                             <i class="fa fa-check-square-o"></i> Cerrar caja
                                         </button>
                                     </div>
@@ -316,7 +324,7 @@
 
                                             </div>
                                             <div class="date-picker">
-                                                <input type="text" id="fecGasto" name="fecGasto"
+                                                <input type="text" id="fecCierre" name="fecCierre"
                                                     class="pickadate form-control pl-1" placeholder="">
                                             </div>
                                         </div>
@@ -494,6 +502,20 @@
                             $("#infSaldoInicial").html(formatCurrency(respuesta.caja
                                 .saldo_inicial, 'es-CO', 'COP'));
 
+
+                            if (respuesta.caja.estado_caja == 'Cerrada') {
+                                $("#btn-cierre").hide();
+                                $("#div-saldoCierre").show();
+                                $("#div-infoCierre").show();
+                                $("#infSaldoCierre").html(formatCurrency(respuesta.caja
+                                    .saldo_cierre, 'es-CO', 'COP'));
+                                $("#fecCierre").html(respuesta.caja.fecha_cierre);
+                            } else {
+                                $("#btn-cierre").show();
+                                $("#div-saldoCierre").hide();
+                                $("#div-infoCierre").hide();
+                            }
+
                             //informacion recaudos
 
                             var totals = {};
@@ -539,23 +561,26 @@
 
                                 totalMedioPago += totals[medioPagoNombre].total;
 
-                                if(medioPagoNombre == 'Efectivo'){
-                                    $("#valorMontoCierre").val(totals[medioPagoNombre].total);
-                                    $("#valorVisMontoCierre").val(formatCurrency(totals[medioPagoNombre].total, 'es-CO', 'COP'));
+                                if (medioPagoNombre == 'Efectivo') {
+                                    $("#valorMontoCierre").val(totals[medioPagoNombre]
+                                        .total);
+                                    $("#valorVisMontoCierre").val(formatCurrency(totals[
+                                        medioPagoNombre].total, 'es-CO', 'COP'));
 
                                 }
-
-
                             }
 
                             $("#tr-mediosPago").html(mediosPago);
                             $("#totalMedioPago").html(formatCurrency(totalMedioPago,
                                 'es-CO', 'COP'));
+                            $("#valorMontoRecaudos").val(totalMedioPago);
 
 
                             //informacion gastos
                             $("#infGastos").html(formatCurrency(respuesta.gastos, 'es-CO',
                                 'COP'));
+
+                            $("#valorMontoGastos").val(respuesta.gastos);
 
                             // total caja
                             let totalCaja = parseInt(respuesta.caja.saldo_inicial) +
@@ -563,6 +588,8 @@
                             totalCaja = totalCaja - parseInt(respuesta.gastos);
 
                             $("#infTotalCaja").html(formatCurrency(totalCaja, 'es-CO',
+                                'COP'));
+                            $("#valTotalGeneral").html(formatCurrency(totalCaja, 'es-CO',
                                 'COP'));
 
                         }
@@ -634,9 +661,8 @@
                     $("#abono").val(numero);
                     var formatoMoneda = formatCurrency(numero, 'es-CO', 'COP');
                     $("#abonoIni").val(formatoMoneda);
-
                 },
-                confirmarCierre: function(){
+                confirmarCierre: function() {
                     Swal.fire({
                         title: "Esta seguro de cerrar esta caja?",
                         text: "¡No podrás revertir esto!",
@@ -660,10 +686,9 @@
                                 confirmButtonClass: "btn btn-success"
                             });
                         }
-                    }); 
+                    });
                 },
-                procederCerrar: function(){
-
+                procederCerrar: function() {
                     var form = $("#formGuardarCierreCaja");
                     let caja = $("#idCaja").val();
 
@@ -685,9 +710,15 @@
                                 type: "success",
                                 title: "Cerrada!",
                                 text: "La caja fue cerrada de forma exitosa.",
-                                confirmButtonClass: "btn btn-success"
+                                timer: 1500,
+                                confirmButtonClass: "btn btn-success",
+                                buttonsStyling: false
                             });
+
                             $.cargar(1);
+                            setTimeout(() => {
+                                $('#modalCierre').modal('toggle');
+                            }, 2000);
                         }
                     });
 
@@ -781,7 +812,9 @@
                     });
 
                 },
+                imprimir: function() {
 
+               }
             });
 
             $.cargar(1);

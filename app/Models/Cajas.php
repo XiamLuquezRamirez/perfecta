@@ -10,7 +10,7 @@ class Cajas extends Model
 {
     public static function guardar($request)
     {
-        $fechaApert = date("Y-m-d H:i:s");
+        $fechaApert = date("Y-m-d");
 
         $respuesta = DB::connection('mysql')->table('cajas')->insertGetId([
             'usuario' => Auth::user()->id,
@@ -30,7 +30,7 @@ class Cajas extends Model
     }
 
     public static function BuscarCajas($idCaja)
-    {
+    { 
         return DB::connection('mysql')->table('cajas')
             ->leftJoin("users", "users.id", "cajas.usuario")
             ->select("cajas.*", "users.nombre_usuario")
@@ -38,14 +38,15 @@ class Cajas extends Model
             ->first();
     }
 
-    public static function CambioEstado($idCaja, $request)
+    public static function CambioEstado($request)
     {
+        $fechaFormateada = date("Y-m-d", strtotime(str_replace('/', '-', $request['fecCierre'])));
 
-        $respuesta = DB::connection('mysql')->table('cajas')->where('id', $idCaja)->update([
-            'fecha_cierre' => $request[''],
-            'recaudos' => $request[''],
-            'gastos' => $request[''],
-            'saldo_cierre' => $request[''],
+        $respuesta = DB::connection('mysql')->table('cajas')->where('id', $request['idCaja'])->update([
+            'fecha_cierre' => $fechaFormateada,
+            'recaudos' => $request['valorMontoRecaudos'],
+            'gastos' => $request['valorMontoGastos'],
+            'saldo_cierre' => $request['valorMontoCierre'],
             'estado_caja' => 'Cerrada'
         ]);
         return "ok";
