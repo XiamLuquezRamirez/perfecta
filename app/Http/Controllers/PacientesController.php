@@ -10,6 +10,7 @@ use App\Models\Secciones;
 use App\Models\ItemsTratamiento;
 use App\Models\Servicios;
 use App\Models\Evoluciones;
+use App\Models\Especialidades;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -58,6 +59,21 @@ class PacientesController extends Controller
             if (request()->ajax()) {
                 return response()->json([
                     'profesionales' => $profesionales,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+    public function AllEspecialidades()
+    {
+        if (Auth::check()) {
+            $especialidades = Especialidades::AllEspecialidades();
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'especialidades' => $especialidades,
                 ]);
             }
         } else {

@@ -34,6 +34,7 @@ Route::get('/AdminPacientes/municipios', [PacientesController::class,'CargarMuni
 Route::post('/AdminPacientes/ValidarPacientes', [PacientesController::class,'ValidarPacientes']);
 Route::post('/AdminPacientes/BuscarPacientes', [PacientesController::class,'BuscarPacientes']);
 Route::post('/AdminPacientes/AllProfesionales', [PacientesController::class,'AllProfesionales']);
+Route::post('/AdminPacientes/AllEspecialidades', [PacientesController::class,'AllEspecialidades']);
 
 
 //GESTIOAR ADMINISTRACCION

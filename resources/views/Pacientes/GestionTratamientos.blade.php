@@ -232,7 +232,8 @@
                                                                                         class="feather icon-corner-up-left"></i>
                                                                                     Salir
                                                                                 </button>
-                                                                                <button type="button" id="btnGuardar"
+                                                                                <button type="button"
+                                                                                    id="btnGuardarSeccion"
                                                                                     onclick="$.guardarSeccion()"
                                                                                     class="btn btn-success">
                                                                                     <i class="fa fa-check-square-o"></i>
@@ -388,19 +389,29 @@
                                                                                                 class="file center-block">
                                                                                                 <input type="file"
                                                                                                     accept=".jpg, .jpeg, .png, .gif, .mp4, .avi, .mov, .pdf"
-                                                                                                    name="archivo"
+                                                                                                    name="archivo[]" class="archivos"
                                                                                                     id="archivo">
                                                                                                 <span
                                                                                                     class="file-custom"></span>
                                                                                             </label>
                                                                                         </div>
-                                                                                        <div class="col-2 col-xl-1">
-                                                                                            <button type="button"
-                                                                                                data-repeater-delete
-                                                                                                title="Eliminar Archivo"
-                                                                                                class="btn btn-icon btn-pure danger mr-1"><i
-                                                                                                    class="fa fa-trash-o"></i></button>
-
+                                                                                        <div class="col-2 col-xl-2">
+                                                                                            <div class="invoice-action">
+                                                                                                <a data-repeater-delete
+                                                                                                    title="Elimiar archivo"
+                                                                                                    style="color: #009c9f"
+                                                                                                    class="invoice-action-view mr-1">
+                                                                                                    <i
+                                                                                                        class="feather icon-trash"></i>
+                                                                                                </a>
+                                                                                                <a class="invoice-action-edit cursor-pointer"
+                                                                                                    onclick="$.verArchivo(this)"
+                                                                                                    title="Ver archivo"
+                                                                                                    style="color: #009c9f">
+                                                                                                    <i
+                                                                                                        class="feather icon-eye"></i>
+                                                                                                </a>
+                                                                                            </div>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -620,6 +631,24 @@
             </div>
         </div>
 
+
+        <div class="modal fade" id="archivoModal" tabindex="-1" role="dialog" aria-labelledby="archivoModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="archivoModalLabel">Vista previa del archivo</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="vistaPreviaArchivo"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div id="loader" class="loader-spinner" style="display: none;">
             <img src="{{ asset('app-assets/images/mujer.gif') }}" width="150" />
             <h2 class="parpadeo" style="color: #D08997; font-weight: bold;">Cargando...</h2>
@@ -629,6 +658,11 @@
     </div>
 
     <form action="{{ url('/AdminPacientes/AllProfesionales') }}" id="formCargarProfesionales" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+
+    <form action="{{ url('/AdminPacientes/AllEspecialidades') }}" id="formCargarEspecialidades" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
@@ -827,6 +861,7 @@
                     $("#tituloTratamiento").html("Agregar tratamiento.");
                     $("#accion").val("agregar");
                     $.cargarProfesionales();
+                    $.cargarEspecialidades();
                 },
                 cambiarAvance: function(val) {
                     var boton = document.getElementById('btnGuardarEvolucion');
@@ -846,6 +881,7 @@
                     $("#accion").val("editar");
 
                     $.cargarProfesionales();
+                    $.cargarEspecialidades();
 
                     $("#idTratamiento").val(id);
 
@@ -969,6 +1005,12 @@
                                     '        <i class="feather icon-trending-up"></i>' +
                                     '         Registrar Evolución' +
                                     '        </a>' +
+                                    '        <a onclick="$.consultarEvolucion(' + item
+                                    .id + ',' + item.seccion +
+                                    ');" class="dropdown-item">' +
+                                    '        <i class="feather icon-eye"></i>' +
+                                    '         Consultar Evolución' +
+                                    '        </a>' +
                                     '        <a onclick="$.editServSecc(' + item
                                     .id + ');" class="dropdown-item">' +
                                     '        <i class="feather icon-edit"></i>' +
@@ -1038,6 +1080,31 @@
                     $("#profesional").html(select);
                     $("#profesionalEvolucion").html(select);
                 },
+                cargarEspecialidades: function() {
+
+                    var form = $("#formCargarEspecialidades");
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    let select = '<option value="">Seleccione...</option>';
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            $.each(respuesta.especialidades, function(i, item) {
+
+                                select += '<option value="' + item.id + '">' + item
+                                    .nombre + '</option>';
+
+                            });
+                        }
+                    });
+
+                    $("#especialidad").html(select);
+                },
                 cargarServicios: function() {
 
                     var form = $("#formCargarServicios");
@@ -1091,6 +1158,17 @@
                         });
                         return;
                     }
+                    if ($("#profesional").val().trim() === "") {
+                        Swal.fire({
+                            type: "warning",
+                            title: "Oops...",
+                            text: "Debes de ingresar la especialidad del tratamiento",
+                            confirmButtonClass: "btn btn-primary",
+                            timer: 1500,
+                            buttonsStyling: false
+                        });
+                        return;
+                    }
 
                     var loader = document.getElementById('loader');
                     loader.style.display = 'block';
@@ -1127,73 +1205,7 @@
                                     buttonsStyling: false
                                 });
 
-                                $("#div-trata-act").html('');
-
-                                $.each(respuesta.newTrata, function(i, item) {
-
-                                    newTrata = '<div id="tratamiento' + item.id +
-                                        '" class="row">' +
-                                        '<div class="col-12 pt-2 pb-2 border-bottom-blue-grey border-bottom-lighten-5">' +
-                                        '    <div class="info-time-tracking-title d-flex justify-content-between align-items-center">' +
-                                        '        <h4 class="pl-2 mb-0 title-info-time-heading text-bold-500">' +
-                                        '            ' + item.nombre + '</h4>' +
-                                        '        <span class="pr-2 fonticon-wrap"' +
-                                        '            style="cursor: pointer; ">' +
-                                        '            <i onclick="$.editarTratamiento(' +
-                                        item.id +
-                                        ');" style="transition: all .2s ease-in-out;" title="Editar Tratamiento"' +
-                                        '                class="fa fa-pencil font-medium-5 hvr-grow-shadow mr-1"></i>' +
-                                        '            <i onclick="$.eliminarTratamiento(' +
-                                        item.id +
-                                        ');" title="Eliminar Tratamiento"' +
-                                        '                class="fa fa-trash-o  font-medium-5 hvr-grow-shadow"></i>' +
-                                        '        </span>' +
-                                        '    </div>' +
-                                        '</div>' +
-                                        '<div class="col-12 hvr-grow-shadow" style="cursor: pointer;"' +
-                                        '    onclick="$.verTratamiento(' + item.id +
-                                        ');">' +
-                                        '    <div class="card-body ">' +
-                                        '        <div class="row justify-content-center align-items-center">' +
-                                        '            <div class="col-xl-4 col-lg-6 col-md-12 text-center clearfix">' +
-                                        '                <h6 class="pt-1"><span' +
-                                        '                        class="fa fa-user"></span> Profesional:' +
-                                        '                </h6>' +
-                                        '                <p>Mairen Pumarejo</p>' +
-                                        '            </div>' +
-                                        '            <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">' +
-                                        '                <h6 class="pt-1"><span' +
-                                        '                        class="fa fa-th-large"></span>' +
-                                        '                    Especialidad:</h6>' +
-                                        '                <p>' + item.especialidad +
-                                        '            </p>' +
-                                        '            </div>' +
-                                        '            <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">' +
-                                        '                <h6 class="pt-1"><span' +
-                                        '                        class="fa fa-list"></span> Servicios Activos:</h6>' +
-                                        '                <p>0</p>' +
-                                        '            </div>' +
-                                        '            <div class="col-xl-2 col-lg-6 col-md-12 text-center clearfix">' +
-                                        '                <div id="outerCircleTrata' +
-                                        consTrata + '" class="outerCircleTrata"' +
-                                        '                style="display: flex; justify-content: center; align-items: center; padding: 0; height: 50px; width: 50px; border-radius: 100%; background-image: conic-gradient(#24BEC0 0deg, #24BEC0 162deg, #F0F0F0 162deg)">' +
-                                        '                <div style="display: flex; justify-content: center; align-items: center; padding: 0; height: 40px; width: 40px; border-radius: 100%; background-color:white">' +
-                                        '                    <span id="porcentajeTrata' +
-                                        consTrata + '">0%</span>' +
-                                        '                </div>' +
-                                        '            </div>' +
-                                        '           </div>' +
-                                        '        </div>' +
-                                        '    </div>' +
-                                        '</div>' +
-                                        '</div>';
-                                    $("#div-trata-act").append(newTrata);
-                                    updatePercentageTratamientos(porAvancTrat,
-                                        consTrata);
-                                    consTrata++;
-
-                                });
-
+                                $.buscInfGeneralPaciente($("#idPaciente").val());
                                 var loader = document.getElementById('loader');
                                 loader.style.display = 'none';
                             }
@@ -1219,7 +1231,46 @@
                     $("#nombreSeccion").val('');
                     $("#descripcionSeccion").val('');
                     $("#accion").val('agregar');
+                    var btnGuardarSeccion = document.getElementById('btnGuardarSeccion');
+                    btnGuardarSeccion.removeAttribute('disabled');
 
+                },
+                verArchivo: function(element) {
+                    var inputArchivo = element.closest('.row').querySelector('.archivos');
+                    var archivoSeleccionado = inputArchivo.files[0];
+
+                    // Mostrar la vista previa en el modal
+                    $.mostrarVistaPrevia(archivoSeleccionado);
+                },
+                consultarEvolucion: function(idSecc){
+                    alert("consultar");
+                },
+                mostrarVistaPrevia: function(archivo) {
+                    var archivoURL = URL.createObjectURL(archivo);
+
+                    // Obtener el contenedor de la vista previa
+                    var vistaPreviaContainer = document.getElementById('vistaPreviaArchivo');
+
+                    // Establecer el contenido de la vista previa
+                    vistaPreviaContainer.innerHTML = '';
+
+                    if (archivo.type.startsWith('image/')) {
+                        // Si es una imagen, crear un elemento de imagen
+                        var imagen = document.createElement('img');
+                        imagen.src = archivoURL;
+                        imagen.className = 'img-fluid';
+                        vistaPreviaContainer.appendChild(imagen);
+                    } else {
+                        // Si no es una imagen, mostrar un enlace de descarga
+                        var enlaceDescarga = document.createElement('a');
+                        enlaceDescarga.href = archivoURL;
+                        enlaceDescarga.textContent = 'Descargar archivo';
+                        enlaceDescarga.download = archivo.name;
+                        vistaPreviaContainer.appendChild(enlaceDescarga);
+                    }
+
+                    // Mostrar el modal usando jQuery
+                    $('#archivoModal').modal('show');
                 },
                 addEvolucion: function(idServ, idSeccion) {
 
@@ -1329,7 +1380,7 @@
                                     type: "success",
                                     title: "",
                                     text: "Operación realizada exitosamente",
-                                    consfirmButtonClass: "btn btn-primary",
+                                    confirmButtonClass: "btn btn-primary",
                                     timer: 1500,
                                     buttonsStyling: false
                                 });
@@ -1342,6 +1393,9 @@
                                         .seccion.nombre);
                                 }
 
+                                var btnGuardarSeccion = document.getElementById(
+                                    'btnGuardarSeccion');
+                                btnGuardarSeccion.setAttribute('disabled', true);
                                 var loader = document.getElementById('loader');
                                 loader.style.display = 'none';
                             }
@@ -1712,6 +1766,12 @@
                             '        <i class="feather icon-trending-up"></i>' +
                             '         Registrar Evolución' +
                             '        </a>' +
+                            '        <a onclick="$.consultarEvolucion(' + item
+                                    .id + ',' + item.seccion +
+                                    ');" class="dropdown-item">' +
+                                    '        <i class="feather icon-eye"></i>' +
+                                    '         Consultar Evolución' +
+                                    '        </a>' +
                             '        <a onclick="$.editServSecc(' + item
                             .id + ');" class="dropdown-item">' +
                             '        <i class="feather icon-edit"></i>' +
@@ -2133,13 +2193,14 @@
                                         servicio.estado_serv === "Terminado");
                                 const totalServiciosPorTratamiento =
                                     serviciosPorTratamiento.length;
-                                const porcentajeTerminado = (
+                                let porcentajeTerminado = (
                                     serviciosTerminadosPorTratamiento.length /
                                     totalServiciosPorTratamiento) * 100;
-
                                 let totalActivos = totalServiciosPorTratamiento -
                                     serviciosTerminadosPorTratamiento.length;
-
+                                if (isNaN(porcentajeTerminado)) {
+                                    porcentajeTerminado = 0;
+                                }
 
                                 tratAct = '<div id="tratamiento' + item.id +
                                     '" class="row">' +
@@ -2174,7 +2235,7 @@
                                     '                <h6 class="pt-1"><span' +
                                     '                        class="fa fa-th-large"></span>' +
                                     '                    Especialidad:</h6>' +
-                                    '                <p>' + item.especialidad +
+                                    '                <p>' + item.nespecialidad +
                                     '</p>' +
                                     '            </div>' +
                                     '            <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">' +
@@ -2310,11 +2371,11 @@
             var editorEvolucion = CKEDITOR.instances.evolucion_escrita;
             //leer variable localStorage tratamientos
             var ultimaParteURLAnterior = document.referrer.split('/').filter(Boolean).pop();
-            if(ultimaParteURLAnterior == "Administracion"  || ultimaParteURLAnterior == "Pacientes"){
+            if (ultimaParteURLAnterior == "Administracion" || ultimaParteURLAnterior == "Pacientes") {
                 if (localStorage.getItem('idTratamiento')) {
                     $.buscInfGeneralPaciente(localStorage.getItem('idPaciente'));
                     $.verTratamiento(localStorage.getItem('idTratamiento'));
-                }else if(localStorage.getItem('idPaciente')){
+                } else if (localStorage.getItem('idPaciente')) {
                     $.buscInfGeneralPaciente(localStorage.getItem('idPaciente'));
                 }
 
@@ -2367,7 +2428,7 @@
                 `conic-gradient(#24BEC0 0deg, #24BEC0 ${3.6 * porcentaje}deg, #F0F0F0 ${3.6 * porcentaje}deg)`);
         }
 
-       
+
 
         // Llamar a la función con un porcentaje específico (puedes cambiar este valor)
     </script>

@@ -19,7 +19,8 @@ class Tratamientos extends Model
             'especialidad' => $request['especialidad'],
             'estado' => 'pendiente',
             'estado_reg' => 'ACTIVO',
-            'estado_pago' => 'pendiente'
+            'estado_pago' => 'pendiente',
+            'saldo_previo' => '0',
 
         ]);
 
@@ -183,8 +184,9 @@ class Tratamientos extends Model
     {
         $respuestaTra = DB::connection('mysql')->table('tratamientos')
             ->leftJoin("profesionales", "profesionales.id", "tratamientos.profesional")
-            ->select("tratamientos.*", "profesionales.nombre AS nprofe")
-            ->where("paciente", $idPac)
+            ->leftJoin("especialidades", "especialidades.id", "tratamientos.especialidad")
+            ->select("tratamientos.*", "profesionales.nombre AS nprofe", "especialidades.nombre AS nespecialidad")
+              ->where("paciente", $idPac)
             ->where('tratamientos.estado', '<>', 'Terminados')
             ->where('tratamientos.estado_reg', 'ACTIVO')
             ->get();
@@ -195,7 +197,8 @@ class Tratamientos extends Model
     {
         $respuestaTra = DB::connection('mysql')->table('tratamientos')
             ->leftJoin("profesionales", "profesionales.id", "tratamientos.profesional")
-            ->select("tratamientos.*", "profesionales.nombre AS nprofe")
+            ->leftJoin("especialidades", "especialidades.id", "tratamientos.especialidad")
+            ->select("tratamientos.*", "profesionales.nombre AS nprofe", "especialidades.nombre AS nespecialidad")
             ->where("paciente", $idPac)
             ->where('tratamientos.estado_reg', 'ACTIVO')
             ->get();
@@ -275,7 +278,8 @@ class Tratamientos extends Model
     {
         $respuestaTra = DB::connection('mysql')->table('tratamientos')
             ->leftJoin("profesionales", "profesionales.id", "tratamientos.profesional")
-            ->select("tratamientos.*", "profesionales.nombre AS nprofe")
+            ->leftJoin("especialidades", "especialidades.id", "tratamientos.especialidad")
+            ->select("tratamientos.*", "profesionales.nombre AS nprofe", "especialidades.nombre AS nespecialidad")
             ->where("paciente", $idPac)
             ->where('tratamientos.estado', 'Terminados')
             ->where('tratamientos.estado_reg', 'ACTIVO')

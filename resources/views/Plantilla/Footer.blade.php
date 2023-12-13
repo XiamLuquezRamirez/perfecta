@@ -24,8 +24,8 @@
 <script src="{{ asset('app-assets/vendors/js/forms/icheck/icheck.min.js') }}"></script>
 <script src="{{ asset('app-assets/vendors/js/extensions/jquery.knob.min.js') }}"></script>
 <script src="{{ asset('app-assets/vendors/js/forms/quill/quill.js') }}"></script>
-<script src="{{asset('app-assets/js/pdfmake.js')}}" type="text/javascript"></script>
-<script src="{{asset('app-assets/pdfmake.js')}}" type="text/javascript"></script>
+<script src="{{asset('app-assets/js/pdfmake/pdfmake.min.js')}}" type="text/javascript"></script>
+<script src="{{asset('app-assets/js/pdfmake/vfs_fonts.js')}}" type="text/javascript"></script>
 
 
 

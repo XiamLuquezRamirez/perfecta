@@ -411,6 +411,7 @@
         $(document).ready(function() {
             $("#MenCaja").addClass("active");
             localStorage.clear();
+            var respuestaGlobal;
 
             var picker = $('.pickadate').daterangepicker({
                 singleDatePicker: true,
@@ -491,8 +492,8 @@
                         async: false,
                         dataType: "json",
                         success: function(respuesta) {
-                            $("#tituloCaja").html("Caja #" + agregarCeros(respuesta.caja.id,
-                                5));
+                            respuestaGlobal = respuesta; 
+                            $("#tituloCaja").html("Caja #" + agregarCeros(respuesta.caja.id,5));
                             $("#fecApertura").html(respuesta.caja.fecha_apertura);
                             $("#usuApertura").html(respuesta.caja.nombre_usuario);
                             $("#infSaldoAnterior").html(formatCurrency(parseInt(respuesta
@@ -813,8 +814,317 @@
 
                 },
                 imprimir: function() {
+                   
+                   
 
-               }
+                    var totals = {};
+
+                    // Iterar sobre los recaudos y acumular los totales
+                    respuestaGlobal.recaudos.forEach(function(recaudo) {
+                        // Mapear los medios de pago a nombres deseados
+                        var medioPagoNombre = {
+                            "e": "Efectivo",
+                            "tc": "Tarjeta de crédito",
+                            "td": "Tarjeta de débito",
+                            "t": "Transferencia"
+                            // Puedes agregar más mapeos según tus necesidades
+                        } [recaudo.medio_pago];
+
+                        // Obtener o crear la entrada para el medio de pago
+                        if (!totals[medioPagoNombre]) {
+                            totals[medioPagoNombre] = {
+                                count: 0,
+                                total: 0
+                            };
+                        }
+
+                        // Incrementar la cantidad y sumar al total
+                        totals[medioPagoNombre].count++;
+                        totals[medioPagoNombre].total += parseInt(recaudo
+                            .valor);
+                    });
+
+                    var totalRecaudos = Object.values(totals).reduce((acc, medioPago) => acc + medioPago.total, 0);
+
+                      // total caja
+                      let totalCaja = parseInt(respuestaGlobal.caja.saldo_inicial) + parseInt(totalRecaudos);
+                      totalCaja = totalCaja - parseInt(respuestaGlobal.gastos);
+                      let colorCaja = "";
+                      let estadoCaja = "";
+                    if(respuestaGlobal.caja.estado_caja == "Cerrada"){
+                        estadoCaja = "Estado Cerrada";
+                        colorCaja = "#FF4545";
+                    }else{
+                        estadOCaja = "Estado Abierta";
+                        colorCaja = "#16D39A";
+                       
+                    }
+                    
+                    var docDefinition = {
+                        content: [
+                            {
+                                
+                                columns: [  {
+                                    text: "" ,
+                                    style: 'title'
+                                },
+                                {
+                                    text: estadoCaja,
+                                    style: 'colorTextoCaja',
+                                },]
+                                
+                            },
+                            {
+                                style: 'header',
+                                columns: [
+                                  
+                                    {
+                                        text: "Caja #" + agregarCeros(respuestaGlobal.caja.id,5),
+                                        style: 'title'
+                                    },
+                                    {
+                                        text: formatCurrency(respuestaGlobal.caja.saldo_inicial, 'es-CO', 'COP'),
+                                        style: 'total'
+                                    }
+                                ]
+                                
+                            },
+                            {
+                                style: 'body',
+                                columns: [{
+                                        width: '33%',
+                                        stack: [{
+                                                text: 'Fecha de apertura:',
+                                                style: 'subTitle'
+                                            },
+                                            {
+                                                text: respuestaGlobal.caja.fecha_apertura,
+                                                style: 'info'
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        width: '33%',
+                                        stack: [{
+                                                text: 'Fecha de cierre:',
+                                                style: 'subTitle'
+                                            },
+                                            {
+                                                text: (respuestaGlobal.caja.estado_caja === 'Cerrada' ? respuestaGlobal.caja.fecha_cierre : 'No aplicable'),
+                                                style: 'info'
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        width: '33%',
+                                        stack: [{
+                                                text: 'Usuario apertura:',
+                                                style: 'subTitle'
+                                            },
+                                            {
+                                                text: respuestaGlobal.caja.nombre_usuario,
+                                                style: 'info'
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                            style: 'tableExample',
+                                table: {
+                                    widths: ['75%', '25%'],
+                                    body: [
+                                        ['Saldo anterior',   { text: formatCurrency(parseInt(respuestaGlobal.caja.saldo_anterior), 'es-CO', 'COP'), alignment: 'right' }],
+                                        ['Abono inicial',  { text: formatCurrency(respuestaGlobal.caja.abono_inicial, 'es-CO', 'COP'), alignment: 'right' }],
+                                        [{text: 'Saldo inicial total', fillColor:'#D7D7DB'},  { text: formatCurrency(respuestaGlobal.caja.saldo_inicial, 'es-CO', 'COP'), alignment: 'right',fillColor:'#D7D7DB'}]
+                                    ]
+                                }
+                            },
+                            {
+                                style: 'tableExample',  // Puedes ajustar el estilo según tus necesidades
+                                table: {
+                                    headerRows: 0,  // Sin filas de encabezado
+                                    widths: ['75%', '25%'],
+                                    body: [
+                                        ...Object.keys(totals).map(medioPago => [
+                                            `${medioPago} (${totals[medioPago].count})`,
+                                            { text: formatCurrency(totals[medioPago].total, 'es-CO', 'COP'), alignment: 'right' }
+                                        ])
+                                    ],
+                                    // Configuración de estilos de la tabla
+                                    margin: [0, 0, 0, 0],  // Configuración de márgenes para quitar el borde superior
+                                    layout: {
+                                        hLineWidth: function (i, node) {
+                                            return (i === 0) ? 0 : 1;  // 0 para quitar el borde superior, 1 para mantener el resto de los bordes
+                                        },
+                                        vLineWidth: function (i, node) {
+                                            return 0;
+                                        },
+                                        hLineColor: function (i, node) {
+                                            return '#fff';  // Color blanco para ocultar el borde superior
+                                        },
+                                        vLineColor: function (i, node) {
+                                            return '#fff';
+                                        },
+                                    }
+                                }
+                            },
+                            {
+                                style: 'tableExample',  // Puedes ajustar el estilo según tus necesidades
+                                table: {
+                                    headerRows: 0,  // Sin filas de encabezado
+                                    widths: ['75%', '25%'],
+                                    body: [
+                                        [{text: 'Recaudos' , fillColor:'#D7D7DB'}, { text: formatCurrency(respuestaGlobal.gastos, 'es-CO', 'COP'), fillColor:'#D7D7DB', alignment: 'right' }]
+                                    ],
+                                    // Configuración de estilos de la tabla
+                                    layout: {
+                                        hLineWidth: function (i, node) {
+                                            return (i === 0) ? 0 : 1;  // 0 para quitar el borde superior, 1 para mantener el resto de los bordes
+                                        },
+                                        vLineWidth: function (i, node) {
+                                            return 0;
+                                        },
+                                        hLineColor: function (i, node) {
+                                            return '#fff';  // Color blanco para ocultar el borde superior
+                                        },
+                                        vLineColor: function (i, node) {
+                                            return '#fff';
+                                        },
+                                    }
+                                }
+                            },
+                            {
+                                style: 'tableExample',  // Puedes ajustar el estilo según tus necesidades
+                                table: {
+                                    headerRows: 0,  // Sin filas de encabezado
+                                    widths: ['75%', '25%'],
+                                    body: [
+                                        [{text: 'Gastos'}, { text: formatCurrency(totalRecaudos, 'es-CO', 'COP'), alignment: 'right' }]
+                                    ],
+                                    // Configuración de estilos de la tabla
+                                    layout: {
+                                        hLineWidth: function (i, node) {
+                                            return (i === 0) ? 0 : 1;  // 0 para quitar el borde superior, 1 para mantener el resto de los bordes
+                                        },
+                                        vLineWidth: function (i, node) {
+                                            return 0;
+                                        },
+                                        hLineColor: function (i, node) {
+                                            return '#fff';  // Color blanco para ocultar el borde superior
+                                        },
+                                        vLineColor: function (i, node) {
+                                            return '#fff';
+                                        },
+                                    }
+                                }
+                            },
+                            {
+                                style: 'tableExample',  // Puedes ajustar el estilo según tus necesidades
+                                table: {
+                                    headerRows: 0,  // Sin filas de encabezado
+                                    widths: ['75%', '25%'],
+                                    body: [
+                                        [{text: 'Total caja (saldo inicial + recaudado - gastos): ' , fillColor:'#D7D7DB'}, { text: formatCurrency(totalCaja, 'es-CO', 'COP'), fillColor:'#D7D7DB', alignment: 'right' }]
+                                    ],
+                                    // Configuración de estilos de la tabla
+                                    layout: {
+                                        hLineWidth: function (i, node) {
+                                            return (i === 0) ? 0 : 1;  // 0 para quitar el borde superior, 1 para mantener el resto de los bordes
+                                        },
+                                        vLineWidth: function (i, node) {
+                                            return 0;
+                                        },
+                                        hLineColor: function (i, node) {
+                                            return '#fff';  // Color blanco para ocultar el borde superior
+                                        },
+                                        vLineColor: function (i, node) {
+                                            return '#fff';
+                                        },
+                                    }
+                                }
+                            },
+                            
+
+                        ],
+                        styles: {
+                            header: {
+                                margin: [0, 20, 0, 20]
+                            },
+                            title: {
+                                fontSize: 18,
+                                bold: true
+                            },
+                            total: {
+                                fontSize: 22,
+                                bold: true,
+                                alignment: 'right'
+                            },
+                            body: {
+                                margin: [0, 20, 0, 20]
+                            },
+                            subTitle: {
+                                fontSize: 12,
+                                bold: true
+                            },
+                            info: {
+                                fontSize: 12
+                            },
+                            table: {
+                                margin: [0, 10, 0, 10]
+                            },
+                            footerButtons: {
+                                margin: [0, 20, 0, 0]
+                            },
+                            tableExample: {
+                                margin: [0, 10, 0, 0]
+                            },
+                            tableExample1: {
+                                margin: [0, 0, 0, 10]
+                            },
+                            colorTextoCaja: {
+                                color: colorCaja,
+                                bold: true,
+                                fontSize: 22,
+                                alignment: 'right'
+                            },
+                        }
+                    };
+
+                    if (respuestaGlobal.caja.estado_caja === 'Cerrada') {
+                        // Agregar la tabla de saldo de cierre al documento PDF
+                        docDefinition.content.push({
+                            style: 'tableExample',
+                            table: {
+                                headerRows: 0,
+                                widths: ['75%', '25%'],
+                                body: [
+                                    [{ text: 'Saldo cierre:', fillColor: '#D7D7DB' }, { text: formatCurrency(respuestaGlobal.caja.saldo_cierre, 'es-CO', 'COP'), fillColor: '#D7D7DB', alignment: 'right' }]
+                                ],
+                                // Configuración de estilos de la tabla
+                                margin: [0, 0, 0, 0],  // Configuración de márgenes para quitar el borde superior
+                                layout: {
+                                    hLineWidth: function (i, node) {
+                                        return (i === 0) ? 0 : 1;  // 0 para quitar el borde superior, 1 para mantener el resto de los bordes
+                                    },
+                                    vLineWidth: function (i, node) {
+                                        return 0;
+                                    },
+                                    hLineColor: function (i, node) {
+                                        return '#fff';  // Color blanco para ocultar el borde superior
+                                    },
+                                    vLineColor: function (i, node) {
+                                        return '#fff';
+                                    },
+                                }
+                            }
+                        });
+                    }               
+
+                    // Generar el PDF y descargarlo
+                    pdfMake.createPdf(docDefinition).download('documento.pdf');
+
+                }
             });
 
             $.cargar(1);
@@ -864,6 +1174,8 @@
             te = String.fromCharCode(tecla);
             return (patron.test(te) || tecla == 9 || tecla == 8 || tecla == 37 || tecla == 39 || tecla == 46);
         }
+        // Función para formatear números como moneda
+       
     </script>
 
     </script>
