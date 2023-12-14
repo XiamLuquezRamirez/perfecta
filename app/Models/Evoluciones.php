@@ -14,7 +14,7 @@ class Evoluciones extends Model
         $respuesta = DB::connection('mysql')->table('evoluciones')->insertGetId([
             'tratamiento' => $idTrata,
             'seccion' => $idSecc,
-            'servicio' => $idPac,
+            'servicio' => $idSer,
             'paciente' => $idPac,
             'profesional' => $data['profesionalEvolucion'],
             'pavance' => $data['pavance'],
@@ -29,6 +29,20 @@ class Evoluciones extends Model
         return $respuestaSecc;
     }
 
+    public static function ConsultarEvolucionesServ($serv){
+
+        $respuesta = DB::connection('mysql')->table('evoluciones')
+        ->leftJoin("profesionales", "profesionales.id", "evoluciones.profesional")
+        ->leftJoin("servicios_tratamiento", "servicios_tratamiento.id", "evoluciones.servicio")
+        ->leftJoin("servicios", "servicios.id", "servicios_tratamiento.servicio") 
+        ->where('evoluciones.servicio', $serv)
+        ->where('evoluciones.estado', 'ACTIVO')
+        ->select("evoluciones.*", "profesionales.nombre AS nprofe", "servicios.nombre AS nservicio")
+        ->get();
+
+        return $respuesta;
+
+    }
 
     public static function guardarArcEvol($data,$evo)
     {
@@ -42,4 +56,14 @@ class Evoluciones extends Model
 
         return $respuesta;
     }
+
+    public static function consulArcEvol($evo){
+        $respuesta = DB::connection('mysql')->table('archivos_evolucion')
+        ->where('evolucion', $evo)
+        ->get();
+        return $respuesta;
+
+    }
+
+
 }

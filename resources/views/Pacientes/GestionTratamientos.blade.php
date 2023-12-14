@@ -324,6 +324,39 @@
 
                                             </div>
                                         </div>
+                                        {{--  Modal historial evoluciones  --}}
+                                        <div class="modal fade text-left" id="modalHistEvoluciones" tabindex="-1"
+                                            role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title" id="tituloEvolucion">Historial de evoluciones</h4>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true"
+                                                                style="font-size: 25px;">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="card-body">
+                                                         <div class="email-scroll-area">
+                                                            <!-- email details  -->
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <div id="div-evoluciones" style="overflow: auto; height: 400px;" class="collapsible email-detail-head">
+                                                                       
+                                                                      
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- email details  end-->                                                          
+                                                        </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         {{--  Modal nueva evolcion  --}}
                                         <div class="modal fade text-left" id="modalEvoluciones" tabindex="-1"
                                             role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
@@ -389,7 +422,7 @@
                                                                                                 class="file center-block">
                                                                                                 <input type="file"
                                                                                                     accept=".jpg, .jpeg, .png, .gif, .mp4, .avi, .mov, .pdf"
-                                                                                                    name="archivo[]" class="archivos"
+                                                                                                    name="archivo" class="archivos"
                                                                                                     id="archivo">
                                                                                                 <span
                                                                                                     class="file-custom"></span>
@@ -638,7 +671,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="archivoModalLabel">Vista previa del archivo</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" onclick="$.salirVistaPrevia();" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -710,6 +743,10 @@
         <!-- Tus campos del formulario aquí -->
     </form>
     <form action="{{ url('/AdminPacientes/busEditTrata') }}" id="formEditarTratamiento" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/AdminPacientes/ConsultarEvoluciones') }}" id="formConsultarEvoluciones" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
@@ -1106,7 +1143,6 @@
                     $("#especialidad").html(select);
                 },
                 cargarServicios: function() {
-
                     var form = $("#formCargarServicios");
                     var url = form.attr("action");
                     var datos = form.serialize();
@@ -1126,7 +1162,6 @@
                                     .nombre + '</strong> &nbsp;&nbsp;&nbsp;(' +
                                     formatCurrency(item.valor, 'es-CO', 'COP') +
                                     ')</option>';
-
                             });
                         }
                     });
@@ -1242,8 +1277,77 @@
                     // Mostrar la vista previa en el modal
                     $.mostrarVistaPrevia(archivoSeleccionado);
                 },
-                consultarEvolucion: function(idSecc){
-                    alert("consultar");
+                consultarEvolucion: function(idServ,idSecc){
+                    
+                    $("#modalHistEvoluciones").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+
+                    var form = $("#formConsultarEvoluciones");
+                    $("#idSecc").remove();
+                    $("#idServ").remove();
+                    form.append("<input type='hidden' id='idSecc' name='idSecc'  value='" + idSecc + "'>");
+                    form.append("<input type='hidden' id='idServ' name='idServ'  value='" + idServ + "'>");
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    let evoluciones = '';
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            let consEvo = 1;
+
+                            $("#tituloEvolucion").html("Historial de evolución - "+respuesta.Seccion.nombre);
+
+                            $.each(respuesta.evoluciones, function(i, item) {
+                                evoluciones +='<div class="card collapse-header bs-callout-danger callout-bordered mb-1" role="tablist">'
+                                    +'<div id="headingCollapse'+consEvo+'" class="card-header d-flex justify-content-between align-items-center" data-toggle="collapse" role="tab" data-target="#collapse'+consEvo+'" aria-expanded="false" aria-controls="collapse'+consEvo+'">'
+                                    +'    <div class="collapse-title media">'
+                                    +'        <div class="media-body mt-25">'
+                                    +'            <span class="text-primary">'+item.nservicio+'</span>'
+                                    +'            <span class="d-sm-inline d-none">('+item.pavance+'%)</span>'
+                                    +'            <small class="text-muted d-block">'+item.nprofe+'</small>'
+                                    +'        </div>'
+                                    +'    </div>'
+                                    +'    <div class="information d-sm-flex d-none align-items-center">'
+                                    +'        <small class="text-muted mr-50">'+item.created_at+'</small>'
+                                    +'    </div>'
+                                    +'</div>'
+                                    +'<div id="collapse'+consEvo+'" role="tabpanel" aria-labelledby="headingCollapse'+consEvo+'" class="collapse">'
+                                    +'    <div class="card-content">'
+                                    +'        <div class="card-body py-1">'
+                                    +'            <p class="text-bold-500"> Evolución escrita:</p>'
+                                    +               item.evolucion
+                                    +'        </div>'
+                                    +'        <div class="card-footer pt-0 border-top">'
+                                    +'            <label class="sidebar-label">Archivos adjuntos</label>'
+                                    +'            <ul class="list-unstyled mb-0">'
+                                    +'                <li class="cursor-pointer pb-25">'
+                                    +'                    <img src="../../../app-assets/images/icons/psd.png" height="30" alt="psd.png">'
+                                    +'                    <small class="text-muted ml-1 attchement-text">uikit-design.psd</small>'
+                                    +'                </li>'
+                                    +'                <li class="cursor-pointer">'
+                                    +'                    <img src="../../../app-assets/images/icons/sketch.png" height="30" alt="sketch.png">'
+                                    +'                    <small class="text-muted ml-1 attchement-text">uikit-design.sketch</small>'
+                                    +'                </li>'
+                                    +'            </ul>'
+                                    +'        </div>'
+                                    +'    </div>'
+                                    +'</div>'
+                                    +'</div>';
+                                    consEvo++;
+                            });
+                            $("#div-evoluciones").html(evoluciones);
+                        }
+                    });
+
+
                 },
                 mostrarVistaPrevia: function(archivo) {
                     var archivoURL = URL.createObjectURL(archivo);
@@ -1333,6 +1437,11 @@
                 },
                 salirEvolucion: function() {
                     $('#modalEvoluciones').modal('toggle');
+                },
+                salirVistaPrevia: function(){
+                    $('#archivoModal').modal('toggle');
+                    var miDiv = document.getElementById("modalEvoluciones");
+                    miDiv.style.setProperty("overflow-y", "auto", "important");
                 },
                 guardarSeccion: function() {
 

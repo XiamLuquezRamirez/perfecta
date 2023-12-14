@@ -1635,7 +1635,6 @@
                     var form = $("#formCargarComentarios");
                     var url = form.attr("action");
                     
-                    
                     form.append("<input type='hidden' id='idCit' name='idCit'  value='" + idCita +
                         "'>");
                     var datos = form.serialize();
