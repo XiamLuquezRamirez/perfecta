@@ -330,7 +330,8 @@
                                             <div class="modal-dialog modal-lg" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title" id="tituloEvolucion">Historial de evoluciones</h4>
+                                                        <h4 class="modal-title" id="tituloEvolucion">Historial de
+                                                            evoluciones</h4>
                                                         <button type="button" class="close" data-dismiss="modal"
                                                             aria-label="Close">
                                                             <span aria-hidden="true"
@@ -339,19 +340,17 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         <div class="card-body">
-                                                         <div class="email-scroll-area">
-                                                            <!-- email details  -->
-                                                            <div class="row">
-                                                                <div class="col-12">
-                                                                    <div id="div-evoluciones" style="overflow: auto; height: 400px;" class="collapsible email-detail-head">
-                                                                       
-                                                                      
+                                                            <div class="email-scroll-area">
+                                                                <!-- email details  -->
+                                                                <div class="row">
+                                                                    <div class="col-12">
+                                                                        <div id="div-evoluciones"
+                                                                            style="overflow: auto; height: 400px;"
+                                                                            class="collapsible email-detail-head">
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <!-- email details  end-->                                                          
-                                                        </div>
-
                                                         </div>
                                                     </div>
                                                 </div>
@@ -422,7 +421,8 @@
                                                                                                 class="file center-block">
                                                                                                 <input type="file"
                                                                                                     accept=".jpg, .jpeg, .png, .gif, .mp4, .avi, .mov, .pdf"
-                                                                                                    name="archivo" class="archivos"
+                                                                                                    name="archivo"
+                                                                                                    class="archivos"
                                                                                                     id="archivo">
                                                                                                 <span
                                                                                                     class="file-custom"></span>
@@ -482,6 +482,31 @@
                                                     </div>
                                                 </div>
 
+                                            </div>
+                                        </div>
+
+                                        <div class="modal fade text-left" id="modalEvolucionesArc" tabindex="-1"
+                                            role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Evolución</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="card-body">
+                                                            <div id="modalContent" style="align-items: center;"></div>
+                                                        </div>
+
+                                                        <div class="form-actions right">
+                                                            <button type="button" onclick="$.cerrarArcEvolucion();"
+                                                                class="btn btn-warning mr-1">
+                                                                <i class="fa fa-reply"></i> Atras
+                                                            </button>
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
                                             </div>
                                         </div>
 
@@ -1042,7 +1067,8 @@
                                     '        <i class="feather icon-trending-up"></i>' +
                                     '         Registrar Evolución' +
                                     '        </a>' +
-                                    '        <a onclick="$.consultarEvolucion(' + item
+                                    '        <a onclick="$.consultarEvolucion(' +
+                                    item
                                     .id + ',' + item.seccion +
                                     ');" class="dropdown-item">' +
                                     '        <i class="feather icon-eye"></i>' +
@@ -1277,8 +1303,8 @@
                     // Mostrar la vista previa en el modal
                     $.mostrarVistaPrevia(archivoSeleccionado);
                 },
-                consultarEvolucion: function(idServ,idSecc){
-                    
+                consultarEvolucion: function(idServ, idSecc) {
+
                     $("#modalHistEvoluciones").modal({
                         backdrop: 'static',
                         keyboard: false
@@ -1287,8 +1313,10 @@
                     var form = $("#formConsultarEvoluciones");
                     $("#idSecc").remove();
                     $("#idServ").remove();
-                    form.append("<input type='hidden' id='idSecc' name='idSecc'  value='" + idSecc + "'>");
-                    form.append("<input type='hidden' id='idServ' name='idServ'  value='" + idServ + "'>");
+                    form.append("<input type='hidden' id='idSecc' name='idSecc'  value='" + idSecc +
+                        "'>");
+                    form.append("<input type='hidden' id='idServ' name='idServ'  value='" + idServ +
+                        "'>");
                     var url = form.attr("action");
                     var datos = form.serialize();
 
@@ -1303,45 +1331,82 @@
                         success: function(respuesta) {
                             let consEvo = 1;
 
-                            $("#tituloEvolucion").html("Historial de evolución - "+respuesta.Seccion.nombre);
+                            $("#tituloEvolucion").html("Historial de evolución - " +
+                                respuesta.Seccion.nombre);
 
                             $.each(respuesta.evoluciones, function(i, item) {
-                                evoluciones +='<div class="card collapse-header bs-callout-danger callout-bordered mb-1" role="tablist">'
-                                    +'<div id="headingCollapse'+consEvo+'" class="card-header d-flex justify-content-between align-items-center" data-toggle="collapse" role="tab" data-target="#collapse'+consEvo+'" aria-expanded="false" aria-controls="collapse'+consEvo+'">'
-                                    +'    <div class="collapse-title media">'
-                                    +'        <div class="media-body mt-25">'
-                                    +'            <span class="text-primary">'+item.nservicio+'</span>'
-                                    +'            <span class="d-sm-inline d-none">('+item.pavance+'%)</span>'
-                                    +'            <small class="text-muted d-block">'+item.nprofe+'</small>'
-                                    +'        </div>'
-                                    +'    </div>'
-                                    +'    <div class="information d-sm-flex d-none align-items-center">'
-                                    +'        <small class="text-muted mr-50">'+item.created_at+'</small>'
-                                    +'    </div>'
-                                    +'</div>'
-                                    +'<div id="collapse'+consEvo+'" role="tabpanel" aria-labelledby="headingCollapse'+consEvo+'" class="collapse">'
-                                    +'    <div class="card-content">'
-                                    +'        <div class="card-body py-1">'
-                                    +'            <p class="text-bold-500"> Evolución escrita:</p>'
-                                    +               item.evolucion
-                                    +'        </div>'
-                                    +'        <div class="card-footer pt-0 border-top">'
-                                    +'            <label class="sidebar-label">Archivos adjuntos</label>'
-                                    +'            <ul class="list-unstyled mb-0">'
-                                    +'                <li class="cursor-pointer pb-25">'
-                                    +'                    <img src="../../../app-assets/images/icons/psd.png" height="30" alt="psd.png">'
-                                    +'                    <small class="text-muted ml-1 attchement-text">uikit-design.psd</small>'
-                                    +'                </li>'
-                                    +'                <li class="cursor-pointer">'
-                                    +'                    <img src="../../../app-assets/images/icons/sketch.png" height="30" alt="sketch.png">'
-                                    +'                    <small class="text-muted ml-1 attchement-text">uikit-design.sketch</small>'
-                                    +'                </li>'
-                                    +'            </ul>'
-                                    +'        </div>'
-                                    +'    </div>'
-                                    +'</div>'
-                                    +'</div>';
-                                    consEvo++;
+                                evoluciones +=
+                                    '<div class="card collapse-header bs-callout-danger callout-bordered mb-1" role="tablist">' +
+                                    '<div id="headingCollapse' + consEvo +
+                                    '" class="card-header d-flex justify-content-between align-items-center" data-toggle="collapse" role="tab" data-target="#collapse' +
+                                    consEvo +
+                                    '" aria-expanded="false" aria-controls="collapse' +
+                                    consEvo + '">' +
+                                    '    <div class="collapse-title media">' +
+                                    '        <div class="media-body mt-25">' +
+                                    '            <span class="text-primary">' + item
+                                    .nservicio + '</span>' +
+                                    '            <span class="d-sm-inline d-none">(' +
+                                    item.pavance + '%)</span>' +
+                                    '            <small class="text-muted d-block">Profesional: ' +
+                                    item.nprofe + '</small>' +
+                                    '        </div>' +
+                                    '    </div>' +
+                                    '    <div class="information d-sm-flex d-none align-items-center">' +
+                                    '        <small class="text-muted mr-50">' +
+                                    item.created_at + '</small>' +
+                                    '    </div>' +
+                                    '</div>' +
+                                    '<div id="collapse' + consEvo +
+                                    '" role="tabpanel" aria-labelledby="headingCollapse' +
+                                    consEvo + '" class="collapse">' +
+                                    '    <div class="card-content">' +
+                                    '        <div class="card-body py-1">' +
+                                    '            <p class="text-bold-500"> Evolución escrita:</p>' +
+                                    item.evolucion +
+                                    '        </div>' +
+                                    '        <div class="card-footer pt-0 border-top">' +
+                                    '            <label class="sidebar-label">Archivos adjuntos</label>' +
+                                    '            <ul class="list-unstyled mb-0">';
+
+                                if (item.archivos.length > 0) {
+                                    let url = $('#Ruta').data("ruta");
+                                    $.each(item.archivos, function(i, itemArc) {
+
+                                        if (itemArc.tipo ==
+                                            "application/pdf") {
+                                            evoluciones +=' <li data-arc="' + itemArc.archivo +'" onclick="$.mostrarArchivo(this);" class="cursor-pointer pb-25">' +
+                                                '          <img src="' +
+                                                url +
+                                                '/images/imgPDF.png" height="30" alt="archivo">' +
+                                                '          <small class="text-muted ml-1 attchement-text">' +
+                                                itemArc.nombre +
+                                                '</small>' +
+                                                '          </li>';
+                                        } else {
+                                            evoluciones +=' <li data-img="' + itemArc.archivo +'" onclick="$.mostrarImagen(this);" class="cursor-pointer pb-25">' +
+                                                '          <img style="border-radius:5px;" src="' +
+                                                url + '/evoluciones/' +
+                                                itemArc.archivo +
+                                                '" height="30" alt="imagen">' +
+                                                '          <small class="text-muted ml-1 attchement-text">' +
+                                                itemArc.nombre +
+                                                '</small>' +
+                                                '          </li>';
+                                        }
+                                    });
+                                } else {
+                                    evoluciones +='<li class="cursor-pointer pb-25">' +
+                                        '         <small class="text-muted ml-1 attchement-text">Sin archivos adjuntos</small>' +
+                                        '         </li>';
+                                }
+
+                                evoluciones += '</ul>' +
+                                    '        </div>' +
+                                    '    </div>' +
+                                    '</div>' +
+                                    '</div>';
+                                consEvo++;
                             });
                             $("#div-evoluciones").html(evoluciones);
                         }
@@ -1438,8 +1503,13 @@
                 salirEvolucion: function() {
                     $('#modalEvoluciones').modal('toggle');
                 },
-                salirVistaPrevia: function(){
+                salirVistaPrevia: function() {
                     $('#archivoModal').modal('toggle');
+                    var miDiv = document.getElementById("modalEvoluciones");
+                    miDiv.style.setProperty("overflow-y", "auto", "important");
+                },
+                cerrarArcEvolucion: function() {
+                    $('#modalEvolucionesArc').modal('toggle');
                     var miDiv = document.getElementById("modalEvoluciones");
                     miDiv.style.setProperty("overflow-y", "auto", "important");
                 },
@@ -1876,11 +1946,11 @@
                             '         Registrar Evolución' +
                             '        </a>' +
                             '        <a onclick="$.consultarEvolucion(' + item
-                                    .id + ',' + item.seccion +
-                                    ');" class="dropdown-item">' +
-                                    '        <i class="feather icon-eye"></i>' +
-                                    '         Consultar Evolución' +
-                                    '        </a>' +
+                            .id + ',' + item.seccion +
+                            ');" class="dropdown-item">' +
+                            '        <i class="feather icon-eye"></i>' +
+                            '         Consultar Evolución' +
+                            '        </a>' +
                             '        <a onclick="$.editServSecc(' + item
                             .id + ');" class="dropdown-item">' +
                             '        <i class="feather icon-edit"></i>' +
@@ -2157,6 +2227,42 @@
                             });
                         }
                     });
+                },
+                mostrarArchivo: function(element) {
+
+                    $("#modalEvolucionesArc").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+
+                    console.log(element);
+
+                    let archivo = element.getAttribute("data-arc");
+
+                    let ruta = $('#Ruta').data("ruta");
+                    let url = ruta + "/evoluciones/" + archivo;
+
+                    var modalContent = document.getElementById('modalContent');
+                    modalContent.innerHTML = '<iframe  style="width: 100%; height:360px;" src="' +
+                        url + '"></iframe>';
+
+                },
+                mostrarImagen: function(element) {
+
+                    $("#modalEvolucionesArc").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+
+                    let ruta = $('#Ruta').data("ruta");
+                    let archivo = element.getAttribute("data-img");
+                    let url = ruta + "/evoluciones/" + archivo;
+
+                    var modalContent = document.getElementById('modalContent');
+                    modalContent.innerHTML =
+                        '<div class="mb-1" style="width:100%; height:340px;"><img src="' + url +
+                        '" style="width:100%; height:360px;" alt="Imagen"></div>';
+
                 },
                 procederEliminarTratamiento: function(idTrata) {
 

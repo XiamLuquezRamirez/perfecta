@@ -75,20 +75,15 @@ class AdminitraccionController extends Controller
     public function ValidarProfesional()
     {
         if (Auth::check()) {
-        $idPac = request()->get('idPac');
-        $existe = "no";
+        $idProf = request()->get('idProf');
         $pacientes = DB::connection('mysql')
             ->table('profesionales')
-            ->where('identificacion', $idPac)
+            ->where('identificacion', $idProf)
             ->where('estado', 'ACTIVO')
-            ->first();
+            ->get();
 
-        if ($pacientes) {
-            $existe = "si";
-        }
-
-        return response()->json([
-            'existe' => $existe,
+             return response()->json([
+            'pacientes' => $pacientes->count(),
 
         ]);
     } else {
@@ -157,7 +152,7 @@ class AdminitraccionController extends Controller
     public function CargarServicios()
     {
         if (Auth::check()) {
-            $perPage = 5; // Número de posts por página
+            $perPage = 10; // Número de posts por página
             $page = request()->get('page', 1);
             $search = request()->get('search');
             if (!is_numeric($page)) {

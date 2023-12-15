@@ -50,7 +50,9 @@ class Evoluciones extends Model
         foreach ($data["archivo"] as $key => $val) {
             $respuesta = DB::connection('mysql')->table('archivos_evolucion')->insert([
                 'evolucion' => $evo,
-                'archivo' => $data["archivo"][$key]
+                'archivo' => $data["archivo"][$key],
+                'tipo' => $data["tipoArc"][$key],
+                'nombre' => $data["nombre"][$key]
             ]);
         }
 

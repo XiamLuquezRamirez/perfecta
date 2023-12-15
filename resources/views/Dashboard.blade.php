@@ -762,6 +762,10 @@
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
+    <form action="{{ url('/AdminPacientes/AllEspecialidades') }}" id="formCargarEspecialidades" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
     <form action="{{ url('/AdminCitas/CargarDisponibilidad') }}" id="formCargarDisponibilidad" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
@@ -1042,8 +1046,8 @@
                         }
 
 
-
-                        let motivo = document.getElementById('motivo').value;
+                        var select2Element = $('#motivo');
+                        let motivo = document.getElementById('motivo').value + "-" +  select2Element.find('option:selected').text();
 
                         var nuevaCita = {
                             title: motivo,
@@ -1146,6 +1150,7 @@
 
                 $('#fechaHoraSelCita').val("");
                 $.cargarProfesionales();
+                $.cargarEspecialidades();
                 fcAgendaViews2.removeAllEvents();
                 // Puedes reemplazar la alerta con la acción que desees realizar.
             });
@@ -1207,6 +1212,31 @@
                     });
 
                     $("#profesional").html(select);
+                },
+                cargarEspecialidades: function() {
+
+                    var form = $("#formCargarEspecialidades");
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    let select = '<option value="">Seleccione...</option>';
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            $.each(respuesta.especialidades, function(i, item) {
+
+                                select += '<option value="' + item.id + '">' + item
+                                    .nombre + '</option>';
+
+                            });
+                        }
+                    });
+
+                    $("#motivo").html(select);
                 },
                 cargarPacientes: function() {
 
@@ -1331,7 +1361,7 @@
                 },
                 selecPaciente: function(id) {
                     $("#idPaciente").val(id);
-                    document.getElementById("div-tratamiento").style = "display: block;";
+                   // document.getElementById("div-tratamiento").style = "display: block;";
                 },
                 guardarCita: function(opc) {
 
@@ -1488,6 +1518,8 @@
                             }
 
                             $.cargarCita();
+                            $.cargarDatos();
+
                         },
                         error: function() {
                             Swal.fire({
@@ -1687,7 +1719,7 @@
                         success: function(response) {
                             //datos de citas
 
-                            $("#motivoCita").html(response.detaCita.motivo);
+                            $("#motivoCita").html(response.detaCita.nespec);
                             $("#profesionalCita").html(response.detaCita.nomprof);
                             var nuevoFormatoIni = $.convertirFormato(response.detaCita
                                 .inicio);
@@ -1845,6 +1877,8 @@
                         if (result.value) {
                             $.procederCambiarEstado(estado);
                             $.cargarCita();
+                            $.cargarDatos();
+
                         } else if (result.dismiss === Swal.DismissReason.cancel) {
                             Swal.fire({
                                 title: "Cancelado",
@@ -1940,6 +1974,8 @@
                                     buttonsStyling: false
                                 });
                                 $.cargarCita();
+                                $.cargarDatos();
+
                             }
                         }
                     });

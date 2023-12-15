@@ -766,20 +766,27 @@ class PacientesController extends Controller
 
             if (request()->has('repeater-list')) {
                 $arc = [];
+                $tip = [];
+                $nom = [];
                 $repeaterList = $data['repeater-list'];
                 foreach ($repeaterList as $archivosEvo) {
                     if (isset($archivosEvo['archivo'])) {
 
                         $archivo = $archivosEvo['archivo'];
                         $nombreOriginal = $archivo->getClientOriginalName();
+                        $tipoMime = $archivo->getClientMimeType();
 
                         // Realiza acciones con el archivo, como moverlo a una ubicación deseada
                         $prefijo = substr(md5(uniqid(rand())), 0, 6);
                         $nombreArchivo = self::sanear_string($prefijo . '_' . $nombreOriginal);
                         $archivo->move(public_path() . '/app-assets/evoluciones/', $nombreArchivo);
                         $arc[] = $nombreArchivo;
+                        $tip[] = $tipoMime;
+                        $nom[] = $$nombreOriginal;
                         // Aquí puedes trabajar con los datos del archivo, como almacenarlos en una base de datos
                         $data['archivo'] = $arc;
+                        $data['tipoArc'] = $tip;
+                        $data['nombre'] = $nom;
                     }
                 }
             }

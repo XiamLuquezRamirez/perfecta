@@ -67,7 +67,7 @@
             </div>
         </div>
 
-        {{--  Modal nuevo profesional  --}}
+        {{--  Modal nuevo servicio  --}}
         <div class="modal fade text-left" id="modalServicios" tabindex="-1" role="dialog"
             aria-labelledby="myModalLabel1" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
@@ -130,21 +130,24 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-12">
+                                        <div class="form-actions right">
+                                            <button type="button" onclick="$.cancelar();" class="btn btn-warning mr-1">
+                                                <i class="feather icon-x"></i> Cancelar
+                                            </button>
+                                            <button type="button" id="btnGuardar" onclick="$.guardar()" class="btn btn-success">
+                                                <i class="fa fa-check-square-o"></i> Guardar
+                                            </button>
+                                            <button type="button" id="btnNuevo" style="display: none;" onclick="$.nuevo()"
+                                                class="btn btn-primary">
+                                                <i class="feather icon-plus"></i> Nuevo
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                         </div>
 
-                        <div class="form-actions right">
-                            <button type="button" onclick="$.cancelar();" class="btn btn-warning mr-1">
-                                <i class="feather icon-x"></i> Cancelar
-                            </button>
-                            <button type="button" id="btnGuardar" onclick="$.guardar()" class="btn btn-success">
-                                <i class="fa fa-check-square-o"></i> Guardar
-                            </button>
-                            <button type="button" id="btnNuevo" style="display: none;" onclick="$.nuevo()"
-                                class="btn btn-primary">
-                                <i class="feather icon-plus"></i> Nuevo
-                            </button>
-                        </div>
+                        
                         </form>
 
                     </div>

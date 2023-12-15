@@ -618,6 +618,10 @@
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
+    <form action="{{ url('/AdminPacientes/AllEspecialidades') }}" id="formCargarEspecialidades" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
     <form action="{{ url('/AdminCitas/CargarDisponibilidad') }}" id="formCargarDisponibilidad" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
@@ -759,7 +763,8 @@
                             return;
                         }
 
-                        let motivo = document.getElementById('motivo').value;
+                        var select2Element = $('#motivo');
+                        let motivo = document.getElementById('motivo').value + "-" +  select2Element.find('option:selected').text();
 
                         var nuevaCita = {
                             title: motivo,
@@ -1505,6 +1510,7 @@
                         'auto'; // Puedes ajustar 'auto' a otro valor como 'hidden' o 'scroll'
                     primeClase.style.height = '400px';
                     $.cargarProfesionales();
+                    $.cargarEspecialidades();
 
 
                 },
@@ -1512,6 +1518,7 @@
                 editarCita: function(idCita) {
 
                     $.cargarProfesionales();
+                    $.cargarEspecialidades();
                     $('#tit-citas').html('Editar cita');
                     $("#accionCita").val("editar");
                     $('#div-listCitas').hide();
@@ -1602,6 +1609,31 @@
                     });
 
                     $("#profesional").html(select);
+                },
+                cargarEspecialidades: function() {
+
+                    var form = $("#formCargarEspecialidades");
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    let select = '<option value="">Seleccione...</option>';
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            $.each(respuesta.especialidades, function(i, item) {
+
+                                select += '<option value="' + item.id + '">' + item
+                                    .nombre + '</option>';
+
+                            });
+                        }
+                    });
+
+                    $("#motivo").html(select);
                 },
 
                 verTratmiento: function(trata, paci) {

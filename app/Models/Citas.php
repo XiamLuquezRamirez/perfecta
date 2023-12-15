@@ -44,8 +44,9 @@ class Citas extends Model
     public static function buscaDetCitas($idCita)
     {
         return DB::connection('mysql')->table('citas')
-            ->join('profesionales', 'citas.profesional', 'profesionales.id')
-            ->select('citas.*', 'profesionales.nombre AS nomprof')
+            ->leftJoin('profesionales', 'citas.profesional', 'profesionales.id')
+            ->leftJoin('especialidades', 'especialidades.id', 'citas.motivo')
+            ->select('citas.*', 'profesionales.nombre AS nomprof', 'especialidades.nombre AS nespec')
             ->where('citas.id', $idCita)
             ->first();
     }
@@ -70,7 +71,6 @@ class Citas extends Model
 
     public static function GuardarCitas($request)
     {
-
         $respuesta = DB::connection('mysql')->table('citas')->insertGetId([
             'paciente' => $request['idpac'],
             'profesional' => $request['profesional'],

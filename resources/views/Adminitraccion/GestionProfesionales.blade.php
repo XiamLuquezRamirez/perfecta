@@ -167,22 +167,25 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="col-md-12">
+                                        <div class="form-actions right">
+                                            <button type="button" onclick="$.cancelar();" class="btn btn-warning mr-1">
+                                                <i class="feather icon-x"></i> Cancelar
+                                            </button>
+                                            <button type="button" id="btnGuardar" onclick="$.guardar()" class="btn btn-success">
+                                                <i class="fa fa-check-square-o"></i> Guardar
+                                            </button>
+                                            <button type="button" id="btnNuevo" style="display: none;" onclick="$.nuevo()"
+                                                class="btn btn-primary">
+                                                <i class="feather icon-plus"></i> Nuevo
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
 
                         </div>
 
-                        <div class="form-actions right">
-                            <button type="button" onclick="$.cancelar();" class="btn btn-warning mr-1">
-                                <i class="feather icon-x"></i> Cancelar
-                            </button>
-                            <button type="button" id="btnGuardar" onclick="$.guardar()" class="btn btn-success">
-                                <i class="fa fa-check-square-o"></i> Guardar
-                            </button>
-                            <button type="button" id="btnNuevo" style="display: none;" onclick="$.nuevo()"
-                                class="btn btn-primary">
-                                <i class="feather icon-plus"></i> Nuevo
-                            </button>
-                        </div>
+                       
                         </form>
 
                     </div>
@@ -279,13 +282,13 @@
                         async: false,
                         dataType: "json",
                         success: function(response) {
-                            if (response.existe === "si") {
+                            if (response.pacientes > 0) {
                                 Swal.fire({
                                     type: "warning",
                                     title: "Oops...",
                                     text: "Esta identificación se enuentra registrada",
                                     confirmButtonClass: "btn btn-primary",
-                                    timer: 1500,
+                                    timer: 2000,
                                     buttonsStyling: false
                                 });
                                 $("#identificacion").val("");
