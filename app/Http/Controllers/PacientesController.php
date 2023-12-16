@@ -782,7 +782,7 @@ class PacientesController extends Controller
                         $archivo->move(public_path() . '/app-assets/evoluciones/', $nombreArchivo);
                         $arc[] = $nombreArchivo;
                         $tip[] = $tipoMime;
-                        $nom[] = $$nombreOriginal;
+                        $nom[] = $nombreOriginal;
                         // Aquí puedes trabajar con los datos del archivo, como almacenarlos en una base de datos
                         $data['archivo'] = $arc;
                         $data['tipoArc'] = $tip;

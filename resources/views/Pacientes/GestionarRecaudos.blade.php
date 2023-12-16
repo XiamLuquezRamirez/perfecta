@@ -73,6 +73,7 @@
                                 <form class="form" method="post" id="formGuardarPagoTratamiento"
                                     action="{{ url('/') }}/AdminPacientes/GuardarPagoTratamiento">
                                     @csrf
+                                    <input type="hidden" name="idTransaccion" id="idTransaccion" value="" />
                                     <div class="card-content" style="display: none;" id="pagoRecaudo">
                                         <div id="daily-activity" class="table-responsive" style="overflow: hidden;">
                                             <table class="table table-hover mb-0">
@@ -581,7 +582,7 @@
                     $.buscInfTratamientos(idPac);
                 },
                 imprimirComprobante: function() {
-                    alert("Imprimir comprobante");
+                   
                 },
                 checkRecaudos: function() {
                     $(".icheck-activity").iCheck({
@@ -885,6 +886,7 @@
                                     buttonsStyling: false
                                 });
 
+                                $("#idTransaccion").val(respuesta.transaccion.id);
                                 $("#ncompro").html(agregarCeros(respuesta.transaccion.id,
                                     5));
                                 $("#fcreacion").html(convertirFormatoFechaHora(respuesta
@@ -901,7 +903,7 @@
                                 $("#nprofesional").html(respuesta.tratamiento.nprofe);
                                 $("#valorAbonoComp").html(formatCurrency(respuesta
                                     .transaccion
-                                    .pago_total, 'es-CO', 'COP'));
+                                    .pago_realizado, 'es-CO', 'COP'));
 
                                 //listar medio de pago
                                 let medioPago = '';

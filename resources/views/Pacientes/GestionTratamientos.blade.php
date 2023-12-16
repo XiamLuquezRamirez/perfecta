@@ -1866,10 +1866,12 @@
                                     buttonsStyling: false
                                 });
                                 $("#trServicioSeccion" + idSeccion).html('');
-                                $.dibujarServicioSecc(respuesta);
+                                {{--  $.dibujarServicioSecc(respuesta);
                                 var totalServicios = formatCurrency(respuesta.totServ,
                                     'es-CO', 'COP');
-                                $("#span-total" + idSeccion).html(totalServicios);
+                                $("#span-total" + idSeccion).html(totalServicios);  --}}
+
+                                $.verTratamiento($("#idTratamiento").val());
 
                                 var loader = document.getElementById('loader');
                                 loader.style.display = 'none';
@@ -2444,7 +2446,7 @@
                                     '                <h6 class="pt-1"><span' +
                                     '                        class="fa fa-user"></span> Profesional:' +
                                     '                </h6>' +
-                                    '                <p>Mairen Pumarejo</p>' +
+                                    '                <p style="text-transform: capitalize;">'+item.nprofe+'</p>' +
                                     '            </div>' +
                                     '            <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">' +
                                     '                <h6 class="pt-1"><span' +
