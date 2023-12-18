@@ -455,6 +455,7 @@
             $("#MenRecaudo").addClass("active");
 
             var lastSelectedData = null;
+            var transaccionGlobal= [];
 
             $('#paciente').on('select2:select', function(e) {
                 // Obtener la información del elemento seleccionado
@@ -488,8 +489,6 @@
                     var datos = form.serialize();
 
                     let tratamientos = '';
-
-
 
                     $.ajax({
                         type: "POST",
@@ -530,8 +529,6 @@
                                             '</td>';
 
                                     }
-                                   
-
 
                                     tratamientos+='<td class="text-truncate">' +
                                     '    <div>' +
@@ -582,6 +579,8 @@
                     $.buscInfTratamientos(idPac);
                 },
                 imprimirComprobante: function() {
+                    alert(transaccionGlobal.tratamiento.nombre);
+                    console.log(transaccionGlobal);
                    
                 },
                 checkRecaudos: function() {
@@ -651,9 +650,6 @@
                         $("#valorVisPago1").val(formatCurrency(gtotal, 'es-CO', 'COP'));
                         $("#valorPago1").val(gtotal);
                     }
-
-
-
                 },
                 atrasTratamiento: function() {
                     $("#pagoRecaudo").hide();
@@ -875,6 +871,10 @@
                         processData: false,
                         contentType: false,
                         success: function(respuesta) {
+
+                        transaccionGlobal = respuesta;
+
+                        console.log(transaccionGlobal);
 
                             if (respuesta) {
                                 Swal.fire({

@@ -1640,8 +1640,8 @@
                     localStorage.clear();
                     localStorage.setItem('idTratamiento', trata);
                     localStorage.setItem('idPaciente', paci);
-                    PEDGITALURL = '{{ url('/AdminPacientes/Tratamientos') }}';
-                    const nuevaPestana = window.open(PEDGITALURL, '_blank');
+                    PERFECTAURL = '{{ url('/AdminPacientes/Tratamientos') }}';
+                    const nuevaPestana = window.open(PERFECTAURL, '_blank');
                     nuevaPestana.focus();
 
                 },
@@ -1649,8 +1649,8 @@
                     localStorage.clear();
                     localStorage.setItem('idTratamiento', trata);
                     localStorage.setItem('idPaciente', paci);
-                    PEDGITALURL = '{{ url('/AdminPacientes/Recaudos') }}';
-                    const nuevaPestana = window.open(PEDGITALURL, '_blank');
+                    PERFECTAURL = '{{ url('/AdminPacientes/Recaudos') }}';
+                    const nuevaPestana = window.open(PERFECTAURL, '_blank');
                     nuevaPestana.focus();
 
                 },
@@ -1658,15 +1658,15 @@
                     localStorage.clear();
                     let paci = $('#idPaciente').val();
                     localStorage.setItem('idPaciente', paci);
-                    PEDGITALURL = '{{ url('/AdminPacientes/Tratamientos') }}';
-                    const nuevaPestana = window.open(PEDGITALURL, '_blank');
+                    PERFECTAURL = '{{ url('/AdminPacientes/Tratamientos') }}';
+                    const nuevaPestana = window.open(PERFECTAURL, '_blank');
                 },
                 verRecaudos: function() {
                     localStorage.clear();
                     let paci = $('#idPaciente').val();
                     localStorage.setItem('idPaciente', paci);
-                    PEDGITALURL = '{{ url('/AdminPacientes/Recaudos') }}';
-                    const nuevaPestana = window.open(PEDGITALURL, '_blank');
+                    PERFECTAURL = '{{ url('/AdminPacientes/Recaudos') }}';
+                    const nuevaPestana = window.open(PERFECTAURL, '_blank');
                 },
                 VerTratamientosList: function(pac) {
                     $('#idPaciente').val(pac);

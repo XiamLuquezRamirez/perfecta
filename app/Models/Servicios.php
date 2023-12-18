@@ -80,6 +80,7 @@ class Servicios extends Model
         ->first();
         
         $saldoServ = $consulSaldo->valor - $consulSaldo->pagado;
+
        
         if($saldoServ <= $valorTotal){
             $respuesta = DB::connection('mysql')->table('servicios_tratamiento')->where('id', $data["dataIds"][$key])->update([
@@ -92,7 +93,7 @@ class Servicios extends Model
                 $valorTotal = 0;
             }
             $respuesta = DB::connection('mysql')->table('servicios_tratamiento')->where('id', $data["dataIds"][$key])->update([
-                'pagado' => $valorTotal
+                'pagado' => $consulSaldo->pagado + $valorTotal
             ]);
         }
 
