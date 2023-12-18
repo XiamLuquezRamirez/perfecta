@@ -30,396 +30,533 @@
                 <div class="content-body">
 
                     <section id="div-datTratameintos" style=" filter: blur(5px);" class="row all-contacts">
-
                         <div class="col-12">
-
                             <div class="card">
                                 <div>
                                     <h4 class="card-title ml-2" id="titTrataPac">Planes de tratamiento del paciente</h4>
                                 </div>
-                                <div class="card-content" id="listRecaudo">
-                                    <div id="daily-activity" class="table-responsive height-300">
-                                        <table class="table table-hover mb-0">
-                                            <thead>
-                                                <tr>
-                                                    <th>
-                                                        <input type="checkbox" id="icheck-input-all"
-                                                            class="icheck-activity">
-                                                    </th>
-                                                    <th>Tratamiento</th>
-                                                    <th>Total</th>
-                                                    <th>Realizado</th>
-                                                    <th>Pagado</th>
-                                                    <th>Saldo</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="trTratamientos">
 
-                                            </tbody>
-                                        </table>
+                                <div class="card-content">
+                                    <div class="card-body">
+                                        <ul class="nav nav-tabs nav-top-border no-hover-bg" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" id="baseIcon-tab11" data-toggle="tab"
+                                                    aria-controls="tabIcon11" href="#tabIcon11" role="tab"
+                                                    aria-selected="true"><i class="fa fa-shopping-cart"></i> Realizar
+                                                    recaudo</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="baseIcon-tab12" data-toggle="tab"
+                                                    aria-controls="tabIcon12" href="#tabIcon12" role="tab"
+                                                    aria-selected="false"><i class="fa fa-eye"></i> Recaudos realizados al
+                                                    paciente</a>
+                                            </li>
 
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="form-actions">
-                                            <div class="text-right">
-                                                <button type="button" onclick="$.pagarTratamiento();"
-                                                    class="btn btn-success"> Pagar Tratamiento<i
-                                                        class="feather icon-chevron-right position-right"></i></button>
-                                            </div>
-                                        </div>
-                                    </div>
+                                        </ul>
+                                        <div class="tab-content px-1 pt-1">
+                                            <div class="tab-pane active" id="tabIcon11" role="tabpanel"
+                                                aria-labelledby="baseIcon-tab11">
+                                                <div class="card-content" id="listRecaudo">
+                                                    <div id="daily-activity" class="table-responsive height-300">
+                                                        <table class="table table-hover mb-0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>
+                                                                        <input type="checkbox" id="icheck-input-all"
+                                                                            class="icheck-activity">
+                                                                    </th>
+                                                                    <th>Tratamiento</th>
+                                                                    <th>Total</th>
+                                                                    <th>Realizado</th>
+                                                                    <th>Pagado</th>
+                                                                    <th>Saldo</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="trTratamientos">
 
-                                </div>
-                                <form class="form" method="post" id="formGuardarPagoTratamiento"
-                                    action="{{ url('/') }}/AdminPacientes/GuardarPagoTratamiento">
-                                    @csrf
-                                    <input type="hidden" name="idTransaccion" id="idTransaccion" value="" />
-                                    <div class="card-content" style="display: none;" id="pagoRecaudo">
-                                        <div id="daily-activity" class="table-responsive" style="overflow: hidden;">
-                                            <table class="table table-hover mb-0">
-                                                <thead>
-                                                    <tr>
-                                                        <th>
-                                                        </th>
-                                                        <th>Servicio</th>
-                                                        <th>Valor</th>
-                                                        <th>Abonado</th>
-                                                        <th>Estado</th>
-                                                        <th>Por Abonar</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="trDetTratamientos">
+                                                            </tbody>
+                                                        </table>
 
-                                                </tbody>
-                                            </table>
-
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-7 col-sm-7 mt-75">
-                                                <!-- Contenido de la primera columna -->
-                                            </div>
-                                            <div class="col-4 col-sm-4 d-flex justify-content-end mt-75">
-                                                <ul class="list-group cost-list">
-
-                                                    <li
-                                                        class="list-group-item each-cost border-0 p-50 d-flex justify-content-between">
-                                                        <span class="cost-title text-bold-600 mr-2">Servicios Seleccionados:
-                                                        </span>
-                                                        <span class="cost-value" id="totalServ">$ 0,00</span>
-                                                    </li>
-                                                    <li
-                                                        class="list-group-item each-cost border-0 p-50 d-flex justify-content-between">
-                                                        <span class="cost-title text-bold-600 mr-2">Saldo previo abonos:
-                                                        </span>
-                                                        <div class="badge badge-success" id="totalAbono">$ 10.000,00</div>
-
-                                                    </li>
-                                                    <li
-                                                        class="list-group-item each-cost border-0 p-50 d-flex justify-content-between">
-                                                        <span class="cost-title text-bold-600 mr-2">Total a pagar: </span>
-                                                        <span class="cost-value" id="totalPago">$ 0,00</span>
-                                                    </li>
-
-                                                    <li
-                                                        class="list-group-item each-cost border-0 p-50 d-flex justify-content-between">
-                                                        <div class="form-check" style="width: 100%">
-                                                            <input type="checkbox" onclick="$.habilAbono(this);"
-                                                                class="form-check-input" id="checkAbono">
-                                                            <label class="form-check-label" for="icheck-input-all">Ingresar
-                                                                abono libre:</label>
-                                                        </div>
-
-                                                        <input type="text" disabled valor="0,00"
-                                                            onkeypress="return validartxtnum(event)"
-                                                            onchange="$.cambioFormato(this.id);" onclick="this.select();"
-                                                            class="form-control" id="valorVisAbono" name="valorVisAbono">
-                                                        <input type="hidden" value="10000" id="valorAbonoPrev"
-                                                            name="valorAbonoPrev">
-                                                        <input type="hidden" value="0" id="valorAbono"
-                                                            name="valorAbono">
-                                                        <input type="hidden" value="0" id="totalServText"
-                                                            name="totalServText">
-                                                        <input type="hidden" value="no" id="selAbono"
-                                                            name="selAbono">
-                                                    </li>
-
-                                                </ul>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-12 mt-1 ml-2">
-                                                <h4>Medio de pago</h4>
-                                            </div>
-                                        </div>
-                                        <input type="hidden" id='consMedio' name='consMedio' value="1" />
-                                        <div class="row ml-1 mr-1" id="div-medioPago">
-                                            <div style="width: 100%;" id="medioPago1"
-                                                class="bs-callout-blue-grey callout-border-left callout-bordered callout-transparent mt-1 p-1 medioPago">
-                                                <div class="row">
-                                                    <div class="col-xl-4 col-md-4 col-4">
-                                                        <div class="form-group">
-                                                            <div class="controls">
-                                                                <label>Medio de pago:</label>
-                                                                <select class="select2 form-control" id="medioPago1"
-                                                                    name="medioPago[]" onchange="$.cammbioMedioPago(1);">
-                                                                    <option value="e">Efectivo</option>
-                                                                    <option value="t">Transferencia</option>
-                                                                    <option value="td">Tarjeta de débito</option>
-                                                                    <option value="tc">Tarjeta de crédito</option>
-                                                                </select>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="form-actions">
+                                                            <div class="text-right">
+                                                                <button type="button" onclick="$.pagarTratamiento();"
+                                                                    class="btn btn-success"> Pagar Tratamiento<i
+                                                                        class="feather icon-chevron-right position-right"></i></button>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-xl-3 col-md-3 col-3">
-                                                        <div class="form-group">
-                                                            <div class="controls">
-                                                                <label>Valor:</label>
-                                                                <input type="text"
-                                                                    onkeypress="return validartxtnum(event)"
-                                                                    data-cons="1" valor="0,00"
-                                                                    onclick="this.select();"
-                                                                    onchange="$.cambioFormatoPago(this.id);"
-                                                                    class="form-control" id="valorVisPago1"
-                                                                    name="valorVisPago">
-                                                                <input type="hidden" class="montMedio" value="0"
-                                                                    id="valorPago1" name="valorPago[]">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-xl-4 col-md-4 col-4">
-                                                        <div class="form-group" id="div-tranfe1" style="display: none;">
-                                                            <div class="controls">
-                                                                <label>Número de Referencia:</label>
-                                                                <input type="text" valor="" class="form-control"
-                                                                    id="referenciaPago" name="referenciaPago[]">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-xl-1 col-md-3 col-3 align-content-end">
-                                                        <button type="button" onclick="$.delMedioPago(1);"
-                                                            class="btn btn-icon btn-pure danger mr-1"><i
-                                                                class="fa fa-trash-o"></i></button>
-                                                    </div>
+
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 mt-2">
-                                            <div class="form-group">
-                                                <button onclick="$.addMedioPago(1);" class="btn btn-primary mt-1"
-                                                    type="button">
-                                                    <i class="fa fa-plus"></i> Agregar Medio de pago
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 mt-2">
-                                            <div class="form-actions">
-                                                <div class="text-right">
-                                                    <button type="button" onclick="$.atrasTratamiento();"
-                                                        class="btn btn-info">
-                                                        <i class="feather icon-chevron-left position-left"></i>
-                                                        Atras</button>
-                                                    <button type="button" onclick="$.ConfirpagoTratamiento();"
-                                                        class="btn btn-success"> Confirmar pago<i
-                                                            class="feather icon-chevron-right position-right"></i></button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
+                                                <form class="form" method="post" id="formGuardarPagoTratamiento"
+                                                    action="{{ url('/') }}/AdminPacientes/GuardarPagoTratamiento">
+                                                    @csrf
+                                                    <input type="hidden" name="idTransaccion" id="idTransaccion"
+                                                        value="" />
+                                                    <div class="card-content" style="display: none;" id="pagoRecaudo">
+                                                        <div id="daily-activity" class="table-responsive"
+                                                            style="overflow: hidden;">
+                                                            <table class="table table-hover mb-0">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>
+                                                                        </th>
+                                                                        <th>Servicio</th>
+                                                                        <th>Valor</th>
+                                                                        <th>Abonado</th>
+                                                                        <th>Estado</th>
+                                                                        <th>Por Abonar</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="trDetTratamientos">
 
-                                <div class="card-content" id="listRecaudoComprobante" style="display: none;">
-                                    <section class="app-invoice-wrapper">
-                                        <div class="row">
-                                            <div class="col-xl-9 col-md-8 col-12 printable-content">
-                                                <!-- using a bootstrap card -->
-                                                <div class="card">
-                                                    <!-- card body -->
-                                                    <div class="card-body p-2">
-                                                        <!-- card-header -->
-                                                        <div class="card-header px-0">
-                                                            <div class="row">
-                                                                <div class="col-md-12 col-lg-7 col-xl-4 mb-50">
-                                                                    <span class="invoice-id font-weight-bold">Comprobante#
-                                                                    </span>
-                                                                    <span id="ncompro"></span>
-                                                                </div>
-                                                                <div class="col-md-12 col-lg-5 col-xl-8">
-                                                                    <div
-                                                                        class="d-flex align-items-center justify-content-end justify-content-xs-start">
-                                                                        <div class="issue-date pr-2">
-                                                                            <span class="font-weight-bold no-wrap">Fecha de
-                                                                                creación: </span>
-                                                                            <span id="fcreacion">07/02/2019</span>
-                                                                        </div>
-                                                                        <div class="due-date">
-                                                                            <span class="font-weight-bold no-wrap">Fecha de
-                                                                                impresión: </span>
-                                                                            <span id="fimpresion">06/04/2019</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+                                                                </tbody>
+                                                            </table>
+
                                                         </div>
 
-                                                        <!-- invoice logo and title -->
-                                                        <div class="invoice-logo-title row py-2">
-                                                            <div
-                                                                class="col-6 d-flex flex-column justify-content-center align-items-start">
-                                                                <h2 class="text-primary">Comprobante de pago</h2>
-                                                                <span>PERFECTA S.A.S</span>
+                                                        <div class="row">
+                                                            <div class="col-7 col-sm-7 mt-75">
+                                                                <!-- Contenido de la primera columna -->
                                                             </div>
-                                                            <div class="col-6 d-flex justify-content-end invoice-logo">
-                                                                <img src="{{ asset('app-assets/images/logo/stack-logo-light.png') }}"
-                                                                    alt="company-logo" height="46" width="164">
-                                                            </div>
-                                                        </div>
-                                                        <hr>
+                                                            <div class="col-4 col-sm-4 d-flex justify-content-end mt-75">
+                                                                <ul class="list-group cost-list">
 
-                                                        <!-- invoice address and contacts -->
-                                                        <div class="row invoice-adress-info py-2">
-                                                            <div class="col-12 mt-1 from-info">
-                                                                <div class="info-title mb-1">
-                                                                    <span class="font-weight-bold no-wrap"
-                                                                        style="font-size: 20px;">Paciente</span>
-                                                                </div>
-                                                                <div class="company-name mb-1">
-                                                                    <div class="issue-date pr-2">
+                                                                    <li
+                                                                        class="list-group-item each-cost border-0 p-50 d-flex justify-content-between">
                                                                         <span
-                                                                            class="font-weight-bold no-wrap">Identificación:
+                                                                            class="cost-title text-bold-600 mr-2">Servicios
+                                                                            Seleccionados:
                                                                         </span>
-                                                                        <span id="nidentificacion"></span>
+                                                                        <span class="cost-value" id="totalServ">$
+                                                                            0,00</span>
+                                                                    </li>
+                                                                    <li
+                                                                        class="list-group-item each-cost border-0 p-50 d-flex justify-content-between">
+                                                                        <span class="cost-title text-bold-600 mr-2">Saldo
+                                                                            previo abonos:
+                                                                        </span>
+                                                                        <div class="badge badge-success" id="totalAbono">$
+                                                                            10.000,00</div>
+
+                                                                    </li>
+                                                                    <li
+                                                                        class="list-group-item each-cost border-0 p-50 d-flex justify-content-between">
+                                                                        <span class="cost-title text-bold-600 mr-2">Total a
+                                                                            pagar: </span>
+                                                                        <span class="cost-value" id="totalPago">$
+                                                                            0,00</span>
+                                                                    </li>
+
+                                                                    <li
+                                                                        class="list-group-item each-cost border-0 p-50 d-flex justify-content-between">
+                                                                        <div class="form-check" style="width: 100%">
+                                                                            <input type="checkbox"
+                                                                                onclick="$.habilAbono(this);"
+                                                                                class="form-check-input" id="checkAbono">
+                                                                            <label class="form-check-label"
+                                                                                for="icheck-input-all">Ingresar
+                                                                                abono libre:</label>
+                                                                        </div>
+
+                                                                        <input type="text" disabled valor="0,00"
+                                                                            onkeypress="return validartxtnum(event)"
+                                                                            onchange="$.cambioFormato(this.id);"
+                                                                            onclick="this.select();" class="form-control"
+                                                                            id="valorVisAbono" name="valorVisAbono">
+                                                                        <input type="hidden" value="10000"
+                                                                            id="valorAbonoPrev" name="valorAbonoPrev">
+                                                                        <input type="hidden" value="0"
+                                                                            id="valorAbono" name="valorAbono">
+                                                                        <input type="hidden" value="0"
+                                                                            id="totalServText" name="totalServText">
+                                                                        <input type="hidden" value="no"
+                                                                            id="selAbono" name="selAbono">
+                                                                    </li>
+
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="col-12 mt-1 ml-2">
+                                                                <h4>Medio de pago</h4>
+                                                            </div>
+                                                        </div>
+                                                        <input type="hidden" id='consMedio' name='consMedio'
+                                                            value="1" />
+                                                        <div class="row ml-1 mr-1" id="div-medioPago">
+                                                            <div style="width: 100%;" id="medioPago1"
+                                                                class="bs-callout-blue-grey callout-border-left callout-bordered callout-transparent mt-1 p-1 medioPago">
+                                                                <div class="row">
+                                                                    <div class="col-xl-4 col-md-4 col-4">
+                                                                        <div class="form-group">
+                                                                            <div class="controls">
+                                                                                <label>Medio de pago:</label>
+                                                                                <select class="select2 form-control"
+                                                                                    id="medioPago1" name="medioPago[]"
+                                                                                    onchange="$.cammbioMedioPago(1);">
+                                                                                    <option value="e">Efectivo
+                                                                                    </option>
+                                                                                    <option value="t">Transferencia
+                                                                                    </option>
+                                                                                    <option value="td">Tarjeta de
+                                                                                        débito</option>
+                                                                                    <option value="tc">Tarjeta de
+                                                                                        crédito</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-xl-3 col-md-3 col-3">
+                                                                        <div class="form-group">
+                                                                            <div class="controls">
+                                                                                <label>Valor:</label>
+                                                                                <input type="text"
+                                                                                    onkeypress="return validartxtnum(event)"
+                                                                                    data-cons="1" valor="0,00"
+                                                                                    onclick="this.select();"
+                                                                                    onchange="$.cambioFormatoPago(this.id);"
+                                                                                    class="form-control"
+                                                                                    id="valorVisPago1"
+                                                                                    name="valorVisPago">
+                                                                                <input type="hidden" class="montMedio"
+                                                                                    value="0" id="valorPago1"
+                                                                                    name="valorPago[]">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-xl-4 col-md-4 col-4">
+                                                                        <div class="form-group" id="div-tranfe1"
+                                                                            style="display: none;">
+                                                                            <div class="controls">
+                                                                                <label>Número de Referencia:</label>
+                                                                                <input type="text" valor=""
+                                                                                    class="form-control"
+                                                                                    id="referenciaPago"
+                                                                                    name="referenciaPago[]">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-xl-1 col-md-3 col-3 align-content-end">
+                                                                        <button type="button"
+                                                                            onclick="$.delMedioPago(1);"
+                                                                            class="btn btn-icon btn-pure danger mr-1"><i
+                                                                                class="fa fa-trash-o"></i></button>
                                                                     </div>
                                                                 </div>
-                                                                <div class="company-address mb-1">
-                                                                    <span class="font-weight-bold no-wrap">Nombre Paciente:
-                                                                    </span>
-                                                                    <span id="npaciente"></span>
-                                                                </div>
-
-
-                                                            </div>
-
-                                                        </div>
-
-                                                        <div class="row invoice-adress-info py-2">
-                                                            <div class="col-6 mt-1 from-info">
-                                                                <div class="info-title mb-1">
-                                                                    <span class="font-weight-bold no-wrap"
-                                                                        style="font-size: 20px;">Tratamiento</span>
-                                                                </div>
-                                                                <div class="company-name mb-1">
-                                                                    <span class="font-weight-bold no-wrap">Descripción:
-                                                                    </span>
-                                                                    <span id="ntratamiento"></span>
-                                                                </div>
-                                                                <div class="company-email  mb-1 mb-1">
-                                                                    <span class="font-weight-bold no-wrap">Profesional:
-                                                                    </span>
-                                                                    <span id="nprofesional"></span>
-                                                                </div>
-
-                                                            </div>
-                                                            <div class="col-6 mt-1 to-info">
-                                                                <div class="info-title mb-1">
-                                                                    <span>&nbsp;</span>
-                                                                </div>
-                                                                <div class="company-name mb-1">
-                                                                    <span class="font-weight-bold no-wrap">Abono: </span>
-                                                                    <span id="valorAbonoComp"></span>
-                                                                </div>
-                                                                <div class="company-name mb-1">
-                                                                    <span class="font-weight-bold no-wrap"></span>
-                                                                    <span></span>
-                                                                </div>
-
                                                             </div>
                                                         </div>
-
-                                                        <!--product details table -->
-                                                        <h4>Detalles medio de pago</h4>
-                                                        <div class="product-details-table py-2 table-responsive">
-                                                            <table class="table table-borderless">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th scope="col">Medio de pago</th>
-                                                                        <th scope="col">Valor</th>
-                                                                        <th scope="col">Referencia de pago</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody id="tr-medioPago">
-
-                                                                </tbody>
-                                                            </table>
+                                                        <div class="col-12 mt-2">
+                                                            <div class="form-group">
+                                                                <button onclick="$.addMedioPago(1);"
+                                                                    class="btn btn-primary mt-1" type="button">
+                                                                    <i class="fa fa-plus"></i> Agregar Medio de pago
+                                                                </button>
+                                                            </div>
                                                         </div>
-                                                        <hr>
-                                                        <h4 id="titServAbon" style="display: none;">Detalles de servicios
-                                                            abonados</h4>
-                                                        <div id="tablaServAbon" style="display: none;"
-                                                            class="product-details-table py-2 table-responsive">
-                                                            <table class="table table-borderless">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th scope="col">#</th>
-                                                                        <th scope="col">Servicio</th>
-                                                                        <th scope="col">Valor</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody id="tr-servAbonado">
-
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                        <hr>
-                                                        <!-- invoice total -->
-                                                        <div class="invoice-total py-2">
-                                                            <div class="row">
-                                                                <div class="col-4 col-sm-6 mt-75">
-
-                                                                </div>
-                                                                <div
-                                                                    class="col-8 col-sm-6 d-flex justify-content-end mt-75">
-                                                                    <ul class="list-group cost-list">
-                                                                        <li
-                                                                            class="list-group-item each-cost border-0 p-50 d-flex justify-content-between">
-                                                                            <span
-                                                                                class="font-weight-bold no-wrap mr-2">Valor
-                                                                                Total: </span>
-                                                                            <span class="cost-value"
-                                                                                id="vtotal"></span>
-                                                                        </li>
-                                                                        <li class="dropdown-divider"></li>
-
-                                                                    </ul>
+                                                        <div class="col-12 mt-2">
+                                                            <div class="form-actions">
+                                                                <div class="text-right">
+                                                                    <button type="button" onclick="$.atrasTratamiento();"
+                                                                        class="btn btn-info">
+                                                                        <i
+                                                                            class="feather icon-chevron-left position-left"></i>
+                                                                        Atras</button>
+                                                                    <button type="button"
+                                                                        onclick="$.ConfirpagoTratamiento();"
+                                                                        class="btn btn-success"> Confirmar pago<i
+                                                                            class="feather icon-chevron-right position-right"></i></button>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
+                                                </form>
+
+                                                <div class="card-content" id="listRecaudoComprobante"
+                                                    style="display: none;">
+                                                    <section class="app-invoice-wrapper">
+                                                        <div class="row">
+                                                            <div class="col-xl-9 col-md-8 col-12 printable-content">
+                                                                <!-- using a bootstrap card -->
+                                                                <div class="card">
+                                                                    <!-- card body -->
+                                                                    <div class="card-body p-2">
+                                                                        <!-- card-header -->
+                                                                        <div class="card-header px-0">
+                                                                            <div class="row">
+                                                                                <div
+                                                                                    class="col-md-12 col-lg-7 col-xl-4 mb-50">
+                                                                                    <span
+                                                                                        class="invoice-id font-weight-bold">Comprobante#
+                                                                                    </span>
+                                                                                    <span id="ncompro"></span>
+                                                                                </div>
+                                                                                <div class="col-md-12 col-lg-5 col-xl-8">
+                                                                                    <div
+                                                                                        class="d-flex align-items-center justify-content-end justify-content-xs-start">
+                                                                                        <div class="issue-date pr-2">
+                                                                                            <span
+                                                                                                class="font-weight-bold no-wrap">Fecha
+                                                                                                de
+                                                                                                creación: </span>
+                                                                                            <span
+                                                                                                id="fcreacion">07/02/2019</span>
+                                                                                        </div>
+                                                                                        <div class="due-date">
+                                                                                            <span
+                                                                                                class="font-weight-bold no-wrap">Fecha
+                                                                                                de
+                                                                                                impresión: </span>
+                                                                                            <span
+                                                                                                id="fimpresion">06/04/2019</span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <!-- invoice logo and title -->
+                                                                        <div class="invoice-logo-title row py-2">
+                                                                            <div
+                                                                                class="col-6 d-flex flex-column justify-content-center align-items-start">
+                                                                                <h2 class="text-primary">Comprobante de
+                                                                                    pago</h2>
+                                                                                <span>PERFECTA S.A.S</span>
+                                                                            </div>
+                                                                            <div
+                                                                                class="col-6 d-flex justify-content-end invoice-logo">
+                                                                                <img src="{{ asset('app-assets/images/logo/stack-logo-light.png') }}"
+                                                                                    alt="company-logo" id="logoPerfecta"
+                                                                                    height="46" width="164">
+                                                                            </div>
+                                                                        </div>
+                                                                        <hr>
+
+                                                                        <!-- invoice address and contacts -->
+                                                                        <div class="row invoice-adress-info py-2">
+                                                                            <div class="col-12 mt-1 from-info">
+                                                                                <div class="info-title mb-1">
+                                                                                    <span class="font-weight-bold no-wrap"
+                                                                                        style="font-size: 20px;">Paciente</span>
+                                                                                </div>
+                                                                                <div class="company-name mb-1">
+                                                                                    <div class="issue-date pr-2">
+                                                                                        <span
+                                                                                            class="font-weight-bold no-wrap">Identificación:
+                                                                                        </span>
+                                                                                        <span id="nidentificacion"></span>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="company-address mb-1">
+                                                                                    <span
+                                                                                        class="font-weight-bold no-wrap">Nombre
+                                                                                        Paciente:
+                                                                                    </span>
+                                                                                    <span id="npaciente"></span>
+                                                                                </div>
+
+
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                        <div class="row invoice-adress-info py-2">
+                                                                            <div class="col-6 mt-1 from-info">
+                                                                                <div class="info-title mb-1">
+                                                                                    <span class="font-weight-bold no-wrap"
+                                                                                        style="font-size: 20px;">Tratamiento</span>
+                                                                                </div>
+                                                                                <div class="company-name mb-1">
+                                                                                    <span
+                                                                                        class="font-weight-bold no-wrap">Descripción:
+                                                                                    </span>
+                                                                                    <span id="ntratamiento"></span>
+                                                                                </div>
+                                                                                <div class="company-email  mb-1 mb-1">
+                                                                                    <span
+                                                                                        class="font-weight-bold no-wrap">Profesional:
+                                                                                    </span>
+                                                                                    <span id="nprofesional"></span>
+                                                                                </div>
+
+                                                                            </div>
+                                                                            <div class="col-6 mt-1 to-info">
+                                                                                <div class="info-title mb-1">
+                                                                                    <span>&nbsp;</span>
+                                                                                </div>
+                                                                                <div class="company-name mb-1">
+                                                                                    <span
+                                                                                        class="font-weight-bold no-wrap">Abono:
+                                                                                    </span>
+                                                                                    <span id="valorAbonoComp"></span>
+                                                                                </div>
+                                                                                <div class="company-name mb-1">
+                                                                                    <span
+                                                                                        class="font-weight-bold no-wrap"></span>
+                                                                                    <span></span>
+                                                                                </div>
+
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <!--product details table -->
+                                                                        <h4>Detalles medio de pago</h4>
+                                                                        <div
+                                                                            class="product-details-table py-2 table-responsive">
+                                                                            <table class="table table-borderless">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th scope="col">Medio de pago
+                                                                                        </th>
+                                                                                        <th scope="col">Valor</th>
+                                                                                        <th scope="col">Referencia de
+                                                                                            pago</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody id="tr-medioPago">
+
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                        <hr>
+                                                                        <h4 id="titServAbon" style="display: none;">
+                                                                            Detalles de servicios
+                                                                            abonados</h4>
+                                                                        <div id="tablaServAbon" style="display: none;"
+                                                                            class="product-details-table py-2 table-responsive">
+                                                                            <table class="table table-borderless">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th scope="col">#</th>
+                                                                                        <th scope="col">Servicio</th>
+                                                                                        <th scope="col">Valor</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody id="tr-servAbonado">
+
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                        <hr>
+                                                                        <!-- invoice total -->
+                                                                        <div class="invoice-total py-2">
+                                                                            <div class="row">
+                                                                                <div class="col-4 col-sm-6 mt-75">
+
+                                                                                </div>
+                                                                                <div
+                                                                                    class="col-8 col-sm-6 d-flex justify-content-end mt-75">
+                                                                                    <ul class="list-group cost-list">
+                                                                                        <li
+                                                                                            class="list-group-item each-cost border-0 p-50 d-flex justify-content-between">
+                                                                                            <span
+                                                                                                class="font-weight-bold no-wrap mr-2">Valor
+                                                                                                Total: </span>
+                                                                                            <span class="cost-value"
+                                                                                                id="vtotal"></span>
+                                                                                        </li>
+                                                                                        <li class="dropdown-divider"></li>
+
+                                                                                    </ul>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- buttons section -->
+                                                            <div class="col-xl-3 col-md-4 col-12 action-btns">
+                                                                <div class="card">
+                                                                    <div class="card-body p-2">
+                                                                        <a onclick="$.imprimirComprobante();"
+                                                                            class="btn btn-info btn-block mb-1 print-invoice">
+                                                                            <i
+                                                                                class="feather icon-printer mr-25 common-size"></i>
+                                                                            Imprimir comprobante</a>
+                                                                        <a onclick="$.enviarComprobante();"
+                                                                            class="btn btn-success btn-block mb-1 print-invoice">
+                                                                            <i
+                                                                                class="feather icon-navigation mr-25 common-size"></i>
+                                                                            Enviar comprobante</a>
+                                                                        <a onclick="$.otroPago();"
+                                                                            class="btn btn-success btn-block mb-1"><i
+                                                                                class="feather icon-credit-card mr-25 common-size"></i>
+                                                                            Realizar Pago</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                 </div>
+                                            </div>
+                                            <div class="tab-pane" id="tabIcon12" role="tabpanel"
+                                                aria-labelledby="baseIcon-tab12">
+                                                <div id="audience-list-scroll" style="height: 400px; overflow: auto;" class="table-responsive position-relative">
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            
+                                                            <th>Transacción</th>
+                                                            <th>Tratamiento</th>
+                                                            <th>Fecha de pago</th>
+                                                            <th>Valor</th>
+                                                            <th>Acción</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                           
+                                                            <td class="align-middle">
+                                                                <span>shwellFlint@gmail.com</span>
+                                                            </td>
+                                                            <td class="align-middle">
+                                                                <span>450MB</span>
+                                                            </td>
+                                                            <td class="align-middle">
+                                                                <div class="progress my-75">
+                                                                    <div class="progress-bar progress-bar-striped bg-success"
+                                                                        role="progressbar" aria-valuenow="20"
+                                                                        aria-valuemin="20" aria-valuemax="100"
+                                                                        style="width:55%">55%</div>
+                                                                </div>
+                                                            </td>
+                                                            <td class="align-middle">
+                                                                <span class="badge badge-success">Active</span>
+                                                            </td>
+                                                            <td class="align-middle">
+                                                                <div class="dropdown">
+                                                                    <span
+                                                                        class="feather icon-more-vertical dropdown-toggle"
+                                                                        id="dropdownMenuButton" data-toggle="dropdown"
+                                                                        aria-haspopup="true" aria-expanded="false">
+                                                                    </span>
+                                                                    <div class="dropdown-menu dropdown-menu-right"
+                                                                        aria-labelledby="dropdownMenuButton">
+                                                                        <a class="dropdown-item" href="#"><li class="fa fa-print"></li> Imprimir</a>
+                                                                            <a class="dropdown-item" href="#"><li class="fa fa-paper-plane-o"></li> Enviar</a>
+                                                                        <a class="dropdown-item" href="#"><li class="fa fa-trash-o"></li> Eliminar</a>
+                                                                    </div>
+                                                                </div>
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
                                             </div>
 
-                                            <!-- buttons section -->
-                                            <div class="col-xl-3 col-md-4 col-12 action-btns">
-                                                <div class="card">
-                                                    <div class="card-body p-2">
-                                                        <a onclick="$.imprimirComprobante();"
-                                                            class="btn btn-info btn-block mb-1 print-invoice"> <i
-                                                                class="feather icon-printer mr-25 common-size"></i>
-                                                            Imprimir comprobante</a>
-                                                        <a onclick="$.enviarComprobante();"
-                                                            class="btn btn-success btn-block mb-1 print-invoice"> <i
-                                                                class="feather icon-navigation mr-25 common-size"></i>
-                                                            Enviar comprobante</a>
-                                                        <a onclick="$.otroPago();"
-                                                            class="btn btn-success btn-block mb-1"><i
-                                                                class="feather icon-credit-card mr-25 common-size"></i>
-                                                            Realizar Pago</a>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
+
+                                    </div>
                                 </div>
+                            </div>
+
+
+
+
+
+
                     </section>
 
 
@@ -455,7 +592,7 @@
             $("#MenRecaudo").addClass("active");
 
             var lastSelectedData = null;
-            var transaccionGlobal= [];
+            var transaccionGlobal = [];
 
             $('#paciente').on('select2:select', function(e) {
                 // Obtener la información del elemento seleccionado
@@ -480,7 +617,7 @@
             }
 
             $.extend({
-                buscInfTratamientos: function(idPac,idTrata) {
+                buscInfTratamientos: function(idPac, idTrata) {
 
                     var form = $("#formCargarTratamientos");
                     $("#idPac").remove();
@@ -501,36 +638,44 @@
                             $.each(respuesta.tratamientosRecaudo, function(i, item) {
                                 tratamientos += '<tr >';
 
-                                    if (typeof idTrata != 'undefined') {
-                                       
-                                        if(item.tratamiento==idTrata){
-                                            tratamientos+='<td class="text-truncate"  style="vertical-align: middle; ">' +
-                                                '    <input type="checkbox" checked data-id="' + item
-                                                .tratamiento +
-                                                '" id="checkRecaudo' + item.tratamiento +
-                                                '" class="icheck-activity classTrata">' +
-                                                '</td>';
-                                        }else{
-                                            tratamientos+='<td class="text-truncate" style="vertical-align: middle; ">' +
-                                                '    <input type="checkbox"  data-id="' + item
-                                                .tratamiento +
-                                                '" id="checkRecaudo' + item.tratamiento +
-                                                '" class="icheck-activity classTrata">' +
-                                                '</td>'; 
-                                        }
+                                if (typeof idTrata != 'undefined') {
 
-                                    }else{
-
-                                        tratamientos+='<td class="text-truncate" style="vertical-align: middle; ">' +
-                                            '    <input type="checkbox"  data-id="' + item
+                                    if (item.tratamiento == idTrata) {
+                                        tratamientos +=
+                                            '<td class="text-truncate"  style="vertical-align: middle; ">' +
+                                            '    <input type="checkbox" checked data-id="' +
+                                            item
                                             .tratamiento +
-                                            '" id="checkRecaudo' + item.tratamiento +
+                                            '" id="checkRecaudo' + item
+                                            .tratamiento +
                                             '" class="icheck-activity classTrata">' +
                                             '</td>';
-
+                                    } else {
+                                        tratamientos +=
+                                            '<td class="text-truncate" style="vertical-align: middle; ">' +
+                                            '    <input type="checkbox"  data-id="' +
+                                            item
+                                            .tratamiento +
+                                            '" id="checkRecaudo' + item
+                                            .tratamiento +
+                                            '" class="icheck-activity classTrata">' +
+                                            '</td>';
                                     }
 
-                                    tratamientos+='<td class="text-truncate">' +
+                                } else {
+
+                                    tratamientos +=
+                                        '<td class="text-truncate" style="vertical-align: middle; ">' +
+                                        '    <input type="checkbox"  data-id="' +
+                                        item
+                                        .tratamiento +
+                                        '" id="checkRecaudo' + item.tratamiento +
+                                        '" class="icheck-activity classTrata">' +
+                                        '</td>';
+
+                                }
+
+                                tratamientos += '<td class="text-truncate">' +
                                     '    <div>' +
                                     '        <p class="mb-25 latest-update-item-name text-bold-600">' +
                                     item.nombreTratamiento +
@@ -572,16 +717,409 @@
                         'div-datTratameintos'
                     ); // Reemplaza 'miDiv' con el ID de tu div
                     datTratameintos.style.filter = 'none';
-                    let idPac = $("idPac").val();
-
-
                     $.atrasTratamiento();
-                    $.buscInfTratamientos(idPac);
+                    $.buscInfTratamientos(lastSelectedData.id);
                 },
                 imprimirComprobante: function() {
-                    alert(transaccionGlobal.tratamiento.nombre);
-                    console.log(transaccionGlobal);
-                   
+                    var loader = document.getElementById('loader');
+                    loader.style.display = 'block';
+
+                    const image = document.getElementById('logoPerfecta');
+                    // Convert the image into a Base64 data URL
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 600;
+                    canvas.height = 141;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(image, 0, 0);
+                    const base64data = canvas.toDataURL();
+                    console.log(base64data);
+
+                    // Definir el contenido del documento
+                    var docDefinition = {
+                        content: [{
+                                image: base64data, // Agrega tu logo aquí
+                                width: 200,
+                                margin: [0, 0, 0, 0],
+
+                            },
+                            {
+                                style: 'card',
+                                stack: [{
+                                    style: 'cardBody',
+                                    stack: [{
+                                            style: 'cardHeader',
+                                            stack: [{
+                                                columns: [{
+                                                        width: '40%',
+                                                        stack: [{
+                                                                text: 'Comprobante de pago',
+                                                                style: 'header'
+                                                            },
+                                                            {
+                                                                text: 'PERFECTA S.A.S',
+                                                                style: 'subheader'
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        width: '60%',
+                                                        stack: [{
+                                                                text: 'Comprobante #' +
+                                                                    agregarCeros(
+                                                                        transaccionGlobal
+                                                                        .transaccion
+                                                                        .id,
+                                                                        5
+                                                                    ),
+                                                                style: 'subheader'
+                                                            },
+                                                            {
+                                                                text: 'Fecha de creación: ' +
+                                                                    convertirFormatoFechaHora(
+                                                                        transaccionGlobal
+                                                                        .transaccion
+                                                                        .created_at
+                                                                    ),
+                                                                style: 'subheaderfecha'
+                                                            },
+                                                            {
+                                                                text: 'Fecha de impresión: ' +
+                                                                    convertirFormatoFechaHora(
+                                                                        new Date()
+                                                                    ),
+                                                                style: 'subheaderfecha'
+                                                            }
+                                                        ],
+                                                        alignment: 'right'
+                                                    }
+                                                ]
+                                            }]
+                                        },
+                                        {
+                                            canvas: [{
+                                                type: 'line',
+                                                x1: 0,
+                                                y1: 0,
+                                                x2: 515,
+                                                y2: 0,
+                                                lineWidth: 1,
+                                                lineColor: '#000'
+                                            }]
+                                        },
+
+                                        {
+                                            style: 'invoiceAdressInfo',
+                                            stack: [{
+                                                style: 'fromInfo',
+                                                stack: [{
+                                                        style: 'infoTitle',
+                                                        text: 'Paciente'
+                                                    },
+                                                    {
+                                                        style: 'companyName',
+                                                        stack: [{
+                                                            text: 'Identificación: ' +
+                                                                transaccionGlobal
+                                                                .tratamiento
+                                                                .identificacion,
+                                                            style: 'subheader'
+                                                        }]
+                                                    },
+                                                    {
+                                                        style: 'companyAddress',
+                                                        stack: [{
+                                                            text: 'Nombre Paciente: ' +
+                                                                transaccionGlobal
+                                                                .tratamiento
+                                                                .npaciente +
+                                                                ' ' +
+                                                                transaccionGlobal
+                                                                .tratamiento
+                                                                .apellido,
+                                                            style: 'subheader'
+                                                        }]
+                                                    }
+                                                ]
+                                            }]
+                                        },
+                                        {
+                                            canvas: [{
+                                                type: 'line',
+                                                x1: 0,
+                                                y1: 0,
+                                                x2: 515,
+                                                y2: 0,
+                                                lineWidth: 0.3,
+                                                lineColor: '#000'
+                                            }]
+                                        },
+
+                                        {
+                                            style: 'invoiceAdressInfo',
+                                            stack: [{
+                                                    style: 'fromInfo',
+                                                    stack: [{
+                                                            style: 'infoTitle',
+                                                            text: 'Tratamiento'
+                                                        },
+                                                        {
+                                                            style: 'companyName',
+                                                            stack: [{
+                                                                text: transaccionGlobal
+                                                                    .tratamiento
+                                                                    .nombre,
+                                                                style: 'subheader'
+                                                            }]
+                                                        },
+                                                        {
+                                                            style: 'companyEmail',
+                                                            stack: [{
+                                                                text: 'Profesional: ' +
+                                                                    transaccionGlobal
+                                                                    .tratamiento
+                                                                    .nprofe,
+                                                                style: 'subheader'
+                                                            }]
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    style: 'toInfo',
+                                                    stack: [{
+                                                        style: 'companyName',
+                                                        stack: [{
+                                                            text: 'Pago realizado: ' +
+                                                                formatCurrency(
+                                                                    transaccionGlobal
+                                                                    .transaccion
+                                                                    .pago_realizado,
+                                                                    'es-CO',
+                                                                    'COP'
+                                                                ),
+                                                            style: 'subheader'
+                                                        }]
+                                                    }]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            canvas: [{
+                                                type: 'line',
+                                                x1: 0,
+                                                y1: 0,
+                                                x2: 515,
+                                                y2: 0,
+                                                lineWidth: 0.3,
+                                                lineColor: '#000'
+                                            }]
+                                        },
+
+                                    ]
+                                }]
+                            }
+                        ],
+                        styles: {
+                            header: {
+                                fontSize: 18,
+                                bold: true
+                            },
+                            subheader: {
+                                fontSize: 14,
+                                bold: true
+                            },
+                            subheaderfecha: {
+                                fontSize: 10,
+                                bold: false
+                            },
+                            card: {
+                                margin: [0, 10, 0, 10]
+                            },
+                            cardBody: {
+                                margin: [20, 0, 20, 0]
+                            },
+                            cardHeader: {
+                                margin: [0, 10, 0, 10]
+                            },
+                            invoiceLogoTitle: {
+                                margin: [0, 10, 0, 10]
+                            },
+                            invoiceAdressInfo: {
+                                margin: [0, 5, 0, 5]
+                            },
+                            fromInfo: {
+                                margin: [0, 0, 0, 0]
+                            },
+                            infoTitle: {
+                                fontSize: 16,
+                                bold: true
+                            },
+                            companyName: {
+                                fontSize: 14,
+                                bold: true
+                            },
+                            companyAddress: {
+                                fontSize: 14
+                            },
+                            companyEmail: {
+                                fontSize: 14
+                            },
+                            toInfo: {
+                                margin: [0, 10, 0, 10]
+                            },
+                            productDetailsTable: {
+                                margin: [0, 10, 0, 0]
+                            }
+                        }
+                    };
+
+
+                    let vtotal = 0;
+                    let referencia = '';
+
+                    docDefinition.content.push({
+                        canvas: [{
+                            type: 'line',
+                            x1: 0,
+                            y1: 0,
+                            x2: 515,
+                            y2: 0,
+                            lineWidth: 1,
+                            lineColor: '#000'
+                        }]
+                    }, {
+                        margin: [20, 0, 0, 20],
+                        text: 'Detalles medio de pago',
+                        style: 'header'
+                    });
+
+                    var separatorLine = {
+                        canvas: [{
+                            type: 'line',
+                            x1: 0,
+                            y1: 0,
+                            x2: 515,
+                            y2: 0,
+                            lineWidth: 1,
+                            lineColor: '#000'
+                        }]
+                    };
+
+                    // Agregar la sección Detalles medio de pago al contenido del documento
+                    docDefinition.content.push(
+                        separatorLine, {
+                            margin: [0, 0, 0, 5],
+                            table: {
+                                headerRows: 1,
+                                widths: ['50%', '25%', '25%'],
+                                body: [
+                                    ['Medio de pago', 'Referencia de pago', 'Valor']
+                                ]
+                            },
+                            layout: {
+                                hLineColor: function(i, node) {
+                                    return '#FFF';
+                                },
+                                vLineColor: function(i, node) {
+                                    return '#FFF';
+                                }
+                            }
+                        }
+                    );
+
+
+                    $.each(transaccionGlobal.medioPago, function(i, item) {
+                        referencia = item.referencia !== null ? item.referencia : "---";
+                        docDefinition.content.push({
+                            table: {
+                                widths: ['50%', '25%', '25%'],
+                                body: [
+                                    [item.medpago, referencia, formatCurrency(item
+                                        .valor, 'es-CO', 'COP')]
+                                ]
+                            },
+                            layout: {
+                                hLineColor: function(i, node) {
+                                    return i === 0 ? '#000' : '#FFF';
+                                },
+                                vLineColor: function(i, node) {
+                                    return '#FFF';
+                                }
+                            }
+                        });
+                        vtotal = vtotal + item.valor;
+                    });
+
+
+                    if (transaccionGlobal.servTerminado.length > 0) {
+                        docDefinition.content.push({
+                            margin: [20, 0, 0, 20],
+                            text: 'Detalles de servicios abonados',
+                            style: 'header'
+                        });
+
+                        docDefinition.content.push(
+                            separatorLine, {
+                                margin: [0, 0, 0, 5],
+                                table: {
+                                    headerRows: 1,
+                                    widths: ['10%', '70%', '20%'],
+                                    body: [
+                                        ['#', 'Servicio', 'Valor']
+                                    ]
+                                },
+                                layout: {
+                                    hLineColor: function(i, node) {
+                                        return '#FFF';
+                                    },
+                                    vLineColor: function(i, node) {
+                                        return '#FFF';
+                                    }
+                                }
+                            }
+                        );
+
+
+                        $.each(transaccionGlobal.servTerminado, function(i, item) {
+                            docDefinition.content.push({
+                                table: {
+                                    widths: ['10%', '70%', '20%'],
+                                    body: [
+                                        [i + 1, item.nombre, formatCurrency(item
+                                            .valor, 'es-CO', 'COP')]
+                                    ]
+                                },
+                                layout: {
+                                    hLineColor: function(i, node) {
+                                        return i === 0 ? '#000' : '#FFF';
+                                    },
+                                    vLineColor: function(i, node) {
+                                        return '#FFF';
+                                    }
+                                }
+                            });
+
+                        });
+                    }
+
+
+                    docDefinition.content.push({
+                        text: 'Valor Total: $ 25,000.00',
+                        style: 'header',
+                        alignment: 'right',
+                        margin: [0, 10, 0, 0]
+                    });
+
+
+
+                    setTimeout(function() {
+                        // Ocultar el loader después de generar el PDF (simulación)
+                        loader.style.display = 'none';
+                    }, 3000);
+
+                    // Crear y descargar el PDF
+                    pdfMake.createPdf(docDefinition).download('comprobante_pago.pdf');
+
+
                 },
                 checkRecaudos: function() {
                     $(".icheck-activity").iCheck({
@@ -872,9 +1410,9 @@
                         contentType: false,
                         success: function(respuesta) {
 
-                        transaccionGlobal = respuesta;
+                            transaccionGlobal = respuesta;
 
-                        console.log(transaccionGlobal);
+                            console.log(transaccionGlobal);
 
                             if (respuesta) {
                                 Swal.fire({
@@ -902,8 +1440,7 @@
                                 $("#ntratamiento").html(respuesta.tratamiento.nombre);
                                 $("#nprofesional").html(respuesta.tratamiento.nprofe);
                                 $("#valorAbonoComp").html(formatCurrency(respuesta
-                                    .transaccion
-                                    .pago_realizado, 'es-CO', 'COP'));
+                                    .transaccion.pago_realizado, 'es-CO', 'COP'));
 
                                 //listar medio de pago
                                 let medioPago = '';
@@ -1042,23 +1579,25 @@
                 }
 
             });
-            var editorEvolucion = CKEDITOR.instances.evolucion_escrita; 
+            var editorEvolucion = CKEDITOR.instances.evolucion_escrita;
 
             //leer variable localStorage tratamientos
             var ultimaParteURLAnterior = document.referrer.split('/').filter(Boolean).pop();
-           
+
             if (ultimaParteURLAnterior == "Administracion" || ultimaParteURLAnterior == "Pacientes") {
                 if (localStorage.getItem('idTratamiento')) {
-                    let idTratamiento = localStorage.getItem('idTratamiento');                   
-                    $.buscInfTratamientos(localStorage.getItem('idPaciente'),idTratamiento);
-                    var datTratameintos = document.getElementById('div-datTratameintos'); // Reemplaza 'miDiv' con el ID de tu div
+                    let idTratamiento = localStorage.getItem('idTratamiento');
+                    $.buscInfTratamientos(localStorage.getItem('idPaciente'), idTratamiento);
+                    var datTratameintos = document.getElementById(
+                        'div-datTratameintos'); // Reemplaza 'miDiv' con el ID de tu div
                     datTratameintos.style.filter = 'none';
                     $.pagarTratamiento();
-                
+
 
                 } else if (localStorage.getItem('idPaciente')) {
                     $.buscInfTratamientos(localStorage.getItem('idPaciente'));
-                    var datTratameintos = document.getElementById('div-datTratameintos'); // Reemplaza 'miDiv' con el ID de tu div
+                    var datTratameintos = document.getElementById(
+                        'div-datTratameintos'); // Reemplaza 'miDiv' con el ID de tu div
                     datTratameintos.style.filter = 'none';
                 }
 

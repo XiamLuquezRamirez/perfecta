@@ -6,8 +6,8 @@
                 <li class="nav-item mobile-menu d-md-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs"
                         href="#"><i class="feather icon-menu font-large-1"></i></a></li>
                 <li class="nav-item"><a class="navbar-brand"
-                        href="{{ asset('html/ltr/horizontal-menu-template-nav/index.html') }}"><img class="brand-logo"
-                            width="130" alt="stack admin logo"
+                        href="{{ url('/Administracion') }}"><img class="brand-logo"
+                            width="150" alt="stack admin logo"
                             src="{{ asset('app-assets/images/logo/stack-logo-light.png') }}">
 
                     </a></li>
