@@ -54,6 +54,10 @@ class Tratamientos extends Model
         return $respuesta;
     }
 
+    public static function transaccionesPacientes($id) {
+        
+    }
+
     public static function MediosPago($tran)
     {
         $serv = DB::connection("mysql")->select("SELECT  CASE WHEN medio_pago = 'e' THEN 'Efectivo' 

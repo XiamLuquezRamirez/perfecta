@@ -317,6 +317,13 @@ class PacientesController extends Controller
                 ]);
             });
 
+
+            /// Recaudos reallizados al paciente
+
+            $recaudos = Tran
+
+
+
             if (request()->ajax()) {
                 return response()->json([
                     'tratamientosRecaudo' => $resultadosAgrupados
@@ -929,7 +936,8 @@ class PacientesController extends Controller
         foreach ($pacientes as $pacient) {
             $formattedPacientes[] = ['id' => $pacient->id, 'text' => $pacient->text];
         }
-        return response()->json(['data' => $pacientes]);
+
+         return response()->json(['data' => $pacientes]);
     }
 
     public function sanear_string($string)

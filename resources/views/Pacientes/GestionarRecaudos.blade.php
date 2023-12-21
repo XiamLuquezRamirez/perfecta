@@ -43,7 +43,7 @@
                                                 <a class="nav-link active" id="baseIcon-tab11" data-toggle="tab"
                                                     aria-controls="tabIcon11" href="#tabIcon11" role="tab"
                                                     aria-selected="true"><i class="fa fa-shopping-cart"></i> Realizar
-                                                    recaudo</a>
+                                                    recaudo al paciente</a>
                                             </li>
                                             <li class="nav-item">
                                                 <a class="nav-link" id="baseIcon-tab12" data-toggle="tab"
@@ -505,7 +505,7 @@
                                                             <th>Acción</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody>
+                                                    <tbody id="tr-recaudosRealizados">
                                                         <tr>
                                                            
                                                             <td class="align-middle">
@@ -706,6 +706,10 @@
 
                             });
                             $("#trTratamientos").html(tratamientos);
+
+
+                            //TRATAMIENTOS REALIZADOS
+                            
                         }
                     });
 
