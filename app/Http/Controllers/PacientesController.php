@@ -81,7 +81,7 @@ class PacientesController extends Controller
         }
     }
 
-  
+
 
     public function AllServicios()
     {
@@ -318,15 +318,16 @@ class PacientesController extends Controller
             });
 
 
-            /// Recaudos reallizados al paciente
+            /// Recaudos realizados al paciente
 
-            $recaudos = Tran
+            $recaudos = Tratamientos::transaccionesPacientes($idPac);
 
 
 
             if (request()->ajax()) {
                 return response()->json([
-                    'tratamientosRecaudo' => $resultadosAgrupados
+                    'tratamientosRecaudo' => $resultadosAgrupados,
+                    'recaudos' => $recaudos
                 ]);
             }
         } else {
@@ -347,39 +348,39 @@ class PacientesController extends Controller
                 //cargar tratamientos
                 $tratamiento = Tratamientos::busTatamiento($dataId);
 
-                $detaTrata .= '<tr>' .                  
+                $detaTrata .= '<tr>' .
                     '<th colspan="6" class="text-truncate">' .
                     '    <div>' .
                     '        <p class="mb-25 latest-update-item-name text-bold-600"><span class="bullet bullet-primary bullet-sm"></span> ' .
                     $tratamiento->nombre .
                     '        </p>' .
                     '    </div></th>' .
-                    '</tr><input type="hidden" name="tratamientoSel" value="'.$tratamiento->id.'"/><input type="hidden" name="tratamiento" value="'.$tratamiento->id.'"/>';
+                    '</tr><input type="hidden" name="tratamientoSel" value="' . $tratamiento->id . '"/><input type="hidden" name="tratamiento" value="' . $tratamiento->id . '"/>';
 
                 //cargar secciones
                 $secciones = Secciones::buscSeccServ($tratamiento->id);
                 $secc = "";
                 foreach ($secciones as $dataSecc) {
-                    
-                    $secc = '<tr>' .                       
+
+                    $secc = '<tr>' .
                         '<th colspan="6" class="text-truncate">' .
                         '    <div>' .
                         '        <p class="mb-25 latest-update-item-name" style=" font-style: italic;">' .
                         $dataSecc->nombre .
                         '        </p>' .
-                        '    </div></th>'.
+                        '    </div></th>' .
                         '</tr>';
-                        $detaTrata .= $secc;
+                    $detaTrata .= $secc;
                     //cargar servicios
                     $servicios = Secciones::buscServSecc($dataSecc->id);
-                  
+
                     foreach ($servicios as $dataServ) {
                         $serv = "";
                         $saldo = $dataServ->valor - $dataServ->pagado;
                         $serv = '<tr>' .
                             '<td  class="text-truncate">' .
-                            '    <input type="checkbox" data-valor="' . $saldo. '" data-id="' . $dataServ->id .
-                            '" id="checkRecaudo'.$dataServ->id.'"  class="icheck-activity-det">' .
+                            '    <input type="checkbox" data-valor="' . $saldo . '" data-id="' . $dataServ->id .
+                            '" id="checkRecaudo' . $dataServ->id . '"  class="icheck-activity-det">' .
                             '</td>' .
                             '<td  class="text-truncate">' .
                             '    <div>' .
@@ -401,9 +402,8 @@ class PacientesController extends Controller
                             number_format($saldo, 2, ',', '.')  .
                             '</td>' .
                             '</tr>';
-                            $detaTrata .= $serv;
+                        $detaTrata .= $serv;
                     }
-                    
                 }
             }
 
@@ -548,24 +548,24 @@ class PacientesController extends Controller
 
             foreach ($ListPacientes as $i => $item) {
                 if (!is_null($item)) {
-                    $conse = $i+1;
+                    $conse = $i + 1;
 
                     $servTermi =  Servicios::buscSeccServPac($item->id);
 
                     $tdTable .= '<tr>
-                <td>'.$conse.'</td>
+                <td>' . $conse . '</td>
                 <td>
                     <a style="color:#009c9f; font-weight: bold" onclick="$.ver(' . $item->id . ');" >' . $item->identificacion . '</a>
                 </td>
-                <td><span class="invoice-amount" style="text-transform: capitalize;">' . $item->nombre. ' ' .$item->apellido. '</span></td>
+                <td><span class="invoice-amount" style="text-transform: capitalize;">' . $item->nombre . ' ' . $item->apellido . '</span></td>
                 <td><span class="invoice-date">' . $item->telefono . '</span></td>';
-                  if($servTermi->count() > 0) {
-                    $tdTable .='<td><span class="badge badge-warning badge-pill">Pendiente</span></td>';
-                  }else{
-                    $tdTable .='<td><span class="badge badge-success badge-pill">Ninguna</span></td>';
-                  }  
-                
-                $tdTable.='<td>
+                    if ($servTermi->count() > 0) {
+                        $tdTable .= '<td><span class="badge badge-warning badge-pill">Pendiente</span></td>';
+                    } else {
+                        $tdTable .= '<td><span class="badge badge-success badge-pill">Ninguna</span></td>';
+                    }
+
+                    $tdTable .= '<td>
                     <div class="invoice-action">
                     <a onclick="$.ver(' . $item->id . ');"  title="Ver" class="invoice-action-view mr-1">
                     <i class="feather icon-eye"></i>
@@ -690,20 +690,20 @@ class PacientesController extends Controller
     {
         if (Auth::check()) {
             $data = request()->all();
-         
+
             $transaccion = Tratamientos::guardarTransaccion($data);
-            
-            $mediPago = Tratamientos::guardarMediosPago($data,$transaccion);
-        
+
+            $mediPago = Tratamientos::guardarMediosPago($data, $transaccion);
+
             $pagoServ = Servicios::updateSaldoServicio($data);
             $valorTotal = $pagoServ['valorTotal'];
             $collectServTerm = $pagoServ['collectServTerm'];
 
             foreach ($collectServTerm as $id) {
-                $ServTerm = Servicios::guardarServTerm($id,$transaccion);
+                $ServTerm = Servicios::guardarServTerm($id, $transaccion);
             }
 
-            $updatetrata = Tratamientos::updateTrata($data['tratamientoSel'],$valorTotal);
+            $updatetrata = Tratamientos::updateTrata($data['tratamientoSel'], $valorTotal);
 
             //consultas 
             $servTerminado = Servicios::ConultservTerminado($transaccion);
@@ -714,13 +714,35 @@ class PacientesController extends Controller
 
             if (request()->ajax()) {
                 return response()->json([
-                   'servTerminado' => $servTerminado,
-                   'medioPago' => $medioPago,
-                   'tratamiento' => $tratamiento,
-                   'transaccion' => $transaccion
+                    'servTerminado' => $servTerminado,
+                    'medioPago' => $medioPago,
+                    'tratamiento' => $tratamiento,
+                    'transaccion' => $transaccion
                 ]);
             }
-            
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+    public function CargarHistoricoTransacciones()
+    {
+        if (Auth::check()) {
+            $transaccion = request()->get('idTransaccion');
+
+            $servTerminado = Servicios::ConultservTerminado($transaccion);
+            $medioPago = Tratamientos::MediosPago($transaccion);
+            $transaccion = Tratamientos::buscTransaccion($transaccion);
+            $tratamiento = Tratamientos::busTatamientoRecaudo($transaccion->tratamiento);
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'servTerminado' => $servTerminado,
+                    'medioPago' => $medioPago,
+                    'tratamiento' => $tratamiento,
+                    'transaccion' => $transaccion
+                ]);
+            }
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
@@ -744,7 +766,7 @@ class PacientesController extends Controller
             }
 
             $servSeccion = Secciones::buscServSecc($idSecc);
-            
+
             $totServ = Secciones::busTotalSeccion($idSecc);
 
             if (request()->ajax()) {
@@ -885,7 +907,7 @@ class PacientesController extends Controller
             $detaCita = Citas::buscaCitasPacientes($idPaciente);
             $paciente = Pacientes::BuscarPaciente($idPaciente);
             $tratamientos = Tratamientos::TratamientosPacientes($idPaciente);
-    
+
             if (request()->ajax()) {
                 return response()->json([
                     'detaCita' => $detaCita,
@@ -937,7 +959,7 @@ class PacientesController extends Controller
             $formattedPacientes[] = ['id' => $pacient->id, 'text' => $pacient->text];
         }
 
-         return response()->json(['data' => $pacientes]);
+        return response()->json(['data' => $pacientes]);
     }
 
     public function sanear_string($string)

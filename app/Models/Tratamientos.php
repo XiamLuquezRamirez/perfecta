@@ -54,8 +54,16 @@ class Tratamientos extends Model
         return $respuesta;
     }
 
-    public static function transaccionesPacientes($id) {
-        
+    public static function transaccionesPacientes($idPac)
+    {
+
+        return  DB::connection('mysql')->table('tratamientos')
+            ->leftJoin("transaccion", "transaccion.tratamiento", "tratamientos.id")
+            ->where('tratamientos.paciente', $idPac)
+            ->where("transaccion.estado", "ACTIVO")
+            ->select("transaccion.*" , "tratamientos.nombre")
+            ->get();
+
     }
 
     public static function MediosPago($tran)
@@ -190,7 +198,7 @@ class Tratamientos extends Model
             ->leftJoin("profesionales", "profesionales.id", "tratamientos.profesional")
             ->leftJoin("especialidades", "especialidades.id", "tratamientos.especialidad")
             ->select("tratamientos.*", "profesionales.nombre AS nprofe", "especialidades.nombre AS nespecialidad")
-              ->where("paciente", $idPac)
+            ->where("paciente", $idPac)
             ->where('tratamientos.estado', '<>', 'Terminados')
             ->where('tratamientos.estado_reg', 'ACTIVO')
             ->get();
@@ -259,7 +267,7 @@ class Tratamientos extends Model
 
         return $recaudoMes;
     }
-    
+
     public static function recaudosCajaResumen($fecIni)
     {
         // Convierte la fecha de inicio a un objeto DateTime

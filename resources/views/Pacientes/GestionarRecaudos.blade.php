@@ -506,42 +506,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody id="tr-recaudosRealizados">
-                                                        <tr>
-                                                           
-                                                            <td class="align-middle">
-                                                                <span>shwellFlint@gmail.com</span>
-                                                            </td>
-                                                            <td class="align-middle">
-                                                                <span>450MB</span>
-                                                            </td>
-                                                            <td class="align-middle">
-                                                                <div class="progress my-75">
-                                                                    <div class="progress-bar progress-bar-striped bg-success"
-                                                                        role="progressbar" aria-valuenow="20"
-                                                                        aria-valuemin="20" aria-valuemax="100"
-                                                                        style="width:55%">55%</div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="align-middle">
-                                                                <span class="badge badge-success">Active</span>
-                                                            </td>
-                                                            <td class="align-middle">
-                                                                <div class="dropdown">
-                                                                    <span
-                                                                        class="feather icon-more-vertical dropdown-toggle"
-                                                                        id="dropdownMenuButton" data-toggle="dropdown"
-                                                                        aria-haspopup="true" aria-expanded="false">
-                                                                    </span>
-                                                                    <div class="dropdown-menu dropdown-menu-right"
-                                                                        aria-labelledby="dropdownMenuButton">
-                                                                        <a class="dropdown-item" href="#"><li class="fa fa-print"></li> Imprimir</a>
-                                                                            <a class="dropdown-item" href="#"><li class="fa fa-paper-plane-o"></li> Enviar</a>
-                                                                        <a class="dropdown-item" href="#"><li class="fa fa-trash-o"></li> Eliminar</a>
-                                                                    </div>
-                                                                </div>
-                                                                </span>
-                                                            </td>
-                                                        </tr>
+                                                        
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -580,6 +545,10 @@
         <!-- Tus campos del formulario aquí -->
     </form>
     <form action="{{ url('/AdminPacientes/TratamientosRecaudoDetalles') }}" id="formBuscDetTrata" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/AdminPacientes/CargarHistoricoTransacciones') }}" id="formCargarTransacciones" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
@@ -709,13 +678,70 @@
 
 
                             //TRATAMIENTOS REALIZADOS
-                            
+                            let recaudos = '';
+                        
+                            $.each(respuesta.recaudos, function(i, item) {
+                                console.log(item.nombre);
+                                recaudos+='<tr>'
+                                    +'<td class="align-middle">'
+                                    +'    <span>'+agregarCeros(item.id,5)+'</span>'
+                                    +'</td>'
+                                    +'<td class="align-middle">'
+                                    +'    <span>'+item.nombre+'</span>'
+                                    +'</td>'
+                                    +'<td class="align-middle">'
+                                    + item.created_at
+                                    +'</td>'
+                                    +'<td class="align-middle">'
+                                  + formatCurrency(item.pago_realizado, 'es-CO', 'COP')
+                                    +'</td>'
+                                    +'<td class="align-middle">'
+                                    +'    <div class="dropdown">'
+                                    +'        <span'
+                                    +'            class="feather icon-more-vertical dropdown-toggle"'
+                                    +'            id="dropdownMenuButton" data-toggle="dropdown"'
+                                    +'            aria-haspopup="true" aria-expanded="false">'
+                                    +'        </span>'
+                                    +'        <div class="dropdown-menu dropdown-menu-right"'
+                                    +'            aria-labelledby="dropdownMenuButton">'
+                                    +'            <a class="dropdown-item" onclick="$.printCompHistorico('+item.id+');"><li class="fa fa-print"></li> Imprimir</a>'
+                                    +'                <a class="dropdown-item" onclick="$.enviarCompHistorico('+item.id+');"><li class="fa fa-paper-plane-o"></li> Enviar</a>'
+                                    +'            <a class="dropdown-item" onclick="$.deleteCompHistorico('+item.id+');"><li class="fa fa-trash-o"></li> Eliminar</a>'
+                                    +'        </div>'
+                                    +'   </div>'
+                                    +'    </span>'
+                                    +'</td>'
+                                +' </tr>';
+                            });
+
+                            $("#tr-recaudosRealizados").html(recaudos);
                         }
                     });
 
                     $.checkRecaudos();
                 },
+                printCompHistorico: function (transa) {
 
+                    var form = $("#formCargarTransacciones");
+                    $("#idTransaccion").remove();
+                    form.append("<input type='hidden' id='idTransaccion' name='idTransaccion'  value='" + transa + "'>");
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            transaccionGlobal = respuesta;
+                            $.imprimirComprobante();
+                        }
+
+                    });
+
+                },
                 otroPago: function() {
                     var datTratameintos = document.getElementById(
                         'div-datTratameintos'
@@ -725,76 +751,66 @@
                     $.buscInfTratamientos(lastSelectedData.id);
                 },
                 imprimirComprobante: function() {
-                    var loader = document.getElementById('loader');
-                    loader.style.display = 'block';
-
-                    const image = document.getElementById('logoPerfecta');
-                    // Convert the image into a Base64 data URL
-                    const canvas = document.createElement('canvas');
-                    canvas.width = 600;
-                    canvas.height = 141;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(image, 0, 0);
-                    const base64data = canvas.toDataURL();
-                    console.log(base64data);
-
-                    // Definir el contenido del documento
-                    var docDefinition = {
-                        content: [{
-                                image: base64data, // Agrega tu logo aquí
-                                width: 200,
-                                margin: [0, 0, 0, 0],
-
-                            },
-                            {
-                                style: 'card',
-                                stack: [{
+                var loader = document.getElementById('loader');
+                loader.style.display = 'block';
+                
+                const image = document.getElementById('logoPerfecta');
+                // Convertir la imagen en una URL de datos Base64
+                const canvas = document.createElement('canvas');
+                canvas.width = 600;
+                canvas.height = 141;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(image, 0, 0);
+                const base64data = canvas.toDataURL();
+                
+                var docDefinition = {
+                    pageMargins: [40, 60, 40, 60], // Márgenes [izquierda, arriba, derecha, abajo]
+                    content: [{
+                            image: base64data,
+                            width: 200,
+                            margin: [0, 0, 0, 0],
+                            alignment: 'center', // Alineación centrada
+                        },
+                        {
+                            style: 'card',
+                            stack: [{
                                     style: 'cardBody',
                                     stack: [{
                                             style: 'cardHeader',
                                             stack: [{
                                                 columns: [{
                                                         width: '40%',
-                                                        stack: [{
-                                                                text: 'Comprobante de pago',
-                                                                style: 'header'
-                                                            },
-                                                            {
-                                                                text: 'PERFECTA S.A.S',
-                                                                style: 'subheader'
-                                                            }
+                                                        stack: [ {
+                                                            text: 'PERFECTA S.A.S',
+                                                            style: 'subheader',
+                                                            alignment: 'left', // Alineación centrada
+                                                        },
+                                                        {
+                                                            text: 'NIT: 1065643203' ,
+                                                            style: 'subheaderfecha',
+                                                        },
+                                                        {
+                                                            text: 'Teléfono: 312 8817962',
+                                                            style: 'subheaderfecha',
+                                                        }
                                                         ]
                                                     },
                                                     {
                                                         width: '60%',
                                                         stack: [{
-                                                                text: 'Comprobante #' +
-                                                                    agregarCeros(
-                                                                        transaccionGlobal
-                                                                        .transaccion
-                                                                        .id,
-                                                                        5
-                                                                    ),
-                                                                style: 'subheader'
+                                                                text: 'Comprobante #' + agregarCeros(transaccionGlobal.transaccion.id, 5),
+                                                                style: 'subheader',
                                                             },
                                                             {
-                                                                text: 'Fecha de creación: ' +
-                                                                    convertirFormatoFechaHora(
-                                                                        transaccionGlobal
-                                                                        .transaccion
-                                                                        .created_at
-                                                                    ),
-                                                                style: 'subheaderfecha'
+                                                                text: 'Fecha de creación: ' + convertirFormatoFechaHora(transaccionGlobal.transaccion.created_at),
+                                                                style: 'subheaderfecha',
                                                             },
                                                             {
-                                                                text: 'Fecha de impresión: ' +
-                                                                    convertirFormatoFechaHora(
-                                                                        new Date()
-                                                                    ),
-                                                                style: 'subheaderfecha'
+                                                                text: 'Fecha de impresión: ' + convertirFormatoFechaHora(new Date()),
+                                                                style: 'subheaderfecha',
                                                             }
                                                         ],
-                                                        alignment: 'right'
+                                                        alignment: 'right',
                                                     }
                                                 ]
                                             }]
@@ -807,40 +823,30 @@
                                                 x2: 515,
                                                 y2: 0,
                                                 lineWidth: 1,
-                                                lineColor: '#000'
+                                                lineColor: '#000',
                                             }]
                                         },
-
+                
                                         {
                                             style: 'invoiceAdressInfo',
                                             stack: [{
                                                 style: 'fromInfo',
                                                 stack: [{
                                                         style: 'infoTitle',
-                                                        text: 'Paciente'
+                                                        text: 'Paciente',
                                                     },
                                                     {
                                                         style: 'companyName',
                                                         stack: [{
-                                                            text: 'Identificación: ' +
-                                                                transaccionGlobal
-                                                                .tratamiento
-                                                                .identificacion,
-                                                            style: 'subheader'
+                                                            text: 'Identificación: ' + transaccionGlobal.tratamiento.identificacion,
+                                                            style: 'subheader',
                                                         }]
                                                     },
                                                     {
                                                         style: 'companyAddress',
                                                         stack: [{
-                                                            text: 'Nombre Paciente: ' +
-                                                                transaccionGlobal
-                                                                .tratamiento
-                                                                .npaciente +
-                                                                ' ' +
-                                                                transaccionGlobal
-                                                                .tratamiento
-                                                                .apellido,
-                                                            style: 'subheader'
+                                                            text: 'Nombre Paciente: ' + transaccionGlobal.tratamiento.npaciente + ' ' + transaccionGlobal.tratamiento.apellido,
+                                                            style: 'subheader',
                                                         }]
                                                     }
                                                 ]
@@ -853,36 +859,31 @@
                                                 y1: 0,
                                                 x2: 515,
                                                 y2: 0,
-                                                lineWidth: 0.3,
-                                                lineColor: '#000'
+                                                lineWidth: 1,
+                                                lineColor: '#000',
                                             }]
                                         },
-
+                
                                         {
                                             style: 'invoiceAdressInfo',
                                             stack: [{
                                                     style: 'fromInfo',
                                                     stack: [{
                                                             style: 'infoTitle',
-                                                            text: 'Tratamiento'
+                                                            text: 'Tratamiento',
                                                         },
                                                         {
                                                             style: 'companyName',
                                                             stack: [{
-                                                                text: transaccionGlobal
-                                                                    .tratamiento
-                                                                    .nombre,
-                                                                style: 'subheader'
+                                                                text: transaccionGlobal.tratamiento.nombre,
+                                                                style: 'subheader',
                                                             }]
                                                         },
                                                         {
                                                             style: 'companyEmail',
                                                             stack: [{
-                                                                text: 'Profesional: ' +
-                                                                    transaccionGlobal
-                                                                    .tratamiento
-                                                                    .nprofe,
-                                                                style: 'subheader'
+                                                                text: 'Profesional: ' + transaccionGlobal.tratamiento.nprofe,
+                                                                style: 'subheader',
                                                             }]
                                                         }
                                                     ]
@@ -892,15 +893,8 @@
                                                     stack: [{
                                                         style: 'companyName',
                                                         stack: [{
-                                                            text: 'Pago realizado: ' +
-                                                                formatCurrency(
-                                                                    transaccionGlobal
-                                                                    .transaccion
-                                                                    .pago_realizado,
-                                                                    'es-CO',
-                                                                    'COP'
-                                                                ),
-                                                            style: 'subheader'
+                                                            text: 'Pago realizado: ' + formatCurrency(transaccionGlobal.transaccion.pago_realizado, 'es-CO', 'COP'),
+                                                            style: 'subheader',
                                                         }]
                                                     }]
                                                 }
@@ -913,217 +907,203 @@
                                                 y1: 0,
                                                 x2: 515,
                                                 y2: 0,
-                                                lineWidth: 0.3,
-                                                lineColor: '#000'
+                                                lineWidth: 1,
+                                                lineColor: '#000',
                                             }]
                                         },
-
                                     ]
                                 }]
-                            }
+                            },
                         ],
                         styles: {
                             header: {
                                 fontSize: 18,
-                                bold: true
+                                bold: true,
                             },
                             subheader: {
                                 fontSize: 14,
-                                bold: true
+                                bold: true,
                             },
                             subheaderfecha: {
                                 fontSize: 10,
-                                bold: false
+                                bold: false,
                             },
                             card: {
-                                margin: [0, 10, 0, 10]
+                                margin: [0, 10, 0, 10],
                             },
                             cardBody: {
-                                margin: [20, 0, 20, 0]
+                                margin: [0, 0, 0, 0],
                             },
                             cardHeader: {
-                                margin: [0, 10, 0, 10]
-                            },
-                            invoiceLogoTitle: {
-                                margin: [0, 10, 0, 10]
+                                margin: [0, 10, 0, 10],
                             },
                             invoiceAdressInfo: {
-                                margin: [0, 5, 0, 5]
+                                margin: [0, 5, 0, 5],
                             },
                             fromInfo: {
-                                margin: [0, 0, 0, 0]
+                                margin: [0, 0, 0, 0],
                             },
                             infoTitle: {
                                 fontSize: 16,
-                                bold: true
+                                bold: true,
                             },
                             companyName: {
                                 fontSize: 14,
-                                bold: true
+                                bold: true,
                             },
                             companyAddress: {
-                                fontSize: 14
+                                fontSize: 14,
                             },
                             companyEmail: {
-                                fontSize: 14
+                                fontSize: 14,
                             },
                             toInfo: {
-                                margin: [0, 10, 0, 10]
+                                margin: [0, 10, 0, 10],
                             },
                             productDetailsTable: {
-                                margin: [0, 10, 0, 0]
-                            }
-                        }
+                                margin: [0, 10, 0, 0],
+                            },
+                        },
                     };
-
-
-                    let vtotal = 0;
-                    let referencia = '';
-
+                
+                let vtotal = 0;
+                let referencia = '';
+                
+                docDefinition.content.push({
+                    margin: [0, 0, 0, 10],
+                    text: 'Detalles medio de pago',
+                    style: 'header',
+                    alignment: 'left', // Alineación a la izquierda
+                });
+                
+                var separatorLine = {
+                    canvas: [{
+                        type: 'line',
+                        x1: 0,
+                        y1: 0,
+                        x2: 515,
+                        y2: 0,
+                        lineWidth: 1,
+                        lineColor: '#000',
+                    }]
+                };
+                
+                docDefinition.content.push(
+                    separatorLine, {
+                        margin: [0, 0, 0, 5],
+                        table: {
+                            headerRows: 1,
+                            widths: ['50%', '25%', '25%'],
+                            body: [
+                                ['Medio de pago', 'Referencia de pago', 'Valor']
+                            ],
+                        },
+                        layout: {
+                            hLineColor: function (i, node) {
+                                return '#FFF';
+                            },
+                            vLineColor: function (i, node) {
+                                return '#FFF';
+                            },
+                        },
+                    }
+                );
+                
+                $.each(transaccionGlobal.medioPago, function (i, item) {
+                    referencia = item.referencia !== null ? item.referencia : '---';
+                    docDefinition.content.push({
+                        table: {
+                            widths: ['50%', '25%', '25%'],
+                            body: [
+                                [item.medpago, referencia, formatCurrency(item.valor, 'es-CO', 'COP')]
+                            ],
+                        },
+                        layout: {
+                            hLineColor: function (i, node) {
+                                return i === 0 ? '#000' : '#FFF';
+                            },
+                            vLineColor: function (i, node) {
+                                return '#FFF';
+                            },
+                        },
+                    });
+                    vtotal = vtotal + item.valor;
+                });
+                
+                if (transaccionGlobal.servTerminado.length > 0) {
                     docDefinition.content.push({
                         canvas: [{
                             type: 'line',
                             x1: 0,
-                            y1: 0,
+                            y1: 10,
                             x2: 515,
-                            y2: 0,
+                            y2: 10,
                             lineWidth: 1,
-                            lineColor: '#000'
+                            lineColor: '#000',
                         }]
                     }, {
-                        margin: [20, 0, 0, 20],
-                        text: 'Detalles medio de pago',
-                        style: 'header'
+                        margin: [0, 10, 0, 10],
+                        text: 'Detalles de servicios abonados',
+                        style: 'header',
+                        alignment: 'left', // Alineación a la izquierda
                     });
-
-                    var separatorLine = {
-                        canvas: [{
-                            type: 'line',
-                            x1: 0,
-                            y1: 0,
-                            x2: 515,
-                            y2: 0,
-                            lineWidth: 1,
-                            lineColor: '#000'
-                        }]
-                    };
-
-                    // Agregar la sección Detalles medio de pago al contenido del documento
+                
                     docDefinition.content.push(
                         separatorLine, {
                             margin: [0, 0, 0, 5],
                             table: {
                                 headerRows: 1,
-                                widths: ['50%', '25%', '25%'],
+                                widths: ['10%', '70%', '20%'],
                                 body: [
-                                    ['Medio de pago', 'Referencia de pago', 'Valor']
-                                ]
+                                    ['#', 'Servicio', 'Valor']
+                                ],
                             },
                             layout: {
-                                hLineColor: function(i, node) {
+                                hLineColor: function (i, node) {
                                     return '#FFF';
                                 },
-                                vLineColor: function(i, node) {
+                                vLineColor: function (i, node) {
                                     return '#FFF';
-                                }
-                            }
+                                },
+                            },
                         }
                     );
-
-
-                    $.each(transaccionGlobal.medioPago, function(i, item) {
-                        referencia = item.referencia !== null ? item.referencia : "---";
+                
+                    $.each(transaccionGlobal.servTerminado, function (i, item) {
                         docDefinition.content.push({
                             table: {
-                                widths: ['50%', '25%', '25%'],
+                                widths: ['10%', '70%', '20%'],
                                 body: [
-                                    [item.medpago, referencia, formatCurrency(item
-                                        .valor, 'es-CO', 'COP')]
-                                ]
+                                    [i + 1, item.nombre, formatCurrency(item.valor, 'es-CO', 'COP')]
+                                ],
                             },
                             layout: {
-                                hLineColor: function(i, node) {
+                                hLineColor: function (i, node) {
                                     return i === 0 ? '#000' : '#FFF';
                                 },
-                                vLineColor: function(i, node) {
+                                vLineColor: function (i, node) {
                                     return '#FFF';
-                                }
-                            }
-                        });
-                        vtotal = vtotal + item.valor;
-                    });
-
-
-                    if (transaccionGlobal.servTerminado.length > 0) {
-                        docDefinition.content.push({
-                            margin: [20, 0, 0, 20],
-                            text: 'Detalles de servicios abonados',
-                            style: 'header'
-                        });
-
-                        docDefinition.content.push(
-                            separatorLine, {
-                                margin: [0, 0, 0, 5],
-                                table: {
-                                    headerRows: 1,
-                                    widths: ['10%', '70%', '20%'],
-                                    body: [
-                                        ['#', 'Servicio', 'Valor']
-                                    ]
                                 },
-                                layout: {
-                                    hLineColor: function(i, node) {
-                                        return '#FFF';
-                                    },
-                                    vLineColor: function(i, node) {
-                                        return '#FFF';
-                                    }
-                                }
-                            }
-                        );
-
-
-                        $.each(transaccionGlobal.servTerminado, function(i, item) {
-                            docDefinition.content.push({
-                                table: {
-                                    widths: ['10%', '70%', '20%'],
-                                    body: [
-                                        [i + 1, item.nombre, formatCurrency(item
-                                            .valor, 'es-CO', 'COP')]
-                                    ]
-                                },
-                                layout: {
-                                    hLineColor: function(i, node) {
-                                        return i === 0 ? '#000' : '#FFF';
-                                    },
-                                    vLineColor: function(i, node) {
-                                        return '#FFF';
-                                    }
-                                }
-                            });
-
+                            },
                         });
-                    }
-
-
-                    docDefinition.content.push({
-                        text: 'Valor Total: $ 25,000.00',
-                        style: 'header',
-                        alignment: 'right',
-                        margin: [0, 10, 0, 0]
                     });
-
-
-
-                    setTimeout(function() {
-                        // Ocultar el loader después de generar el PDF (simulación)
-                        loader.style.display = 'none';
-                    }, 3000);
-
-                    // Crear y descargar el PDF
-                    pdfMake.createPdf(docDefinition).download('comprobante_pago.pdf');
-
-
+                }
+                
+                docDefinition.content.push({
+                    text: 'Valor Total: ' + formatCurrency(vtotal, 'es-CO', 'COP'),
+                    style: 'header',
+                    alignment: 'right',
+                    margin: [0, 40, 0, 0],
+                });
+                
+                setTimeout(function () {
+                    // Ocultar el loader después de generar el PDF (simulación)
+                    loader.style.display = 'none';
+                }, 3000);
+                
+                // Crear y descargar el PDF
+                pdfMake.createPdf(docDefinition).download('comprobante_pago.pdf');
+                
                 },
                 checkRecaudos: function() {
                     $(".icheck-activity").iCheck({
