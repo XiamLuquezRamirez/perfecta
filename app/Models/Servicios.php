@@ -71,8 +71,6 @@ class Servicios extends Model
 
     $valorTotal = $valorTotal + $valorAbonoPrev;
     
-    
-
     foreach ($data["dataIds"] as $key => $val) {
      
         $consulSaldo = DB::connection('mysql')->table('servicios_tratamiento')
@@ -81,7 +79,6 @@ class Servicios extends Model
         
         $saldoServ = $consulSaldo->valor - $consulSaldo->pagado;
 
-       
         if($saldoServ <= $valorTotal){
             $respuesta = DB::connection('mysql')->table('servicios_tratamiento')->where('id', $data["dataIds"][$key])->update([
                 'pagado' => $consulSaldo->valor,
@@ -107,9 +104,8 @@ class Servicios extends Model
     ];
 
     return $resultado;
-
-
   }
+  
 
   public static function buscSeccServPac($idPaci)
   {

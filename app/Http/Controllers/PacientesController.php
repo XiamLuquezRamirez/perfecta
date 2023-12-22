@@ -335,12 +335,8 @@ class PacientesController extends Controller
                 ]);
             });
 
-
             /// Recaudos realizados al paciente
-
             $recaudos = Tratamientos::transaccionesPacientes($idPac);
-
-
 
             if (request()->ajax()) {
                 return response()->json([
@@ -515,7 +511,6 @@ class PacientesController extends Controller
                         <div class="card-body">
                           <table class="table mb-5">
                                     <tbody id="trServicioSeccion' . $seccion->id . '">
-                                        
 
                                     </tbody>
                                 </table>
@@ -708,11 +703,11 @@ class PacientesController extends Controller
     {
         if (Auth::check()) {
             $data = request()->all();
-            dd($data);
-
+           
             $transaccion = Tratamientos::guardarTransaccion($data);
 
             $mediPago = Tratamientos::guardarMediosPago($data, $transaccion);
+            $servAfec = Tratamientos::guardarServAfectados($data, $transaccion);
 
             $pagoServ = Servicios::updateSaldoServicio($data);
             $valorTotal = $pagoServ['valorTotal'];

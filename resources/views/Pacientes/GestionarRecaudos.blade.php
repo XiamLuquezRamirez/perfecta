@@ -870,7 +870,7 @@
                                                     {
                                                         style: 'companyAddress',
                                                         stack: [{
-                                                            text: 'Nombre Paciente: ' + transaccionGlobal.tratamiento.npaciente + ' ' + transaccionGlobal.tratamiento.apellido,
+                                                            text: 'Nombre: ' + transaccionGlobal.tratamiento.npaciente + ' ' + transaccionGlobal.tratamiento.apellido,
                                                             style: 'subheader',
                                                         }]
                                                     }

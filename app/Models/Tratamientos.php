@@ -61,20 +61,19 @@ class Tratamientos extends Model
             ->leftJoin("transaccion", "transaccion.tratamiento", "tratamientos.id")
             ->where('tratamientos.paciente', $idPac)
             ->where("transaccion.estado", "ACTIVO")
-            ->select("transaccion.*" , "tratamientos.nombre")
+            ->select("transaccion.*", "tratamientos.nombre")
             ->orderBy("transaccion.id", "DESC")
             ->get();
-
     }
 
     public static function MediosPago($tran)
     {
         $serv = DB::connection("mysql")->select("SELECT  CASE WHEN medio_pago = 'e' THEN 'Efectivo' 
         WHEN medio_pago = 'tc' THEN 'Tarjeta de crédito'
-        WHEN medio_pago = 'td' THEN 'Tarjeta de débito' 
-        WHEN medio_pago = 't' THEN 'Transferencia' 
+        WHEN medio_pago = 'td' THEN 'Tarjeta de débito'
+        WHEN medio_pago = 't' THEN 'Transferencia'
         END AS medpago, valor, referencia
-         FROM medio_pagos_tratamiento  
+         FROM medio_pagos_tratamiento
         WHERE  transaccion=" . $tran);
 
         return $serv;
@@ -95,10 +94,21 @@ class Tratamientos extends Model
 
         return $respuesta;
     }
+    public static function guardarServAfectados($data, $idTransaccion)
+    {
+
+        foreach ($data["dataIds"] as $key => $val) {
+            $respuesta = DB::connection('mysql')->table('pagos_afectados_transaccion')->insert([
+                'transaccion' => $idTransaccion,
+                'servicio' => $data["dataIds"][$key],
+            ]);
+        }
+
+        return $respuesta;
+    }
 
     public static function eliminarTrata($trat)
     {
-
         $respuesta = DB::connection('mysql')->table('tratamientos')->where('id', $trat)->update([
             'estado_reg' => 'ELIMINADO',
         ]);
@@ -106,10 +116,36 @@ class Tratamientos extends Model
     }
     public static function delTransaccion($transaccion)
     {
-
         $valRest = $transaccion->pago_realizado;
-        
+        $servTratamiento = DB::connection('mysql')->table('pagos_afectados_transaccion')
+            ->where('transaccion', $transaccion->id)
+            ->get();
 
+        dd($servTratamiento);
+        foreach ($servTratamiento as $dataServ) {
+            $newValor = $dataServ->pagado - $valRest;
+
+            if ($newValor < 0) {
+                $respuesta = DB::connection('mysql')->table('servicios_tratamiento')->where('id', $dataServ->id)->update([
+                    'pagado' => '0',
+                ]);
+
+                $delServPago = DB::connection('mysql')->table('servicios_abonados')
+                ->where('transaccion', $transaccion->id)
+                ->where('servicio', $dataServ->id)
+                ->delete();
+
+                $newValor = abs($newValor);
+
+            }else{
+                $respuesta = DB::connection('mysql')->table('servicios_tratamiento')->where('id', $dataServ->id)->update([
+                    'pagado' => $newValor,
+                ]);
+            }
+            
+            $valRest = $newValor;
+            
+        }
 
         $respuesta = DB::connection('mysql')->table('tratamientos')->where('id', $valRest)->update([
             'estado_reg' => 'ELIMINADO',
@@ -140,7 +176,6 @@ class Tratamientos extends Model
                 'estado_pago' => 'Pagado'
             ]);
         }
-
 
         return "ok";
     }
@@ -246,7 +281,7 @@ class Tratamientos extends Model
         $recaudoHoy = DB::connection('mysql')
             ->table('transaccion')
             ->whereDate('created_at', now()->format('Y-m-d'))
-            ->where("estado","ACTIVO")
+            ->where("estado", "ACTIVO")
             ->sum('pago_realizado');
 
 
@@ -262,7 +297,7 @@ class Tratamientos extends Model
         $recaudoMes = DB::connection('mysql')
             ->table('transaccion')
             ->whereBetween('created_at', [$primerDiaDelMes, $ultimoDiaDelMes])
-            ->where("estado","ACTIVO")
+            ->where("estado", "ACTIVO")
             ->sum('pago_realizado');
 
         return $recaudoMes;
@@ -278,7 +313,7 @@ class Tratamientos extends Model
         $recaudoMes = DB::connection('mysql')
             ->table('transaccion')
             ->whereBetween('created_at', [$fechaInicio->format('Y-m-d H:i:s'), $fechaFin->format('Y-m-d H:i:s')])
-            ->where("estado","ACTIVO")
+            ->where("estado", "ACTIVO")
             ->sum('pago_realizado');
 
         return $recaudoMes;
@@ -299,8 +334,6 @@ class Tratamientos extends Model
 
         return $recaudoMes;
     }
-
-
 
     public static function TratamientosPacientesOtr($idPac)
     {
