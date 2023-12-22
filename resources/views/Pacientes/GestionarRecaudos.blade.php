@@ -552,6 +552,10 @@
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
+    <form action="{{ url('/AdminPacientes/DeleteTransaccion') }}" id="formDeleteTransaccion" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
 
 @endsection
 
@@ -719,6 +723,27 @@
                     });
 
                     $.checkRecaudos();
+                },
+                deleteCompHistorico: function(transa){
+
+                    var form = $("#formDeleteTransaccion");
+                    $("#idTransaccion").remove();
+                    form.append("<input type='hidden' id='idTransaccion' name='idTransaccion'  value='" + transa + "'>");
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                         
+                        }
+
+                    });
+
                 },
                 printCompHistorico: function (transa) {
 

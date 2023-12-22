@@ -99,6 +99,7 @@ Route::post('/AdminPacientes/EliminarSeccion', [PacientesController::class,'Elim
 Route::post('/AdminPacientes/EliminarTratamiento', [PacientesController::class,'EliminarTratamiento']);
 Route::post('/AdminPacientes/ConsultarEvoluciones', [PacientesController::class,'ConsultarEvoluciones']);
 Route::post('/AdminPacientes/CargarHistoricoTransacciones', [PacientesController::class,'CargarHistoricoTransacciones']);
+Route::post('/AdminPacientes/DeleteTransaccion', [PacientesController::class,'DeleteTransaccion']);
 
 
 // GESTIONAR RECAUDOS

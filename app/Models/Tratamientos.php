@@ -62,6 +62,7 @@ class Tratamientos extends Model
             ->where('tratamientos.paciente', $idPac)
             ->where("transaccion.estado", "ACTIVO")
             ->select("transaccion.*" , "tratamientos.nombre")
+            ->orderBy("transaccion.id", "DESC")
             ->get();
 
     }
@@ -99,6 +100,18 @@ class Tratamientos extends Model
     {
 
         $respuesta = DB::connection('mysql')->table('tratamientos')->where('id', $trat)->update([
+            'estado_reg' => 'ELIMINADO',
+        ]);
+        return "ok";
+    }
+    public static function delTransaccion($transaccion)
+    {
+
+        $valRest = $transaccion->pago_realizado;
+        
+
+
+        $respuesta = DB::connection('mysql')->table('tratamientos')->where('id', $valRest)->update([
             'estado_reg' => 'ELIMINADO',
         ]);
         return "ok";
@@ -233,6 +246,7 @@ class Tratamientos extends Model
         $recaudoHoy = DB::connection('mysql')
             ->table('transaccion')
             ->whereDate('created_at', now()->format('Y-m-d'))
+            ->where("estado","ACTIVO")
             ->sum('pago_realizado');
 
 
@@ -248,6 +262,7 @@ class Tratamientos extends Model
         $recaudoMes = DB::connection('mysql')
             ->table('transaccion')
             ->whereBetween('created_at', [$primerDiaDelMes, $ultimoDiaDelMes])
+            ->where("estado","ACTIVO")
             ->sum('pago_realizado');
 
         return $recaudoMes;
@@ -263,6 +278,7 @@ class Tratamientos extends Model
         $recaudoMes = DB::connection('mysql')
             ->table('transaccion')
             ->whereBetween('created_at', [$fechaInicio->format('Y-m-d H:i:s'), $fechaFin->format('Y-m-d H:i:s')])
+            ->where("estado","ACTIVO")
             ->sum('pago_realizado');
 
         return $recaudoMes;

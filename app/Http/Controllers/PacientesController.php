@@ -66,6 +66,24 @@ class PacientesController extends Controller
         }
     }
 
+    public function DeleteTransaccion()
+    {
+        if (Auth::check()) {
+            $idTrasa = request()->get('idTransaccion');
+
+            $transaccion = Tratamientos::buscTransaccion($idTrasa);
+            $delTransaccion = Tratamientos::delTransaccion($transaccion);
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'transaccion' => $transaccion,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
     public function AllEspecialidades()
     {
         if (Auth::check()) {
@@ -690,6 +708,7 @@ class PacientesController extends Controller
     {
         if (Auth::check()) {
             $data = request()->all();
+            dd($data);
 
             $transaccion = Tratamientos::guardarTransaccion($data);
 
