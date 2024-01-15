@@ -27,7 +27,7 @@ class AdminitraccionController extends Controller
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
-    
+
     public function Servicios()
     {
         if (Auth::check()) {
@@ -75,20 +75,20 @@ class AdminitraccionController extends Controller
     public function ValidarProfesional()
     {
         if (Auth::check()) {
-        $idProf = request()->get('idProf');
-        $pacientes = DB::connection('mysql')
-            ->table('profesionales')
-            ->where('identificacion', $idProf)
-            ->where('estado', 'ACTIVO')
-            ->get();
+            $idProf = request()->get('idProf');
+            $pacientes = DB::connection('mysql')
+                ->table('profesionales')
+                ->where('identificacion', $idProf)
+                ->where('estado', 'ACTIVO')
+                ->get();
 
-             return response()->json([
-            'pacientes' => $pacientes->count(),
+            return response()->json([
+                'pacientes' => $pacientes->count(),
 
-        ]);
-    } else {
-        return redirect("/")->with("error", "Su Sesión ha Terminado");
-    }
+            ]);
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
     }
 
     public function CargarProfesionales()
@@ -222,18 +222,18 @@ class AdminitraccionController extends Controller
 
             $servicios = DB::connection('mysql')
                 ->table('cajas')
-                ->leftJoin("users", "users.id","cajas.usuario")
+                ->leftJoin("users", "users.id", "cajas.usuario")
                 ->select("cajas.*", "users.nombre_usuario")
                 ->where('estado_reg', 'ACTIVO');
 
-                $ultimaCaja = DB::connection('mysql')
+            $ultimaCaja = DB::connection('mysql')
                 ->table('cajas')
                 ->latest()
                 ->first();
-                $saldoAnterior = 0;
-                if($ultimaCaja){
-                    $saldoAnterior = $ultimaCaja->saldo_cierre;
-                }
+            $saldoAnterior = 0;
+            if ($ultimaCaja) {
+                $saldoAnterior = $ultimaCaja->saldo_cierre;
+            }
 
             $ListServicios = $servicios->paginate($perPage, ['*'], 'page', $page);
 
@@ -248,29 +248,28 @@ class AdminitraccionController extends Controller
                     $fechaApertura = $item->fecha_apertura;
 
                     $saldo_acomulado = Tratamientos::recaudoCaja($fechaApertura);
-                    $gastos = Gastos::GastosCaja($fechaApertura);   
-                       
-                    $saldo=($saldo_inicial+$saldo_acomulado);
-                   
-                    $saldo=$saldo-$gastos;
-                  
+                    $gastos = Gastos::GastosCaja($fechaApertura);
+
+                    $saldo = ($saldo_inicial + $saldo_acomulado);
+
+                    $saldo = $saldo - $gastos;
+
 
                     $tdTable .= '<tr>
-                <td><span class="invoice-date">' .str_pad($j, 5, '0', STR_PAD_LEFT) . '</span></td>
+                <td><span class="invoice-date">' . str_pad($j, 5, '0', STR_PAD_LEFT) . '</span></td>
                 <td><span class="invoice-date">' . $fechaApertura . '</span></td>
                 <td><span class="invoice-date">' . $item->fecha_cierre . '</span></td>
-                <td><span class="invoice-date">$ ' . number_format($item->saldo_inicial, 2, ',', '.'). '</span></td>
-                <td><span class="invoice-date">$ ' . number_format($saldo_acomulado, 2, ',', '.'). '</span></td>
+                <td><span class="invoice-date">$ ' . number_format($item->saldo_inicial, 2, ',', '.') . '</span></td>
+                <td><span class="invoice-date">$ ' . number_format($saldo_acomulado, 2, ',', '.') . '</span></td>
                 <td><span class="invoice-date">$ ' . number_format($gastos, 2, ',', '.')  . '</span></td>
                 <td><span class="invoice-date">$ ' . number_format($saldo, 2, ',', '.') . '</span></td>';
-                if($item->estado_caja == "Abierta"){
-                    $tdTable.='<td><span class="invoice-date"><span class="badge badge-success"> ' . $item->estado_caja . '</span></span></td>';
-                }else{
-                    $tdTable.='<td><span class="invoice-date"><span class="badge badge-warning"> ' . $item->estado_caja . '</span></span></td>';
-                  
-                }
-                
-                $tdTable.='<td>
+                    if ($item->estado_caja == "Abierta") {
+                        $tdTable .= '<td><span class="invoice-date"><span class="badge badge-success"> ' . $item->estado_caja . '</span></span></td>';
+                    } else {
+                        $tdTable .= '<td><span class="invoice-date"><span class="badge badge-warning"> ' . $item->estado_caja . '</span></span></td>';
+                    }
+
+                    $tdTable .= '<td>
                     <div class="invoice-action">
 
                     <a onclick="$.verDetalle(' . $item->id . ');" style="color:#009c9f; title="Editar" class="invoice-action-edit cursor-pointer mr-1">
@@ -305,17 +304,17 @@ class AdminitraccionController extends Controller
             $page = request()->get('page', 1);
             $search = request()->get('search');
             $fecha = request()->get('fecBusc');
-        $fechaPago = date("Y-m-d", strtotime(str_replace('/', '-',  $fecha)));
-            
+            $fechaPago = date("Y-m-d", strtotime(str_replace('/', '-',  $fecha)));
+
             if (!is_numeric($page)) {
                 $page = 1; // Establecer un valor predeterminado si no es numérico
             }
 
             $gastos = DB::connection('mysql')
                 ->table('gastos')
-                ->leftJoin("categorias", "categorias.id","gastos.categoria")
+                ->leftJoin("categorias", "categorias.id", "gastos.categoria")
                 ->where('gastos.estado', 'ACTIVO')
-                ->select('gastos.*','categorias.descripcion AS desgasto');
+                ->select('gastos.*', 'categorias.descripcion AS desgasto');
             if ($search) {
                 $gastos->where('gastos.descripcion', 'LIKE', '%' . $search . '%');
                 $gastos->where('categorias.descripcion', 'LIKE', '%' . $search . '%');
@@ -331,7 +330,7 @@ class AdminitraccionController extends Controller
 
             foreach ($ListGastos as $i => $item) {
                 if (!is_null($item)) {
-                    $total= $total+$item->valor;
+                    $total = $total + $item->valor;
                     $numero_formateado = number_format($item->valor, 2, ',', '.');
                     $fecha_gasto = date('d/m/Y', strtotime($item->fecha_gasto));
                     $fecha_pago = date('d/m/Y', strtotime($item->fecha_pago));
@@ -394,11 +393,11 @@ class AdminitraccionController extends Controller
             $idCaja = request()->get('idCaja');
             $caja = Cajas::BuscarCajas($idCaja);
 
-           //recaudo
+            //recaudo
             $recaudos = Tratamientos::recaudosCajaResumen($caja->fecha_apertura);
-            
-           //gastos
-           $gastos = Gastos::GastosCaja($caja->fecha_apertura); 
+
+            //gastos
+            $gastos = Gastos::GastosCaja($caja->fecha_apertura);
 
 
             if (request()->ajax()) {
@@ -468,19 +467,33 @@ class AdminitraccionController extends Controller
     public function CargarDatos()
     {
         if (Auth::check()) {
-           
+
             $pacientes = Pacientes::BuscarPacienteCita();
             $citasHoy = Citas::AllCitasHoy();
             $recaudosHoy = Tratamientos::recaudosHoy();
+            $recaudosAyer = Tratamientos::recaudosAyer();
             $recaudosMes = Tratamientos::recaudosMes();
-            
-          
+
+            $recaudosMesAnte = Tratamientos::recaudosMesAnte();
+
+            $porcentajeCambioMes = 0; // Inicializar el porcentaje a cero para evitar divisiones por cero
+            if ($recaudosMesAnte != 0) {
+                $porcentajeCambioMes = (($recaudosMes - $recaudosMesAnte) / abs($recaudosMesAnte)) * 100;
+            }
+            $porcentajeCambioDia = 0; // Inicializar el porcentaje a cero para evitar divisiones por cero
+            if ($recaudosAyer != 0) {
+                $porcentajeCambioDia = (($recaudosHoy - $recaudosAyer) / abs($recaudosAyer)) * 100;
+            }
+
+
             if (request()->ajax()) {
                 return response()->json([
                     'pacientes' => $pacientes->count(),
                     'citasHoy' => $citasHoy->count(),
                     'recaudosHoy' => $recaudosHoy,
                     'recaudosMes' => $recaudosMes,
+                    'porcentajeCambioMes' => $porcentajeCambioMes,
+                    'porcentajeCambioDia' => $porcentajeCambioDia
                 ]);
             }
         } else {
@@ -527,12 +540,12 @@ class AdminitraccionController extends Controller
             $data = request()->all();
             $idCategoria = $data['idCategoria'];
 
-            if ($data['accionCate'] == "agregar") {               
+            if ($data['accionCate'] == "agregar") {
                 $respuesta = Categorias::guardar($data);
 
                 $idCategoria = $respuesta;
             } else {
-              
+
                 $respuesta = Categorias::editar($data);
             }
 
@@ -559,12 +572,12 @@ class AdminitraccionController extends Controller
             $data = request()->all();
             $idGastos = $data['idGastos'];
 
-            if ($data['accion'] == "agregar") {               
+            if ($data['accion'] == "agregar") {
                 $respuesta = Gastos::guardar($data);
 
                 $idGastos = $respuesta;
             } else {
-              
+
                 $respuesta = Gastos::editar($data);
             }
 
@@ -707,7 +720,7 @@ class AdminitraccionController extends Controller
     public function CierreCaja()
     {
         if (Auth::check()) {
-           
+
             $data = request()->all();
             $gastos = Cajas::CambioEstado($data);
             if (request()->ajax()) {

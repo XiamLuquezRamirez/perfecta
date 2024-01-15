@@ -51,7 +51,8 @@ class PacientesController extends Controller
         }
     }
 
-    public function updateServiciosTerminados() {
+    public function updateServiciosTerminados()
+    {
         if (Auth::check()) {
             $servicio = Tratamientos::AllServiciosTermiandos();
 
@@ -718,23 +719,22 @@ class PacientesController extends Controller
     {
         if (Auth::check()) {
             $data = request()->all();
-           
-            $transaccion = Tratamientos::guardarTransaccion($data);
 
+            $transaccion = Tratamientos::guardarTransaccion($data);
             $mediPago = Tratamientos::guardarMediosPago($data, $transaccion);
-     
+
 
             $pagoServ = Servicios::updateSaldoServicio($data);
             $valorTotal = $pagoServ['valorTotal'];
             $collectServTerm = $pagoServ['collectServTerm'];
             $collectServAfec = $pagoServ['collectServAfec'];
 
-           
-            
+
+
             foreach ($collectServTerm as $id) {
                 $ServTerm = Servicios::guardarServTerm($id, $transaccion);
             }
-           
+
             foreach ($collectServAfec as $item) {
                 $servAfec = Tratamientos::guardarServAfectados($item['servicio'], $item['valorServicio'], $transaccion);
             }
@@ -761,7 +761,6 @@ class PacientesController extends Controller
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
-
     public function CargarHistoricoTransacciones()
     {
         if (Auth::check()) {

@@ -45,8 +45,7 @@
                                         <h3 id="recaudoHoy" class="heading-text text-bold-600">$ 0,00</h3>
                                         <p class="sub-heading">Recaudo hoy</p>
                                     </div>
-                                    <span class="inc-dec-percentage">
-                                        <small class="success"><i class="fa fa-long-arrow-up"></i> 0%</small>
+                                    <span class="inc-dec-percentage" id="porRecaudoDia">
                                     </span>
                                 </div>
                             </div>
@@ -59,8 +58,8 @@
                                         <h3 id="recaudoMes" class="heading-text text-bold-600">$ 0,00</h3>
                                         <p class="sub-heading">Recaudo Mes</p>
                                     </div>
-                                    <span class="inc-dec-percentage">
-                                        <small class="danger"><i class="fa fa-long-arrow-down"></i> 0%</small>
+                                    <span class="inc-dec-percentage" id="porRecaudoMes">
+                                       
                                     </span>
                                 </div>
                             </div>
@@ -2002,10 +2001,24 @@
                                 'es-CO', 'COP'));
                             $('#recaudoMes').html(formatCurrency(respuesta.recaudosMes,
                                 'es-CO', 'COP'));
+
+                                //DIFERENCIA RECAUDO MES
+                                if(respuesta.porcentajeCambioMes >= 0){
+                                    $("#porRecaudoMes").html('<small class="success" ><i class="fa fa-long-arrow-up"></i> '+Math.round(respuesta.porcentajeCambioMes)+'%</small>');
+                                }else{
+                                    let valRes = (respuesta.porcentajeCambioMes) * -1;
+                                    $("#porRecaudoMes").html('<small class="danger" ><i class="fa fa-long-arrow-down"></i> '+Math.round(valRes)+'%</small>');
+                                }
+
+                                  //DIFERENCIA RECAUDO DIA
+                                if(respuesta.porcentajeCambioDia >= 0){
+                                    $("#porRecaudoDia").html(' <small class="success" ><i class="fa fa-long-arrow-up"></i> '+ Math.round(respuesta.porcentajeCambioDia)+'%</small>');
+                                }else{
+                                    let valResDia = (respuesta.porcentajeCambioDia) * -1;
+                                    $("#porRecaudoDia").html('<small class="danger" ><i class="fa fa-long-arrow-down"></i> '+Math.round(valResDia)+'%</small>');
+                                }
                         }
                     });
-
-
                 }
             });
 

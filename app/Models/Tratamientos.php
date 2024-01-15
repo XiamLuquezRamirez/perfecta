@@ -294,6 +294,16 @@ class Tratamientos extends Model
 
         return $recaudoHoy;
     }
+    public static function recaudosAyer()
+    {
+        $recaudoHoy = DB::connection('mysql')
+            ->table('transaccion')
+            ->whereDate('created_at', now()->subDay()->format('Y-m-d'))
+            ->where("estado", "ACTIVO")
+            ->sum('pago_realizado');
+
+        return $recaudoHoy;
+    }
 
     public static function recaudosMes()
     {
@@ -308,6 +318,21 @@ class Tratamientos extends Model
 
         return $recaudoMes;
     }
+    
+    public static function recaudosMesAnte()
+    {
+        $primerDiaDelMesAnterior = now()->subMonth()->startOfMonth();
+        $ultimoDiaDelMesAnterior = now()->subMonth()->endOfMonth();
+
+        $recaudoMes = DB::connection('mysql')
+            ->table('transaccion')
+            ->whereBetween('created_at', [$primerDiaDelMesAnterior, $ultimoDiaDelMesAnterior])
+            ->where("estado", "ACTIVO")
+            ->sum('pago_realizado');
+
+        return $recaudoMes;
+    }
+
     public static function recaudoCaja($fecIni)
     {
         // Convierte la fecha de inicio a un objeto DateTime
