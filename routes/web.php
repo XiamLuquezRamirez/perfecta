@@ -25,6 +25,10 @@ Route::get('/', function () {
 Route::post('/Login', [UsuariosController::class,'Login']);
 Route::get('/Logout', [UsuariosController::class,'Logout']);
 Route::get('/Administracion', [UsuariosController::class,'Administracion']);
+Route::get('/Administracion/perfil', [UsuariosController::class,'perfil']);
+Route::post('/Administracion/VerificarUsuario', [UsuariosController::class,'VerificarUsuario']);
+Route::post('/Administracion/UpdatePerfil', [UsuariosController::class,'UpdatePerfil']);
+
 
 ///GESTION PACIENTES
 Route::get('/AdminPacientes/Pacientes', [PacientesController::class,'Pacientes']);
@@ -100,6 +104,7 @@ Route::post('/AdminPacientes/EliminarTratamiento', [PacientesController::class,'
 Route::post('/AdminPacientes/ConsultarEvoluciones', [PacientesController::class,'ConsultarEvoluciones']);
 Route::post('/AdminPacientes/CargarHistoricoTransacciones', [PacientesController::class,'CargarHistoricoTransacciones']);
 Route::post('/AdminPacientes/DeleteTransaccion', [PacientesController::class,'DeleteTransaccion']);
+Route::post('/AdminPacientes/updateServiciosTerminados', [PacientesController::class,'updateServiciosTerminados']);
 
 
 // GESTIONAR RECAUDOS

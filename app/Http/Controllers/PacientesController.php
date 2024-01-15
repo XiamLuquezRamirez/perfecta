@@ -51,6 +51,21 @@ class PacientesController extends Controller
         }
     }
 
+    public function updateServiciosTerminados() {
+        if (Auth::check()) {
+            $servicio = Tratamientos::AllServiciosTermiandos();
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'servicio' => $servicio,
+                    'cantserv' => $servicio->count()
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
     public function AllProfesionales()
     {
         if (Auth::check()) {
@@ -707,15 +722,23 @@ class PacientesController extends Controller
             $transaccion = Tratamientos::guardarTransaccion($data);
 
             $mediPago = Tratamientos::guardarMediosPago($data, $transaccion);
-            $servAfec = Tratamientos::guardarServAfectados($data, $transaccion);
+     
 
             $pagoServ = Servicios::updateSaldoServicio($data);
             $valorTotal = $pagoServ['valorTotal'];
             $collectServTerm = $pagoServ['collectServTerm'];
+            $collectServAfec = $pagoServ['collectServAfec'];
 
+           
+            
             foreach ($collectServTerm as $id) {
                 $ServTerm = Servicios::guardarServTerm($id, $transaccion);
             }
+           
+            foreach ($collectServAfec as $item) {
+                $servAfec = Tratamientos::guardarServAfectados($item['servicio'], $item['valorServicio'], $transaccion);
+            }
+
 
             $updatetrata = Tratamientos::updateTrata($data['tratamientoSel'], $valorTotal);
 

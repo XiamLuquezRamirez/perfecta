@@ -803,6 +803,10 @@
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
+    <form action="{{ url('/AdminPacientes/updateServiciosTerminados') }}" id="formServTerminados" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
 
 @endsection
 
@@ -854,7 +858,7 @@
                 }
             });
 
-
+       
 
             var fechaActual = new Date().toISOString().split("T")[0];
             var calendarE3 = document.getElementById("fc-agenda-views");
@@ -2020,6 +2024,13 @@
             return (patron.test(te) || tecla == 9 || tecla == 8 || tecla == 37 || tecla == 39 || tecla == 44);
         }
 
+        function verNotifiPaci(paci){
+            localStorage.clear();
+            localStorage.setItem('idPaciente', paci);
+            PEDGITALURL = '{{ url('/AdminPacientes/Recaudos') }}';
+            const nuevaPestana = window.open(PEDGITALURL, '_blank');
+        }
+
         function formatCurrency(number, locale, currencySymbol) {
             return new Intl.NumberFormat(locale, {
                 style: 'currency',
@@ -2078,5 +2089,5 @@
         }
     </script>
 
-    </script>
+
 @endsection

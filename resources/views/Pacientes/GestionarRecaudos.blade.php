@@ -5,6 +5,7 @@
     <input type="hidden" id="Ruta" data-ruta="{{ asset('/app-assets/') }}" />
     <input type="hidden" id="RutaTotal" data-ruta="{{ asset('/') }}" />
     <input type="hidden" id="accion" value="" />
+    <input type="hidden" id="idPaciente" value="" />
     <div class="content-header row">
         <div class="content-header-left col-md-6 col-12 mb-2">
             <h3 class="content-header-title mb-0">Gestionar Recaudos</h3>
@@ -516,15 +517,7 @@
                                     </div>
                                 </div>
                             </div>
-
-
-
-
-
-
                     </section>
-
-
                 </div>
             </div>
         </div>
@@ -557,6 +550,11 @@
         <!-- Tus campos del formulario aquí -->
     </form>
 
+    <form action="{{ url('/AdminPacientes/updateServiciosTerminados') }}" id="formServTerminados" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+
 @endsection
 
 @section('scripts')
@@ -585,6 +583,7 @@
                     ); // Reemplaza 'miDiv' con el ID de tu div
                     datTratameintos.style.filter = 'none';
                     $.atrasTratamiento();
+                    $("#idPaciente").val(lastSelectedData.id);
                     $.buscInfTratamientos(lastSelectedData.id);
                 }
             }
@@ -686,7 +685,7 @@
                         
                             $.each(respuesta.recaudos, function(i, item) {
                                 console.log(item.nombre);
-                                recaudos+='<tr>'
+                                recaudos+='<tr id="trTransaccion'+item.id+'">'
                                     +'<td class="align-middle">'
                                     +'    <span>'+agregarCeros(item.id,5)+'</span>'
                                     +'</td>'
@@ -726,6 +725,35 @@
                 },
                 deleteCompHistorico: function(transa){
 
+
+                    Swal.fire({
+                        title: "Esta seguro de Eliminar este registro?",
+                        text: "¡No podrás revertir esto!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Si, eliminar!",
+                        cancelButtonText: "Cancelar",
+                        confirmButtonClass: "btn btn-warning",
+                        cancelButtonClass: "btn btn-danger ml-1",
+                        buttonsStyling: false
+                    }).then(function(result) {
+                        if (result.value) {
+                            $.procederEliminarServ(transa);
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                            Swal.fire({
+                                title: "Cancelado",
+                                text: "Tu registro está a salvo ;)",
+                                type: "error",
+                                confirmButtonClass: "btn btn-success"
+                            });
+                        }
+                    });
+                },
+
+                procederEliminarServ: function(transa){
+
                     var form = $("#formDeleteTransaccion");
                     $("#idTransaccion").remove();
                     form.append("<input type='hidden' id='idTransaccion' name='idTransaccion'  value='" + transa + "'>");
@@ -739,7 +767,16 @@
                         async: false,
                         dataType: "json",
                         success: function(respuesta) {
-                         
+
+                            $("#trTransaccion"+transa).remove();
+                            Swal.fire({
+                                type: "success",
+                                title: "Eliminado!",
+                                text: "El Registro fue eliminado correctamente.",
+                                confirmButtonClass: "btn btn-success"
+                            });
+
+                            $.buscInfTratamientos($("#idPaciente").val());
                         }
 
                     });
@@ -773,7 +810,7 @@
                     ); // Reemplaza 'miDiv' con el ID de tu div
                     datTratameintos.style.filter = 'none';
                     $.atrasTratamiento();
-                    $.buscInfTratamientos(lastSelectedData.id);
+                    $.buscInfTratamientos($("#idPaciente").val());
                 },
                 imprimirComprobante: function() {
                 var loader = document.getElementById('loader');
@@ -1421,9 +1458,7 @@
 
                             transaccionGlobal = respuesta;
 
-                            console.log(transaccionGlobal);
-
-                            if (respuesta) {
+                           if (respuesta) {
                                 Swal.fire({
                                     type: "success",
                                     title: "",
@@ -1496,6 +1531,7 @@
                                 $("#pagoRecaudo").hide();
                                 $("#listRecaudo").hide();
                                 $("#listRecaudoComprobante").show();
+                                $.buscInfTratamientos($("#idPaciente").val());
 
                             }
                         },
@@ -1596,6 +1632,7 @@
             if (ultimaParteURLAnterior == "Administracion" || ultimaParteURLAnterior == "Pacientes") {
                 if (localStorage.getItem('idTratamiento')) {
                     let idTratamiento = localStorage.getItem('idTratamiento');
+                    $("#idPaciente").val(localStorage.getItem('idPaciente'));
                     $.buscInfTratamientos(localStorage.getItem('idPaciente'), idTratamiento);
                     var datTratameintos = document.getElementById(
                         'div-datTratameintos'); // Reemplaza 'miDiv' con el ID de tu div
@@ -1604,6 +1641,7 @@
 
 
                 } else if (localStorage.getItem('idPaciente')) {
+                    $("#idPaciente").val(localStorage.getItem('idPaciente'));
                     $.buscInfTratamientos(localStorage.getItem('idPaciente'));
                     var datTratameintos = document.getElementById(
                         'div-datTratameintos'); // Reemplaza 'miDiv' con el ID de tu div

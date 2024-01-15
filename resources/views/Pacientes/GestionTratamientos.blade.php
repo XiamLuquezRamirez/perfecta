@@ -1686,6 +1686,7 @@
                     $("#servSeccion").val(id);
                     $("#idSeccion").val(id);
                     $("#accion").val('agregar');
+                    document.getElementById("btnGuardar").disabled = false;
 
                     $("#modalServicios").modal({
                         backdrop: 'static',
@@ -1700,6 +1701,7 @@
                 },
                 salirServicio: function() {
                     $('#modalServicios').modal('toggle');
+                    document.getElementById("btnGuardar").disabled = false;
                 },
                 guardarServicio: function() {
                     if ($("#servicioTrat").val().trim() === "") {
@@ -1716,6 +1718,8 @@
 
                     var loader = document.getElementById('loader');
                     loader.style.display = 'block';
+                    document.getElementById("btnGuardar").disabled = true;
+                    
 
                     var form = $("#formGuardarServicio");
                     var url = form.attr("action");
@@ -1986,6 +1990,9 @@
                     });
                 },
                 buscInfServicio: function(val) {
+
+                    document.getElementById("btnGuardar").disabled= false;
+
                     var form = $("#formBuscaServicios");
                     $("#idServ").remove();
                     form.append("<input type='hidden' id='idServ' name='idServ'  value='" + val + "'>");
@@ -2073,8 +2080,6 @@
 
                     let idServ = $("#" + id).data("id");
                     let idSecc = $("#" + id).data("seccion");
-
-                    console.log(idServ + " " + idSecc);
 
                     Swal.fire({
                         title: "Esta seguro de Eliminar este registro?",
@@ -2385,7 +2390,8 @@
 
                                 citas += ' <li class="list-group-item">' +
                                     '<span class="fa fa-calendar float-right"></span>' +
-                                    '<a href="#">' + item.motivo + '</a>' +
+                                    '<a href="#">' + item.nombre + '</a>' +
+                                    '<p class="font-small-2 mb-0 text-muted">Prof.: '+item.nomprof+'</p>' +
                                     '<p class="font-small-2 mb-0 text-muted">' +
                                     fechaHora + '</p>' +
                                     '<p class="font-small-2 mb-0 text-muted">' +

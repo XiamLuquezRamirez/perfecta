@@ -60,6 +60,7 @@ class Servicios extends Model
     $valorAbonoPrev = $data['valorAbonoPrev'];
     $abonoPrev = 0;
     $collectServTerm = collect();
+    $collectServAfec = collect();
   
     if($data['selAbono']=="si"){
         $abonoPrevCal = $valorTotal - $valorAbono;
@@ -70,6 +71,8 @@ class Servicios extends Model
     }
 
     $valorTotal = $valorTotal + $valorAbonoPrev;
+
+   
     
     foreach ($data["dataIds"] as $key => $val) {
      
@@ -84,14 +87,33 @@ class Servicios extends Model
                 'pagado' => $consulSaldo->valor,
                 'estado_pago' => 'Pagado',
             ]);
+
+          
+
             $collectServTerm->push($data["dataIds"][$key]);
+
+            $item = [
+                'servicio' => $data["dataIds"][$key],
+                'valorServicio' => $saldoServ
+            ];
+        
+
+            $collectServAfec->push($item);
+            
         }else{
             if($valorTotal<0){
                 $valorTotal = 0;
             }
+
             $respuesta = DB::connection('mysql')->table('servicios_tratamiento')->where('id', $data["dataIds"][$key])->update([
                 'pagado' => $consulSaldo->pagado + $valorTotal
             ]);
+
+            $item = [
+                'servicio' => $data["dataIds"][$key],
+                'valorServicio' => $valorTotal
+            ];
+            $collectServAfec->push($item);
         }
 
         $valorTotal = $valorTotal - $saldoServ;
@@ -101,6 +123,7 @@ class Servicios extends Model
     $resultado = [
         'valorTotal' => $valorTotal,
         'collectServTerm' => $collectServTerm->toArray(),
+        'collectServAfec' => $collectServAfec->toArray(),
     ];
 
     return $resultado;

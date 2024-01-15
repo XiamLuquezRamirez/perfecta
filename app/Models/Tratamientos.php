@@ -3,9 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\DB;
 
 class Tratamientos extends Model
 {
@@ -31,7 +30,6 @@ class Tratamientos extends Model
         return $respuestaTra;
     }
 
-
     public static function guardarTransaccion($data)
     {
         $pagoRealizado = 0;
@@ -47,7 +45,7 @@ class Tratamientos extends Model
             'abono_libre' => $data['valorAbono'],
             'pago_realizado' => $pagoRealizado,
             'usuario' => Auth::user()->id,
-            'estado' => 'ACTIVO'
+            'estado' => 'ACTIVO',
 
         ]);
 
@@ -57,7 +55,7 @@ class Tratamientos extends Model
     public static function transaccionesPacientes($idPac)
     {
 
-        return  DB::connection('mysql')->table('tratamientos')
+        return DB::connection('mysql')->table('tratamientos')
             ->leftJoin("transaccion", "transaccion.tratamiento", "tratamientos.id")
             ->where('tratamientos.paciente', $idPac)
             ->where("transaccion.estado", "ACTIVO")
@@ -68,7 +66,7 @@ class Tratamientos extends Model
 
     public static function MediosPago($tran)
     {
-        $serv = DB::connection("mysql")->select("SELECT  CASE WHEN medio_pago = 'e' THEN 'Efectivo' 
+        $serv = DB::connection("mysql")->select("SELECT  CASE WHEN medio_pago = 'e' THEN 'Efectivo'
         WHEN medio_pago = 'tc' THEN 'Tarjeta de crédito'
         WHEN medio_pago = 'td' THEN 'Tarjeta de débito'
         WHEN medio_pago = 't' THEN 'Transferencia'
@@ -85,24 +83,22 @@ class Tratamientos extends Model
         foreach ($data["medioPago"] as $key => $val) {
             $respuesta = DB::connection('mysql')->table('medio_pagos_tratamiento')->insert([
                 'transaccion' => $idTransaccion,
-                'tratamiento' =>  $data['tratamientoSel'],
+                'tratamiento' => $data['tratamientoSel'],
                 'medio_pago' => $data["medioPago"][$key],
                 'valor' => $data["valorPago"][$key],
-                'referencia' => $data["referenciaPago"][$key]
+                'referencia' => $data["referenciaPago"][$key],
             ]);
         }
 
         return $respuesta;
     }
-    public static function guardarServAfectados($data, $idTransaccion)
+    public static function guardarServAfectados($serv, $valor, $idTransaccion)
     {
-
-        foreach ($data["dataIds"] as $key => $val) {
-            $respuesta = DB::connection('mysql')->table('pagos_afectados_transaccion')->insert([
-                'transaccion' => $idTransaccion,
-                'servicio' => $data["dataIds"][$key],
-            ]);
-        }
+        $respuesta = DB::connection('mysql')->table('pagos_afectados_transaccion')->insert([
+            'transaccion' => $idTransaccion,
+            'servicio' => $serv,
+            'valor' => $valor,
+        ]);
 
         return $respuesta;
     }
@@ -116,41 +112,53 @@ class Tratamientos extends Model
     }
     public static function delTransaccion($transaccion)
     {
-        $valRest = $transaccion->pago_realizado;
+
         $servTratamiento = DB::connection('mysql')->table('pagos_afectados_transaccion')
             ->where('transaccion', $transaccion->id)
             ->get();
 
-        dd($servTratamiento);
         foreach ($servTratamiento as $dataServ) {
-            $newValor = $dataServ->pagado - $valRest;
+            $servic = DB::connection('mysql')->table('servicios_tratamiento')
+                ->where('id', $dataServ->servicio)
+                ->first();
 
-            if ($newValor < 0) {
-                $respuesta = DB::connection('mysql')->table('servicios_tratamiento')->where('id', $dataServ->id)->update([
-                    'pagado' => '0',
+            $newValor = $servic->pagado - $dataServ->valor;
+
+            if ($dataServ->valor < $servic->valor) {
+                $respuesta = DB::connection('mysql')->table('servicios_tratamiento')->where('id', $dataServ->servicio)->update([
+                    'pagado' => $newValor,
+                    'estado_pago' => 'Pendiente',
                 ]);
 
                 $delServPago = DB::connection('mysql')->table('servicios_abonados')
-                ->where('transaccion', $transaccion->id)
-                ->where('servicio', $dataServ->id)
-                ->delete();
-
-                $newValor = abs($newValor);
-
-            }else{
-                $respuesta = DB::connection('mysql')->table('servicios_tratamiento')->where('id', $dataServ->id)->update([
-                    'pagado' => $newValor,
-                ]);
+                    ->where('transaccion', $transaccion->id)
+                    ->where('servicio', $dataServ->servicio)
+                    ->delete();
             }
-            
-            $valRest = $newValor;
-            
+
         }
 
-        $respuesta = DB::connection('mysql')->table('tratamientos')->where('id', $valRest)->update([
-            'estado_reg' => 'ELIMINADO',
+        $respuesta = DB::connection('mysql')->table('transaccion')->where('id', $transaccion->id)->update([
+            'estado' => 'ELIMINADO',
         ]);
+
+        $delMedPago = DB::connection('mysql')->table('medio_pagos_tratamiento')
+        ->where('transaccion', $transaccion->id)
+        ->delete();
+
         return "ok";
+    }
+
+    public static function AllServiciosTermiandos(){
+        $consulEstadoServ = DB::connection('mysql')->table('servicios_tratamiento')
+        ->leftJoin("pacientes", "pacientes.id", "servicios_tratamiento.paciente")
+        ->where("estado_pago", "Pendiente")
+        ->where("estado_serv", "Terminado")
+        ->select("pacientes.id","pacientes.nombre","pacientes.apellido")
+        ->groupBy("pacientes.id","pacientes.nombre","pacientes.apellido")
+        ->get();
+
+        return $consulEstadoServ;
     }
 
     public static function updateTrata($idTrata, $aboPrev)
@@ -167,13 +175,13 @@ class Tratamientos extends Model
 
         if ($consulEstadoServ->count() > 0) {
             $respuesta = DB::connection('mysql')->table('tratamientos')->where('id', $idTrata)->update([
-                'saldo_previo' => $aboPrev
+                'saldo_previo' => $aboPrev,
             ]);
         } else {
 
             $respuesta = DB::connection('mysql')->table('tratamientos')->where('id', $idTrata)->update([
                 'saldo_previo' => $aboPrev,
-                'estado_pago' => 'Pagado'
+                'estado_pago' => 'Pagado',
             ]);
         }
 
@@ -267,7 +275,7 @@ class Tratamientos extends Model
 
     public static function TratamientosPacientesRecaudo($idPac)
     {
-        $respuestaTra = DB::connection("mysql")->select("SELECT st.*,tr.id, tr.saldo_previo sprev, tr.nombre AS ntrara, prof.nombre nprof, CONCAT(pac.identificacion,' - ',pac.nombre, ' ',pac.apellido) AS npac FROM servicios_tratamiento st 
+        $respuestaTra = DB::connection("mysql")->select("SELECT st.*,tr.id, tr.saldo_previo sprev, tr.nombre AS ntrara, prof.nombre nprof, CONCAT(pac.identificacion,' - ',pac.nombre, ' ',pac.apellido) AS npac FROM servicios_tratamiento st
         LEFT JOIN tratamientos tr ON st.tratamiento= tr.id
         LEFT JOIN profesionales prof ON tr.profesional= prof.id
         LEFT JOIN pacientes pac ON tr.paciente= pac.id
@@ -284,10 +292,8 @@ class Tratamientos extends Model
             ->where("estado", "ACTIVO")
             ->sum('pago_realizado');
 
-
         return $recaudoHoy;
     }
-
 
     public static function recaudosMes()
     {
@@ -305,10 +311,10 @@ class Tratamientos extends Model
     public static function recaudoCaja($fecIni)
     {
         // Convierte la fecha de inicio a un objeto DateTime
-        $fechaInicio = new  \DateTime($fecIni);
+        $fechaInicio = new \DateTime($fecIni);
 
         // Utiliza la fecha y hora actual como el último momento
-        $fechaFin = new  \DateTime();
+        $fechaFin = new \DateTime();
 
         $recaudoMes = DB::connection('mysql')
             ->table('transaccion')
@@ -322,10 +328,10 @@ class Tratamientos extends Model
     public static function recaudosCajaResumen($fecIni)
     {
         // Convierte la fecha de inicio a un objeto DateTime
-        $fechaInicio = new  \DateTime($fecIni);
+        $fechaInicio = new \DateTime($fecIni);
 
         // Utiliza la fecha y hora actual como el último momento
-        $fechaFin = new  \DateTime();
+        $fechaFin = new \DateTime();
 
         $recaudoMes = DB::connection('mysql')
             ->table('medio_pagos_tratamiento')

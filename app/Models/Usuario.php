@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class Usuario extends Model
@@ -67,6 +68,37 @@ class Usuario extends Model
         return DB::connection('mysql')->table('users')
             ->where('login_usuario', $login)
             ->first();
+    }
+    public static function verifUsuario($usu)
+    {
+        return DB::connection('mysql')->table('users')
+            ->where('login_usuario', $usu)
+            ->where('login_usuario', '<>', Auth::user()->login_usuario)
+            ->get();
+    }
+
+    public static function cambiosPerfil($request) {
+
+        if ($request['cambioPasw'] != "") {
+            $respuesta = DB::connection('mysql')->table('users')->where('id', Auth::user()->id)->update([
+                'nombre_usuario' => $request['nombre'],
+                'login_usuario' => $request['usuario'],
+                'pasword_usuario' => bcrypt($request['cambioPasw']),
+                'email_usuario' => $request['email'],
+                'telefono' => $request['telefono'],
+                'foto' => $request['img']
+            ]);
+        } else {
+            $respuesta = DB::connection('mysql')->table('users')->where('id',  Auth::user()->id)->update([
+                'nombre_usuario' => $request['nombre'],
+                'login_usuario' => $request['usuario'],
+                'email_usuario' => $request['email'],
+                'telefono' => $request['telefono'],
+                'foto' => $request['img']
+            ]);
+        }
+        return  "ok";
+
     }
 
 }

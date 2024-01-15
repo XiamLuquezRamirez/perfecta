@@ -19,8 +19,11 @@ class Citas extends Model
     public static function CitasPaciente($idPac)
     {
         return DB::connection('mysql')->table('citas')
+        ->leftJoin("especialidades","especialidades.id", "citas.motivo")
+        ->join('profesionales', 'citas.profesional', 'profesionales.id')
             ->where('paciente', $idPac)
             ->where('citas.estado', '!=', 'Anulada')
+            ->select("citas.*","especialidades.nombre",'profesionales.nombre AS nomprof' )
             ->get();
     }
 

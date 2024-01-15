@@ -300,7 +300,6 @@
                                                                 <label for="account-company">Teléfono</label>
                                                                 <input type="text" class="form-control" id="telefono"
                                                                     name="telefono"
-                                                                    onkeypress="return validartxtnum(event)"
                                                                     placeholder="Teléfono">
                                                             </div>
                                                         </div>
@@ -1653,7 +1652,7 @@
                     const nuevaPestana = window.open(PERFECTAURL, '_blank');
                     nuevaPestana.focus();
 
-                },
+            },
                 verTratamientos: function() {
                     localStorage.clear();
                     let paci = $('#idPaciente').val();
