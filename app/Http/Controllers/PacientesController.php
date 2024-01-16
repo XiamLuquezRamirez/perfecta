@@ -554,7 +554,7 @@ class PacientesController extends Controller
     public function CargarPacientes()
     {
         if (Auth::check()) {
-            $perPage = 5; // Número de posts por página
+            $perPage = 10; // Número de posts por página
             $page = request()->get('page', 1);
             $search = request()->get('search');
             if (!is_numeric($page)) {

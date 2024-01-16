@@ -2006,7 +2006,7 @@
                                 if(respuesta.porcentajeCambioMes >= 0){
                                     $("#porRecaudoMes").html('<small class="success" ><i class="fa fa-long-arrow-up"></i> '+Math.round(respuesta.porcentajeCambioMes)+'%</small>');
                                 }else{
-                                    let valRes = (respuesta.porcentajeCambioMes) * -1;
+                                    let valRes = respuesta.porcentajeCambioMes;
                                     $("#porRecaudoMes").html('<small class="danger" ><i class="fa fa-long-arrow-down"></i> '+Math.round(valRes)+'%</small>');
                                 }
 
@@ -2014,7 +2014,7 @@
                                 if(respuesta.porcentajeCambioDia >= 0){
                                     $("#porRecaudoDia").html(' <small class="success" ><i class="fa fa-long-arrow-up"></i> '+ Math.round(respuesta.porcentajeCambioDia)+'%</small>');
                                 }else{
-                                    let valResDia = (respuesta.porcentajeCambioDia) * -1;
+                                    let valResDia = respuesta.porcentajeCambioDia;
                                     $("#porRecaudoDia").html('<small class="danger" ><i class="fa fa-long-arrow-down"></i> '+Math.round(valResDia)+'%</small>');
                                 }
                         }
