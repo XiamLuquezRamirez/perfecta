@@ -14,7 +14,7 @@ $(document).ready(function () {
                 dataType: "json",
                 success: function (response) {
                     $("#cantNotificaPaciente").html(response.cantserv);
-                    $("#cantNotificaPaciente2").html(response.cantserv+ 'Nueva(s)');
+                    $("#cantNotificaPaciente2").html(response.cantserv+ ' Nueva(s)');
 
                 $.each(response.servicio, function (i, item) {
                     let npaciente = item.nombre +' ' + item.apellido;
