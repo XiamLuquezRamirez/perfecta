@@ -566,11 +566,10 @@
                                                             <div class="card-body text-center">
                                                                 <button type="button" onclick="$.addSeccion();"
                                                                     class="btn btn-danger mr-1"><i class="fa fa-plus"></i>
-                                                                    Agregar Sección</button>
-                                                                <button style="display: none;"
-                                                                    onclick="$.addServicioTrata();" type="button"
-                                                                    class="btn btn-primary "><i class="fa fa-plus"></i>
-                                                                    Agregar Servicio</button>
+                                                                    Agregar sección</button>
+                                                                <button onclick="$.verEvoluciones();" type="button"
+                                                                    class="btn btn-primary "><i class="fa fa-eye"></i>
+                                                                    Ver evolución</button>
                                                             </div>
                                                             <div id="sesionesTratamiento" class="form-body pt-0">
                                                                 <div class="carwd-body">
@@ -775,6 +774,14 @@
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
+    <form action="{{ url('/AdminPacientes/ConsultarEvolucionesGen') }}" id="formConsultarEvolucionesGen" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/AdminPacientes/updateServiciosTerminados') }}" id="formServTerminados" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
 
 
 @endsection
@@ -922,6 +929,7 @@
 
                     $("#tituloTratamiento").html("Agregar tratamiento.");
                     $("#accion").val("agregar");
+                    document.getElementById('btn_guadarTrataminto').disabled = false;
                     $.cargarProfesionales();
                     $.cargarEspecialidades();
                 },
@@ -1266,6 +1274,9 @@
                                     buttonsStyling: false
                                 });
 
+                                document.getElementById('btn_guadarTrataminto').disabled =
+                                    true;
+
                                 $.buscInfGeneralPaciente($("#idPaciente").val());
                                 var loader = document.getElementById('loader');
                                 loader.style.display = 'none';
@@ -1375,7 +1386,10 @@
 
                                         if (itemArc.tipo ==
                                             "application/pdf") {
-                                            evoluciones +=' <li data-arc="' + itemArc.archivo +'" onclick="$.mostrarArchivo(this);" class="cursor-pointer pb-25">' +
+                                            evoluciones +=
+                                                ' <li data-arc="' + itemArc
+                                                .archivo +
+                                                '" onclick="$.mostrarArchivo(this);" class="cursor-pointer pb-25">' +
                                                 '          <img src="' +
                                                 url +
                                                 '/images/imgPDF.png" height="30" alt="archivo">' +
@@ -1384,7 +1398,10 @@
                                                 '</small>' +
                                                 '          </li>';
                                         } else {
-                                            evoluciones +=' <li data-img="' + itemArc.archivo +'" onclick="$.mostrarImagen(this);" class="cursor-pointer pb-25">' +
+                                            evoluciones +=
+                                                ' <li data-img="' + itemArc
+                                                .archivo +
+                                                '" onclick="$.mostrarImagen(this);" class="cursor-pointer pb-25">' +
                                                 '          <img style="border-radius:5px;" src="' +
                                                 url + '/evoluciones/' +
                                                 itemArc.archivo +
@@ -1396,7 +1413,8 @@
                                         }
                                     });
                                 } else {
-                                    evoluciones +='<li class="cursor-pointer pb-25">' +
+                                    evoluciones +=
+                                        '<li class="cursor-pointer pb-25">' +
                                         '         <small class="text-muted ml-1 attchement-text">Sin archivos adjuntos</small>' +
                                         '         </li>';
                                 }
@@ -1412,6 +1430,167 @@
                         }
                     });
 
+
+                },
+                verEvoluciones: function() {
+
+                    $("#modalHistEvoluciones").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+                    var tratamiento = $("#idTratamiento").val();
+
+                    var form = $("#formConsultarEvolucionesGen");
+                    $("#idTrata").remove();
+                    form.append("<input type='hidden' id='idTrata' name='idTrata'  value='" +
+                        tratamiento +
+                        "'>");
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    let evoluciones = '';
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            $("#tituloEvolucion").html('Historial de evolución de tratamiento - <b>' +respuesta.tratamiento.nombre+"</b>");
+
+                            const evolucionesAgrupadas = $.agruparEvoluciones(respuesta
+                                .evoluciones);
+                            console.log(evolucionesAgrupadas);
+                            const resultHTML = $.armarHTML(evolucionesAgrupadas);
+
+                            $("#div-evoluciones").html(resultHTML);
+                        }
+                    });
+                },
+                agruparEvoluciones: function(evoluciones) {
+                    const agrupadas = {};
+                    evoluciones.forEach(evolucion => {
+                        const tratamiento = evolucion.ntratamiento;
+                        const seccion = evolucion.nseccion;
+                        const servicio = evolucion.nservicio;
+
+                        if (!agrupadas[tratamiento]) {
+                            agrupadas[tratamiento] = {};
+                        }
+
+                        if (!agrupadas[tratamiento][seccion]) {
+                            agrupadas[tratamiento][seccion] = {};
+                        }
+
+                        if (!agrupadas[tratamiento][seccion][servicio]) {
+                            agrupadas[tratamiento][seccion][servicio] = [];
+                        }
+
+                        agrupadas[tratamiento][seccion][servicio].push(evolucion);
+                    });
+
+                    return agrupadas;
+                },
+                armarHTML: function(evolucionesAgrupadas) {
+
+                    
+        let evoluciones = '';
+        let consEvo = 1;
+        for (const tratamiento in evolucionesAgrupadas) {
+          
+
+            for (const seccion in evolucionesAgrupadas[tratamiento]) {
+                evoluciones += `<h3 style="text-transform: capitalize;"><i class="bullet bullet-sm bullet-success"></i> ${seccion}</h3>`;
+
+                for (const servicio in evolucionesAgrupadas[tratamiento][seccion]) {
+                    evolucionesAgrupadas[tratamiento][seccion][servicio].forEach(evolucion => {
+                   
+                        evoluciones +=
+                        '<div class="card collapse-header bs-callout-danger callout-bordered mb-1" role="tablist">' +
+                        '<div id="headingCollapse' + consEvo +
+                        '" class="card-header d-flex justify-content-between align-items-center" data-toggle="collapse" role="tab" data-target="#collapse' +
+                        consEvo +
+                        '" aria-expanded="false" aria-controls="collapse' +
+                        consEvo + '">' +
+                        '    <div class="collapse-title media">' +
+                        '        <div class="media-body mt-25">' +
+                        '            <span class="text-primary">' + evolucion
+                        .nservicio + '</span>' +
+                        '            <span class="d-sm-inline d-none">(' +
+                            evolucion.pavance + '%)</span>' +
+                        '            <small class="text-muted d-block">Profesional: ' +
+                            evolucion.nprofe + '</small>' +
+                        '        </div>' +
+                        '    </div>' +
+                        '    <div class="information d-sm-flex d-none align-items-center">' +
+                        '        <small class="text-muted mr-50">' +
+                            evolucion.created_at + '</small>' +
+                        '    </div>' +
+                        '</div>' +
+                        '<div id="collapse' + consEvo +
+                        '" role="tabpanel" aria-labelledby="headingCollapse' +
+                        consEvo + '" class="collapse">' +
+                        '    <div class="card-content">' +
+                        '        <div class="card-body py-1">' +
+                        '            <p class="text-bold-500"> Evolución escrita:</p>' +
+                        evolucion.evolucion +
+                        '        </div>' +
+                        '        <div class="card-footer pt-0 border-top">' +
+                        '            <label class="sidebar-label">Archivos adjuntos</label>' +
+                        '            <ul class="list-unstyled mb-0">';
+    
+                    if (evolucion.archivos.length > 0) {
+                        let url = $('#Ruta').data("ruta");
+                        $.each(evolucion.archivos, function(i, itemArc) {
+    
+                            if (itemArc.tipo ==
+                                "application/pdf") {
+                                evoluciones +=
+                                    ' <li data-arc="' + itemArc
+                                    .archivo +
+                                    '" onclick="$.mostrarArchivo(this);" class="cursor-pointer pb-25">' +
+                                    '          <img src="' +
+                                    url +
+                                    '/images/imgPDF.png" height="30" alt="archivo">' +
+                                    '          <small class="text-muted ml-1 attchement-text">' +
+                                    itemArc.nombre +
+                                    '</small>' +
+                                    '          </li>';
+                            } else {
+                                evoluciones +=
+                                    ' <li data-img="' + itemArc
+                                    .archivo +
+                                    '" onclick="$.mostrarImagen(this);" class="cursor-pointer pb-25">' +
+                                    '          <img style="border-radius:5px;" src="' +
+                                    url + '/evoluciones/' +
+                                    itemArc.archivo +
+                                    '" height="30" alt="imagen">' +
+                                    '          <small class="text-muted ml-1 attchement-text">' +
+                                    itemArc.nombre +
+                                    '</small>' +
+                                    '          </li>';
+                            }
+                        });
+                    } else {
+                        evoluciones +=
+                            '<li class="cursor-pointer pb-25">' +
+                            '         <small class="text-muted ml-1 attchement-text">Sin archivos adjuntos</small>' +
+                            '         </li>';
+                    }
+    
+                    evoluciones += '</ul>' +
+                        '        </div>' +
+                        '    </div>' +
+                        '</div>' +
+                        '</div>';
+                    consEvo++;
+                    });
+                    }
+            }
+        }
+
+        return evoluciones;
 
                 },
                 mostrarVistaPrevia: function(archivo) {
@@ -1719,7 +1898,7 @@
                     var loader = document.getElementById('loader');
                     loader.style.display = 'block';
                     document.getElementById("btnGuardar").disabled = true;
-                    
+
 
                     var form = $("#formGuardarServicio");
                     var url = form.attr("action");
@@ -1991,7 +2170,7 @@
                 },
                 buscInfServicio: function(val) {
 
-                    document.getElementById("btnGuardar").disabled= false;
+                    document.getElementById("btnGuardar").disabled = false;
 
                     var form = $("#formBuscaServicios");
                     $("#idServ").remove();
@@ -2391,7 +2570,8 @@
                                 citas += ' <li class="list-group-item">' +
                                     '<span class="fa fa-calendar float-right"></span>' +
                                     '<a href="#">' + item.nombre + '</a>' +
-                                    '<p class="font-small-2 mb-0 text-muted">Prof.: '+item.nomprof+'</p>' +
+                                    '<p class="font-small-2 mb-0 text-muted">Prof.: ' +
+                                    item.nomprof + '</p>' +
                                     '<p class="font-small-2 mb-0 text-muted">' +
                                     fechaHora + '</p>' +
                                     '<p class="font-small-2 mb-0 text-muted">' +
@@ -2452,7 +2632,8 @@
                                     '                <h6 class="pt-1"><span' +
                                     '                        class="fa fa-user"></span> Profesional:' +
                                     '                </h6>' +
-                                    '                <p style="text-transform: capitalize;">'+item.nprofe+'</p>' +
+                                    '                <p style="text-transform: capitalize;">' +
+                                    item.nprofe + '</p>' +
                                     '            </div>' +
                                     '            <div class="col-xl-3 col-lg-6 col-md-12 text-center clearfix">' +
                                     '                <h6 class="pt-1"><span' +

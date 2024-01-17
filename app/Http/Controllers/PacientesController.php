@@ -205,6 +205,29 @@ class PacientesController extends Controller
         }
     }
 
+    public function ConsultarEvolucionesGen()
+    {
+        if (Auth::check()) {
+            $idTrata = request()->get('idTrata');
+            $tratamiento = Tratamientos::busTatamiento($idTrata);
+            $evoluciones = Evoluciones::ConsultarEvoluciones($idTrata);
+
+            foreach ($evoluciones as $evo) {
+                $archivosEvolucion = Evoluciones::consulArcEvol($evo->id);
+                $evo->archivos = $archivosEvolucion;
+            }
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'tratamiento' => $tratamiento,
+                    'evoluciones' => $evoluciones
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
     public function EliminarServicio()
     {
         if (Auth::check()) {

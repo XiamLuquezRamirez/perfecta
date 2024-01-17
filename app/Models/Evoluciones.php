@@ -43,6 +43,22 @@ class Evoluciones extends Model
         return $respuesta;
 
     }
+    public static function ConsultarEvoluciones($trata){
+
+        $respuesta = DB::connection('mysql')->table('evoluciones')
+        ->leftJoin("profesionales", "profesionales.id", "evoluciones.profesional")
+        ->leftJoin("servicios_tratamiento", "servicios_tratamiento.id", "evoluciones.servicio")
+        ->leftJoin("servicios", "servicios.id", "servicios_tratamiento.servicio")
+        ->leftJoin("tratamientos","tratamientos.id","evoluciones.tratamiento")
+        ->leftJoin("secciones","secciones.id","evoluciones.seccion")
+        ->where('evoluciones.tratamiento', $trata)
+        ->where('evoluciones.estado', 'ACTIVO')
+        ->select("evoluciones.*", "profesionales.nombre AS nprofe", "servicios.nombre AS nservicio","tratamientos.nombre AS ntratamiento","secciones.nombre AS nseccion")
+        ->get();
+
+        return $respuesta;
+
+    }
 
     public static function guardarArcEvol($data,$evo)
     {

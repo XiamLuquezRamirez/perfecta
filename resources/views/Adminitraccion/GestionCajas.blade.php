@@ -403,6 +403,10 @@
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
+    <form action="{{ url('/AdminPacientes/updateServiciosTerminados') }}" id="formServTerminados" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
 
 @endsection
 
