@@ -82,6 +82,7 @@ Route::post('/AdminCitas/CambioEstadocita', [CitasController::class,'CambioEstad
 Route::post('/AdminCitas/InformacionCita', [CitasController::class,'InformacionCita']);
 Route::post('/AdminCitas/GuardarComentario', [CitasController::class,'GuardarComentario']);
 Route::post('/AdminCitas/cargarComentario', [CitasController::class,'cargarComentario']);
+Route::post('/AdminCitas/notificaccionCita', [CitasController::class,'notificaccionCita']);
 
 
 
@@ -113,4 +114,5 @@ Route::get('/AdminPacientes/Recaudos', [PacientesController::class,'Recaudos']);
 Route::post('/AdminPacientes/TratamientosRecaudo', [PacientesController::class,'TratamientosRecaudo']);
 Route::post('/AdminPacientes/TratamientosRecaudoDetalles', [PacientesController::class,'TratamientosRecaudoDetalles']);
 Route::post('/AdminPacientes/GuardarPagoTratamiento', [PacientesController::class,'GuardarPagoTratamiento']);
+Route::post('/AdminPacientes/envioComprobante', [PacientesController::class,'envioComprobante']);
 

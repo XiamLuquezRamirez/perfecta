@@ -477,7 +477,7 @@
                                                                             <i
                                                                                 class="feather icon-printer mr-25 common-size"></i>
                                                                             Imprimir comprobante</a>
-                                                                        <a onclick="$.enviarComprobante();"
+                                                                        <a onclick="$.enviarComprobante(1);"
                                                                             class="btn btn-success btn-block mb-1 print-invoice">
                                                                             <i
                                                                                 class="feather icon-navigation mr-25 common-size"></i>
@@ -494,29 +494,30 @@
                                             </div>
                                             <div class="tab-pane" id="tabIcon12" role="tabpanel"
                                                 aria-labelledby="baseIcon-tab12">
-                                                <div id="audience-list-scroll" style="height: 400px; overflow: auto;" class="table-responsive position-relative">
-                                                <table class="table">
-                                                    <thead>
-                                                        <tr>
-                                                            
-                                                            <th>Transacción</th>
-                                                            <th>Tratamiento</th>
-                                                            <th>Fecha de pago</th>
-                                                            <th>Valor</th>
-                                                            <th>Acción</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id="tr-recaudosRealizados">
-                                                        
-                                                    </tbody>
-                                                </table>
+                                                <div id="audience-list-scroll" style="height: 400px; overflow: auto;"
+                                                    class="table-responsive position-relative">
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+
+                                                                <th>Transacción</th>
+                                                                <th>Tratamiento</th>
+                                                                <th>Fecha de pago</th>
+                                                                <th>Valor</th>
+                                                                <th>Acción</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tr-recaudosRealizados">
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
                                             </div>
 
                                         </div>
-
                                     </div>
                                 </div>
-                            </div>
                     </section>
                 </div>
             </div>
@@ -551,6 +552,10 @@
     </form>
 
     <form action="{{ url('/AdminPacientes/updateServiciosTerminados') }}" id="formServTerminados" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/AdminPacientes/envioComprobante') }}" id="formEnvioComprobante" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
@@ -682,39 +687,48 @@
 
                             //TRATAMIENTOS REALIZADOS
                             let recaudos = '';
-                        
+
                             $.each(respuesta.recaudos, function(i, item) {
                                 console.log(item.nombre);
-                                recaudos+='<tr id="trTransaccion'+item.id+'">'
-                                    +'<td class="align-middle">'
-                                    +'    <span>'+agregarCeros(item.id,5)+'</span>'
-                                    +'</td>'
-                                    +'<td class="align-middle">'
-                                    +'    <span>'+item.nombre+'</span>'
-                                    +'</td>'
-                                    +'<td class="align-middle">'
-                                    + item.created_at
-                                    +'</td>'
-                                    +'<td class="align-middle">'
-                                  + formatCurrency(item.pago_realizado, 'es-CO', 'COP')
-                                    +'</td>'
-                                    +'<td class="align-middle">'
-                                    +'    <div class="dropdown">'
-                                    +'        <span'
-                                    +'            class="feather icon-more-vertical dropdown-toggle"'
-                                    +'            id="dropdownMenuButton" data-toggle="dropdown"'
-                                    +'            aria-haspopup="true" aria-expanded="false">'
-                                    +'        </span>'
-                                    +'        <div class="dropdown-menu dropdown-menu-right"'
-                                    +'            aria-labelledby="dropdownMenuButton">'
-                                    +'            <a class="dropdown-item" onclick="$.printCompHistorico('+item.id+');"><li class="fa fa-print"></li> Imprimir</a>'
-                                    +'                <a class="dropdown-item" onclick="$.enviarCompHistorico('+item.id+');"><li class="fa fa-paper-plane-o"></li> Enviar</a>'
-                                    +'            <a class="dropdown-item" onclick="$.deleteCompHistorico('+item.id+');"><li class="fa fa-trash-o"></li> Eliminar</a>'
-                                    +'        </div>'
-                                    +'   </div>'
-                                    +'    </span>'
-                                    +'</td>'
-                                +' </tr>';
+                                recaudos += '<tr id="trTransaccion' + item.id +
+                                    '">' +
+                                    '<td class="align-middle">' +
+                                    '    <span>' + agregarCeros(item.id, 5) +
+                                    '</span>' +
+                                    '</td>' +
+                                    '<td class="align-middle">' +
+                                    '    <span>' + item.nombre + '</span>' +
+                                    '</td>' +
+                                    '<td class="align-middle">' +
+                                    item.created_at +
+                                    '</td>' +
+                                    '<td class="align-middle">' +
+                                    formatCurrency(item.pago_realizado, 'es-CO',
+                                        'COP') +
+                                    '</td>' +
+                                    '<td class="align-middle">' +
+                                    '    <div class="dropdown">' +
+                                    '        <span' +
+                                    '            class="feather icon-more-vertical dropdown-toggle"' +
+                                    '            id="dropdownMenuButton" data-toggle="dropdown"' +
+                                    '            aria-haspopup="true" aria-expanded="false">' +
+                                    '        </span>' +
+                                    '        <div class="dropdown-menu dropdown-menu-right"' +
+                                    '            aria-labelledby="dropdownMenuButton">' +
+                                    '            <a class="dropdown-item" onclick="$.printCompHistorico(' +
+                                    item.id +
+                                    ');"><li class="fa fa-print"></li> Imprimir</a>' +
+                                    '                <a class="dropdown-item" onclick="$.enviarCompHistorico(' +
+                                    item.id +
+                                    ');"><li class="fa fa-paper-plane-o"></li> Enviar</a>' +
+                                    '            <a class="dropdown-item" onclick="$.deleteCompHistorico(' +
+                                    item.id +
+                                    ');"><li class="fa fa-trash-o"></li> Eliminar</a>' +
+                                    '        </div>' +
+                                    '   </div>' +
+                                    '    </span>' +
+                                    '</td>' +
+                                    ' </tr>';
                             });
 
                             $("#tr-recaudosRealizados").html(recaudos);
@@ -723,7 +737,7 @@
 
                     $.checkRecaudos();
                 },
-                deleteCompHistorico: function(transa){
+                deleteCompHistorico: function(transa) {
 
 
                     Swal.fire({
@@ -752,11 +766,13 @@
                     });
                 },
 
-                procederEliminarServ: function(transa){
+                procederEliminarServ: function(transa) {
 
                     var form = $("#formDeleteTransaccion");
                     $("#idTransaccion").remove();
-                    form.append("<input type='hidden' id='idTransaccion' name='idTransaccion'  value='" + transa + "'>");
+                    form.append(
+                        "<input type='hidden' id='idTransaccion' name='idTransaccion'  value='" +
+                        transa + "'>");
                     var url = form.attr("action");
                     var datos = form.serialize();
 
@@ -768,7 +784,7 @@
                         dataType: "json",
                         success: function(respuesta) {
 
-                            $("#trTransaccion"+transa).remove();
+                            $("#trTransaccion" + transa).remove();
                             Swal.fire({
                                 type: "success",
                                 title: "Eliminado!",
@@ -782,11 +798,13 @@
                     });
 
                 },
-                printCompHistorico: function (transa) {
+                printCompHistorico: function(transa) {
 
                     var form = $("#formCargarTransacciones");
                     $("#idTransaccion").remove();
-                    form.append("<input type='hidden' id='idTransaccion' name='idTransaccion'  value='" + transa + "'>");
+                    form.append(
+                        "<input type='hidden' id='idTransaccion' name='idTransaccion'  value='" +
+                        transa + "'>");
                     var url = form.attr("action");
                     var datos = form.serialize();
 
@@ -804,6 +822,9 @@
                     });
 
                 },
+                enviarComprobante: function(enviar) {
+                    $.imprimirComprobante(enviar);
+                },
                 otroPago: function() {
                     var datTratameintos = document.getElementById(
                         'div-datTratameintos'
@@ -812,63 +833,78 @@
                     $.atrasTratamiento();
                     $.buscInfTratamientos($("#idPaciente").val());
                 },
-                imprimirComprobante: function() {
-                var loader = document.getElementById('loader');
-                loader.style.display = 'block';
-                
-                const image = document.getElementById('logoPerfecta');
-                // Convertir la imagen en una URL de datos Base64
-                const canvas = document.createElement('canvas');
-                canvas.width = 600;
-                canvas.height = 141;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(image, 0, 0);
-                const base64data = canvas.toDataURL();
-                
-                var docDefinition = {
-                    pageMargins: [40, 60, 40, 60], // Márgenes [izquierda, arriba, derecha, abajo]
-                    content: [{
-                            image: base64data,
-                            width: 200,
-                            margin: [0, 0, 0, 0],
-                            alignment: 'center', // Alineación centrada
-                        },
-                        {
-                            style: 'card',
-                            stack: [{
+                imprimirComprobante: function(enviar) {
+                    var loader = document.getElementById('loader');
+                    loader.style.display = 'block';
+
+                    const image = document.getElementById('logoPerfecta');
+                    // Convertir la imagen en una URL de datos Base64
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 600;
+                    canvas.height = 141;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(image, 0, 0);
+                    const base64data = canvas.toDataURL();
+
+                    var docDefinition = {
+                        pageMargins: [40, 60, 40,
+                        60], // Márgenes [izquierda, arriba, derecha, abajo]
+                        content: [{
+                                image: base64data,
+                                width: 200,
+                                margin: [0, 0, 0, 0],
+                                alignment: 'center', // Alineación centrada
+                            },
+                            {
+                                style: 'card',
+                                stack: [{
                                     style: 'cardBody',
                                     stack: [{
                                             style: 'cardHeader',
                                             stack: [{
                                                 columns: [{
                                                         width: '40%',
-                                                        stack: [ {
-                                                            text: 'PERFECTA S.A.S',
-                                                            style: 'subheader',
-                                                            alignment: 'left', // Alineación centrada
-                                                        },
-                                                        {
-                                                            text: 'NIT: 1065643203' ,
-                                                            style: 'subheaderfecha',
-                                                        },
-                                                        {
-                                                            text: 'Teléfono: 312 8817962',
-                                                            style: 'subheaderfecha',
-                                                        }
+                                                        stack: [{
+                                                                text: 'PERFECTA S.A.S',
+                                                                style: 'subheader',
+                                                                alignment: 'left', // Alineación centrada
+                                                            },
+                                                            {
+                                                                text: 'NIT: 1065643203',
+                                                                style: 'subheaderfecha',
+                                                            },
+                                                            {
+                                                                text: 'Teléfono: 312 8817962',
+                                                                style: 'subheaderfecha',
+                                                            }
                                                         ]
                                                     },
                                                     {
                                                         width: '60%',
                                                         stack: [{
-                                                                text: 'Comprobante #' + agregarCeros(transaccionGlobal.transaccion.id, 5),
+                                                                text: 'Comprobante #' +
+                                                                    agregarCeros(
+                                                                        transaccionGlobal
+                                                                        .transaccion
+                                                                        .id,
+                                                                        5
+                                                                        ),
                                                                 style: 'subheader',
                                                             },
                                                             {
-                                                                text: 'Fecha de creación: ' + convertirFormatoFechaHora(transaccionGlobal.transaccion.created_at),
+                                                                text: 'Fecha de creación: ' +
+                                                                    convertirFormatoFechaHora(
+                                                                        transaccionGlobal
+                                                                        .transaccion
+                                                                        .created_at
+                                                                        ),
                                                                 style: 'subheaderfecha',
                                                             },
                                                             {
-                                                                text: 'Fecha de impresión: ' + convertirFormatoFechaHora(new Date()),
+                                                                text: 'Fecha de impresión: ' +
+                                                                    convertirFormatoFechaHora(
+                                                                        new Date()
+                                                                        ),
                                                                 style: 'subheaderfecha',
                                                             }
                                                         ],
@@ -888,7 +924,7 @@
                                                 lineColor: '#000',
                                             }]
                                         },
-                
+
                                         {
                                             style: 'invoiceAdressInfo',
                                             stack: [{
@@ -900,14 +936,24 @@
                                                     {
                                                         style: 'companyName',
                                                         stack: [{
-                                                            text: 'Identificación: ' + transaccionGlobal.tratamiento.identificacion,
+                                                            text: 'Identificación: ' +
+                                                                transaccionGlobal
+                                                                .tratamiento
+                                                                .identificacion,
                                                             style: 'subheader',
                                                         }]
                                                     },
                                                     {
                                                         style: 'companyAddress',
                                                         stack: [{
-                                                            text: 'Nombre: ' + transaccionGlobal.tratamiento.npaciente + ' ' + transaccionGlobal.tratamiento.apellido,
+                                                            text: 'Nombre: ' +
+                                                                transaccionGlobal
+                                                                .tratamiento
+                                                                .npaciente +
+                                                                ' ' +
+                                                                transaccionGlobal
+                                                                .tratamiento
+                                                                .apellido,
                                                             style: 'subheader',
                                                         }]
                                                     }
@@ -925,7 +971,7 @@
                                                 lineColor: '#000',
                                             }]
                                         },
-                
+
                                         {
                                             style: 'invoiceAdressInfo',
                                             stack: [{
@@ -937,14 +983,19 @@
                                                         {
                                                             style: 'companyName',
                                                             stack: [{
-                                                                text: transaccionGlobal.tratamiento.nombre,
+                                                                text: transaccionGlobal
+                                                                    .tratamiento
+                                                                    .nombre,
                                                                 style: 'subheader',
                                                             }]
                                                         },
                                                         {
                                                             style: 'companyEmail',
                                                             stack: [{
-                                                                text: 'Profesional: ' + transaccionGlobal.tratamiento.nprofe,
+                                                                text: 'Profesional: ' +
+                                                                    transaccionGlobal
+                                                                    .tratamiento
+                                                                    .nprofe,
                                                                 style: 'subheader',
                                                             }]
                                                         }
@@ -955,7 +1006,14 @@
                                                     stack: [{
                                                         style: 'companyName',
                                                         stack: [{
-                                                            text: 'Pago realizado: ' + formatCurrency(transaccionGlobal.transaccion.pago_realizado, 'es-CO', 'COP'),
+                                                            text: 'Pago realizado: ' +
+                                                                formatCurrency(
+                                                                    transaccionGlobal
+                                                                    .transaccion
+                                                                    .pago_realizado,
+                                                                    'es-CO',
+                                                                    'COP'
+                                                                    ),
                                                             style: 'subheader',
                                                         }]
                                                     }]
@@ -1027,145 +1085,176 @@
                             },
                         },
                     };
-                
-                let vtotal = 0;
-                let referencia = '';
-                
-                docDefinition.content.push({
-                    margin: [0, 0, 0, 10],
-                    text: 'Detalles medio de pago',
-                    style: 'header',
-                    alignment: 'left', // Alineación a la izquierda
-                });
-                
-                var separatorLine = {
-                    canvas: [{
-                        type: 'line',
-                        x1: 0,
-                        y1: 0,
-                        x2: 515,
-                        y2: 0,
-                        lineWidth: 1,
-                        lineColor: '#000',
-                    }]
-                };
-                
-                docDefinition.content.push(
-                    separatorLine, {
-                        margin: [0, 0, 0, 5],
-                        table: {
-                            headerRows: 1,
-                            widths: ['50%', '25%', '25%'],
-                            body: [
-                                ['Medio de pago', 'Referencia de pago', 'Valor']
-                            ],
-                        },
-                        layout: {
-                            hLineColor: function (i, node) {
-                                return '#FFF';
-                            },
-                            vLineColor: function (i, node) {
-                                return '#FFF';
-                            },
-                        },
-                    }
-                );
-                
-                $.each(transaccionGlobal.medioPago, function (i, item) {
-                    referencia = item.referencia !== null ? item.referencia : '---';
+
+                    let vtotal = 0;
+                    let referencia = '';
+
                     docDefinition.content.push({
-                        table: {
-                            widths: ['50%', '25%', '25%'],
-                            body: [
-                                [item.medpago, referencia, formatCurrency(item.valor, 'es-CO', 'COP')]
-                            ],
-                        },
-                        layout: {
-                            hLineColor: function (i, node) {
-                                return i === 0 ? '#000' : '#FFF';
-                            },
-                            vLineColor: function (i, node) {
-                                return '#FFF';
-                            },
-                        },
-                    });
-                    vtotal = vtotal + item.valor;
-                });
-                
-                if (transaccionGlobal.servTerminado.length > 0) {
-                    docDefinition.content.push({
-                        canvas: [{
-                            type: 'line',
-                            x1: 0,
-                            y1: 10,
-                            x2: 515,
-                            y2: 10,
-                            lineWidth: 1,
-                            lineColor: '#000',
-                        }]
-                    }, {
-                        margin: [0, 10, 0, 10],
-                        text: 'Detalles de servicios abonados',
+                        margin: [0, 0, 0, 10],
+                        text: 'Detalles medio de pago',
                         style: 'header',
                         alignment: 'left', // Alineación a la izquierda
                     });
-                
+
+                    var separatorLine = {
+                        canvas: [{
+                            type: 'line',
+                            x1: 0,
+                            y1: 0,
+                            x2: 515,
+                            y2: 0,
+                            lineWidth: 1,
+                            lineColor: '#000',
+                        }]
+                    };
+
                     docDefinition.content.push(
                         separatorLine, {
                             margin: [0, 0, 0, 5],
                             table: {
                                 headerRows: 1,
-                                widths: ['10%', '70%', '20%'],
+                                widths: ['50%', '25%', '25%'],
                                 body: [
-                                    ['#', 'Servicio', 'Valor']
+                                    ['Medio de pago', 'Referencia de pago', 'Valor']
                                 ],
                             },
                             layout: {
-                                hLineColor: function (i, node) {
+                                hLineColor: function(i, node) {
                                     return '#FFF';
                                 },
-                                vLineColor: function (i, node) {
+                                vLineColor: function(i, node) {
                                     return '#FFF';
                                 },
                             },
                         }
                     );
-                
-                    $.each(transaccionGlobal.servTerminado, function (i, item) {
+
+                    $.each(transaccionGlobal.medioPago, function(i, item) {
+                        referencia = item.referencia !== null ? item.referencia : '---';
                         docDefinition.content.push({
                             table: {
-                                widths: ['10%', '70%', '20%'],
+                                widths: ['50%', '25%', '25%'],
                                 body: [
-                                    [i + 1, item.nombre, formatCurrency(item.valor, 'es-CO', 'COP')]
+                                    [item.medpago, referencia, formatCurrency(item
+                                        .valor, 'es-CO', 'COP')]
                                 ],
                             },
                             layout: {
-                                hLineColor: function (i, node) {
+                                hLineColor: function(i, node) {
                                     return i === 0 ? '#000' : '#FFF';
                                 },
-                                vLineColor: function (i, node) {
+                                vLineColor: function(i, node) {
                                     return '#FFF';
                                 },
                             },
                         });
+                        vtotal = vtotal + item.valor;
                     });
-                }
-                
-                docDefinition.content.push({
-                    text: 'Valor Total: ' + formatCurrency(vtotal, 'es-CO', 'COP'),
-                    style: 'header',
-                    alignment: 'right',
-                    margin: [0, 40, 0, 0],
-                });
-                
-                setTimeout(function () {
-                    // Ocultar el loader después de generar el PDF (simulación)
-                    loader.style.display = 'none';
-                }, 3000);
-                
-                // Crear y descargar el PDF
-                pdfMake.createPdf(docDefinition).download('comprobante_pago.pdf');
-                
+
+                    if (transaccionGlobal.servTerminado.length > 0) {
+                        docDefinition.content.push({
+                            canvas: [{
+                                type: 'line',
+                                x1: 0,
+                                y1: 10,
+                                x2: 515,
+                                y2: 10,
+                                lineWidth: 1,
+                                lineColor: '#000',
+                            }]
+                        }, {
+                            margin: [0, 10, 0, 10],
+                            text: 'Detalles de servicios abonados',
+                            style: 'header',
+                            alignment: 'left', // Alineación a la izquierda
+                        });
+
+                        docDefinition.content.push(
+                            separatorLine, {
+                                margin: [0, 0, 0, 5],
+                                table: {
+                                    headerRows: 1,
+                                    widths: ['10%', '70%', '20%'],
+                                    body: [
+                                        ['#', 'Servicio', 'Valor']
+                                    ],
+                                },
+                                layout: {
+                                    hLineColor: function(i, node) {
+                                        return '#FFF';
+                                    },
+                                    vLineColor: function(i, node) {
+                                        return '#FFF';
+                                    },
+                                },
+                            }
+                        );
+
+                        $.each(transaccionGlobal.servTerminado, function(i, item) {
+                            docDefinition.content.push({
+                                table: {
+                                    widths: ['10%', '70%', '20%'],
+                                    body: [
+                                        [i + 1, item.nombre, formatCurrency(item
+                                            .valor, 'es-CO', 'COP')]
+                                    ],
+                                },
+                                layout: {
+                                    hLineColor: function(i, node) {
+                                        return i === 0 ? '#000' : '#FFF';
+                                    },
+                                    vLineColor: function(i, node) {
+                                        return '#FFF';
+                                    },
+                                },
+                            });
+                        });
+                    }
+
+                    docDefinition.content.push({
+                        text: 'Valor Total: ' + formatCurrency(vtotal, 'es-CO', 'COP'),
+                        style: 'header',
+                        alignment: 'right',
+                        margin: [0, 40, 0, 0],
+                    });
+
+                    setTimeout(function() {
+                        // Ocultar el loader después de generar el PDF (simulación)
+                        loader.style.display = 'none';
+                    }, 3000);
+
+                    // Crear y descargar el PDF
+                    
+                    if (enviar == 1) {
+                        const pdfMakeDataUrl = pdfMake.createPdf(docDefinition).getDataUrl();
+                        var form = $("#formEnvioComprobante");
+                        var url = form.attr("action");
+                        var token = $("#token").val(); // Obtener el token CSRF de la metaetiqueta
+
+
+                        $.ajax({
+                            url: url,
+                            type: 'POST',
+                            contentType: 'application/json',
+                            data: JSON.stringify({ pdfData: pdfMakeDataUrl }),
+                            headers: {
+                                'X-CSRF-TOKEN': token  // Agregar el token CSRF como encabezado
+                            },
+                            success: function(data) {
+                              console.log(data.message); // Mensaje del servidor
+                            },
+                            error: function(xhr, status, error) {
+                              console.error('Error al enviar el PDF al servidor:', error);
+                            }
+                          });
+
+                    } else {
+                        pdfMake.createPdf(docDefinition).download('comprobante_pago.pdf');
+
+                    }
+
+
+
                 },
                 checkRecaudos: function() {
                     $(".icheck-activity").iCheck({
@@ -1458,7 +1547,7 @@
 
                             transaccionGlobal = respuesta;
 
-                           if (respuesta) {
+                            if (respuesta) {
                                 Swal.fire({
                                     type: "success",
                                     title: "",

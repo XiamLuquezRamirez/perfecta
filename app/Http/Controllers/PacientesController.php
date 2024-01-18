@@ -67,6 +67,20 @@ class PacientesController extends Controller
         }
     }
 
+    public function envioComprobante(){
+        $pdfContent = request()->get('pdfContent');
+       
+
+        // Genera un nombre único para el archivo PDF
+        $pdfFileName = 'comprobante_pago_' . uniqid() . '.pdf';
+    
+        // Ruta donde se guardará el archivo en el servidor (puedes ajustar según tu estructura de archivos)
+        $pdfFilePath = public_path('/app-assets/comprobantes/' . $pdfFileName);
+    
+        // Guarda el contenido del PDF en el archivo en el servidor
+        file_put_contents($pdfFilePath, $pdfContent);
+    }
+
     public function AllProfesionales()
     {
         if (Auth::check()) {

@@ -585,7 +585,7 @@
 
                                                     <td colspan="2">
                                                         <div class="form-actions right">
-                                                            <button type="button" class="btn btn-warning mr-1">
+                                                            <button type="button" onclick="$.notifCPaciente();" class="btn btn-warning mr-1">
                                                                 <i class="  feather icon-bell"></i> Notificar al Cliente
                                                             </button>
                                                             <button type="button" onclick="$.addComentario();" class="btn btn-primary">
@@ -803,6 +803,10 @@
         <!-- Tus campos del formulario aquí -->
     </form>
     <form action="{{ url('/AdminPacientes/updateServiciosTerminados') }}" id="formServTerminados" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/AdminCitas/notificaccionCita') }}" id="formCambioNotifCita" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
@@ -1951,6 +1955,7 @@
 
                     var form = $("#formCambioEstadocita");
                     $('#idCita').remove();
+                    $('#estadoCita').remove();
                     form.append("<input type='hidden' id='idCita' name='idCita'  value='" + idCita +
                         "'>");
                     form.append("<input type='hidden' id='estadoCita' name='estadoCita'  value='" +
@@ -1973,12 +1978,93 @@
                                     text: "El estado de la cita fue cambiada a " +
                                         estado + " exitosamente",
                                     confirmButtonClass: "btn btn-primary",
-                                    timer: 1500,
+                                    timer: 2000,
                                     buttonsStyling: false
                                 });
                                 $.cargarCita();
                                 $.cargarDatos();
+                            }
 
+                            setTimeout(function (){
+                                if(respuesta.envioCorreo == 'noCorreo'){
+                                    Swal.fire({
+                                        type: "errot",
+                                        title: "Opsss...",
+                                        text: "El paciente no tiene un correo electronico asociaco",
+                                        confirmButtonClass: "btn btn-primary",
+                                        timer: 1500,
+                                        buttonsStyling: false
+                                    });
+                                }else if(respuesta.envioCorreo == 'Error'){
+                                    Swal.fire({
+                                        type: "errot",
+                                        title: "Opsss...",
+                                        text: "Ha ocurrido un error",
+                                        confirmButtonClass: "btn btn-primary",
+                                        timer: 1500,
+                                        buttonsStyling: false
+                                    });
+                                }else{
+                                    Swal.fire({
+                                        type: "success",
+                                        title: "",
+                                        text: "El correo fue enviado exitosamente",
+                                        confirmButtonClass: "btn btn-primary",
+                                        timer: 1500,
+                                        buttonsStyling: false
+                                    });
+                                }
+                            }, 3000);
+
+                            
+                        }
+                    });
+                },
+                notifCPaciente: function() {
+                    var idCita = $("#idCita").val();
+
+                    var form = $("#formCambioNotifCita");
+                    $('#idCita').remove();
+                    $('#estadoCita').remove();
+                    form.append("<input type='hidden' id='idCita' name='idCita'  value='" + idCita +
+                        "'>");
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            if (respuesta.envioCorreo == "ok") {
+                                Swal.fire({
+                                    type: "success",
+                                    title: "",
+                                    text: "El correo fue enviado exitosamente",
+                                    confirmButtonClass: "btn btn-primary",
+                                    timer: 1500,
+                                    buttonsStyling: false
+                                });
+                            }else if (respuesta.envioCorreo == "noCorreo"){
+                                Swal.fire({
+                                    type: "errot",
+                                    title: "Opsss...",
+                                    text: "El paciente no tiene un correo electronico asociaco",
+                                    confirmButtonClass: "btn btn-primary",
+                                    timer: 1500,
+                                    buttonsStyling: false
+                                });
+                            }else{
+                                Swal.fire({
+                                    type: "errot",
+                                    title: "Opsss...",
+                                    text: "Ha ocurrido un error",
+                                    confirmButtonClass: "btn btn-primary",
+                                    timer: 1500,
+                                    buttonsStyling: false
+                                });
                             }
                         }
                     });
