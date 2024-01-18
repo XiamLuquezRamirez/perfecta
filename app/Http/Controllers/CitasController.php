@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Citas;
 use App\Models\Pacientes;
 use App\Models\Tratamientos;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 class CitasController extends Controller
 {
@@ -87,6 +89,9 @@ class CitasController extends Controller
             $estadoCita = request()->get('estadoCita');
             $CitasPaciente = Citas::CambioEstadocita($idCita, $estadoCita);
 
+            //enviar correo de cambio de estado
+            $envioCorreo = self::envioCambioEstadoCita($idCita,$estadoCita);
+
 
             if (request()->ajax()) {
                 return response()->json([
@@ -95,6 +100,37 @@ class CitasController extends Controller
             }
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+    public function envioCambioEstadoCita($idCita, $estadoCita) {
+        $mail = new PHPMailer(true);
+
+        try {
+            // Configuración del servidor SMTP
+            $mail->isSMTP();
+            $mail->Host = 'mail.perfectaestetica.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = 'citas@perfectaestetica.com';
+            $mail->Password = 'tu-contraseña';
+            $mail->SMTPSecure = 'tls';
+            $mail->Port = 587;
+
+            // Configuración del remitente y destinatario
+            $mail->setFrom('citas@perfectaestetica.com', 'Tu Nombre');
+            $mail->addAddress('alexanderx105@hotmail.com', 'Nombre Destinatario');
+
+            // Contenido del correo
+            $mail->isHTML(true);
+            $mail->Subject = 'Asunto del correo';
+            $mail->Body = 'Contenido del correo en formato HTML';
+
+            // Envío del correo
+            $mail->send();
+
+            return 'Correo enviado con éxito';
+        } catch (Exception $e) {
+            return "Error al enviar el correo: {$mail->ErrorInfo}";
         }
     }
 
