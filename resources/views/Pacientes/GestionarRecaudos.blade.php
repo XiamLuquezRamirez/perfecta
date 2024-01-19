@@ -817,7 +817,6 @@
                             transaccionGlobal = respuesta;
                             $.imprimirComprobante();
                         }
-
                     });
 
                 },
@@ -825,30 +824,55 @@
                     var loader = document.getElementById('loader');
                     loader.style.display = 'block';
 
-                    var form = $("#formGuardarPagoTratamiento");
-
-                    let tratamiento = transaccionGlobal.tratameinto.id;
-                    let transaccion = transaccionGlobal.trasaccion.id;
-
-                    $("#idTratamiento").remove();
+                    var form = $("#formEnvioComprobante");                   
+                    let transaccion = $("#idTransaccion").val();                  
                     $("#idTransaccion").remove();
-
-                    form.append("<input type='hidden' id='idTratamiento' name='idTratamiento'  value='" + tratamiento +
-                        "'>");
                     form.append("<input type='hidden' id='idTransaccion' name='idTransaccion'  value='" + transaccion +
                         "'>");
 
                     var url = form.attr("action");
-                    var accion = $("#accio").val();
+                    var datos = form.serialize();
 
                     $.ajax({
                         type: "POST",
                         url: url,
-                        data: formData,
-                        processData: false,
-                        contentType: false,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
                         success: function(respuesta) {
-                            
+                           
+                            loader.style.display = 'none';                            
+
+                            if(respuesta.resultado == "ok"){
+                                Swal.fire({
+                                    type: "success",
+                                    title: "",
+                                    text: "Comprobante enviado exitosamente",
+                                    confirmButtonClass: "btn btn-primary",
+                                    timer: 1500,
+                                    buttonsStyling: false
+                                });
+
+
+                            }else if(respuesta.resultado == "noCorreo"){
+                                Swal.fire({
+                                    type: "errot",
+                                    title: "Opsss...",
+                                    text: "El paciente no tiene un correo electronico asociado",
+                                    confirmButtonClass: "btn btn-primary",
+                                    timer: 1500,
+                                    buttonsStyling: false
+                                });
+                            }else{
+                                Swal.fire({
+                                    type: "errot",
+                                    title: "Opsss...",
+                                    text: "Ha ocurrido un error",
+                                    confirmButtonClass: "btn btn-primary",
+                                    timer: 1500,
+                                    buttonsStyling: false
+                                });
+                            }
                         }
                     });
 

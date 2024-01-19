@@ -142,7 +142,7 @@ class CitasController extends Controller
             $asunto = "Recordatorio de cita";
         }else{
             $mensaje = "Su cita a cambiado a estado: ".$datosCita->estado;
-            $asunto = "Cambio de estado";
+            $asunto = "Cambio de estado de cita";
         }
 
         $contenido = "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
@@ -608,6 +608,8 @@ class CitasController extends Controller
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
+
+   
 
     public function sanear_string($string)
     {

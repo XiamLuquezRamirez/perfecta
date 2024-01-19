@@ -34,7 +34,7 @@
                             </div>
 
                             <div class="position-relative">
-                                <input type="search" id="searchInput" class="form-control" placeholder="Busqueda...">
+                                <input type="text" id="searchInput" class="form-control" placeholder="Busqueda...">
                                 <div class="form-control-position">
                                     <i class="fa fa-search text-size-base text-muted la-rotate-270"></i>
                                 </div>

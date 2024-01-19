@@ -1346,6 +1346,8 @@
                                 respuesta.Seccion.nombre);
 
                             $.each(respuesta.evoluciones, function(i, item) {
+                                let evolEscrita = item.evolucion = (item.evolucion === null || item.evolucion.trim() === '') ? 'Sin evolución' : item.evolucion;
+                                
                                 evoluciones +=
                                     '<div class="card collapse-header bs-callout-danger callout-bordered mb-1" role="tablist">' +
                                     '<div id="headingCollapse' + consEvo +
@@ -1373,9 +1375,8 @@
                                     consEvo + '" class="collapse">' +
                                     '    <div class="card-content">' +
                                     '        <div class="card-body py-1">' +
-                                    '            <p class="text-bold-500"> Evolución escrita:</p>' +
-                                    item.evolucion +
-                                    '        </div>' +
+                                    '            <p class="text-bold-600"><b> Evolución escrita:</b></p>' +
+                                    +evolEscrita+    '        </div>' +
                                     '        <div class="card-footer pt-0 border-top">' +
                                     '            <label class="sidebar-label">Archivos adjuntos</label>' +
                                     '            <ul class="list-unstyled mb-0">';
@@ -1505,7 +1506,8 @@
 
                 for (const servicio in evolucionesAgrupadas[tratamiento][seccion]) {
                     evolucionesAgrupadas[tratamiento][seccion][servicio].forEach(evolucion => {
-                   
+                        let evolEscrita = evolucion.evolucion = (evolucion.evolucion === null || evolucion.evolucion.trim() === '') ? 'Sin evolución' : evolucion.evolucion;
+                               
                         evoluciones +=
                         '<div class="card collapse-header bs-callout-danger callout-bordered mb-1" role="tablist">' +
                         '<div id="headingCollapse' + consEvo +
@@ -1534,7 +1536,7 @@
                         '    <div class="card-content">' +
                         '        <div class="card-body py-1">' +
                         '            <p class="text-bold-500"> Evolución escrita:</p>' +
-                        evolucion.evolucion +
+                        evolEscrita +
                         '        </div>' +
                         '        <div class="card-footer pt-0 border-top">' +
                         '            <label class="sidebar-label">Archivos adjuntos</label>' +

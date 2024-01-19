@@ -26,11 +26,11 @@
                 <ul class="nav navbar-nav float-right">
                     <li class="dropdown dropdown-notification nav-item"><a class="nav-link nav-link-label"
                             href="#" data-toggle="dropdown"><i class="ficon feather icon-bell"></i><span
-                            id="cantNotificaPaciente"  class="badge badge-pill badge-danger badge-up">1</span></a>
+                            id="cantNotificaPaciente"  class="badge badge-pill badge-danger badge-up">0</span></a>
                         <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
                             <li class="dropdown-menu-header">
                                 <h6 class="dropdown-header m-0"><span class="grey darken-2">Notificationes</span>
-                                    <span id="cantNotificaPaciente2" class="notification-tag badge badge-danger float-right m-0">5 Nuevas</span></h6>
+                                    <span id="cantNotificaPaciente2" class="notification-tag badge badge-danger float-right m-0">0 Nuevas</span></h6>
                             </li>
                             <li class="scrollable-container media-list" id="listNotof">
                              </li>

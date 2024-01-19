@@ -105,8 +105,12 @@ class AdminitraccionController extends Controller
                 ->table('profesionales')
                 ->where('estado', 'ACTIVO');
             if ($search) {
-                $profesionales->where('identificacion', 'LIKE', '%' . $search . '%');
-                $profesionales->where('nombre', 'LIKE', '%' . $search . '%');
+              
+                $profesionales->where(function ($query) use ($search) {
+                    $query->where('identificacion', 'LIKE', '%' . $search . '%')
+                        ->orWhere('nombre', 'LIKE', '%' . $search . '%');
+                });
+            
             }
 
             $ListProfesionales = $profesionales->paginate($perPage, ['*'], 'page', $page);
@@ -316,8 +320,10 @@ class AdminitraccionController extends Controller
                 ->where('gastos.estado', 'ACTIVO')
                 ->select('gastos.*', 'categorias.descripcion AS desgasto');
             if ($search) {
-                $gastos->where('gastos.descripcion', 'LIKE', '%' . $search . '%');
-                $gastos->where('categorias.descripcion', 'LIKE', '%' . $search . '%');
+                $gastos->where(function ($query) use ($search) {
+                    $query->where('gastos.descripcion', 'LIKE', '%' . $search . '%')
+                        ->orWhere('categorias.descripcion', 'LIKE', '%' . $search . '%');
+                });
             }
             $gastos->where('gastos.fecha_pago',  $fechaPago);
 

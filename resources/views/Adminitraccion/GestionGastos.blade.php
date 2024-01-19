@@ -259,8 +259,6 @@
                                                 <i class="feather icon-corner-up-left"></i>
                                                 Salir
                                             </button>
-
-
                                         </div>
                                     </div>
                                 </div>
@@ -404,8 +402,7 @@
                     var miDiv = document.getElementById("modalGastos");
                     miDiv.style.setProperty("overflow-y", "auto", "important");
 
-                },
-            
+                },            
                 guardar: function() {
 
 
@@ -688,7 +685,6 @@
 
                     $.limpiar();
                 },
-
                 eliminar: function(id) {
                     Swal.fire({
                         title: "Esta seguro de Eliminar este registro?",
@@ -716,7 +712,6 @@
                         }
                     });
                 },
-
                 eliminarCategoria: function(id) {
                     Swal.fire({
                         title: "Esta seguro de Eliminar este registro?",
@@ -862,9 +857,7 @@
             const fechaFormateada = `${dia.padStart(2, '0')}/${mes.padStart(2, '0')}/${año}`;
 
             return fechaFormateada;
-        }
-
-       
+        }       
     </script>
 
     </script>
