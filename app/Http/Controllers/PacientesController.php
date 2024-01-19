@@ -68,17 +68,20 @@ class PacientesController extends Controller
     }
 
     public function envioComprobante(){
-        $pdfContent = request()->get('pdfContent');
-       
+      if(Auth::check()){
+    $tratamiento = request()->get("idTratamiento");        
+    $transaccion = request()->get("idTransaccion");        
 
-        // Genera un nombre único para el archivo PDF
-        $pdfFileName = 'comprobante_pago_' . uniqid() . '.pdf';
-    
-        // Ruta donde se guardará el archivo en el servidor (puedes ajustar según tu estructura de archivos)
-        $pdfFilePath = public_path('/app-assets/comprobantes/' . $pdfFileName);
-    
-        // Guarda el contenido del PDF en el archivo en el servidor
-        file_put_contents($pdfFilePath, $pdfContent);
+    $servTerminado = Servicios::ConultservTerminado($transaccion);
+    $medioPago = Tratamientos::MediosPago($transaccion);
+    $tratamiento = Tratamientos::busTatamientoRecaudo($tratamiento);
+    $transaccion = Tratamientos::buscTransaccion($transaccion);
+
+
+      }else{
+        return redirect("/")->with("error", "Su Sesión ha Terminado");
+      }
+
     }
 
     public function AllProfesionales()
@@ -760,13 +763,10 @@ class PacientesController extends Controller
             $transaccion = Tratamientos::guardarTransaccion($data);
             $mediPago = Tratamientos::guardarMediosPago($data, $transaccion);
 
-
             $pagoServ = Servicios::updateSaldoServicio($data);
             $valorTotal = $pagoServ['valorTotal'];
             $collectServTerm = $pagoServ['collectServTerm'];
             $collectServAfec = $pagoServ['collectServAfec'];
-
-
 
             foreach ($collectServTerm as $id) {
                 $ServTerm = Servicios::guardarServTerm($id, $transaccion);
@@ -776,7 +776,6 @@ class PacientesController extends Controller
                 $servAfec = Tratamientos::guardarServAfectados($item['servicio'], $item['valorServicio'], $transaccion);
             }
 
-
             $updatetrata = Tratamientos::updateTrata($data['tratamientoSel'], $valorTotal);
 
             //consultas 
@@ -784,7 +783,6 @@ class PacientesController extends Controller
             $medioPago = Tratamientos::MediosPago($transaccion);
             $tratamiento = Tratamientos::busTatamientoRecaudo($data['tratamientoSel']);
             $transaccion = Tratamientos::buscTransaccion($transaccion);
-
 
             if (request()->ajax()) {
                 return response()->json([

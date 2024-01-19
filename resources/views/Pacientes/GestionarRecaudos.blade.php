@@ -477,7 +477,7 @@
                                                                             <i
                                                                                 class="feather icon-printer mr-25 common-size"></i>
                                                                             Imprimir comprobante</a>
-                                                                        <a onclick="$.enviarComprobante(1);"
+                                                                        <a onclick="$.enviarComprobante();"
                                                                             class="btn btn-success btn-block mb-1 print-invoice">
                                                                             <i
                                                                                 class="feather icon-navigation mr-25 common-size"></i>
@@ -765,7 +765,6 @@
                         }
                     });
                 },
-
                 procederEliminarServ: function(transa) {
 
                     var form = $("#formDeleteTransaccion");
@@ -822,8 +821,37 @@
                     });
 
                 },
-                enviarComprobante: function(enviar) {
-                    $.imprimirComprobante(enviar);
+                enviarComprobante: function() {
+                    var loader = document.getElementById('loader');
+                    loader.style.display = 'block';
+
+                    var form = $("#formGuardarPagoTratamiento");
+
+                    let tratamiento = transaccionGlobal.tratameinto.id;
+                    let transaccion = transaccionGlobal.trasaccion.id;
+
+                    $("#idTratamiento").remove();
+                    $("#idTransaccion").remove();
+
+                    form.append("<input type='hidden' id='idTratamiento' name='idTratamiento'  value='" + tratamiento +
+                        "'>");
+                    form.append("<input type='hidden' id='idTransaccion' name='idTransaccion'  value='" + transaccion +
+                        "'>");
+
+                    var url = form.attr("action");
+                    var accion = $("#accio").val();
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(respuesta) {
+                            
+                        }
+                    });
+
                 },
                 otroPago: function() {
                     var datTratameintos = document.getElementById(
@@ -833,7 +861,7 @@
                     $.atrasTratamiento();
                     $.buscInfTratamientos($("#idPaciente").val());
                 },
-                imprimirComprobante: function(enviar) {
+                imprimirComprobante: function() {
                     var loader = document.getElementById('loader');
                     loader.style.display = 'block';
 
@@ -1224,37 +1252,9 @@
                     }, 3000);
 
                     // Crear y descargar el PDF
-                    
-                    if (enviar == 1) {
-                        const pdfMakeDataUrl = pdfMake.createPdf(docDefinition).getDataUrl();
-                        var form = $("#formEnvioComprobante");
-                        var url = form.attr("action");
-                        var token = $("#token").val(); // Obtener el token CSRF de la metaetiqueta
-
-
-                        $.ajax({
-                            url: url,
-                            type: 'POST',
-                            contentType: 'application/json',
-                            data: JSON.stringify({ pdfData: pdfMakeDataUrl }),
-                            headers: {
-                                'X-CSRF-TOKEN': token  // Agregar el token CSRF como encabezado
-                            },
-                            success: function(data) {
-                              console.log(data.message); // Mensaje del servidor
-                            },
-                            error: function(xhr, status, error) {
-                              console.error('Error al enviar el PDF al servidor:', error);
-                            }
-                          });
-
-                    } else {
+                                    
                         pdfMake.createPdf(docDefinition).download('comprobante_pago.pdf');
-
-                    }
-
-
-
+                  
                 },
                 checkRecaudos: function() {
                     $(".icheck-activity").iCheck({
@@ -1384,8 +1384,6 @@
                     });
 
                     $.checkDetaRecaudos();
-
-
                 },
                 convertirFormato: function(fechaHora) {
                     // Crear un objeto Date a partir de la cadena de fecha y hora
@@ -1417,9 +1415,6 @@
 
                     $("#valorVisPago1").val(formatCurrency(numero, 'es-CO', 'COP'));
                     $("#valorPago1").val(numero);
-
-
-
                 },
                 cambioFormatoPago: function(id) {
                     var numero = $("#" + id).val();
@@ -1459,12 +1454,10 @@
                     } else {
                         $("#div-tranfe" + id).show();
                     }
-
                 },
                 ConfirpagoTratamiento: function() {
 
                     var checkServ = document.getElementsByClassName('icheck-activity-det');
-                    console.log(checkServ.length);
                     var sumTotal = 0;
                     var selServ = false;
 
@@ -1501,7 +1494,6 @@
                     if (abono.checked) {
                         sumTotal = $("#valorAbono").val();
                     }
-
 
                     if (sumMont < sumTotal || sumMont > sumTotal) {
                         Swal.fire({
