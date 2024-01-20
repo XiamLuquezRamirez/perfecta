@@ -20,9 +20,9 @@
                     </li>
                     <li id="MenAdminProesional"  data-menu=""><a class="dropdown-item" href="{{ url('/Administracion/Profesionales') }}" data-i18n="Todo Application" data-toggle="dropdown">Gestión de Profesionales</a>
                     </li>
-                    <li id="MenAdminInventario"  data-menu=""><a class="dropdown-item" href="app-kanban.html" data-i18n="Kanban Application" data-toggle="dropdown">Gestión de Inventario</a>
+                    <li  style="display:none;" id="MenAdminInventario"  data-menu=""><a class="dropdown-item" href="app-kanban.html" data-i18n="Kanban Application" data-toggle="dropdown">Gestión de Inventario</a>
                     </li>
-                    <li id="MenAdminUsuuario"  data-menu=""><a class="dropdown-item" href="app-contacts.html" data-i18n="Contacts" data-toggle="dropdown">Gestión de Usuarios</a>
+                    <li style="display:none;" id="MenAdminUsuuario"  data-menu=""><a class="dropdown-item" href="app-contacts.html" data-i18n="Contacts" data-toggle="dropdown">Gestión de Usuarios</a>
                     </li>
                 </ul>
             </li>

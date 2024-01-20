@@ -71,7 +71,7 @@ class PacientesController extends Controller
 
     public function envioComprobante(){
   if(Auth::check()){
-    $mail = new PHPMailer(true);   
+    $mail = new PHPMailer(true);
     $idTransaccion = request()->get("idTransaccion");        
     $transaccion = Tratamientos::buscTransaccion($idTransaccion);
     $servTerminado = Servicios::ConultservTerminado($idTransaccion);

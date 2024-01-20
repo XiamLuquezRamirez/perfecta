@@ -819,8 +819,6 @@
                 },
                 imprimir: function() {
                    
-                   
-
                     var totals = {};
 
                     // Iterar sobre los recaudos y acumular los totales
@@ -887,7 +885,7 @@
                                         style: 'title'
                                     },
                                     {
-                                        text: formatCurrency(respuestaGlobal.caja.saldo_inicial, 'es-CO', 'COP'),
+                                        text: formatCurrency(totalCaja, 'es-CO', 'COP'),
                                         style: 'total'
                                     }
                                 ]
@@ -979,7 +977,7 @@
                                     headerRows: 0,  // Sin filas de encabezado
                                     widths: ['75%', '25%'],
                                     body: [
-                                        [{text: 'Recaudos' , fillColor:'#D7D7DB'}, { text: formatCurrency(respuestaGlobal.gastos, 'es-CO', 'COP'), fillColor:'#D7D7DB', alignment: 'right' }]
+                                        [{text: 'Recaudos' , fillColor:'#D7D7DB'}, { text: formatCurrency(totalRecaudos, 'es-CO', 'COP'), fillColor:'#D7D7DB', alignment: 'right' }]
                                     ],
                                     // Configuración de estilos de la tabla
                                     layout: {
@@ -1004,7 +1002,7 @@
                                     headerRows: 0,  // Sin filas de encabezado
                                     widths: ['75%', '25%'],
                                     body: [
-                                        [{text: 'Gastos'}, { text: formatCurrency(totalRecaudos, 'es-CO', 'COP'), alignment: 'right' }]
+                                        [{text: 'Gastos'}, { text: formatCurrency(respuestaGlobal.gastos, 'es-CO', 'COP'), alignment: 'right' }]
                                     ],
                                     // Configuración de estilos de la tabla
                                     layout: {
@@ -1126,7 +1124,7 @@
                     }               
 
                     // Generar el PDF y descargarlo
-                    pdfMake.createPdf(docDefinition).download('documento.pdf');
+                    pdfMake.createPdf(docDefinition).download('InformeCaja.pdf');
 
                 }
             });
