@@ -1026,6 +1026,7 @@ class PacientesController extends Controller
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
+    
 
     public function CargarMunicipios(Request $request)
     {

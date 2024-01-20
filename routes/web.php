@@ -97,7 +97,7 @@ Route::post('/AdminPacientes/CargarDatosPacTrat', [PacientesController::class,'C
 Route::post('/AdminPacientes/SeccionesTratamientos', [PacientesController::class,'SeccionesTratamientos']);
 Route::post('/AdminPacientes/AllServicios', [PacientesController::class,'AllServicios']);
 Route::post('/AdminPacientes/busEditServ', [PacientesController::class,'busEditServ']);
-Route::post('/AdminPacientes/busEditSecc', [PacientesController::class,'busEditSecc']);
+Route::post('/AdminPacientes/busPEditSecc', [PacientesController::class,'busEditSecc']);
 Route::post('/AdminPacientes/busEditTrata', [PacientesController::class,'busEditTrata']);
 Route::post('/AdminPacientes/EliminarServicio', [PacientesController::class,'EliminarServicio']);
 Route::post('/AdminPacientes/EliminarSeccion', [PacientesController::class,'EliminarSeccion']);
@@ -116,3 +116,8 @@ Route::post('/AdminPacientes/TratamientosRecaudoDetalles', [PacientesController:
 Route::post('/AdminPacientes/GuardarPagoTratamiento', [PacientesController::class,'GuardarPagoTratamiento']);
 Route::post('/AdminPacientes/envioComprobante', [PacientesController::class,'envioComprobante']);
 
+
+// NOTIFICAR PACIENTES
+Route::get('/Administracion/Promociones', [AdminitraccionController::class,'Promociones']);
+Route::post('/Administracion/CargarPromociones', [AdminitraccionController::class,'CargarPromociones']);
+Route::post('/Administracion/CargarPacientes', [AdminitraccionController::class,'CargarPacientes']);

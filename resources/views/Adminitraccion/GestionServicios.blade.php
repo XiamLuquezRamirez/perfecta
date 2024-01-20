@@ -133,7 +133,7 @@
                                     <div class="col-12">
                                         <div class="form-actions right">
                                             <button type="button" onclick="$.cancelar();" class="btn btn-warning mr-1">
-                                                <i class="feather icon-x"></i> Cancelar
+                                                <i class="fa fa-reply"></i> Salir
                                             </button>
                                             <button type="button" id="btnGuardar" onclick="$.guardar()" class="btn btn-success">
                                                 <i class="fa fa-check-square-o"></i> Guardar
@@ -406,7 +406,7 @@
                     $("#trMultimedia").html(multimedia);
                 },
                 cancelar: function() {
-                    $('#modalProfesional').modal('hide');
+                    $('#modalServicios').modal('hide');
                 },
                 limpiar: function() {                
                     $("#nombre").val("");

@@ -38,6 +38,16 @@ class AdminitraccionController extends Controller
         }
     }
 
+    public function Promociones()
+    {
+        $bandera = "";
+        if (Auth::check()) {
+            return view('Adminitraccion.GestionarPromociones', compact('bandera'));
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
     public function Gastos()
     {
         if (Auth::check()) {
@@ -65,6 +75,21 @@ class AdminitraccionController extends Controller
             if (request()->ajax()) {
                 return response()->json([
                     'categorias' => $categorias,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+    public function CargarPacientes()
+    {
+        if (Auth::check()) {
+            $pacientes = Pacientes::BuscarPacienteCita();
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'pacientes' => $pacientes,
                 ]);
             }
         } else {
@@ -105,12 +130,11 @@ class AdminitraccionController extends Controller
                 ->table('profesionales')
                 ->where('estado', 'ACTIVO');
             if ($search) {
-              
+
                 $profesionales->where(function ($query) use ($search) {
                     $query->where('identificacion', 'LIKE', '%' . $search . '%')
                         ->orWhere('nombre', 'LIKE', '%' . $search . '%');
                 });
-            
             }
 
             $ListProfesionales = $profesionales->paginate($perPage, ['*'], 'page', $page);
@@ -153,6 +177,7 @@ class AdminitraccionController extends Controller
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
+
     public function CargarServicios()
     {
         if (Auth::check()) {
@@ -188,7 +213,6 @@ class AdminitraccionController extends Controller
                 <td><span class="invoice-date">$ ' . $numero_formateado . '</span></td>
                 <td>
                     <div class="invoice-action">
-
                     <a onclick="$.editar(' . $item->id . ');" title="Editar" class="invoice-action-edit cursor-pointer mr-1">
                         <i class="feather icon-edit-1"></i>
                     </a>
@@ -205,6 +229,63 @@ class AdminitraccionController extends Controller
             }
 
             $pagination = $ListServicios->links('Adminitraccion.Paginacion')->render();
+
+            return response()->json([
+                'servicios' => $tdTable,
+                'links' => $pagination,
+            ]);
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+    public function CargarPromociones()
+    {
+        if (Auth::check()) {
+            $perPage = 10; // Número de posts por página
+            $page = request()->get('page', 1);
+            $search = request()->get('search');
+            if (!is_numeric($page)) {
+                $page = 1; // Establecer un valor predeterminado si no es numérico
+            }
+
+            $promociones = DB::connection('mysql')
+                ->table('promociones')
+                ->where('estado', 'ACTIVO');
+            if ($search) {
+                $promociones->where('descripcion', 'LIKE', '%' . $search . '%');
+            }
+
+            $ListPromociones = $promociones->paginate($perPage, ['*'], 'page', $page);
+
+            $tdTable = '';
+            $j = 1;
+            $x = ($page - 1) * $perPage + 1;
+
+            foreach ($ListPromociones as $i => $item) {
+                if (!is_null($item)) {
+                    $tdTable .= '<tr>
+                <td><span class="invoice-date">' . $j . '</span></td>
+                <td><span class="invoice-date">' . $item->descripcion . '</span></td>
+               <td>
+                    <div class="invoice-action">
+
+                    <a onclick="$.editar(' . $item->id . ');" title="Editar" class="invoice-action-edit cursor-pointer mr-1">
+                        <i class="feather icon-edit-1"></i>
+                    </a>
+                    <a onclick="$.eliminar(' . $item->id . ');" title="Eliminar" class="invoice-action-edit cursor-pointer">
+                        <i class="feather icon-trash"></i>
+                    </a>
+                    </div>
+                </td>
+            </tr>';
+
+                    $x++;
+                    $j++;
+                }
+            }
+
+            $pagination = $ListPromociones->links('Adminitraccion.Paginacion')->render();
 
             return response()->json([
                 'servicios' => $tdTable,
