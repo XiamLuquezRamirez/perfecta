@@ -715,9 +715,9 @@ class PacientesController extends Controller
 
                 $estado_serv = $tratamientosPorTratamiento->first()->estado_serv;
 
-                if ($estado_serv == "Terminado") {
-                    $realizadoTratamiento = $tratamientosPorTratamiento->sum('valor');
-                }
+            
+               $realizadoTratamiento = $tratamientosPorTratamiento->sum('valor');
+                
 
                 $nombreTratamiento = $tratamientosPorTratamiento->first()->ntrara;
                 $nombreProfesional = $tratamientosPorTratamiento->first()->nprof;

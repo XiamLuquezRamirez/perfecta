@@ -344,8 +344,7 @@ class AdminitraccionController extends Controller
                 <td><span class="invoice-date">' . $item->fecha_cierre . '</span></td>
                 <td><span class="invoice-date">$ ' . number_format($item->saldo_inicial, 2, ',', '.') . '</span></td>
                 <td><span class="invoice-date">$ ' . number_format($saldo_acomulado, 2, ',', '.') . '</span></td>
-                <td><span class="invoice-date">$ ' . number_format($gastos, 2, ',', '.') . '</span></td>
-                <td><span class="invoice-date">$ ' . number_format($saldo, 2, ',', '.') . '</span></td>';
+                <td><span class="invoice-date">$ ' . number_format($gastos, 2, ',', '.') . '</span></td>';
                     if ($item->estado_caja == "Abierta") {
                         $tdTable .= '<td><span class="invoice-date"><span class="badge badge-success"> ' . $item->estado_caja . '</span></span></td>';
                     } else {
@@ -485,8 +484,8 @@ class AdminitraccionController extends Controller
             $recaudos = Tratamientos::recaudosCajaResumen($caja->fecha_apertura);
 
             //gastos
-            $gastos = Gastos::GastosCaja($caja->fecha_apertura);
-
+            $gastos = Gastos::GastosCajaDet($caja->fecha_apertura);
+            
             if (request()->ajax()) {
                 return response()->json([
                     'caja' => $caja,

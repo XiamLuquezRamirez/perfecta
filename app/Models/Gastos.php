@@ -18,6 +18,7 @@ class Gastos extends Model
             'categoria' => $request['categoria'],
             'valor' => $request['valor'],
             'forma_pago' => $request['formPago'],
+            'referencia' => $request['referencia'],
             'fecha_gasto' => $fechaGasto,
             'fecha_pago' => $fechaPago,
             'estado' => 'ACTIVO'
@@ -41,6 +42,23 @@ class Gastos extends Model
 
         return $recaudoMes;
     }
+    public static function GastosCajaDet($fecIni)
+    {
+        // Convierte la fecha de inicio a un objeto DateTime
+        $fechaInicio = new  \DateTime($fecIni);
+
+        // Utiliza la fecha y hora actual como el último momento
+        $fechaFin = new  \DateTime();
+
+        $recaudoMes = DB::connection('mysql')
+            ->table('gastos')
+            ->leftJoin("categorias","categorias.id","gastos.categoria")
+            ->whereBetween('fecha_pago', [$fechaInicio->format('Y-m-d'), $fechaFin->format('Y-m-d')])
+            ->select("gastos.*","categorias.descripcion AS ncategoria")
+            ->get();
+
+        return $recaudoMes;
+    }
 
     public static function editar($request)
     {
@@ -54,6 +72,7 @@ class Gastos extends Model
             'categoria' => $request['categoria'],
             'valor' => $request['valor'],
             'forma_pago' => $request['formPago'],
+            'referencia' => $request['referencia'],
             'fecha_gasto' => $fechaGasto,
             'fecha_pago' => $fechaPago
         ]);

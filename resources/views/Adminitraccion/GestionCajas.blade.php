@@ -63,7 +63,6 @@
                                     <th>Saldo inicial</th>
                                     <th>Recaudado</th>
                                     <th>Gastos</th>
-                                    <th>Saldo Caja</th>
                                     <th>Estado</th>
                                     <th>Detalles</th>
                                 </tr>
@@ -234,20 +233,33 @@
                                 <table class="table mb-0">
                                     <tbody>
                                         <tr>
-                                            <td style="width: 55%">Gastos (-)</td>
+                                            <td style="width: 55%">Gastos Efectivo (-)</td>
                                             <td></td>
                                             <td></td>
                                             <td id="infGastos">$ 0,00</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 55%">Gastos Transferencia (-)</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td id="infGastosT">$ 0,00</td>
                                         </tr>
 
                                     </tbody>
                                     <tfoot class="bg-teal bg-lighten-4 height-50">
                                         <tr>
-                                            <th style="width: 55%">Total caja (saldo inicial + recaudado - gastos):
+                                            <th style="width: 55%">Total caja efectivo (saldo inicial + recaudado - gastos):
                                             </th>
                                             <th></th>
                                             <th></th>
                                             <th id="infTotalCaja">$ 0,00</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="width: 55%">Total caja Transferencia (recaudado - gastos):
+                                            </th>
+                                            <th></th>
+                                            <th></th>
+                                            <th id="infTotalCajaT">$ 0,00</th>
                                         </tr>
                                     </tfoot>
 
@@ -266,6 +278,65 @@
                                         </tr>
                                     </tfoot>
 
+                                </table>
+                            </div>
+                            <hr>
+
+                            <h4>Detalle de Recaudos</h4>
+                            <div class="table-responsive" style="height: 350px;">
+                                <table class="table mb-0">
+                                    <thead class="border-bottom border-dark">
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>Paciente</th>
+                                            <th>Fecha de pago</th>
+                                            <th>Medio de Pago</th>
+                                            <th>Referencia</th>
+                                            <th>Valor pagado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tr_detaRecaudo">
+                                       
+                                    </tbody>
+                                    <tfoot class="bg-teal bg-lighten-4 height-50">
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th style="width: 55%">Total</th>
+                                            <th></th>
+                                            <th></th>
+                                            <th id="infTotalRecaudos">$ 0,00</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <hr>
+                            <h4>Detalle de gastos</h4>
+                            <div class="table-responsive" style="height: 350px;">
+                                <table class="table mb-0">
+                                    <thead class="border-bottom border-dark">
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>Descripción</th>
+                                            <th>Fecha de pago</th>
+                                            <th>Medio de pago</th>
+                                            <th>Referencia</th>
+                                            <th>Valor pagado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tr_detaGastos">
+                                       
+                                    </tbody>
+                                    <tfoot class="bg-teal bg-lighten-4 height-50">
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th style="width: 55%">Total</th>
+                                            <th></th>
+                                            <th></th>
+                                            <th id="infTotalGastos">$ 0,00</th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                             <hr>
@@ -341,6 +412,8 @@
                                                 name="valorMontoCierre">
                                             <input type="hidden" value="" id="valorMontoGastos"
                                                 name="valorMontoGastos">
+                                            <input type="hidden" value="" id="valorMontoGastosT"
+                                                name="valorMontoGastosT">
                                             <input type="hidden" value="" id="valorMontoRecaudos"
                                                 name="valorMontoRecaudos">
                                         </div>
@@ -496,8 +569,9 @@
                         async: false,
                         dataType: "json",
                         success: function(respuesta) {
-                            respuestaGlobal = respuesta; 
-                            $("#tituloCaja").html("Caja #" + agregarCeros(respuesta.caja.id,5));
+                            respuestaGlobal = respuesta;
+                            $("#tituloCaja").html("Caja #" + agregarCeros(respuesta.caja.id,
+                                5));
                             $("#fecApertura").html(respuesta.caja.fecha_apertura);
                             $("#usuApertura").html(respuesta.caja.nombre_usuario);
                             $("#infSaldoAnterior").html(formatCurrency(parseInt(respuesta
@@ -554,6 +628,8 @@
 
                             let mediosPago = '';
                             let totalMedioPago = 0;
+                            let totalMedioPagoT = 0;
+                            console.log(totals);
                             for (var medioPagoNombre in totals) {
                                 mediosPago += '<tr>' +
                                     '<td style="width: 55%">' + medioPagoNombre + ' (' +
@@ -564,41 +640,156 @@
                                         'es-CO', 'COP') + '</td>' +
                                     '</tr>';
 
-                                totalMedioPago += totals[medioPagoNombre].total;
+                              
 
-                                if (medioPagoNombre == 'Efectivo') {
+                                if (medioPagoNombre == 'Efectivo') {  
+                                    totalMedioPago += totals[medioPagoNombre].total;                                
                                     $("#valorMontoCierre").val(totals[medioPagoNombre]
                                         .total);
                                     $("#valorVisMontoCierre").val(formatCurrency(totals[
                                         medioPagoNombre].total, 'es-CO', 'COP'));
 
+                                }else{
+                                    totalMedioPagoT += totals[medioPagoNombre].total;
                                 }
                             }
 
+                            let totalRecaudos = totalMedioPago + totalMedioPagoT;
+
                             $("#tr-mediosPago").html(mediosPago);
-                            $("#totalMedioPago").html(formatCurrency(totalMedioPago,
+                            $("#totalMedioPago").html(formatCurrency(totalRecaudos,
                                 'es-CO', 'COP'));
                             $("#valorMontoRecaudos").val(totalMedioPago);
 
+                            var totalEfectivo = 0;
+                            var totalTransferencia = 0;
+
+                            // Recorrer el arreglo de gastos
+                            respuesta.gastos.forEach(function(gasto) {
+                                // Sumar al total correspondiente
+                                if (gasto.forma_pago === "e") {
+                                    totalEfectivo += parseInt(gasto.valor);
+                                } else if (gasto.forma_pago === "t") {
+                                    totalTransferencia += parseInt(gasto.valor);
+                                }
+                            });
+
 
                             //informacion gastos
-                            $("#infGastos").html(formatCurrency(respuesta.gastos, 'es-CO',
+                            $("#infGastos").html(formatCurrency(totalEfectivo, 'es-CO',
+                                'COP'));
+                            $("#infGastosT").html(formatCurrency(totalTransferencia, 'es-CO',
                                 'COP'));
 
-                            $("#valorMontoGastos").val(respuesta.gastos);
+                            $("#valorMontoGastos").val(totalEfectivo);
+                            $("#valorMontoGastosT").val(totalTransferencia);
 
                             // total caja
                             let totalCaja = parseInt(respuesta.caja.saldo_inicial) +
                                 parseInt(totalMedioPago);
-                            totalCaja = totalCaja - parseInt(respuesta.gastos);
+
+                            let totalCajaT = totalMedioPagoT - totalTransferencia;
+
+
+                            totalCaja = totalCaja - parseInt(totalEfectivo);
 
                             $("#infTotalCaja").html(formatCurrency(totalCaja, 'es-CO',
+                                'COP'));
+                            $("#infTotalCajaT").html(formatCurrency(totalCajaT, 'es-CO',
                                 'COP'));
                             $("#valTotalGeneral").html(formatCurrency(totalCaja, 'es-CO',
                                 'COP'));
 
+
+                            ////MOSTRAR DETALLES RECAUDO
+                            let detaRecaudos = '';
+                            let referencia = '';
+                            var medioPagoNombre;
+                            let totalRecaudosDet = 0;
+                            $.each(respuesta.recaudos, function(i, item) {
+                             medioPagoNombre = {
+                                    "e": "Efectivo",
+                                    "tc": "Tarjeta de crédito",
+                                    "td": "Tarjeta de débito",
+                                    "t": "Transferencia"
+                                    // Puedes agregar más mapeos según tus necesidades
+                                } [item.medio_pago];
+
+                                referencia = item.referencia = item
+                                        .referencia !== null ? item.referencia :
+                                        "---";
+
+                                detaRecaudos+= '<tr>'
+                                    +'<td>'+agregarCeros(item.transaccion,5)+'</td>'
+                                    +'<td>'+item.nombre+' '+item.apellido+'</td>'
+                                    +'<td>'+$.convertirFormato(item.created_at)+'</td>'
+                                    +'<td>'+medioPagoNombre+'</td>'
+                                    +'<td>'+referencia+'</td>'
+                                    +'<td>'+formatCurrency(item.valor, 'es-CO', 'COP')+'</td>'
+                                +'</tr>'
+
+                                totalRecaudosDet+= parseInt(item.valor);
+
+                            });
+
+                            $('#tr_detaRecaudo').html(detaRecaudos);
+                            $('#infTotalRecaudos').html(formatCurrency(totalRecaudosDet, 'es-CO', 'COP'));
+                            ////MOSTRAR DETALLES GASTOS
+                            let detaGastos = '';
+                            let referenciaG = '';
+                            var medioPagoNombreG;
+                            let totalGastosDet = 0;
+                            $.each(respuesta.gastos, function(i, item) {
+                             medioPagoNombreG = {
+                                    "e": "Efectivo",
+                                    "t": "Transferencia"
+                                    // Puedes agregar más mapeos según tus necesidades
+                                } [item.forma_pago];
+
+                                referenciaG = item.referencia = item
+                                        .referencia !== null ? item.referencia :
+                                        "---";
+
+                                        detaGastos+= '<tr>'
+                                    +'<td>'+agregarCeros(item.id,5)+'</td>'
+                                    +'<td>'+item.ncategoria+": "+ item.descripcion+'</td>'
+                                    +'<td>'+$.convertirFormato(item.fecha_pago)+'</td>'
+                                    +'<td>'+medioPagoNombreG+'</td>'
+                                    +'<td>'+referenciaG+'</td>'
+                                    +'<td>'+formatCurrency(item.valor, 'es-CO', 'COP')+'</td>'
+                                +'</tr>'
+                                totalGastosDet+=parseInt(item.valor);
+
+                            });
+
+                            $('#tr_detaGastos').html(detaGastos);
+                            $('#infTotalGastos').html(formatCurrency(totalGastosDet, 'es-CO', 'COP'));
+
+
                         }
                     });
+                },
+                convertirFormato: function(fechaHora) {
+                    // Crear un objeto Date a partir de la cadena de fecha y hora
+                    var fecha = new Date(fechaHora);
+
+                    // Obtener los componentes de la fecha y la hora
+                    var dia = fecha.getDate();
+                    var mes = fecha.getMonth() + 1; // Los meses comienzan desde 0, por lo que sumamos 1
+                    var anio = fecha.getFullYear();
+                    var horas = fecha.getHours();
+                    var minutos = fecha.getMinutes();
+                    var ampm = horas >= 12 ? 'PM' : 'AM';
+
+                    // Formatear los componentes en el nuevo formato
+                    horas = horas % 12;
+                    horas = horas ? horas : 12; // Si es 0, cambiar a 12
+                    minutos = minutos < 10 ? '0' + minutos : minutos;
+
+                    // Crear la cadena formateada
+                    var nuevoFormato = `${dia}/${mes}/${anio} ${horas}:${minutos} ${ampm}`;
+
+                    return nuevoFormato;
                 },
                 guardar: function() {
 
@@ -818,9 +1009,10 @@
 
                 },
                 imprimir: function() {
-                   
+
                     var totals = {};
 
+                    console.log(respuestaGlobal);
                     // Iterar sobre los recaudos y acumular los totales
                     respuestaGlobal.recaudos.forEach(function(recaudo) {
                         // Mapear los medios de pago a nombres deseados
@@ -846,42 +1038,45 @@
                             .valor);
                     });
 
-                    var totalRecaudos = Object.values(totals).reduce((acc, medioPago) => acc + medioPago.total, 0);
+                    var totalRecaudos = Object.values(totals).reduce((acc, medioPago) => acc + medioPago
+                        .total, 0);
 
-                      // total caja
-                      let totalCaja = parseInt(respuestaGlobal.caja.saldo_inicial) + parseInt(totalRecaudos);
-                      totalCaja = totalCaja - parseInt(respuestaGlobal.gastos);
-                      let colorCaja = "";
-                      let estadoCaja = "";
-                    if(respuestaGlobal.caja.estado_caja == "Cerrada"){
+                    // total caja
+                    let totalCaja = parseInt(respuestaGlobal.caja.saldo_inicial) + parseInt(
+                        totalRecaudos);
+                    totalCaja = totalCaja - parseInt(respuestaGlobal.gastos);
+                    let colorCaja = "";
+                    let estadoCaja = "";
+                    if (respuestaGlobal.caja.estado_caja == "Cerrada") {
                         estadoCaja = "Estado Cerrada";
                         colorCaja = "#FF4545";
-                    }else{
+                    } else {
                         estadOCaja = "Estado Abierta";
                         colorCaja = "#16D39A";
-                       
+
                     }
-                    
+
                     var docDefinition = {
-                        content: [
-                            {
-                                
-                                columns: [  {
-                                    text: "" ,
-                                    style: 'title'
-                                },
-                                {
-                                    text: estadoCaja,
-                                    style: 'colorTextoCaja',
-                                },]
-                                
+                        content: [{
+
+                                columns: [{
+                                        text: "",
+                                        style: 'title'
+                                    },
+                                    {
+                                        text: estadoCaja,
+                                        style: 'colorTextoCaja',
+                                    },
+                                ]
+
                             },
                             {
                                 style: 'header',
                                 columns: [
-                                  
+
                                     {
-                                        text: "Caja #" + agregarCeros(respuestaGlobal.caja.id,5),
+                                        text: "Caja #" + agregarCeros(respuestaGlobal.caja
+                                            .id, 5),
                                         style: 'title'
                                     },
                                     {
@@ -889,7 +1084,7 @@
                                         style: 'total'
                                     }
                                 ]
-                                
+
                             },
                             {
                                 style: 'body',
@@ -900,7 +1095,8 @@
                                                 style: 'subTitle'
                                             },
                                             {
-                                                text: respuestaGlobal.caja.fecha_apertura,
+                                                text: respuestaGlobal.caja
+                                                    .fecha_apertura,
                                                 style: 'info'
                                             }
                                         ]
@@ -912,7 +1108,10 @@
                                                 style: 'subTitle'
                                             },
                                             {
-                                                text: (respuestaGlobal.caja.estado_caja === 'Cerrada' ? respuestaGlobal.caja.fecha_cierre : 'No aplicable'),
+                                                text: (respuestaGlobal.caja
+                                                    .estado_caja === 'Cerrada' ?
+                                                    respuestaGlobal.caja
+                                                    .fecha_cierre : 'No aplicable'),
                                                 style: 'info'
                                             }
                                         ]
@@ -924,7 +1123,8 @@
                                                 style: 'subTitle'
                                             },
                                             {
-                                                text: respuestaGlobal.caja.nombre_usuario,
+                                                text: respuestaGlobal.caja
+                                                    .nombre_usuario,
                                                 style: 'info'
                                             }
                                         ]
@@ -932,121 +1132,170 @@
                                 ]
                             },
                             {
-                            style: 'tableExample',
+                                style: 'tableExample',
                                 table: {
                                     widths: ['75%', '25%'],
                                     body: [
-                                        ['Saldo anterior',   { text: formatCurrency(parseInt(respuestaGlobal.caja.saldo_anterior), 'es-CO', 'COP'), alignment: 'right' }],
-                                        ['Abono inicial',  { text: formatCurrency(respuestaGlobal.caja.abono_inicial, 'es-CO', 'COP'), alignment: 'right' }],
-                                        [{text: 'Saldo inicial total', fillColor:'#D7D7DB'},  { text: formatCurrency(respuestaGlobal.caja.saldo_inicial, 'es-CO', 'COP'), alignment: 'right',fillColor:'#D7D7DB'}]
+                                        ['Saldo anterior', {
+                                            text: formatCurrency(parseInt(
+                                                    respuestaGlobal.caja
+                                                    .saldo_anterior), 'es-CO',
+                                                'COP'),
+                                            alignment: 'right'
+                                        }],
+                                        ['Abono inicial', {
+                                            text: formatCurrency(respuestaGlobal.caja
+                                                .abono_inicial, 'es-CO', 'COP'),
+                                            alignment: 'right'
+                                        }],
+                                        [{
+                                            text: 'Saldo inicial total',
+                                            fillColor: '#D7D7DB'
+                                        }, {
+                                            text: formatCurrency(respuestaGlobal.caja
+                                                .saldo_inicial, 'es-CO', 'COP'),
+                                            alignment: 'right',
+                                            fillColor: '#D7D7DB'
+                                        }]
                                     ]
                                 }
                             },
                             {
-                                style: 'tableExample',  // Puedes ajustar el estilo según tus necesidades
+                                style: 'tableExample', // Puedes ajustar el estilo según tus necesidades
                                 table: {
-                                    headerRows: 0,  // Sin filas de encabezado
+                                    headerRows: 0, // Sin filas de encabezado
                                     widths: ['75%', '25%'],
                                     body: [
                                         ...Object.keys(totals).map(medioPago => [
                                             `${medioPago} (${totals[medioPago].count})`,
-                                            { text: formatCurrency(totals[medioPago].total, 'es-CO', 'COP'), alignment: 'right' }
+                                            {
+                                                text: formatCurrency(totals[medioPago]
+                                                    .total, 'es-CO', 'COP'),
+                                                alignment: 'right'
+                                            }
                                         ])
                                     ],
                                     // Configuración de estilos de la tabla
-                                    margin: [0, 0, 0, 0],  // Configuración de márgenes para quitar el borde superior
+                                    margin: [0, 0, 0,
+                                    0], // Configuración de márgenes para quitar el borde superior
                                     layout: {
-                                        hLineWidth: function (i, node) {
-                                            return (i === 0) ? 0 : 1;  // 0 para quitar el borde superior, 1 para mantener el resto de los bordes
+                                        hLineWidth: function(i, node) {
+                                            return (i === 0) ? 0 :
+                                            1; // 0 para quitar el borde superior, 1 para mantener el resto de los bordes
                                         },
-                                        vLineWidth: function (i, node) {
+                                        vLineWidth: function(i, node) {
                                             return 0;
                                         },
-                                        hLineColor: function (i, node) {
-                                            return '#fff';  // Color blanco para ocultar el borde superior
+                                        hLineColor: function(i, node) {
+                                            return '#fff'; // Color blanco para ocultar el borde superior
                                         },
-                                        vLineColor: function (i, node) {
+                                        vLineColor: function(i, node) {
                                             return '#fff';
                                         },
                                     }
                                 }
                             },
                             {
-                                style: 'tableExample',  // Puedes ajustar el estilo según tus necesidades
+                                style: 'tableExample', // Puedes ajustar el estilo según tus necesidades
                                 table: {
-                                    headerRows: 0,  // Sin filas de encabezado
+                                    headerRows: 0, // Sin filas de encabezado
                                     widths: ['75%', '25%'],
                                     body: [
-                                        [{text: 'Recaudos' , fillColor:'#D7D7DB'}, { text: formatCurrency(totalRecaudos, 'es-CO', 'COP'), fillColor:'#D7D7DB', alignment: 'right' }]
+                                        [{
+                                            text: 'Recaudos',
+                                            fillColor: '#D7D7DB'
+                                        }, {
+                                            text: formatCurrency(totalRecaudos, 'es-CO',
+                                                'COP'),
+                                            fillColor: '#D7D7DB',
+                                            alignment: 'right'
+                                        }]
                                     ],
                                     // Configuración de estilos de la tabla
                                     layout: {
-                                        hLineWidth: function (i, node) {
-                                            return (i === 0) ? 0 : 1;  // 0 para quitar el borde superior, 1 para mantener el resto de los bordes
+                                        hLineWidth: function(i, node) {
+                                            return (i === 0) ? 0 :
+                                            1; // 0 para quitar el borde superior, 1 para mantener el resto de los bordes
                                         },
-                                        vLineWidth: function (i, node) {
+                                        vLineWidth: function(i, node) {
                                             return 0;
                                         },
-                                        hLineColor: function (i, node) {
-                                            return '#fff';  // Color blanco para ocultar el borde superior
+                                        hLineColor: function(i, node) {
+                                            return '#fff'; // Color blanco para ocultar el borde superior
                                         },
-                                        vLineColor: function (i, node) {
+                                        vLineColor: function(i, node) {
                                             return '#fff';
                                         },
                                     }
                                 }
                             },
                             {
-                                style: 'tableExample',  // Puedes ajustar el estilo según tus necesidades
+                                style: 'tableExample', // Puedes ajustar el estilo según tus necesidades
                                 table: {
-                                    headerRows: 0,  // Sin filas de encabezado
+                                    headerRows: 0, // Sin filas de encabezado
                                     widths: ['75%', '25%'],
                                     body: [
-                                        [{text: 'Gastos'}, { text: formatCurrency(respuestaGlobal.gastos, 'es-CO', 'COP'), alignment: 'right' }]
+                                        [{
+                                            text: 'Gastos'
+                                        }, {
+                                            text: formatCurrency(respuestaGlobal.gastos,
+                                                'es-CO', 'COP'),
+                                            alignment: 'right'
+                                        }]
                                     ],
                                     // Configuración de estilos de la tabla
                                     layout: {
-                                        hLineWidth: function (i, node) {
-                                            return (i === 0) ? 0 : 1;  // 0 para quitar el borde superior, 1 para mantener el resto de los bordes
+                                        hLineWidth: function(i, node) {
+                                            return (i === 0) ? 0 :
+                                            1; // 0 para quitar el borde superior, 1 para mantener el resto de los bordes
                                         },
-                                        vLineWidth: function (i, node) {
+                                        vLineWidth: function(i, node) {
                                             return 0;
                                         },
-                                        hLineColor: function (i, node) {
-                                            return '#fff';  // Color blanco para ocultar el borde superior
+                                        hLineColor: function(i, node) {
+                                            return '#fff'; // Color blanco para ocultar el borde superior
                                         },
-                                        vLineColor: function (i, node) {
+                                        vLineColor: function(i, node) {
                                             return '#fff';
                                         },
                                     }
                                 }
                             },
                             {
-                                style: 'tableExample',  // Puedes ajustar el estilo según tus necesidades
+                                style: 'tableExample', // Puedes ajustar el estilo según tus necesidades
                                 table: {
-                                    headerRows: 0,  // Sin filas de encabezado
+                                    headerRows: 0, // Sin filas de encabezado
                                     widths: ['75%', '25%'],
                                     body: [
-                                        [{text: 'Total caja (saldo inicial + recaudado - gastos): ' , fillColor:'#D7D7DB'}, { text: formatCurrency(totalCaja, 'es-CO', 'COP'), fillColor:'#D7D7DB', alignment: 'right' }]
+                                        [{
+                                            text: 'Total caja (saldo inicial + recaudado - gastos): ',
+                                            fillColor: '#D7D7DB'
+                                        }, {
+                                            text: formatCurrency(totalCaja, 'es-CO',
+                                                'COP'),
+                                            fillColor: '#D7D7DB',
+                                            alignment: 'right'
+                                        }]
                                     ],
                                     // Configuración de estilos de la tabla
                                     layout: {
-                                        hLineWidth: function (i, node) {
-                                            return (i === 0) ? 0 : 1;  // 0 para quitar el borde superior, 1 para mantener el resto de los bordes
+                                        hLineWidth: function(i, node) {
+                                            return (i === 0) ? 0 :
+                                            1; // 0 para quitar el borde superior, 1 para mantener el resto de los bordes
                                         },
-                                        vLineWidth: function (i, node) {
+                                        vLineWidth: function(i, node) {
                                             return 0;
                                         },
-                                        hLineColor: function (i, node) {
-                                            return '#fff';  // Color blanco para ocultar el borde superior
+                                        hLineColor: function(i, node) {
+                                            return '#fff'; // Color blanco para ocultar el borde superior
                                         },
-                                        vLineColor: function (i, node) {
+                                        vLineColor: function(i, node) {
                                             return '#fff';
                                         },
                                     }
                                 }
                             },
-                            
+
 
                         ],
                         styles: {
@@ -1101,27 +1350,37 @@
                                 headerRows: 0,
                                 widths: ['75%', '25%'],
                                 body: [
-                                    [{ text: 'Saldo cierre:', fillColor: '#D7D7DB' }, { text: formatCurrency(respuestaGlobal.caja.saldo_cierre, 'es-CO', 'COP'), fillColor: '#D7D7DB', alignment: 'right' }]
+                                    [{
+                                        text: 'Saldo cierre:',
+                                        fillColor: '#D7D7DB'
+                                    }, {
+                                        text: formatCurrency(respuestaGlobal.caja
+                                            .saldo_cierre, 'es-CO', 'COP'),
+                                        fillColor: '#D7D7DB',
+                                        alignment: 'right'
+                                    }]
                                 ],
                                 // Configuración de estilos de la tabla
-                                margin: [0, 0, 0, 0],  // Configuración de márgenes para quitar el borde superior
+                                margin: [0, 0, 0,
+                                0], // Configuración de márgenes para quitar el borde superior
                                 layout: {
-                                    hLineWidth: function (i, node) {
-                                        return (i === 0) ? 0 : 1;  // 0 para quitar el borde superior, 1 para mantener el resto de los bordes
+                                    hLineWidth: function(i, node) {
+                                        return (i === 0) ? 0 :
+                                        1; // 0 para quitar el borde superior, 1 para mantener el resto de los bordes
                                     },
-                                    vLineWidth: function (i, node) {
+                                    vLineWidth: function(i, node) {
                                         return 0;
                                     },
-                                    hLineColor: function (i, node) {
-                                        return '#fff';  // Color blanco para ocultar el borde superior
+                                    hLineColor: function(i, node) {
+                                        return '#fff'; // Color blanco para ocultar el borde superior
                                     },
-                                    vLineColor: function (i, node) {
+                                    vLineColor: function(i, node) {
                                         return '#fff';
                                     },
                                 }
                             }
                         });
-                    }               
+                    }
 
                     // Generar el PDF y descargarlo
                     pdfMake.createPdf(docDefinition).download('InformeCaja.pdf');
@@ -1177,7 +1436,6 @@
             return (patron.test(te) || tecla == 9 || tecla == 8 || tecla == 37 || tecla == 39 || tecla == 46);
         }
         // Función para formatear números como moneda
-       
     </script>
 
     </script>

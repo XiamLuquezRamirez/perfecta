@@ -35,7 +35,7 @@
 
                         </div>
                         <div class="date-picker">
-                            <input type="text" onchange="$.cambioFecha();" id="fecha" name="fecha"
+                            <input type="text" id="fecha" name="fecha"
                                 class="pickadate form-control pl-1" placeholder="Fecha de gastos">
                         </div>
                     </div>
@@ -174,13 +174,19 @@
                                     <div class="col-4">
                                         <div class="form-group">
                                             <label for="userinput8">Forma de pago </label>
-                                            <select class="select2 form-control" id="formPago" name="formPago" >
+                                            <select class="select2 form-control" onchange="$.habReferencia(this.value);" id="formPago" name="formPago" >
                                                 <option value="">Seleccione...
                                                 </option>
                                                 <option value="e">Efectivo</option>
                                                 <option value="t">Transferencia</option>
                                             </select>
 
+                                        </div>
+                                    </div>
+                                    <div class="col-4" id="div-referencia" style="display: none;">
+                                        <div class="form-group">
+                                            <label>Referencia:</label>
+                                            <input type="text" class="form-control" id="referencia" value="" name="referencia">
                                         </div>
                                     </div>
                                     <div class="col-4">
@@ -192,6 +198,7 @@
                                             <input type="hidden" value="" id="valor" name="valor">
                                         </div>
                                     </div>
+                                  
 
                                     <div class="col-12">
                                         <div class="form-actions right">
@@ -332,18 +339,7 @@
 
             localStorage.clear();
 
-            var picker = $('.pickadate').daterangepicker({
-                singleDatePicker: true,
-                showDropdowns: true,
-                locale: {
-                    format: 'DD/MM/YYYY',
-                    daysOfWeek: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
-                    monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto',
-                        'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
-                    ],
-                }
-            });
-
+          
 
             $.extend({
                 cargar: function(page, searchTerm = '') {
@@ -662,6 +658,13 @@
                             var fechPago = convertirFecha(respuesta.gastos.fecha_pago);
                             $("#fecGasto").val(fechGasto);
                             $("#fecPago").val(fechPago);
+                            if(respuesta.gastos.forma_pago == "t"){
+                                $("#referencia").val(respuesta.gastos.referencia);
+                                $("#div-referencia").show();
+                            }else{
+                                $("#referencia").val("");
+                                $("#div-referencia").hide();
+                            }
 
                             $('#categoria').val(respuesta.gastos.categoria).trigger(
                                 'change.select2');
@@ -672,7 +675,6 @@
                             var formatoMoneda = formatCurrency(numero, 'es-CO', 'COP');
                             $("#valor").val(numero);
                             $("#valorVis").val(formatoMoneda);
-
 
                         }
                     });
@@ -780,6 +782,15 @@
                     });
 
                 },
+                habReferencia: function(val){
+                    
+                    if(val == "t"){
+                        $("#div-referencia").show();
+                    }else{
+                        $("#div-referencia").hide();
+                        $("#referencia").val("");
+                    }
+                },
                 procederEliminarCate: function(id) {
                     var form = $("#formEliminarCategoria");
 
@@ -806,10 +817,6 @@
                         }
                     });
 
-                },
-                cambioFecha: function() {
-                    var searchTerm = $("#searchInput").val();
-                    $.cargar(1, searchTerm);
                 }
 
             });
@@ -832,6 +839,28 @@
                 $.cargar(1, searchTerm); // Cargar la primera página con el término de búsqueda
             });
         })
+
+
+        var picker = $('.pickadate').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            locale: {
+                format: 'DD/MM/YYYY',
+                daysOfWeek: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto',
+                    'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+                ],
+            }
+        });
+
+
+        function cambioFecha(){
+            var searchTerm = $("#searchInput").val();
+            
+            $.cargar(1, searchTerm);
+        }
+
+        $("#fecha").on("change", cambioFecha);
 
         function formatCurrency(number, locale, currencySymbol) {
             return new Intl.NumberFormat(locale, {

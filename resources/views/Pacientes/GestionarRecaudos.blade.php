@@ -518,7 +518,7 @@
                                                     </table>
                                                 </div>
 
-                                                <div class="row mt-1" >
+                                                <div class="row mt-1">
                                                     <div class="col-12" style="text-align:right;">
                                                         <div class="form-actions right">
                                                             <button type="button" onclick="$.imprimirRecaudos();"
@@ -607,6 +607,7 @@
             var lastSelectedData = null;
             var transaccionGlobal = [];
             var recaudosRealizados = [];
+            const totalesPorTratamiento = {};
 
             $('#paciente').on('select2:select', function(e) {
                 // Obtener la información del elemento seleccionado
@@ -726,10 +727,12 @@
                             //RECAUDOS REALIZADOS
                             let recaudos = '';
 
+
                             recaudosRealizados = respuesta.recaudos;
+                            console.log(recaudosRealizados);
 
                             $.each(respuesta.recaudos, function(i, item) {
-                                console.log(item.nombre);
+
                                 recaudos += '<tr id="trTransaccion' + item.id +
                                     '">' +
                                     '<td class="align-middle">' +
@@ -1354,8 +1357,104 @@
                     pdfMake.createPdf(docDefinition).download('comprobante_pago.pdf');
 
                 },
-                imprimirRecaudos: function (){
-                    console.log(recaudosRealizados);
+                imprimirRecaudos: function() {
+                    const tratamientosOrganizados = {};
+
+                    // Iterar sobre el array original y organizar los datos
+                    recaudosRealizados.forEach(item => {
+                        const tratamientoID = item.tratamiento;
+
+                        // Verificar si el tratamiento ya está en el objeto organizado
+                        if (!tratamientosOrganizados[tratamientoID]) {
+                            // Si no existe, crear un nuevo tratamiento con su array de recaudos
+                            tratamientosOrganizados[tratamientoID] = {
+                                tratamiento: item.tratamiento,
+                                ntratamiento: item.nombre,
+                                recaudos: []
+                            };
+                        }
+
+                        // Añadir el recaudo al tratamiento correspondiente
+                        tratamientosOrganizados[tratamientoID].recaudos.push({
+                            id: item.id,
+                            pago_total: item.pago_total,
+                            abono_libre: item.abono_libre,
+                            pago_realizado: item.pago_realizado,
+                            usuario: item.usuario,
+                            estado: item.estado,
+                            remember_token: item.remember_token,
+                            created_at: item.created_at,
+                            update_at: item.update_at,
+                            nombre: item.nombre,
+                            nusuario: item.nombre_usuario
+                        });
+                    });
+
+                    // Convertir el objeto organizado de nuevo a un array
+                    const arrayTratamientosOrganizados = Object.values(tratamientosOrganizados);
+
+                    // Imprimir el resultado
+                    $.generarPDF(arrayTratamientosOrganizados);
+
+                },
+                generarPDF: function(arrayTratamientosOrganizados) {
+                
+                let miH4 = document.getElementById('titTrataPac');  
+
+                let npaciente = miH4.textContent || miH4.innerText;
+
+                    var documentDefinition = {
+                        content: [{
+                                text: 'Informe de Tratamientos y Recaudos',
+                                style: 'header'
+                            },
+                            {
+                                text: npaciente,
+                                style: 'headerPac'
+                            },
+                            {
+                                text: '\n'
+                            },
+                            // Iterar sobre los tratamientos
+                            ...arrayTratamientosOrganizados.flatMap(tratamiento => [{
+                                    text: `Tratamiento: ${tratamiento.ntratamiento}`,
+                                    style: 'subheader'
+                                },
+                                {
+                                    table: {
+                                        body: generarTabla(tratamiento.recaudos)
+                                    },
+                                    layout: 'lightHorizontalLines'
+                                },
+                                {
+                                    text: '\n'
+                                },
+                            ]),
+                        ],
+                        styles: {
+                            header: {
+                                fontSize: 18,
+                                bold: true,
+                                alignment: 'center',
+                                margin: [0, 0, 0, 10]
+                            },
+                            headerPac: {
+                                fontSize: 14,
+                                bold: true,
+                                alignment: 'center',
+                                margin: [0, 0, 0, 10]
+                            },
+                            subheader: {
+                                fontSize: 14,
+                                bold: true,
+                                margin: [0, 10, 0, 5]
+                            }
+                        }
+                    };
+
+                    // Generar el PDF
+                    pdfMake.createPdf(documentDefinition).open();
+
                 },
                 checkRecaudos: function() {
                     $(".icheck-activity").iCheck({
@@ -1885,6 +1984,24 @@
             return fechaHoraFormateada;
         }
 
+        function generarTabla(recaudos) {
+            // Cabecera de la tabla
+            const tableBody = [
+                ['# Transacción', 'Pago Realizado', 'Usuario', 'Fecha de Creación'],
+            ];
+
+            // Datos de los recaudos
+            recaudos.forEach(recaudo => {
+                tableBody.push([
+                    agregarCeros(recaudo.id, 5),
+                    formatCurrency(recaudo.pago_realizado, 'es-CO', 'COP'),
+                    recaudo.nusuario,
+                    convertirFormatoFechaHora(recaudo.created_at)
+                ]);
+            });
+
+            return tableBody;
+        }
 
 
         function agregarCeros(numero, longitud) {

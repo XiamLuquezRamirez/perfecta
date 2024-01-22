@@ -57,9 +57,10 @@ class Tratamientos extends Model
 
         return DB::connection('mysql')->table('tratamientos')
             ->leftJoin("transaccion", "transaccion.tratamiento", "tratamientos.id")
+            ->leftJoin("users", "users.id", "transaccion.usuario")
             ->where('tratamientos.paciente', $idPac)
             ->where("transaccion.estado", "ACTIVO")
-            ->select("transaccion.*", "tratamientos.nombre")
+            ->select("transaccion.*", "tratamientos.nombre","users.nombre_usuario")
             ->orderBy("transaccion.id", "DESC")
             ->get();
     }
@@ -381,7 +382,10 @@ class Tratamientos extends Model
 
         $recaudoMes = DB::connection('mysql')
             ->table('medio_pagos_tratamiento')
-            ->whereBetween('created_at', [$fechaInicio->format('Y-m-d H:i:s'), $fechaFin->format('Y-m-d H:i:s')])
+            ->leftJoin("tratamientos", "tratamientos.id","medio_pagos_tratamiento.tratamiento")
+            ->leftJoin("pacientes", "pacientes.id","tratamientos.paciente")
+            ->whereBetween('medio_pagos_tratamiento.created_at', [$fechaInicio->format('Y-m-d H:i:s'), $fechaFin->format('Y-m-d H:i:s')])
+            ->select("medio_pagos_tratamiento.*", "pacientes.nombre", "pacientes.apellido")
             ->get();
 
         return $recaudoMes;
