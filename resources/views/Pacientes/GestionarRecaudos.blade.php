@@ -52,6 +52,12 @@
                                                     aria-selected="false"><i class="fa fa-eye"></i> Recaudos realizados al
                                                     paciente</a>
                                             </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="baseIcon-tab12" data-toggle="tab"
+                                                    aria-controls="tabIcon13" href="#tabIcon13" role="tab"
+                                                    aria-selected="false"><i class="fa fa-trash-o"></i> Recaudos
+                                                    eliminados</a>
+                                            </li>
 
                                         </ul>
                                         <div class="tab-content px-1 pt-1">
@@ -499,7 +505,6 @@
                                                     <table class="table">
                                                         <thead>
                                                             <tr>
-
                                                                 <th>Transacción</th>
                                                                 <th>Tratamiento</th>
                                                                 <th>Fecha de pago</th>
@@ -508,6 +513,38 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody id="tr-recaudosRealizados">
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                                <div class="row mt-1" >
+                                                    <div class="col-12" style="text-align:right;">
+                                                        <div class="form-actions right">
+                                                            <button type="button" onclick="$.imprimirRecaudos();"
+                                                                class="btn btn-warning mr-1">
+                                                                <i class="fa fa-print"></i> Imprimir
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                            <div class="tab-pane" id="tabIcon13" role="tabpanel"
+                                                aria-labelledby="baseIcon-tab13">
+                                                <div id="audience-list-scroll" style="height: 400px; overflow: auto;"
+                                                    class="table-responsive position-relative">
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Transacción</th>
+                                                                <th>Tratamiento</th>
+                                                                <th>Fecha de eliminación</th>
+                                                                <th>Valor</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tr-recaudosEliminados">
 
                                                         </tbody>
                                                     </table>
@@ -569,6 +606,7 @@
 
             var lastSelectedData = null;
             var transaccionGlobal = [];
+            var recaudosRealizados = [];
 
             $('#paciente').on('select2:select', function(e) {
                 // Obtener la información del elemento seleccionado
@@ -685,8 +723,10 @@
                             $("#trTratamientos").html(tratamientos);
 
 
-                            //TRATAMIENTOS REALIZADOS
+                            //RECAUDOS REALIZADOS
                             let recaudos = '';
+
+                            recaudosRealizados = respuesta.recaudos;
 
                             $.each(respuesta.recaudos, function(i, item) {
                                 console.log(item.nombre);
@@ -732,6 +772,31 @@
                             });
 
                             $("#tr-recaudosRealizados").html(recaudos);
+                            //RECAUDOS ELIMINADOS
+                            recaudos = '';
+
+                            $.each(respuesta.recaudosEliminados, function(i, item) {
+
+                                recaudos += '<tr id="trTransaccion' + item.id +
+                                    '">' +
+                                    '<td class="align-middle">' +
+                                    '    <span>' + agregarCeros(item.id, 5) +
+                                    '</span>' +
+                                    '</td>' +
+                                    '<td class="align-middle">' +
+                                    '    <span>' + item.nombre + '</span>' +
+                                    '</td>' +
+                                    '<td class="align-middle">' +
+                                    item.created_at +
+                                    '</td>' +
+                                    '<td class="align-middle">' +
+                                    formatCurrency(item.pago_realizado, 'es-CO',
+                                        'COP') +
+                                    '</td>' +
+                                    ' </tr>';
+                            });
+
+                            $("#tr-recaudosEliminados").html(recaudos);
                         }
                     });
 
@@ -744,6 +809,8 @@
                         title: "Esta seguro de Eliminar este registro?",
                         text: "¡No podrás revertir esto!",
                         type: "warning",
+                        input: 'text',
+                        inputPlaceholder: 'Motivo por el cual eliminara el pago...',
                         showCancelButton: true,
                         confirmButtonColor: "#3085d6",
                         cancelButtonColor: "#d33",
@@ -754,7 +821,8 @@
                         buttonsStyling: false
                     }).then(function(result) {
                         if (result.value) {
-                            $.procederEliminarServ(transa);
+                            const motivo = result.value;
+                            $.procederEliminarServ(transa, motivo);
                         } else if (result.dismiss === Swal.DismissReason.cancel) {
                             Swal.fire({
                                 title: "Cancelado",
@@ -765,13 +833,16 @@
                         }
                     });
                 },
-                procederEliminarServ: function(transa) {
+                procederEliminarServ: function(transa, motivo) {
 
                     var form = $("#formDeleteTransaccion");
                     $("#idTransaccion").remove();
                     form.append(
                         "<input type='hidden' id='idTransaccion' name='idTransaccion'  value='" +
                         transa + "'>");
+                    form.append(
+                        "<input type='hidden' id='motivoDelete' name='motivoDelete'  value='" +
+                        motivo + "'>");
                     var url = form.attr("action");
                     var datos = form.serialize();
 
@@ -824,10 +895,12 @@
                     var loader = document.getElementById('loader');
                     loader.style.display = 'block';
 
-                    var form = $("#formEnvioComprobante");                   
-                    let transaccion = $("#idTransaccion").val();                  
+                    var form = $("#formEnvioComprobante");
+                    let transaccion = $("#idTransaccion").val();
                     $("#idTransaccion").remove();
-                    form.append("<input type='hidden' id='idTransaccion' name='idTransaccion'  value='" + transaccion +
+                    form.append(
+                        "<input type='hidden' id='idTransaccion' name='idTransaccion'  value='" +
+                        transaccion +
                         "'>");
 
                     var url = form.attr("action");
@@ -840,10 +913,10 @@
                         async: false,
                         dataType: "json",
                         success: function(respuesta) {
-                           
-                            loader.style.display = 'none';                            
 
-                            if(respuesta.resultado == "ok"){
+                            loader.style.display = 'none';
+
+                            if (respuesta.resultado == "ok") {
                                 Swal.fire({
                                     type: "success",
                                     title: "",
@@ -854,7 +927,7 @@
                                 });
 
 
-                            }else if(respuesta.resultado == "noCorreo"){
+                            } else if (respuesta.resultado == "noCorreo") {
                                 Swal.fire({
                                     type: "errot",
                                     title: "Opsss...",
@@ -863,7 +936,7 @@
                                     timer: 1500,
                                     buttonsStyling: false
                                 });
-                            }else{
+                            } else {
                                 Swal.fire({
                                     type: "errot",
                                     title: "Opsss...",
@@ -900,7 +973,8 @@
 
                     var docDefinition = {
                         pageMargins: [40, 60, 40,
-                        60], // Márgenes [izquierda, arriba, derecha, abajo]
+                            60
+                        ], // Márgenes [izquierda, arriba, derecha, abajo]
                         content: [{
                                 image: base64data,
                                 width: 200,
@@ -940,7 +1014,7 @@
                                                                         .transaccion
                                                                         .id,
                                                                         5
-                                                                        ),
+                                                                    ),
                                                                 style: 'subheader',
                                                             },
                                                             {
@@ -949,14 +1023,14 @@
                                                                         transaccionGlobal
                                                                         .transaccion
                                                                         .created_at
-                                                                        ),
+                                                                    ),
                                                                 style: 'subheaderfecha',
                                                             },
                                                             {
                                                                 text: 'Fecha de impresión: ' +
                                                                     convertirFormatoFechaHora(
                                                                         new Date()
-                                                                        ),
+                                                                    ),
                                                                 style: 'subheaderfecha',
                                                             }
                                                         ],
@@ -1065,7 +1139,7 @@
                                                                     .pago_realizado,
                                                                     'es-CO',
                                                                     'COP'
-                                                                    ),
+                                                                ),
                                                             style: 'subheader',
                                                         }]
                                                     }]
@@ -1276,9 +1350,12 @@
                     }, 3000);
 
                     // Crear y descargar el PDF
-                                    
-                        pdfMake.createPdf(docDefinition).download('comprobante_pago.pdf');
-                  
+
+                    pdfMake.createPdf(docDefinition).download('comprobante_pago.pdf');
+
+                },
+                imprimirRecaudos: function (){
+                    console.log(recaudosRealizados);
                 },
                 checkRecaudos: function() {
                     $(".icheck-activity").iCheck({

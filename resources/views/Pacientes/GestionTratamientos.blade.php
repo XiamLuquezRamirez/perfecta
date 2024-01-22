@@ -74,7 +74,7 @@
                                             <hr>
                                             <div class="col-xxl-8 col-xl-12 col-lg-12 col-md-12 col-12">
                                                 <div class="card info-time-tracking">
-                                                    <div class="card-content" id="div-trata-act">
+                                                    <div class="card-content" style="overflow: auto;" id="div-trata-act">
 
                                                     </div>
                                                 </div>
@@ -1347,7 +1347,7 @@
 
                             $.each(respuesta.evoluciones, function(i, item) {
                                 let evolEscrita = item.evolucion = (item.evolucion === null || item.evolucion.trim() === '') ? 'Sin evolución' : item.evolucion;
-                                
+                                console.log(evolEscrita);
                                 evoluciones +=
                                     '<div class="card collapse-header bs-callout-danger callout-bordered mb-1" role="tablist">' +
                                     '<div id="headingCollapse' + consEvo +
@@ -1376,7 +1376,7 @@
                                     '    <div class="card-content">' +
                                     '        <div class="card-body py-1">' +
                                     '            <p class="text-bold-600"><b> Evolución escrita:</b></p>' +
-                                    +evolEscrita+    '        </div>' +
+                                    evolEscrita+    '        </div>' +
                                     '        <div class="card-footer pt-0 border-top">' +
                                     '            <label class="sidebar-label">Archivos adjuntos</label>' +
                                     '            <ul class="list-unstyled mb-0">';

@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Profesionales;
-use App\Models\Servicios;
+use App\Models\Cajas;
 use App\Models\Categorias;
+use App\Models\Citas;
 use App\Models\Gastos;
 use App\Models\Pacientes;
-use App\Models\Usuario;
-use App\Models\Citas;
+use App\Models\Profesionales;
+use App\Models\Servicios;
 use App\Models\Tratamientos;
-use App\Models\Cajas;
+use App\Models\Usuario;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
 
 class AdminitraccionController extends Controller
 {
@@ -339,14 +338,13 @@ class AdminitraccionController extends Controller
 
                     $saldo = $saldo - $gastos;
 
-
                     $tdTable .= '<tr>
                 <td><span class="invoice-date">' . str_pad($j, 5, '0', STR_PAD_LEFT) . '</span></td>
                 <td><span class="invoice-date">' . $fechaApertura . '</span></td>
                 <td><span class="invoice-date">' . $item->fecha_cierre . '</span></td>
                 <td><span class="invoice-date">$ ' . number_format($item->saldo_inicial, 2, ',', '.') . '</span></td>
                 <td><span class="invoice-date">$ ' . number_format($saldo_acomulado, 2, ',', '.') . '</span></td>
-                <td><span class="invoice-date">$ ' . number_format($gastos, 2, ',', '.')  . '</span></td>
+                <td><span class="invoice-date">$ ' . number_format($gastos, 2, ',', '.') . '</span></td>
                 <td><span class="invoice-date">$ ' . number_format($saldo, 2, ',', '.') . '</span></td>';
                     if ($item->estado_caja == "Abierta") {
                         $tdTable .= '<td><span class="invoice-date"><span class="badge badge-success"> ' . $item->estado_caja . '</span></span></td>';
@@ -360,7 +358,7 @@ class AdminitraccionController extends Controller
                     <a onclick="$.verDetalle(' . $item->id . ');" style="color:#009c9f; title="Editar" class="invoice-action-edit cursor-pointer mr-1">
                         <i class="fa fa-search"></i> Ver detalles
                     </a>
-                   
+
                     </div>
                 </td>
             </tr>';
@@ -375,7 +373,7 @@ class AdminitraccionController extends Controller
             return response()->json([
                 'servicios' => $tdTable,
                 'links' => $pagination,
-                'saldoAnterior' => $saldoAnterior
+                'saldoAnterior' => $saldoAnterior,
             ]);
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
@@ -389,7 +387,7 @@ class AdminitraccionController extends Controller
             $page = request()->get('page', 1);
             $search = request()->get('search');
             $fecha = request()->get('fecBusc');
-            $fechaPago = date("Y-m-d", strtotime(str_replace('/', '-',  $fecha)));
+            $fechaPago = date("Y-m-d", strtotime(str_replace('/', '-', $fecha)));
 
             if (!is_numeric($page)) {
                 $page = 1; // Establecer un valor predeterminado si no es numérico
@@ -406,7 +404,7 @@ class AdminitraccionController extends Controller
                         ->orWhere('categorias.descripcion', 'LIKE', '%' . $search . '%');
                 });
             }
-            $gastos->where('gastos.fecha_pago',  $fechaPago);
+            $gastos->where('gastos.fecha_pago', $fechaPago);
 
             $ListGastos = $gastos->paginate($perPage, ['*'], 'page', $page);
 
@@ -422,12 +420,15 @@ class AdminitraccionController extends Controller
                     $fecha_gasto = date('d/m/Y', strtotime($item->fecha_gasto));
                     $fecha_pago = date('d/m/Y', strtotime($item->fecha_pago));
                     $descripcion = $item->descripcion !== null ? $item->descripcion : "---";
+                    $formaPago = ($item->forma_pago === "e") ? "Efectivo" : (($item->forma_pago === "t") ? "Transferencia" : "Opción no válida");
+
                     $tdTable .= '<tr>
                 <td><span class="invoice-date">' . $j . '</span></td>
                 <td><span class="invoice-date">' . $item->desgasto . '</span></td>
-                <td><span class="invoice-date">' . $descripcion  . '</span></td>               
+                <td><span class="invoice-date">' . $descripcion . '</span></td>
                 <td><span class="invoice-date">' . $fecha_gasto . '</span></td>
                 <td><span class="invoice-date">' . $fecha_pago . '</span></td>
+                <td><span class="invoice-date">' . $formaPago . '</span></td>
                 <td><span class="invoice-date">$ ' . $numero_formateado . '</span></td>
                 <td>
                     <div class="invoice-action">
@@ -485,7 +486,6 @@ class AdminitraccionController extends Controller
 
             //gastos
             $gastos = Gastos::GastosCaja($caja->fecha_apertura);
-
 
             if (request()->ajax()) {
                 return response()->json([
@@ -572,7 +572,6 @@ class AdminitraccionController extends Controller
                 $porcentajeCambioDia = (($recaudosHoy - $recaudosAyer) / abs($recaudosAyer)) * 100;
             }
 
-
             if (request()->ajax()) {
                 return response()->json([
                     'pacientes' => $pacientes->count(),
@@ -580,7 +579,7 @@ class AdminitraccionController extends Controller
                     'recaudosHoy' => $recaudosHoy,
                     'recaudosMes' => $recaudosMes,
                     'porcentajeCambioMes' => $porcentajeCambioMes,
-                    'porcentajeCambioDia' => $porcentajeCambioDia
+                    'porcentajeCambioDia' => $porcentajeCambioDia,
                 ]);
             }
         } else {
@@ -745,8 +744,6 @@ class AdminitraccionController extends Controller
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
-
-
 
     public function EliminarProfesional()
     {

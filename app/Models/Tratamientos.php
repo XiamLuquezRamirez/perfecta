@@ -64,6 +64,19 @@ class Tratamientos extends Model
             ->get();
     }
 
+    public static function transaccionesPacientesEliminadas($idPac)
+    {
+        $recaudos = DB::connection('mysql')->table('transacciones_eliminadas')
+            ->leftJoin("transaccion", "transaccion.id", "transacciones_eliminadas.transaccion")
+            ->leftJoin("tratamientos","tratamientos.id","transaccion.tratamiento")
+            ->where('tratamientos.paciente', $idPac)
+            ->select("transaccion.id","transaccion.pago_realizado", "tratamientos.nombre","transacciones_eliminadas.created_at")
+            ->orderBy("transacciones_eliminadas.id", "DESC")
+            ->get();
+            return $recaudos;
+          
+    }
+
     public static function MediosPago($tran)
     {
         $serv = DB::connection("mysql")->select("SELECT  CASE WHEN medio_pago = 'e' THEN 'Efectivo'
@@ -110,7 +123,7 @@ class Tratamientos extends Model
         ]);
         return "ok";
     }
-    public static function delTransaccion($transaccion)
+    public static function delTransaccion($transaccion,$motivo)
     {
 
         $servTratamiento = DB::connection('mysql')->table('pagos_afectados_transaccion')
@@ -141,6 +154,14 @@ class Tratamientos extends Model
         $respuesta = DB::connection('mysql')->table('transaccion')->where('id', $transaccion->id)->update([
             'estado' => 'ELIMINADO',
         ]);
+
+
+        $respuesta = DB::connection('mysql')->table('transacciones_eliminadas')->insert([
+            'transaccion' => $transaccion->id,
+            'motivo' => $motivo,
+            'usuario' => Auth::user()->id
+        ]);
+
 
         $delMedPago = DB::connection('mysql')->table('medio_pagos_tratamiento')
         ->where('transaccion', $transaccion->id)

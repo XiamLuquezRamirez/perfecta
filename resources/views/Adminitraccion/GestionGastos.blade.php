@@ -64,9 +64,10 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Categoria</th>
-                                    <th>Descripción</th>                               
+                                    <th>Descripción</th>
                                     <th>Fecha</th>
                                     <th>Fecha de pago</th>
+                                    <th>Forma de pago</th>
                                     <th>Valor</th>
                                     <th>Acción</th>
                                 </tr>
@@ -74,10 +75,10 @@
                             <tbody id="trRegistros">
                             </tbody>
                             <tfoot>
-                                               
+
                                 <tr>
-                                    <td colspan="4"></td> <!-- Si necesitas celdas combinadas -->
-                                    <td ><b>Total:</b></td>
+                                    <td colspan="5"></td> <!-- Si necesitas celdas combinadas -->
+                                    <td><b>Total:</b></td>
                                     <td><b id="totalGastos"></b></td>
                                     <td colspan="2"></td> <!-- Para ajustar a la cantidad de columnas -->
                                 </tr>
@@ -108,7 +109,7 @@
 
                             <form class="form" method="post" id="formGuardar"
                                 action="{{ url('/') }}/Administracion/GuardarGasto">
-                                <input type="hidden" name="idGastos" id="idServicio" value="" />
+                                <input type="hidden" name="idGastos" id="idGastos" value="" />
                                 <input type="hidden" name="accion" id="accion" value="">
 
                                 <div class="row justify-content-end">
@@ -172,6 +173,18 @@
                                     </div>
                                     <div class="col-4">
                                         <div class="form-group">
+                                            <label for="userinput8">Forma de pago </label>
+                                            <select class="select2 form-control" id="formPago" name="formPago" >
+                                                <option value="">Seleccione...
+                                                </option>
+                                                <option value="e">Efectivo</option>
+                                                <option value="t">Transferencia</option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="form-group">
                                             <label for="userinput8">Valor:</label>
                                             <input type="text" onchange="$.cambioFormato(this.id);"
                                                 onkeypress="return validartxtnum(event)" onclick="this.select()"
@@ -211,7 +224,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title">Gestionar categorias</h4>
-                      
+
                     </div>
                     <div class="modal-body">
                         <div class="card-body">
@@ -248,7 +261,7 @@
                                             <tbody id="trRegistrosCategoria">
                                             </tbody>
 
-                                         
+
                                         </table>
                                     </div>
 
@@ -286,7 +299,7 @@
     <form action="{{ url('/Administracion/cargarCategorias') }}" id="formCargarCategorias" method="POST">
         @csrf
         <!-- Tus c
-                                ampos del formulario aquí -->
+                                    ampos del formulario aquí -->
     </form>
 
     <form action="{{ url('/Administracion/BuscarGastos') }}" id="formBuscarGastos" method="POST">
@@ -365,8 +378,9 @@
                             ); // Rellenamos la tabla con las filas generadas
                             $('#pagination-links').html(response
                                 .links); // Colocamos los enlaces de paginación
-                           
-                            $("#totalGastos").html(formatCurrency(response.total, 'es-CO', 'COP'));
+
+                            $("#totalGastos").html(formatCurrency(response.total, 'es-CO',
+                                'COP'));
                         }
                     });
                 },
@@ -402,10 +416,8 @@
                     var miDiv = document.getElementById("modalGastos");
                     miDiv.style.setProperty("overflow-y", "auto", "important");
 
-                },            
+                },
                 guardar: function() {
-
-
                     if ($("#categoria").val().trim() === "") {
                         Swal.fire({
                             type: "warning",
@@ -489,7 +501,6 @@
 
                 },
                 guardarCategoria: function() {
-
 
                     if ($("#descripcionCategoria").val().trim() === "") {
                         Swal.fire({
@@ -631,7 +642,7 @@
                     $("#btnNuevo").hide();
 
                     var form = $("#formBuscarGastos");
-                    $("#idServ").remove();
+                    $("#idGas").remove();
                     form.append("<input type='hidden' id='idGas' name='idGas'  value='" + id + "'>");
 
                     var url = form.attr("action");
@@ -654,6 +665,8 @@
 
                             $('#categoria').val(respuesta.gastos.categoria).trigger(
                                 'change.select2');
+                            $('#formPago').val(respuesta.gastos.forma_pago).trigger(
+                                'change.select2');
                             $("#descripcion").val(respuesta.gastos.descripcion);
                             var numero = respuesta.gastos.valor;
                             var formatoMoneda = formatCurrency(numero, 'es-CO', 'COP');
@@ -675,6 +688,7 @@
                     $("#valorVis").val("0,00");
                     $("#descripcion").val("");
                     $('#categoria').val("").trigger('change.select2');
+                    $('#formPago').val("").trigger('change.select2');
                     setToday();
 
                 },
@@ -857,7 +871,7 @@
             const fechaFormateada = `${dia.padStart(2, '0')}/${mes.padStart(2, '0')}/${año}`;
 
             return fechaFormateada;
-        }       
+        }
     </script>
 
     </script>

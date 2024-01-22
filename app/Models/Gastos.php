@@ -17,6 +17,7 @@ class Gastos extends Model
             'descripcion' => $request['descripcion'],
             'categoria' => $request['categoria'],
             'valor' => $request['valor'],
+            'forma_pago' => $request['formPago'],
             'fecha_gasto' => $fechaGasto,
             'fecha_pago' => $fechaPago,
             'estado' => 'ACTIVO'
@@ -52,6 +53,7 @@ class Gastos extends Model
             'descripcion' => $request['descripcion'],
             'categoria' => $request['categoria'],
             'valor' => $request['valor'],
+            'forma_pago' => $request['formPago'],
             'fecha_gasto' => $fechaGasto,
             'fecha_pago' => $fechaPago
         ]);

@@ -91,12 +91,11 @@ class CitasController extends Controller
             $CitasPaciente = Citas::CambioEstadocita($idCita, $estadoCita);
             $tipo = 'cambioEstado';
             //enviar correo de cambio de estado
-            $envioCorreo = self::envioCambioEstadoCita($idCita,$tipo);
+            //$envioCorreo = self::envioCambioEstadoCita($idCita,$tipo);
 
             if (request()->ajax()) {
                 return response()->json([
-                    'estado' => $CitasPaciente,
-                    'envioCorreo' => $envioCorreo
+                    'estado' => $CitasPaciente
                 ]);
             }
         } else {

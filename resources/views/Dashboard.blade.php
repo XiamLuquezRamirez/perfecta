@@ -1985,7 +1985,7 @@
                                 $.cargarDatos();
                             }
 
-                            setTimeout(function (){
+                            {{--  setTimeout(function (){
                                 if(respuesta.envioCorreo == 'noCorreo'){
                                     Swal.fire({
                                         type: "errot",
@@ -2014,7 +2014,7 @@
                                         buttonsStyling: false
                                     });
                                 }
-                            }, 3000);
+                            }, 3000);  --}}
 
                             
                         }

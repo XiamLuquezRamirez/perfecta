@@ -447,9 +447,12 @@ class PacientesController extends Controller
     {
         if (Auth::check()) {
             $idTrasa = request()->get('idTransaccion');
+            $motivo = request()->get('motivoDelete');
 
             $transaccion = Tratamientos::buscTransaccion($idTrasa);
-            $delTransaccion = Tratamientos::delTransaccion($transaccion);
+            $delTransaccion = Tratamientos::delTransaccion($transaccion,$motivo);
+            
+
 
             if (request()->ajax()) {
                 return response()->json([
@@ -737,11 +740,14 @@ class PacientesController extends Controller
 
             /// Recaudos realizados al paciente
             $recaudos = Tratamientos::transaccionesPacientes($idPac);
+            /// Recaudos eliminados al paciente
+            $recaudosEliminados = Tratamientos::transaccionesPacientesEliminadas($idPac);
 
             if (request()->ajax()) {
                 return response()->json([
                     'tratamientosRecaudo' => $resultadosAgrupados,
-                    'recaudos' => $recaudos
+                    'recaudos' => $recaudos,
+                    'recaudosEliminados' => $recaudosEliminados
                 ]);
             }
         } else {
