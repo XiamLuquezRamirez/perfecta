@@ -125,7 +125,7 @@ class CitasController extends Controller
 
         $datosCita = Citas::infcitasEmail($idCita);
        
-        if($datosCita->email=="" || $datosCita->email==null){
+        if($datosCita->email =="" || $datosCita->email==null){
             return 'noCorreo';
         }
 
@@ -399,7 +399,7 @@ class CitasController extends Controller
         <tbody>
         <tr>
         <td id='x_greeting'>
-        Estimad@ <strong>".$datosCita->apaciente.", ".$datosCita->npaciente.",</strong>
+        Estimad@ <strong style='text-transform: capitalize;'>".$datosCita->apaciente.", ".$datosCita->npaciente.",</strong>
         </td>
         </tr>
         <tr>
@@ -487,14 +487,14 @@ class CitasController extends Controller
             $mail->isSMTP();
             $mail->Host = 'mail.perfectaestetica.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'citas@perfectaestetica.com';
+            $mail->Username = 'notificaciones@perfectaestetica.com';
             $mail->Password = 'Mairen_2024';
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // O PHPMailer::ENCRYPTION_SMTPS si es necesario
             $mail->Port = 587;
 
             // Configuración del remitente y destinatario
-            $mail->setFrom('citas@perfectaestetica.com', 'PERFECTA');
-            $mail->addAddress('xiamir64@gmail.com', $datosCita->npaciente. " ".$datosCita->apaciente);
+            $mail->setFrom('notificaciones@perfectaestetica.com', 'PERFECTA');
+            $mail->addAddress($datosCita->email, $datosCita->npaciente. " ".$datosCita->apaciente);
 
             // Contenido del correo
             $mail->isHTML(true);
@@ -551,8 +551,10 @@ class CitasController extends Controller
             }
             if ($data['accionCita'] == "agregar") {
                 $cita = Citas::GuardarCitas($data);
+                self::envioCambioEstadoCita($cita,'recordatorio');
             } else {
                 $cita = Citas::EditarCitas($data);
+                self::envioCambioEstadoCita($data['idCitaPac'],'recordatorio');
             }
 
 

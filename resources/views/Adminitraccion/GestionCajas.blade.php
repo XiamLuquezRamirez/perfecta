@@ -248,7 +248,8 @@
                                     </tbody>
                                     <tfoot class="bg-teal bg-lighten-4 height-50">
                                         <tr>
-                                            <th style="width: 55%">Total caja efectivo (saldo inicial + recaudado - gastos):
+                                            <th style="width: 55%">Total caja efectivo (saldo inicial + recaudado -
+                                                gastos):
                                             </th>
                                             <th></th>
                                             <th></th>
@@ -296,7 +297,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id="tr_detaRecaudo">
-                                       
+
                                     </tbody>
                                     <tfoot class="bg-teal bg-lighten-4 height-50">
                                         <tr>
@@ -325,7 +326,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id="tr_detaGastos">
-                                       
+
                                     </tbody>
                                     <tfoot class="bg-teal bg-lighten-4 height-50">
                                         <tr>
@@ -348,7 +349,7 @@
                                             <i class="fa fa-reply"></i> Salir
                                         </button>
                                         <button type="button" onclick="$.imprimir()" class="btn btn-info ">
-                                            <i class="fa fa-print"></i> Imprir
+                                            <i class="fa fa-print"></i> Imprimir
                                         </button>
                                         <button type="button" id="btn-cierre" onclick="$.cerrarCaja();"
                                             class="btn btn-primary">
@@ -640,18 +641,13 @@
                                         'es-CO', 'COP') + '</td>' +
                                     '</tr>';
 
-                              
+                                if (medioPagoNombre == 'Efectivo') {
+                                    totalMedioPago += totals[medioPagoNombre].total;                                  
 
-                                if (medioPagoNombre == 'Efectivo') {  
-                                    totalMedioPago += totals[medioPagoNombre].total;                                
-                                    $("#valorMontoCierre").val(totals[medioPagoNombre]
-                                        .total);
-                                    $("#valorVisMontoCierre").val(formatCurrency(totals[
-                                        medioPagoNombre].total, 'es-CO', 'COP'));
-
-                                }else{
+                                } else {
                                     totalMedioPagoT += totals[medioPagoNombre].total;
-                                }
+                                }                              
+                                
                             }
 
                             let totalRecaudos = totalMedioPago + totalMedioPagoT;
@@ -678,7 +674,8 @@
                             //informacion gastos
                             $("#infGastos").html(formatCurrency(totalEfectivo, 'es-CO',
                                 'COP'));
-                            $("#infGastosT").html(formatCurrency(totalTransferencia, 'es-CO',
+                            $("#infGastosT").html(formatCurrency(totalTransferencia,
+                                'es-CO',
                                 'COP'));
 
                             $("#valorMontoGastos").val(totalEfectivo);
@@ -691,7 +688,12 @@
                             let totalCajaT = totalMedioPagoT - totalTransferencia;
 
 
+                          
                             totalCaja = totalCaja - parseInt(totalEfectivo);
+
+                            $("#valorMontoCierre").val(totalCaja);
+                            $("#valorVisMontoCierre").val(formatCurrency(totalCaja, 'es-CO', 'COP'));
+
 
                             $("#infTotalCaja").html(formatCurrency(totalCaja, 'es-CO',
                                 'COP'));
@@ -707,7 +709,7 @@
                             var medioPagoNombre;
                             let totalRecaudosDet = 0;
                             $.each(respuesta.recaudos, function(i, item) {
-                             medioPagoNombre = {
+                                medioPagoNombre = {
                                     "e": "Efectivo",
                                     "tc": "Tarjeta de crédito",
                                     "td": "Tarjeta de débito",
@@ -716,54 +718,63 @@
                                 } [item.medio_pago];
 
                                 referencia = item.referencia = item
-                                        .referencia !== null ? item.referencia :
-                                        "---";
+                                    .referencia !== null ? item.referencia :
+                                    "---";
 
-                                detaRecaudos+= '<tr>'
-                                    +'<td>'+agregarCeros(item.transaccion,5)+'</td>'
-                                    +'<td>'+item.nombre+' '+item.apellido+'</td>'
-                                    +'<td>'+$.convertirFormato(item.created_at)+'</td>'
-                                    +'<td>'+medioPagoNombre+'</td>'
-                                    +'<td>'+referencia+'</td>'
-                                    +'<td>'+formatCurrency(item.valor, 'es-CO', 'COP')+'</td>'
-                                +'</tr>'
+                                detaRecaudos += '<tr>' +
+                                    '<td>' + agregarCeros(item.transaccion, 5) +
+                                    '</td>' +
+                                    '<td>' + item.nombre + ' ' + item.apellido +
+                                    '</td>' +
+                                    '<td>' + $.convertirFormato(item.created_at) +
+                                    '</td>' +
+                                    '<td>' + medioPagoNombre + '</td>' +
+                                    '<td>' + referencia + '</td>' +
+                                    '<td>' + formatCurrency(item.valor, 'es-CO',
+                                        'COP') + '</td>' +
+                                    '</tr>'
 
-                                totalRecaudosDet+= parseInt(item.valor);
+                                totalRecaudosDet += parseInt(item.valor);
 
                             });
 
                             $('#tr_detaRecaudo').html(detaRecaudos);
-                            $('#infTotalRecaudos').html(formatCurrency(totalRecaudosDet, 'es-CO', 'COP'));
+                            $('#infTotalRecaudos').html(formatCurrency(totalRecaudosDet,
+                                'es-CO', 'COP'));
                             ////MOSTRAR DETALLES GASTOS
                             let detaGastos = '';
                             let referenciaG = '';
                             var medioPagoNombreG;
                             let totalGastosDet = 0;
                             $.each(respuesta.gastos, function(i, item) {
-                             medioPagoNombreG = {
+                                medioPagoNombreG = {
                                     "e": "Efectivo",
                                     "t": "Transferencia"
                                     // Puedes agregar más mapeos según tus necesidades
                                 } [item.forma_pago];
 
                                 referenciaG = item.referencia = item
-                                        .referencia !== null ? item.referencia :
-                                        "---";
+                                    .referencia !== null ? item.referencia :
+                                    "---";
 
-                                        detaGastos+= '<tr>'
-                                    +'<td>'+agregarCeros(item.id,5)+'</td>'
-                                    +'<td>'+item.ncategoria+": "+ item.descripcion+'</td>'
-                                    +'<td>'+$.convertirFormato(item.fecha_pago)+'</td>'
-                                    +'<td>'+medioPagoNombreG+'</td>'
-                                    +'<td>'+referenciaG+'</td>'
-                                    +'<td>'+formatCurrency(item.valor, 'es-CO', 'COP')+'</td>'
-                                +'</tr>'
-                                totalGastosDet+=parseInt(item.valor);
+                                detaGastos += '<tr>' +
+                                    '<td>' + agregarCeros(item.id, 5) + '</td>' +
+                                    '<td>' + item.ncategoria + ": " + item
+                                    .descripcion + '</td>' +
+                                    '<td>' + $.convertirFormato(item.fecha_pago) +
+                                    '</td>' +
+                                    '<td>' + medioPagoNombreG + '</td>' +
+                                    '<td>' + referenciaG + '</td>' +
+                                    '<td>' + formatCurrency(item.valor, 'es-CO',
+                                        'COP') + '</td>' +
+                                    '</tr>'
+                                totalGastosDet += parseInt(item.valor);
 
                             });
 
                             $('#tr_detaGastos').html(detaGastos);
-                            $('#infTotalGastos').html(formatCurrency(totalGastosDet, 'es-CO', 'COP'));
+                            $('#infTotalGastos').html(formatCurrency(totalGastosDet,
+                                'es-CO', 'COP'));
 
 
                         }
@@ -1012,8 +1023,9 @@
 
                     var totals = {};
 
-                    console.log(respuestaGlobal);
+                    console.log(respuestaGlobal.recaudos);
                     // Iterar sobre los recaudos y acumular los totales
+                    let totalRecaudosDet = 0;
                     respuestaGlobal.recaudos.forEach(function(recaudo) {
                         // Mapear los medios de pago a nombres deseados
                         var medioPagoNombre = {
@@ -1036,15 +1048,47 @@
                         totals[medioPagoNombre].count++;
                         totals[medioPagoNombre].total += parseInt(recaudo
                             .valor);
+                        totalRecaudosDet += parseInt(recaudo.valor);
                     });
 
-                    var totalRecaudos = Object.values(totals).reduce((acc, medioPago) => acc + medioPago
-                        .total, 0);
+
+                    let totalMedioPago = 0;
+                    let totalMedioPagoT = 0;
+
+                    for (var medioPagoNombre in totals) {
+                        if (medioPagoNombre == 'Efectivo') {
+                            totalMedioPago += totals[medioPagoNombre].total;
+                        } else {
+                            totalMedioPagoT += totals[medioPagoNombre].total;
+                        }
+                    }
+
+
+                    var totalEfectivo = 0;
+                    var totalTransferencia = 0;
+                    let totalGastosDet = 0;
+                    // Recorrer el arreglo de gastos
+                    respuestaGlobal.gastos.forEach(function(gasto) {
+                        // Sumar al total correspondiente
+                        if (gasto.forma_pago === "e") {
+                            totalEfectivo += parseInt(gasto.valor);
+                        } else if (gasto.forma_pago === "t") {
+                            totalTransferencia += parseInt(gasto.valor);
+                        }
+                        totalGastosDet += parseInt(gasto.valor);
+                    });
+
+
 
                     // total caja
                     let totalCaja = parseInt(respuestaGlobal.caja.saldo_inicial) + parseInt(
-                        totalRecaudos);
-                    totalCaja = totalCaja - parseInt(respuestaGlobal.gastos);
+                        totalMedioPago);
+                    totalCaja = totalCaja - parseInt(totalEfectivo);
+
+                    let totalCajaT = totalMedioPagoT - totalTransferencia;
+
+
+
                     let colorCaja = "";
                     let estadoCaja = "";
                     if (respuestaGlobal.caja.estado_caja == "Cerrada") {
@@ -1055,6 +1099,9 @@
                         colorCaja = "#16D39A";
 
                     }
+
+
+
 
                     var docDefinition = {
                         content: [{
@@ -1177,11 +1224,12 @@
                                     ],
                                     // Configuración de estilos de la tabla
                                     margin: [0, 0, 0,
-                                    0], // Configuración de márgenes para quitar el borde superior
+                                        0
+                                    ], // Configuración de márgenes para quitar el borde superior
                                     layout: {
                                         hLineWidth: function(i, node) {
                                             return (i === 0) ? 0 :
-                                            1; // 0 para quitar el borde superior, 1 para mantener el resto de los bordes
+                                                1; // 0 para quitar el borde superior, 1 para mantener el resto de los bordes
                                         },
                                         vLineWidth: function(i, node) {
                                             return 0;
@@ -1205,7 +1253,8 @@
                                             text: 'Recaudos',
                                             fillColor: '#D7D7DB'
                                         }, {
-                                            text: formatCurrency(totalRecaudos, 'es-CO',
+                                            text: formatCurrency(totalRecaudosDet,
+                                                'es-CO',
                                                 'COP'),
                                             fillColor: '#D7D7DB',
                                             alignment: 'right'
@@ -1215,7 +1264,7 @@
                                     layout: {
                                         hLineWidth: function(i, node) {
                                             return (i === 0) ? 0 :
-                                            1; // 0 para quitar el borde superior, 1 para mantener el resto de los bordes
+                                                1; // 0 para quitar el borde superior, 1 para mantener el resto de los bordes
                                         },
                                         vLineWidth: function(i, node) {
                                             return 0;
@@ -1236,9 +1285,16 @@
                                     widths: ['75%', '25%'],
                                     body: [
                                         [{
-                                            text: 'Gastos'
+                                            text: 'Gastos en efectivo'
                                         }, {
-                                            text: formatCurrency(respuestaGlobal.gastos,
+                                            text: formatCurrency(totalEfectivo,
+                                                'es-CO', 'COP'),
+                                            alignment: 'right'
+                                        }],
+                                        [{
+                                            text: 'Gastos en transferencia'
+                                        }, {
+                                            text: formatCurrency(totalTransferencia,
                                                 'es-CO', 'COP'),
                                             alignment: 'right'
                                         }]
@@ -1247,7 +1303,7 @@
                                     layout: {
                                         hLineWidth: function(i, node) {
                                             return (i === 0) ? 0 :
-                                            1; // 0 para quitar el borde superior, 1 para mantener el resto de los bordes
+                                                1; // 0 para quitar el borde superior, 1 para mantener el resto de los bordes
                                         },
                                         vLineWidth: function(i, node) {
                                             return 0;
@@ -1268,10 +1324,19 @@
                                     widths: ['75%', '25%'],
                                     body: [
                                         [{
-                                            text: 'Total caja (saldo inicial + recaudado - gastos): ',
+                                            text: 'Total caja efectivo(saldo inicial + recaudado - gastos): ',
                                             fillColor: '#D7D7DB'
                                         }, {
                                             text: formatCurrency(totalCaja, 'es-CO',
+                                                'COP'),
+                                            fillColor: '#D7D7DB',
+                                            alignment: 'right'
+                                        }],
+                                        [{
+                                            text: 'Total caja transferencia (recaudado - gastos): ',
+                                            fillColor: '#D7D7DB'
+                                        }, {
+                                            text: formatCurrency(totalCajaT, 'es-CO',
                                                 'COP'),
                                             fillColor: '#D7D7DB',
                                             alignment: 'right'
@@ -1281,7 +1346,7 @@
                                     layout: {
                                         hLineWidth: function(i, node) {
                                             return (i === 0) ? 0 :
-                                            1; // 0 para quitar el borde superior, 1 para mantener el resto de los bordes
+                                                1; // 0 para quitar el borde superior, 1 para mantener el resto de los bordes
                                         },
                                         vLineWidth: function(i, node) {
                                             return 0;
@@ -1306,8 +1371,19 @@
                                 fontSize: 18,
                                 bold: true
                             },
+                            title2: {
+                                fontSize: 17,
+                                bold: true,
+                                alignment: 'left',
+                                margin: [0, 20, 0, 10] // Ajusta los márgenes según tus preferencias
+                            },
                             total: {
                                 fontSize: 22,
+                                bold: true,
+                                alignment: 'right'
+                            },
+                            total2: {
+                                fontSize: 15,
                                 bold: true,
                                 alignment: 'right'
                             },
@@ -1339,6 +1415,22 @@
                                 fontSize: 22,
                                 alignment: 'right'
                             },
+                            tableStyle: {
+                                margin: [0, 5, 0, 15], // Ajusta los márgenes según tus necesidades
+                                fontSize: 9,
+                                color: '#333', // Color del texto de la tabla
+                                alignment: 'center',
+                                fillColor: '#F2F2F2', // Color de fondo para las filas normales
+                            },
+
+                            headerStyle: {
+                                bold: true,
+                                fontSize: 11,
+                                color: '#333', // Color del texto del encabezado
+                                fillColor: '#D7D7DB', // Color de fondo del encabezado
+                                alignment: 'center',
+                                margin: [0, 5, 0, 7], // Ajusta los márgenes según tus necesidades
+                            }
                         }
                     };
 
@@ -1362,11 +1454,12 @@
                                 ],
                                 // Configuración de estilos de la tabla
                                 margin: [0, 0, 0,
-                                0], // Configuración de márgenes para quitar el borde superior
+                                    0
+                                ], // Configuración de márgenes para quitar el borde superior
                                 layout: {
                                     hLineWidth: function(i, node) {
                                         return (i === 0) ? 0 :
-                                        1; // 0 para quitar el borde superior, 1 para mantener el resto de los bordes
+                                            1; // 0 para quitar el borde superior, 1 para mantener el resto de los bordes
                                     },
                                     vLineWidth: function(i, node) {
                                         return 0;
@@ -1381,6 +1474,179 @@
                             }
                         });
                     }
+
+
+                    docDefinition.content.push({
+                        text: 'Detalle de recaudos',
+                        style: 'title2'
+                    });
+
+                    const medioPagoMap = {
+                        "e": "Efectivo",
+                        "tc": "Tarjeta de crédito",
+                        "td": "Tarjeta de débito",
+                        "t": "Transferencia"
+                    };
+
+
+                    var recaudosTable = {
+
+                        table: {
+                            headerRows: 0,
+                            widths: ['auto', 'auto', 'auto', 'auto', 'auto',
+                            'auto'], // ajusta según tus necesidades
+                            body: [
+                                [{
+                                        text: 'No.',
+                                        style: 'headerStyle'
+                                    },
+                                    {
+                                        text: 'Paciente',
+                                        style: 'headerStyle'
+                                    },
+                                    {
+                                        text: 'Fecha de pago',
+                                        style: 'headerStyle'
+                                    },
+                                    {
+                                        text: 'Medio de pago',
+                                        style: 'headerStyle'
+                                    },
+                                    {
+                                        text: 'Referencia',
+                                        style: 'headerStyle'
+                                    },
+                                    {
+                                        text: 'Valor',
+                                        style: 'headerStyle'
+                                    }
+                                ],
+                                // ... puedes agregar más filas según la cantidad de detalles de recaudos
+                                // Ejemplo con los datos proporcionados:
+                                ...respuestaGlobal.recaudos.map(recaudo => [
+                                    agregarCeros(recaudo.transaccion, 5),
+                                    `${recaudo.nombre} ${recaudo.apellido}`,
+                                    $.convertirFormato(recaudo.created_at),
+                                    medioPagoMap[recaudo.medio_pago] || recaudo.medio_pago,
+                                    recaudo.referencia = recaudo.referencia !== null ?
+                                    recaudo.referencia : "---",
+                                    formatCurrency(recaudo.valor, 'es-CO', 'COP')
+                                ])
+                            ]
+                        },
+                        style: 'tableStyle', // Aplica el estilo a las filas normales
+                        layout: {
+                            hLineWidth: function(i, node) {
+                                return (i === 0 || i === node.table.body.length) ? 1 : 0;
+                            },
+                            vLineWidth: function(i, node) {
+                                return 0;
+                            },
+                        }
+                    };
+
+                    var totalRow = [
+                        {
+                            text: 'Total:',
+                            colSpan: 5,
+                            style: 'total2'
+                        },
+                        {},
+                        {},
+                        {},
+                        {},
+                        {
+                            text: formatCurrency(totalRecaudosDet, 'es-CO', 'COP'),
+                            style: 'total2'
+                        },
+                      
+                    ];
+
+                    recaudosTable.table.body.push(totalRow);
+                    docDefinition.content.push(recaudosTable);
+
+
+                    ///imprimir gastos
+                    docDefinition.content.push({
+                        text: 'Detalle de gastos',
+                        style: 'title2'
+                    });
+
+                    var gastosTable = {
+
+                        table: {
+                            headerRows: 0,
+                            widths: ['auto', 'auto', 'auto', 'auto', 'auto',
+                            'auto'], // ajusta según tus necesidades
+                            body: [
+                                [{
+                                        text: 'No.',
+                                        style: 'headerStyle'
+                                    },
+                                    {
+                                        text: 'Descripción',
+                                        style: 'headerStyle'
+                                    },
+                                    {
+                                        text: 'Fecha de pago',
+                                        style: 'headerStyle'
+                                    },
+                                    {
+                                        text: 'Medio de pago',
+                                        style: 'headerStyle'
+                                    },
+                                    {
+                                        text: 'Referencia',
+                                        style: 'headerStyle'
+                                    },
+                                    {
+                                        text: 'Valor',
+                                        style: 'headerStyle'
+                                    }
+                                ],
+                                // ... puedes agregar más filas según la cantidad de detalles de recaudos
+                                // Ejemplo con los datos proporcionados:
+                                ...respuestaGlobal.gastos.map(gasto => [
+                                    agregarCeros(gasto.id, 5),
+                                    `${gasto.ncategoria}: ${gasto.descripcion}`,
+                                    $.convertirFormato(gasto.fecha_pago),
+                                    medioPagoMap[gasto.forma_pago] || gasto.forma_pago,
+                                    gasto.referencia = gasto.referencia !== null ?
+                                    gasto.referencia : "---",
+                                    formatCurrency(gasto.valor, 'es-CO', 'COP')
+                                ])
+                            ]
+                        },
+                        style: 'tableStyle', // Aplica el estilo a las filas normales
+                        layout: {
+                            hLineWidth: function(i, node) {
+                                return (i === 0 || i === node.table.body.length) ? 1 : 0;
+                            },
+                            vLineWidth: function(i, node) {
+                                return 0;
+                            },
+                        }
+                    };
+
+                    var totalRowGast = [
+                        {
+                            text: 'Total:',
+                            colSpan: 5,
+                            style: 'total2'
+                        },
+                        {},
+                        {},
+                        {},
+                        {},
+                        {
+                            text: formatCurrency(totalGastosDet, 'es-CO', 'COP'),
+                            style: 'total2'
+                        },
+                      
+                    ];
+                    
+                    gastosTable.table.body.push(totalRowGast);
+                    docDefinition.content.push(gastosTable);
 
                     // Generar el PDF y descargarlo
                     pdfMake.createPdf(docDefinition).download('InformeCaja.pdf');
@@ -1414,6 +1680,7 @@
             }).format(number);
         }
 
+       
         function agregarCeros(numero, longitud) {
             return numero.toString().padStart(longitud, '0');
         }

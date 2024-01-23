@@ -82,7 +82,7 @@ class PacientesController extends Controller
 
     $infPaciente = Pacientes::BuscarPaciente($tratamiento->paciente);
 
-    if($infPaciente->email=="" || $infPaciente->email==null){
+    if($infPaciente->email =="" || $infPaciente->email==null){
         if (request()->ajax()) {
             return response()->json([
                 'resultado' => "noCorreo",
@@ -389,14 +389,14 @@ class PacientesController extends Controller
             $mail->isSMTP();
             $mail->Host = 'mail.perfectaestetica.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'citas@perfectaestetica.com';
+            $mail->Username = 'notificaciones@perfectaestetica.com';
             $mail->Password = 'Mairen_2024';
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // O PHPMailer::ENCRYPTION_SMTPS si es necesario
             $mail->Port = 587;
 
             // Configuración del remitente y destinatario
-            $mail->setFrom('citas@perfectaestetica.com', 'PERFECTA');
-            $mail->addAddress('xiamir64@gmail.com', $infPaciente->nombre. " ".$infPaciente->apellido);
+            $mail->setFrom('notificaciones@perfectaestetica.com', 'PERFECTA');
+            $mail->addAddress($infPaciente->email, $infPaciente->nombre. " ".$infPaciente->apellido);
 
             // Contenido del correo
             $mail->isHTML(true);
@@ -954,11 +954,16 @@ class PacientesController extends Controller
             $pacientes = DB::connection('mysql')
                 ->table('pacientes')
                 ->where('estado', 'ACTIVO');
-            if ($search) {
-                $pacientes->where('identificacion', 'LIKE', '%' . $search . '%');
-                $pacientes->where('nombre', 'LIKE', '%' . $search . '%');
-                $pacientes->where('apellido', 'LIKE', '%' . $search . '%');
-            }
+
+                if ($search) {
+                    $pacientes->where(function ($query) use ($search) {
+                        $query->where('identificacion', 'LIKE', '%' . $search . '%')
+                            ->orWhere('nombre', 'LIKE', '%' . $search . '%')
+                            ->orWhere('apellido', 'LIKE', '%' . $search . '%');
+                    });
+                }
+
+           
 
             $ListPacientes = $pacientes->paginate($perPage, ['*'], 'page', $page);
 
