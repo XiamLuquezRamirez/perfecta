@@ -8,6 +8,7 @@
     <input type="hidden" id="conTrata" name="conTrata" value="" />
     <input type="hidden" id="conTrataOtro" name="conTrataOtro" value="" />
     <input type="hidden" id="accion" value="" />
+    <input type="hidden" id="accionEvolucion" value="" />
     <div class="content-header row">
         <div class="content-header-left col-md-6 col-12 mb-2">
             <h3 class="content-header-title mb-0">Gestionar Tratamientos</h3>
@@ -305,6 +306,12 @@
                                                                                         class="feather icon-corner-up-left"></i>
                                                                                     Salir
                                                                                 </button>
+                                                                                <button type="button" style="display: none;" id="btnNuevo"
+                                                                                    onclick="$.nuevoServicio()"
+                                                                                    class="btn btn-success">
+                                                                                    <i class="fa fa-plus"></i>
+                                                                                    Nuevo
+                                                                                </button>
                                                                                 <button type="button" id="btnGuardar"
                                                                                     onclick="$.guardarServicio()"
                                                                                     class="btn btn-success">
@@ -359,6 +366,7 @@
                                         {{--  Modal nueva evolcion  --}}
                                         <div class="modal fade text-left" id="modalEvoluciones" tabindex="-1"
                                             role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+                                            <input type="hidden" id="idEvolucion" name="idEvolucion" value="" />
                                             <div class="modal-dialog modal-lg" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -454,6 +462,13 @@
                                                                                 class="btn btn-primary">
                                                                                 <i class="icon-plus4"></i> Agregar archivo
                                                                             </button>
+                                                                            <div id="arcExist" style="display: none:">
+                                                                                <h4 class="mt-1">Archivos Existentes</h4>
+                                                                                <div id="archEvol">
+
+                                                                                </div>
+
+                                                                            </div>
                                                                         </div>
                                                                         <div class="col-md-12 col-sm-12">
                                                                             <div class="form-actions right">
@@ -778,7 +793,19 @@
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
+    <form action="{{ url('/AdminPacientes/ConsultarEvolucionEdit') }}" id="formConsultarEvolucion" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
     <form action="{{ url('/AdminPacientes/updateServiciosTerminados') }}" id="formServTerminados" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/AdminPacientes/DeleteArchivoEvolucion') }}" id="formDeleteArchivoEvolucion" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/AdminPacientes/DeleteEvolucion') }}" id="formEliminarEvolucion" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
@@ -1300,6 +1327,8 @@
                         keyboard: false
                     });
 
+                    $("#tituloUnidad").html("Crear sección");
+
                     $("#nombreSeccion").val('');
                     $("#descripcionSeccion").val('');
                     $("#accion").val('agregar');
@@ -1313,6 +1342,126 @@
 
                     // Mostrar la vista previa en el modal
                     $.mostrarVistaPrevia(archivoSeleccionado);
+                },
+                editarEvolucion: function(evolucion) {
+                    $("#idEvolucion").val(evolucion);
+                    $("#accionEvolucion").val("editar");
+
+                    $("#modalEvoluciones").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+
+                    $.cargarProfesionales();
+                    $("#items-archivo").html('');
+
+                    var form = $("#formConsultarEvolucion");
+                    $("#idEvo").remove();
+                    form.append("<input type='hidden' id='idEvo' name='idEvo'  value='" + evolucion +
+                        "'>");
+
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            $('#profesionalEvolucion').val(respuesta.evolucion.profesional)
+                                .trigger('change.select2');
+                            $('#pavance').val(respuesta.evolucion.pavance).trigger(
+                                'change.select2');
+                            editorEvolucion.setData(respuesta.evolucion.evolucion);
+
+                            ///consultar archivos
+                            let url = $('#Ruta').data("ruta");
+                            let archEvol = '';
+                            if (respuesta.evolucion.archivos.length > 0) {
+                                $("#arcExist").show();
+                            } else {
+                                $("#arcExist").hide();
+                            }
+
+                            $.each(respuesta.evolucion.archivos, function(i, itemArc) {
+
+                                if (itemArc.tipo ==
+                                    "application/pdf") {
+                                    archEvol +=
+                                        ' <li id="li_' + itemArc.id +
+                                        '" data-arc="' + itemArc
+                                        .archivo +
+                                        '" onclick="$.mostrarArchivo(this);" class="cursor-pointer pb-25">' +
+                                        '          <img src="' +
+                                        url +
+                                        '/images/imgPDF.png" height="30" alt="archivo">' +
+                                        '          <small class="text-muted ml-1 attchement-text">' +
+                                        itemArc.nombre +
+                                        '</small>' +
+                                        '</li><small id="btnDelEvo_' + itemArc.id +
+                                        '" style="cursor: pointer;" onclick="$.deleteArchivoEvo(' +
+                                        itemArc.id +
+                                        ')" class="badge badge-pill badge-danger">Eliminar</small>';
+                                } else {
+                                    archEvol +=
+                                        ' <li id="li_' + itemArc.id +
+                                        '" data-img="' + itemArc
+                                        .archivo +
+                                        '" onclick="$.mostrarImagen(this);" class="cursor-pointer pb-25">' +
+                                        '          <img style="border-radius:5px;" src="' +
+                                        url + '/evoluciones/' +
+                                        itemArc.archivo +
+                                        '" height="30" alt="imagen">' +
+                                        '          <small class="text-muted ml-1 attchement-text">' +
+                                        itemArc.nombre +
+                                        '</small>' +
+                                        '          </li><small id="btnDelEvo_' +
+                                        itemArc.id +
+                                        '" style="cursor: pointer;" onclick="$.deleteArchivoEvo(' +
+                                        itemArc.id +
+                                        ')" class="badge badge-pill badge-danger">Eliminar</small>';
+                                }
+                            });
+
+                            $("#archEvol").html(archEvol);
+                        }
+                    });
+
+                },
+                deleteArchivoEvo: function(id) {
+                    var form = $("#formDeleteArchivoEvolucion");
+                    $("#idArchivo").remove();
+                    form.append("<input type='hidden' id='idArchivo' name='idArchivo'  value='" + id +
+                        "'>");
+
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            if (respuesta.estado == "ok") {
+                                Swal.fire({
+                                    type: "success",
+                                    title: "",
+                                    text: "Operación realizada exitosamente",
+                                    confirmButtonClass: "btn btn-primary",
+                                    timer: 1500,
+                                    buttonsStyling: false
+                                });
+
+                                $("#li_" + id).remove();
+                                $("#btnDelEvo_" + id).remove();
+
+                            }
+                        }
+                    });
                 },
                 consultarEvolucion: function(idServ, idSecc) {
 
@@ -1346,7 +1495,10 @@
                                 respuesta.Seccion.nombre);
 
                             $.each(respuesta.evoluciones, function(i, item) {
-                                let evolEscrita = item.evolucion = (item.evolucion === null || item.evolucion.trim() === '') ? 'Sin evolución' : item.evolucion;
+                                let evolEscrita = item.evolucion = (item
+                                        .evolucion === null || item.evolucion
+                                        .trim() === '') ? 'Sin evolución' : item
+                                    .evolucion;
                                 console.log(evolEscrita);
                                 evoluciones +=
                                     '<div class="card collapse-header bs-callout-danger callout-bordered mb-1" role="tablist">' +
@@ -1376,7 +1528,7 @@
                                     '    <div class="card-content">' +
                                     '        <div class="card-body py-1">' +
                                     '            <p class="text-bold-600"><b> Evolución escrita:</b></p>' +
-                                    evolEscrita+    '        </div>' +
+                                    evolEscrita + '        </div>' +
                                     '        <div class="card-footer pt-0 border-top">' +
                                     '            <label class="sidebar-label">Archivos adjuntos</label>' +
                                     '            <ul class="list-unstyled mb-0">';
@@ -1422,6 +1574,16 @@
 
                                 evoluciones += '</ul>' +
                                     '        </div>' +
+                                    '   <div class="card-footer border-top-blue-grey border-top-lighten-5 text-muted mb-1">' +
+                                    '       <span class="tags float-right">' +
+                                    '          <span onclick="$.editarEvolucion(' +
+                                    item.id +
+                                    ');" style="cursor: pointer;" class="badge badge-pill badge-primary">Editar</span>' +
+                                    '         <span onclick="$.eliminarEvolucion(' +
+                                    item.id +
+                                    ');" style="cursor: pointer;" class="badge badge-pill badge-danger">Eliminar</span>' +
+                                    '      </span>' +
+                                    '  </div>' +
                                     '    </div>' +
                                     '</div>' +
                                     '</div>';
@@ -1458,11 +1620,12 @@
                         async: false,
                         dataType: "json",
                         success: function(respuesta) {
-                            $("#tituloEvolucion").html('Historial de evolución de tratamiento - <b>' +respuesta.tratamiento.nombre+"</b>");
+                            $("#tituloEvolucion").html(
+                                'Historial de evolución de tratamiento - <b>' +
+                                respuesta.tratamiento.nombre + "</b>");
 
                             const evolucionesAgrupadas = $.agruparEvoluciones(respuesta
                                 .evoluciones);
-                            console.log(evolucionesAgrupadas);
                             const resultHTML = $.armarHTML(evolucionesAgrupadas);
 
                             $("#div-evoluciones").html(resultHTML);
@@ -1495,104 +1658,174 @@
                 },
                 armarHTML: function(evolucionesAgrupadas) {
 
-                    
-        let evoluciones = '';
-        let consEvo = 1;
-        for (const tratamiento in evolucionesAgrupadas) {
-          
 
-            for (const seccion in evolucionesAgrupadas[tratamiento]) {
-                evoluciones += `<h3 style="text-transform: capitalize;"><i class="bullet bullet-sm bullet-success"></i> ${seccion}</h3>`;
+                    let evoluciones = '';
+                    let consEvo = 1;
+                    for (const tratamiento in evolucionesAgrupadas) {
 
-                for (const servicio in evolucionesAgrupadas[tratamiento][seccion]) {
-                    evolucionesAgrupadas[tratamiento][seccion][servicio].forEach(evolucion => {
-                        let evolEscrita = evolucion.evolucion = (evolucion.evolucion === null || evolucion.evolucion.trim() === '') ? 'Sin evolución' : evolucion.evolucion;
-                               
-                        evoluciones +=
-                        '<div class="card collapse-header bs-callout-danger callout-bordered mb-1" role="tablist">' +
-                        '<div id="headingCollapse' + consEvo +
-                        '" class="card-header d-flex justify-content-between align-items-center" data-toggle="collapse" role="tab" data-target="#collapse' +
-                        consEvo +
-                        '" aria-expanded="false" aria-controls="collapse' +
-                        consEvo + '">' +
-                        '    <div class="collapse-title media">' +
-                        '        <div class="media-body mt-25">' +
-                        '            <span class="text-primary">' + evolucion
-                        .nservicio + '</span>' +
-                        '            <span class="d-sm-inline d-none">(' +
-                            evolucion.pavance + '%)</span>' +
-                        '            <small class="text-muted d-block">Profesional: ' +
-                            evolucion.nprofe + '</small>' +
-                        '        </div>' +
-                        '    </div>' +
-                        '    <div class="information d-sm-flex d-none align-items-center">' +
-                        '        <small class="text-muted mr-50">' +
-                            evolucion.created_at + '</small>' +
-                        '    </div>' +
-                        '</div>' +
-                        '<div id="collapse' + consEvo +
-                        '" role="tabpanel" aria-labelledby="headingCollapse' +
-                        consEvo + '" class="collapse">' +
-                        '    <div class="card-content">' +
-                        '        <div class="card-body py-1">' +
-                        '            <p class="text-bold-500"> Evolución escrita:</p>' +
-                        evolEscrita +
-                        '        </div>' +
-                        '        <div class="card-footer pt-0 border-top">' +
-                        '            <label class="sidebar-label">Archivos adjuntos</label>' +
-                        '            <ul class="list-unstyled mb-0">';
-    
-                    if (evolucion.archivos.length > 0) {
-                        let url = $('#Ruta').data("ruta");
-                        $.each(evolucion.archivos, function(i, itemArc) {
-    
-                            if (itemArc.tipo ==
-                                "application/pdf") {
-                                evoluciones +=
-                                    ' <li data-arc="' + itemArc
-                                    .archivo +
-                                    '" onclick="$.mostrarArchivo(this);" class="cursor-pointer pb-25">' +
-                                    '          <img src="' +
-                                    url +
-                                    '/images/imgPDF.png" height="30" alt="archivo">' +
-                                    '          <small class="text-muted ml-1 attchement-text">' +
-                                    itemArc.nombre +
-                                    '</small>' +
-                                    '          </li>';
-                            } else {
-                                evoluciones +=
-                                    ' <li data-img="' + itemArc
-                                    .archivo +
-                                    '" onclick="$.mostrarImagen(this);" class="cursor-pointer pb-25">' +
-                                    '          <img style="border-radius:5px;" src="' +
-                                    url + '/evoluciones/' +
-                                    itemArc.archivo +
-                                    '" height="30" alt="imagen">' +
-                                    '          <small class="text-muted ml-1 attchement-text">' +
-                                    itemArc.nombre +
-                                    '</small>' +
-                                    '          </li>';
+
+                        for (const seccion in evolucionesAgrupadas[tratamiento]) {
+                            evoluciones +=
+                                `<h3 style="text-transform: capitalize;"><i class="bullet bullet-sm bullet-success"></i> ${seccion}</h3>`;
+
+                            for (const servicio in evolucionesAgrupadas[tratamiento][seccion]) {
+                                evolucionesAgrupadas[tratamiento][seccion][servicio].forEach(
+                                    evolucion => {
+                                        let evolEscrita = evolucion.evolucion = (evolucion
+                                                .evolucion === null || evolucion.evolucion
+                                                .trim() === '') ? 'Sin evolución' : evolucion
+                                            .evolucion;
+
+                                        evoluciones +=
+                                            '<div class="card collapse-header bs-callout-danger callout-bordered mb-1" role="tablist">' +
+                                            '<div id="headingCollapse' + consEvo +
+                                            '" class="card-header d-flex justify-content-between align-items-center" data-toggle="collapse" role="tab" data-target="#collapse' +
+                                            consEvo +
+                                            '" aria-expanded="false" aria-controls="collapse' +
+                                            consEvo + '">' +
+                                            '    <div class="collapse-title media">' +
+                                            '        <div class="media-body mt-25">' +
+                                            '            <span class="text-primary">' + evolucion
+                                            .nservicio + '</span>' +
+                                            '            <span class="d-sm-inline d-none">(' +
+                                            evolucion.pavance + '%)</span>' +
+                                            '            <small class="text-muted d-block">Profesional: ' +
+                                            evolucion.nprofe + '</small>' +
+                                            '        </div>' +
+                                            '    </div>' +
+                                            '    <div class="information d-sm-flex d-none align-items-center">' +
+                                            '        <small class="text-muted mr-50">' +
+                                            evolucion.created_at + '</small>' +
+                                            '    </div>' +
+                                            '</div>' +
+                                            '<div id="collapse' + consEvo +
+                                            '" role="tabpanel" aria-labelledby="headingCollapse' +
+                                            consEvo + '" class="collapse">' +
+                                            '    <div class="card-content">' +
+                                            '        <div class="card-body py-1">' +
+                                            '            <p class="text-bold-500"> Evolución escrita:</p>' +
+                                            evolEscrita +
+                                            '        </div>' +
+                                            '        <div class="card-footer pt-0 border-top">' +
+                                            '            <label class="sidebar-label">Archivos adjuntos</label>' +
+                                            '            <ul class="list-unstyled mb-0">';
+
+                                        if (evolucion.archivos.length > 0) {
+                                            let url = $('#Ruta').data("ruta");
+                                            $.each(evolucion.archivos, function(i, itemArc) {
+
+                                                if (itemArc.tipo ==
+                                                    "application/pdf") {
+                                                    evoluciones +=
+                                                        ' <li data-arc="' + itemArc
+                                                        .archivo +
+                                                        '" onclick="$.mostrarArchivo(this);" class="cursor-pointer pb-25">' +
+                                                        '          <img src="' +
+                                                        url +
+                                                        '/images/imgPDF.png" height="30" alt="archivo">' +
+                                                        '          <small class="text-muted ml-1 attchement-text">' +
+                                                        itemArc.nombre +
+                                                        '</small>' +
+                                                        '          </li>';
+                                                } else {
+                                                    evoluciones +=
+                                                        ' <li data-img="' + itemArc
+                                                        .archivo +
+                                                        '" onclick="$.mostrarImagen(this);" class="cursor-pointer pb-25">' +
+                                                        '          <img style="border-radius:5px;" src="' +
+                                                        url + '/evoluciones/' +
+                                                        itemArc.archivo +
+                                                        '" height="30" alt="imagen">' +
+                                                        '          <small class="text-muted ml-1 attchement-text">' +
+                                                        itemArc.nombre +
+                                                        '</small>' +
+                                                        '          </li>';
+                                                }
+                                            });
+                                        } else {
+                                            evoluciones +=
+                                                '<li class="cursor-pointer pb-25">' +
+                                                '         <small class="text-muted ml-1 attchement-text">Sin archivos adjuntos</small>' +
+                                                '         </li>';
+                                        }
+
+                                        evoluciones += '</ul>' +
+                                            '        </div>' +
+                                            '   <div class="card-footer border-top-blue-grey border-top-lighten-5 text-muted mb-1">' +
+                                            '       <span class="tags float-right">' +
+                                            '          <span onclick="$.editarEvolucion(' +
+                                            evolucion.id +
+                                            ');" style="cursor: pointer;" class="badge badge-pill badge-primary">Editar</span>' +
+                                            '         <span onclick="$.eliminarEvolucion(' +
+                                            evolucion.id +
+                                            ');" style="cursor: pointer;" class="badge badge-pill badge-danger">Eliminar</span>' +
+                                            '      </span>' +
+                                            '  </div>' +
+                                            '    </div>' +
+                                            '</div>' +
+                                            '</div>';
+                                        consEvo++;
+                                    });
                             }
-                        });
-                    } else {
-                        evoluciones +=
-                            '<li class="cursor-pointer pb-25">' +
-                            '         <small class="text-muted ml-1 attchement-text">Sin archivos adjuntos</small>' +
-                            '         </li>';
+                        }
                     }
-    
-                    evoluciones += '</ul>' +
-                        '        </div>' +
-                        '    </div>' +
-                        '</div>' +
-                        '</div>';
-                    consEvo++;
-                    });
-                    }
-            }
-        }
 
-        return evoluciones;
+                    return evoluciones;
+
+                },
+
+                eliminarEvolucion: function(evolucion) {
+                    Swal.fire({
+                        title: "Esta seguro de Eliminar este registro?",
+                        text: "¡No podrás revertir esto!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Si, eliminar!",
+                        cancelButtonText: "Cancelar",
+                        confirmButtonClass: "btn btn-warning",
+                        cancelButtonClass: "btn btn-danger ml-1",
+                        buttonsStyling: false
+                    }).then(function(result) {
+                        if (result.value) {
+                            $.procederEliminarEvolucion(evolucion);
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                            Swal.fire({
+                                title: "Cancelado",
+                                text: "Tu registro está a salvo ;)",
+                                type: "error",
+                                confirmButtonClass: "btn btn-success"
+                            });
+                        }
+                    });
+                },
+                procederEliminarEvolucion: function(evolucion) {
+                    var form = $("#formEliminarEvolucion");
+                    $("#idEvo").remove();
+                    form.append("<input type='hidden' id='idEvo' name='idEvo'  value='" + evolucion +
+                        "'>");
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            Swal.fire({
+                                type: "success",
+                                title: "Eliminado!",
+                                text: "El Registro fue eliminado correctamente.",
+                                confirmButtonClass: "btn btn-success"
+                            });
+
+                            $.verTratamiento($("#idTratamiento").val());
+                            $.verEvoluciones();
+                        }
+                    });
 
                 },
                 mostrarVistaPrevia: function(archivo) {
@@ -1628,6 +1861,8 @@
                         backdrop: 'static',
                         keyboard: false
                     });
+                    $("#accionEvolucion").val("agregar");
+                    $("#arcExist").hide();
 
                     $('#pavance').val("0").trigger('change.select2');
                     $("#items-archivo").html('');
@@ -1639,7 +1874,7 @@
                     $("#idSeccion").val(idSeccion);
                     $("#idServicio").val(idServ);
                     $.cargarProfesionales();
-                    $.iniciaEditor();
+                    editorEvolucion.setData("");
                 },
                 iniciaEditor: function() {
                     CKEDITOR.replace('evolucion_escrita', {
@@ -1655,8 +1890,12 @@
                     $("#nombreSeccion").val('');
                     $("#descripcionSeccion").val('');
 
+
+                    $("#tituloUnidad").html('Editar sección');
                     $("#accion").val('editar');
                     $("#idSeccion").val(id);
+                    document.getElementById("btnGuardarSeccion").disabled = false;                   
+                 
 
                     var form = $("#formEditarSeccion");
                     $("#idSecc").remove();
@@ -1753,9 +1992,7 @@
                                         .seccion.nombre);
                                 }
 
-                                var btnGuardarSeccion = document.getElementById(
-                                    'btnGuardarSeccion');
-                                btnGuardarSeccion.setAttribute('disabled', true);
+                                document.getElementById("btnGuardarSeccion").disabled = true; 
                                 var loader = document.getElementById('loader');
                                 loader.style.display = 'none';
                             }
@@ -1877,12 +2114,27 @@
                     $("#valorVis").val("");
                     $("#valor").val("");
 
+                    $("#btnGuardar").show();
+                    $("#btnNuevo").hide();
+
                     $.cargarServicios();
 
                 },
                 salirServicio: function() {
                     $('#modalServicios').modal('toggle');
                     document.getElementById("btnGuardar").disabled = false;
+                  
+                },
+                nuevoServicio: function() {
+                    $("#btnGuardar").show();
+                    $("#btnNuevo").hide();
+
+                    $('#servicioTrat').val("")
+                    .trigger('change.select2');
+
+                    $("#valorVis").val("");
+                    $("#valor").val("");
+
                 },
                 guardarServicio: function() {
                     if ($("#servicioTrat").val().trim() === "") {
@@ -1959,7 +2211,8 @@
 
                                 $("#span-total" + idSeccion).html(totalServicios);
 
-
+                                $("#btnNuevo").show();
+                                $("#btnGuardar").hide();
 
                                 var loader = document.getElementById('loader');
                                 loader.style.display = 'none';
@@ -2004,11 +2257,12 @@
 
                     var form = $("#formGuardarEvolucion");
                     var url = form.attr("action");
-                    var accion = $("#accion").val();
+                    var accion = $("#accionEvolucion").val();
                     var idSeccion = $("#idSeccion").val();
                     var idTratamiento = $("#idTratamiento").val();
                     var idPaciente = $("#idPaciente").val();
                     var idServicio = $("#idServicio").val();
+                    var idEvolucion = $("#idEvolucion").val();
                     var token = $("#token").val();
                     $("#accion").remove();
                     $("#idtoken").remove();
@@ -2032,6 +2286,9 @@
                     form.append("<input type='hidden' id='idSer' name='idSer'  value='" +
                         idServicio +
                         "'>");
+                    form.append("<input type='hidden' id='idEvo' name='idEvo'  value='" +
+                        idEvolucion +
+                        "'>");
 
 
                     $.ajax({
@@ -2051,12 +2308,10 @@
                                     buttonsStyling: false
                                 });
                                 $("#trServicioSeccion" + idSeccion).html('');
-                                {{--  $.dibujarServicioSecc(respuesta);
-                                var totalServicios = formatCurrency(respuesta.totServ,
-                                    'es-CO', 'COP');
-                                $("#span-total" + idSeccion).html(totalServicios);  --}}
 
                                 $.verTratamiento($("#idTratamiento").val());
+                                $.salirEvolucion();
+                                $.verEvoluciones();
 
                                 var loader = document.getElementById('loader');
                                 loader.style.display = 'none';
@@ -2664,7 +2919,7 @@
                                     '</div>' +
                                     '</div>';
                                 $("#div-trata-act").append(tratAct);
-                                updatePercentageTratamientos(porcentajeTerminado,
+                                updatePercentageTratamientos(Math.round(porcentajeTerminado),
                                     consTrata);
                                 consTrata++;
                             });
@@ -2742,8 +2997,7 @@
                                     '</div>' +
                                     '</div>';
                                 $("#div-trata-otr").append(tratOtr);
-                                updatePercentageTratamientos(porcentajeTerminado2,
-                                    consTrataOtro);
+                                updatePercentageTratamientos(Math.round(porcentajeTerminado2),consTrataOtro);
                                 consTrataOtro++;
                             });
                         }
@@ -2774,6 +3028,8 @@
 
             });
 
+            $.iniciaEditor();
+
             var editorEvolucion = CKEDITOR.instances.evolucion_escrita;
             //leer variable localStorage tratamientos
             var ultimaParteURLAnterior = document.referrer.split('/').filter(Boolean).pop();
@@ -2786,6 +3042,10 @@
                 }
 
             }
+
+
+
+
         });
 
 

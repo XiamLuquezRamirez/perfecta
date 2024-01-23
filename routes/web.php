@@ -46,23 +46,28 @@ Route::get('/Administracion/Profesionales', [AdminitraccionController::class,'Pr
 Route::get('/Administracion/Servicios', [AdminitraccionController::class,'Servicios']);
 Route::post('/Administracion/CargarProfesionales', [AdminitraccionController::class,'CargarProfesionales']);
 Route::post('/Administracion/CargarGastos', [AdminitraccionController::class,'CargarGastos']);
+Route::post('/Administracion/CargarConsignaciones', [AdminitraccionController::class,'CargarConsignaciones']);
 Route::post('/Administracion/CargarServicios', [AdminitraccionController::class,'CargarServicios']);
 Route::post('/Administracion/GuardarProfesional', [AdminitraccionController::class,'GuardarProfesional']);
 Route::post('/Administracion/GuardarServicio', [AdminitraccionController::class,'GuardarServicio']);
 Route::post('/Administracion/ValidarProfesional', [AdminitraccionController::class,'ValidarProfesional']);
 Route::post('/Administracion/BuscarProfesional', [AdminitraccionController::class,'BuscarProfesional']);
 Route::post('/Administracion/BuscarGastos', [AdminitraccionController::class,'BuscarGastos']);
+Route::post('/Administracion/Buscarconsignacion', [AdminitraccionController::class,'Buscarconsignacion']);
 Route::post('/Administracion/BuscarServicio', [AdminitraccionController::class,'BuscarServicio']);
 Route::post('/Administracion/BuscarUsuario', [AdminitraccionController::class,'BuscarUsuario']);
 Route::post('/Administracion/EliminarProfesional', [AdminitraccionController::class,'EliminarProfesional']);
 Route::post('/Administracion/EliminarServicio', [AdminitraccionController::class,'EliminarServicio']);
 Route::post('/Administracion/EliminarCategoria', [AdminitraccionController::class,'EliminarCategoria']);
 Route::post('/Administracion/EliminarGastos', [AdminitraccionController::class,'EliminarGastos']);
+Route::post('/Administracion/EliminarConsignacion', [AdminitraccionController::class,'EliminarConsignacion']);
 Route::get('/Administracion/Gastos', [AdminitraccionController::class,'Gastos']);
+Route::get('/Administracion/Consignaciones', [AdminitraccionController::class,'Consignaciones']);
 Route::get('/Administracion/Cajas', [AdminitraccionController::class,'Cajas']);
 Route::post('/Administracion/cargarCategorias', [AdminitraccionController::class,'cargarCategorias']);
 Route::post('/Administracion/GuardarCategoria', [AdminitraccionController::class,'GuardarCategoria']);
 Route::post('/Administracion/GuardarGasto', [AdminitraccionController::class,'GuardarGasto']);
+Route::post('/Administracion/GuardarConsignacion', [AdminitraccionController::class,'GuardarConsignacion']);
 Route::post('/Administracion/GuardarCaja', [AdminitraccionController::class,'GuardarCaja']);
 Route::post('/Administracion/CargarDatos', [AdminitraccionController::class,'CargarDatos']);
 Route::post('/Administracion/CargarCajas', [AdminitraccionController::class,'CargarCajas']);
@@ -97,16 +102,19 @@ Route::post('/AdminPacientes/CargarDatosPacTrat', [PacientesController::class,'C
 Route::post('/AdminPacientes/SeccionesTratamientos', [PacientesController::class,'SeccionesTratamientos']);
 Route::post('/AdminPacientes/AllServicios', [PacientesController::class,'AllServicios']);
 Route::post('/AdminPacientes/busEditServ', [PacientesController::class,'busEditServ']);
-Route::post('/AdminPacientes/busPEditSecc', [PacientesController::class,'busEditSecc']);
+Route::post('/AdminPacientes/busEditSecc', [PacientesController::class,'busEditSecc']);
 Route::post('/AdminPacientes/busEditTrata', [PacientesController::class,'busEditTrata']);
 Route::post('/AdminPacientes/EliminarServicio', [PacientesController::class,'EliminarServicio']);
 Route::post('/AdminPacientes/EliminarSeccion', [PacientesController::class,'EliminarSeccion']);
 Route::post('/AdminPacientes/EliminarTratamiento', [PacientesController::class,'EliminarTratamiento']);
 Route::post('/AdminPacientes/ConsultarEvoluciones', [PacientesController::class,'ConsultarEvoluciones']);
 Route::post('/AdminPacientes/ConsultarEvolucionesGen', [PacientesController::class,'ConsultarEvolucionesGen']);
+Route::post('/AdminPacientes/ConsultarEvolucionEdit', [PacientesController::class,'ConsultarEvolucionEdit']);
 Route::post('/AdminPacientes/CargarHistoricoTransacciones', [PacientesController::class,'CargarHistoricoTransacciones']);
 Route::post('/AdminPacientes/DeleteTransaccion', [PacientesController::class,'DeleteTransaccion']);
 Route::post('/AdminPacientes/updateServiciosTerminados', [PacientesController::class,'updateServiciosTerminados']);
+Route::post('/AdminPacientes/DeleteArchivoEvolucion', [PacientesController::class,'DeleteArchivoEvolucion']);
+Route::post('/AdminPacientes/DeleteEvolucion', [PacientesController::class,'DeleteEvolucion']);
 
 
 // GESTIONAR RECAUDOS

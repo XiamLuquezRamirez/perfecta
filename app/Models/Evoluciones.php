@@ -10,7 +10,6 @@ class Evoluciones extends Model
 {
     public static function guardar($data,$idSecc,$idTrata,$idPac,$idSer)
     {
-
         $respuesta = DB::connection('mysql')->table('evoluciones')->insertGetId([
             'tratamiento' => $idTrata,
             'seccion' => $idSecc,
@@ -29,6 +28,15 @@ class Evoluciones extends Model
         return $respuestaSecc;
     }
 
+    public static function editar($data)
+    {
+        $respuesta = DB::connection('mysql')->table('evoluciones')->where('id', $data['idEvo'])->update([
+            'pavance' => $data['pavance'],
+            'evolucion' => $data['evolucion_escrita'],
+        ]);
+        return $data['idEvo'];
+    }
+
     public static function ConsultarEvolucionesServ($serv){
 
         $respuesta = DB::connection('mysql')->table('evoluciones')
@@ -43,6 +51,24 @@ class Evoluciones extends Model
         return $respuesta;
 
     }
+    public static function ConsultarEvolucionEdit($evo){
+
+        $respuesta = DB::connection('mysql')->table('evoluciones')
+        ->where('id', $evo)
+        ->first();
+
+        return $respuesta;
+
+    }
+
+    public static function delArchivo($idArchivo){
+        $delArchivo = DB::connection('mysql')->table('archivos_evolucion')
+        ->where('id', $idArchivo)
+        ->delete();
+
+        return "ok";
+    }
+
     public static function ConsultarEvoluciones($trata){
 
         $respuesta = DB::connection('mysql')->table('evoluciones')
@@ -81,6 +107,19 @@ class Evoluciones extends Model
         ->get();
         return $respuesta;
 
+    }
+
+    public static function Eliminar($id)
+    {
+        return DB::connection('mysql')->table('evoluciones')->where('id', $id)->update([
+            'estado' => 'ELIMINADO',
+        ]);
+    }
+    public static function updatePorcAvance($serv, $pavance)
+    {
+        return DB::connection('mysql')->table('servicios_tratamiento')->where('id', $serv)->update([
+            'avance' => $pavance,
+        ]);
     }
 
 

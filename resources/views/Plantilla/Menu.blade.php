@@ -16,6 +16,8 @@
                 <ul class="dropdown-menu">
                     <li id="MenAdminGasto"  data-menu=""><a class="dropdown-item" href="{{ url('/Administracion/Gastos') }}" data-i18n="Email Application" data-toggle="dropdown">Gestión de gastos</a>
                     </li>
+                    <li id="MenAdminConsignacion"  data-menu=""><a class="dropdown-item" href="{{ url('/Administracion/Consignaciones') }}" data-i18n="Email Application" data-toggle="dropdown">Gestión de consignaciones</a>
+                    </li>
                     <li  id="MenAdminServicios"  data-menu=""><a class="dropdown-item" href="{{ url('/Administracion/Servicios') }}" data-i18n="Chat Application" data-toggle="dropdown">Gestión de servicios</a>
                     </li>
                     <li id="MenAdminProesional"  data-menu=""><a class="dropdown-item" href="{{ url('/Administracion/Profesionales') }}" data-i18n="Todo Application" data-toggle="dropdown">Gestión de profesionales</a>

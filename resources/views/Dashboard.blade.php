@@ -158,6 +158,8 @@
                                                                 <option value="30">30 minutos</option>
                                                                 <option value="60">1 hora</option>
                                                                 <option value="120">2 horas</option>
+                                                                <option value="180">3 horas</option>
+                                                                <option value="240">4 horas</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -955,7 +957,7 @@
                 slotDuration: '00:15:00', // Duración de cada intervalo en la vista semanal (aquí es de una hora)
                 slotLabelInterval: "00:15", // Mostrar etiquetas de hora cada una hora
                 minTime: "08:00:00",
-                maxTime: "18:00:00",
+                maxTime: "18:45:00",
                 hiddenDays: [0], 
                 locale: "es",
                 events: disponibilidadJSON,
@@ -996,7 +998,7 @@
                 slotDuration: '00:15:00', // Duración de cada intervalo en la vista semanal (aquí es de una hora)
                 slotLabelInterval: "00:15", // Mostrar etiquetas de hora cada una hora
                 minTime: "08:00:00",
-                maxTime: "18:00:00",
+                maxTime: "18:45:00",
                 hiddenDays: [0], 
                 locale: "es",
                 dateClick: function(event) {

@@ -224,7 +224,22 @@
                                             <th style="width: 55%">Recaudos</th>
                                             <th></th>
                                             <th></th>
-                                            <th id="totalMedioPago">$ 0,00/th>
+                                            <th id="totalMedioPago">$ 0,00</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table mb-0">
+                                    <tbody id="tr-mediosPago">
+
+                                    </tbody>
+                                    <tfoot class="bg-teal bg-lighten-4 height-50">
+                                        <tr>
+                                            <th style="width: 55%">Consignaciones</th>
+                                            <th></th>
+                                            <th></th>
+                                            <th id="totalConsignacion">$ 0,00</th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -642,12 +657,12 @@
                                     '</tr>';
 
                                 if (medioPagoNombre == 'Efectivo') {
-                                    totalMedioPago += totals[medioPagoNombre].total;                                  
+                                    totalMedioPago += totals[medioPagoNombre].total;
 
                                 } else {
                                     totalMedioPagoT += totals[medioPagoNombre].total;
-                                }                              
-                                
+                                }
+
                             }
 
                             let totalRecaudos = totalMedioPago + totalMedioPagoT;
@@ -688,11 +703,12 @@
                             let totalCajaT = totalMedioPagoT - totalTransferencia;
 
 
-                          
+
                             totalCaja = totalCaja - parseInt(totalEfectivo);
 
                             $("#valorMontoCierre").val(totalCaja);
-                            $("#valorVisMontoCierre").val(formatCurrency(totalCaja, 'es-CO', 'COP'));
+                            $("#valorVisMontoCierre").val(formatCurrency(totalCaja, 'es-CO',
+                                'COP'));
 
 
                             $("#infTotalCaja").html(formatCurrency(totalCaja, 'es-CO',
@@ -741,6 +757,19 @@
                             $('#tr_detaRecaudo').html(detaRecaudos);
                             $('#infTotalRecaudos').html(formatCurrency(totalRecaudosDet,
                                 'es-CO', 'COP'));
+
+                            ////MOSTRAR  CONSIGNACIONES
+                            let totalConsig = 0;
+
+                            respuesta.consig.forEach(item => {
+                                totalConsig += parseFloat(item.valor);
+                            });
+
+                            $('#totalConsignacion').html(formatCurrency(totalConsig,
+                                'es-CO', 'COP'));
+
+
+
                             ////MOSTRAR DETALLES GASTOS
                             let detaGastos = '';
                             let referenciaG = '';
@@ -750,7 +779,6 @@
                                 medioPagoNombreG = {
                                     "e": "Efectivo",
                                     "t": "Transferencia"
-                                    // Puedes agregar más mapeos según tus necesidades
                                 } [item.forma_pago];
 
                                 referenciaG = item.referencia = item
@@ -1079,6 +1107,13 @@
                     });
 
 
+                       ////MOSTRAR  CONSIGNACIONES
+                       let totalConsig = 0;
+
+                       respuestaGlobal.consig.forEach(item => {
+                           totalConsig += parseFloat(item.valor);
+                       });
+
 
                     // total caja
                     let totalCaja = parseInt(respuestaGlobal.caja.saldo_inicial) + parseInt(
@@ -1099,6 +1134,8 @@
                         colorCaja = "#16D39A";
 
                     }
+
+
 
 
 
@@ -1254,6 +1291,41 @@
                                             fillColor: '#D7D7DB'
                                         }, {
                                             text: formatCurrency(totalRecaudosDet,
+                                                'es-CO',
+                                                'COP'),
+                                            fillColor: '#D7D7DB',
+                                            alignment: 'right'
+                                        }]
+                                    ],
+                                    // Configuración de estilos de la tabla
+                                    layout: {
+                                        hLineWidth: function(i, node) {
+                                            return (i === 0) ? 0 :
+                                                1; // 0 para quitar el borde superior, 1 para mantener el resto de los bordes
+                                        },
+                                        vLineWidth: function(i, node) {
+                                            return 0;
+                                        },
+                                        hLineColor: function(i, node) {
+                                            return '#fff'; // Color blanco para ocultar el borde superior
+                                        },
+                                        vLineColor: function(i, node) {
+                                            return '#fff';
+                                        },
+                                    }
+                                }
+                            },
+                            {
+                                style: 'tableExample', // Puedes ajustar el estilo según tus necesidades
+                                table: {
+                                    headerRows: 0, // Sin filas de encabezado
+                                    widths: ['75%', '25%'],
+                                    body: [
+                                        [{
+                                            text: 'Consignaciones',
+                                            fillColor: '#D7D7DB'
+                                        }, {
+                                            text: formatCurrency(totalConsig,
                                                 'es-CO',
                                                 'COP'),
                                             fillColor: '#D7D7DB',
@@ -1494,7 +1566,8 @@
                         table: {
                             headerRows: 0,
                             widths: ['auto', 'auto', 'auto', 'auto', 'auto',
-                            'auto'], // ajusta según tus necesidades
+                                'auto'
+                            ], // ajusta según tus necesidades
                             body: [
                                 [{
                                         text: 'No.',
@@ -1545,8 +1618,7 @@
                         }
                     };
 
-                    var totalRow = [
-                        {
+                    var totalRow = [{
                             text: 'Total:',
                             colSpan: 5,
                             style: 'total2'
@@ -1559,7 +1631,7 @@
                             text: formatCurrency(totalRecaudosDet, 'es-CO', 'COP'),
                             style: 'total2'
                         },
-                      
+
                     ];
 
                     recaudosTable.table.body.push(totalRow);
@@ -1577,7 +1649,8 @@
                         table: {
                             headerRows: 0,
                             widths: ['auto', 'auto', 'auto', 'auto', 'auto',
-                            'auto'], // ajusta según tus necesidades
+                                'auto'
+                            ], // ajusta según tus necesidades
                             body: [
                                 [{
                                         text: 'No.',
@@ -1628,8 +1701,7 @@
                         }
                     };
 
-                    var totalRowGast = [
-                        {
+                    var totalRowGast = [{
                             text: 'Total:',
                             colSpan: 5,
                             style: 'total2'
@@ -1642,9 +1714,9 @@
                             text: formatCurrency(totalGastosDet, 'es-CO', 'COP'),
                             style: 'total2'
                         },
-                      
+
                     ];
-                    
+
                     gastosTable.table.body.push(totalRowGast);
                     docDefinition.content.push(gastosTable);
 
@@ -1680,7 +1752,7 @@
             }).format(number);
         }
 
-       
+
         function agregarCeros(numero, longitud) {
             return numero.toString().padStart(longitud, '0');
         }

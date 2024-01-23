@@ -11,6 +11,7 @@ use App\Models\Profesionales;
 use App\Models\Servicios;
 use App\Models\Tratamientos;
 use App\Models\Usuario;
+use App\Models\Consignacion;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -56,6 +57,17 @@ class AdminitraccionController extends Controller
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
+
+    public function Consignaciones()
+    {
+        if (Auth::check()) {
+            $bandera = "";
+            return view('Adminitraccion.GestionConsignaciones', compact('bandera'));
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
     public function Cajas()
     {
         if (Auth::check()) {
@@ -459,6 +471,82 @@ class AdminitraccionController extends Controller
         }
     }
 
+    public function CargarConsignaciones()
+    {
+        if (Auth::check()) {
+            $perPage = 20; // Número de posts por página
+            $page = request()->get('page', 1);
+            $search = request()->get('search');
+            $fecha = request()->get('fecBusc');
+            $fechaPago = date("Y-m-d", strtotime(str_replace('/', '-', $fecha)));
+
+            if (!is_numeric($page)) {
+                $page = 1; // Establecer un valor predeterminado si no es numérico
+            }
+
+            $consignaciones = DB::connection('mysql')
+                ->table('consignaciones')
+                ->where('estado', 'ACTIVO');
+            if ($search) {
+                $consignaciones->where(function ($query) use ($search) {
+                    $query->where('descripcion', 'LIKE', '%' . $search . '%')
+                        ->orWhere('banco', 'LIKE', '%' . $search . '%')
+                        ->orWhere('nconsignacion', 'LIKE', '%' . $search . '%');
+                });
+            }
+            $consignaciones->where('fecha', $fechaPago);
+
+            $ListConsignaciones = $consignaciones->paginate($perPage, ['*'], 'page', $page);
+
+            $tdTable = '';
+            $j = 1;
+            $x = ($page - 1) * $perPage + 1;
+            $total = 0;
+
+            foreach ($ListConsignaciones as $i => $item) {
+                if (!is_null($item)) {
+                    $total = $total + $item->valor;
+                    $numero_formateado = number_format($item->valor, 2, ',', '.');
+                    $fecha_pago = date('d/m/Y', strtotime($item->fecha));
+                    $descripcion = $item->descripcion !== null ? $item->descripcion : "---";
+                    
+                    $tdTable .= '<tr>
+                <td><span class="invoice-date">' . $j . '</span></td>
+                <td><span class="invoice-date">' . $descripcion . '</span></td>
+                <td><span class="invoice-date">' . $fecha_pago . '</span></td>
+                <td><span class="invoice-date">' . $item->banco . '</span></td>
+                <td><span class="invoice-date">' . $item->nconsignacion . '</span></td>
+                <td><span class="invoice-date">$ ' . $numero_formateado . '</span></td>
+                <td>
+                    <div class="invoice-action">
+
+                    <a onclick="$.editar(' . $item->id . ');" title="Editar" class="invoice-action-edit cursor-pointer mr-1">
+                        <i class="feather icon-edit-1"></i>
+                    </a>
+                    <a onclick="$.eliminar(' . $item->id . ');" title="Eliminar" class="invoice-action-edit cursor-pointer">
+                        <i class="feather icon-trash"></i>
+                    </a>
+                    </div>
+                </td>
+            </tr>';
+
+                    $x++;
+                    $j++;
+                }
+            }
+
+            $pagination = $ListConsignaciones->links('Adminitraccion.Paginacion')->render();
+
+            return response()->json([
+                'servicios' => $tdTable,
+                'links' => $pagination,
+                'total' => $total,
+            ]);
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
     public function BuscarProfesional()
     {
         if (Auth::check()) {
@@ -485,12 +573,14 @@ class AdminitraccionController extends Controller
 
             //gastos
             $gastos = Gastos::GastosCajaDet($caja->fecha_apertura);
+            $consig = Consignacion::consigCaja($caja->fecha_apertura);
             
             if (request()->ajax()) {
                 return response()->json([
                     'caja' => $caja,
                     'recaudos' => $recaudos,
                     'gastos' => $gastos,
+                    'consig' => $consig
                 ]);
             }
         } else {
@@ -507,6 +597,22 @@ class AdminitraccionController extends Controller
             if (request()->ajax()) {
                 return response()->json([
                     'gastos' => $gastos,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+    public function Buscarconsignacion()
+    {
+        if (Auth::check()) {
+            $idCons = request()->get('idCons');
+            $consignacion = Consignacion::BuscarConsig($idCons);
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'consignacion' => $consignacion,
                 ]);
             }
         } else {
@@ -683,6 +789,38 @@ class AdminitraccionController extends Controller
         }
     }
 
+    public function GuardarConsignacion()
+    {
+        if (Auth::check()) {
+            $data = request()->all();
+            $idConsignacion = $data['idConsignacion'];
+
+            if ($data['accion'] == "agregar") {
+                $respuesta = Consignacion::guardar($data);
+
+                $idConsignacion = $respuesta;
+            } else {
+
+                $respuesta = Consignacion::editar($data);
+            }
+
+            if ($respuesta) {
+                $estado = "ok";
+            } else {
+                $estado = "fail";
+            }
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => $estado,
+                    'id' => $idConsignacion,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
     public function GuardarCaja()
     {
         if (Auth::check()) {
@@ -790,7 +928,7 @@ class AdminitraccionController extends Controller
     {
         if (Auth::check()) {
             $idGast = request()->get('idGast');
-            $gastos = Gastos::CambioEstado($idGast);
+            $gastos = Gastos::Eliminar($idGast);
             if (request()->ajax()) {
                 return response()->json([
                     'estado' => "ok",
@@ -800,6 +938,21 @@ class AdminitraccionController extends Controller
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
+    public function EliminarConsignacion()
+    {
+        if (Auth::check()) {
+            $idCons = request()->get('idCons');
+            $consignacion = Consignacion::Eliminar($idCons);
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => "ok",
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
     public function CierreCaja()
     {
         if (Auth::check()) {

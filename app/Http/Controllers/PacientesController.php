@@ -452,11 +452,54 @@ class PacientesController extends Controller
             $transaccion = Tratamientos::buscTransaccion($idTrasa);
             $delTransaccion = Tratamientos::delTransaccion($transaccion,$motivo);
             
+            
 
 
             if (request()->ajax()) {
                 return response()->json([
                     'transaccion' => $transaccion,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+    public function DeleteArchivoEvolucion()
+    {
+        if (Auth::check()) {
+            $idArchivo = request()->get('idArchivo');
+
+            $delTransaccion = Evoluciones::delArchivo($idArchivo);
+            
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => "ok",
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+    public function DeleteEvolucion()
+    {
+        if (Auth::check()) {
+            $idEvo = request()->get('idEvo');
+
+            $evolucion = Evoluciones::ConsultarEvolucionEdit($idEvo);
+            $delEvolucion = Evoluciones::Eliminar($idEvo);
+
+            $serv = $evolucion->servicio;
+
+            $consEvol = Evoluciones::ConsultarEvolucionesServ($serv);
+            $ultEvol = $consEvol->last();
+
+            $updateServ = Evoluciones::updatePorcAvance($ultEvol->servicio, $ultEvol->pavance);
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => "ok",
                 ]);
             }
         } else {
@@ -562,6 +605,25 @@ class PacientesController extends Controller
                 return response()->json([
                     'Seccion' => $Seccion,
                     'evoluciones' => $evoluciones,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+    public function ConsultarEvolucionEdit()
+    {
+        if (Auth::check()) {
+            $idEvo = request()->get('idEvo');
+
+            $evolucion = Evoluciones::ConsultarEvolucionEdit($idEvo);
+            $archivosEvolucion = Evoluciones::consulArcEvol($evolucion->id);
+            $evolucion->archivos = $archivosEvolucion;
+            
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'evolucion' => $evolucion
                 ]);
             }
         } else {
@@ -1218,7 +1280,13 @@ class PacientesController extends Controller
             $idPac = $data['idPac'];
             $idSer = $data['idSer'];
 
-            $respuestaEvol = Evoluciones::guardar($data, $idSecc, $idTrata, $idPac, $idSer);
+            if($data['accion']=="agregar"){
+                $respuestaEvol = Evoluciones::guardar($data, $idSecc, $idTrata, $idPac, $idSer);
+                $Evol = $respuestaEvol->id;
+            }else{
+                $respuestaEvol = Evoluciones::editar($data);
+                $Evol =$respuestaEvol;                
+            }
 
             if (request()->has('repeater-list')) {
                 $arc = [];
@@ -1250,7 +1318,7 @@ class PacientesController extends Controller
             $updateServ = Secciones::updateServ($idSer, $data['pavance']);
 
             if (isset($data['archivo'])) {
-                $evoArchivos = Evoluciones::guardarArcEvol($data, $respuestaEvol->id);
+                $evoArchivos = Evoluciones::guardarArcEvol($data, $Evol);
             }
 
             $servSeccion = Secciones::buscServSecc($idSecc);
@@ -1258,7 +1326,7 @@ class PacientesController extends Controller
 
             if (request()->ajax()) {
                 return response()->json([
-                    'servicios' => $respuestaEvol,
+                    'servicios' => $Evol ,
                     'totServ' => $totServ,
                     'servSeccion' => $servSeccion,
 

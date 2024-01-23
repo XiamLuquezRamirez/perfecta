@@ -38,6 +38,7 @@ class Gastos extends Model
         $recaudoMes = DB::connection('mysql')
             ->table('gastos')
             ->whereBetween('fecha_pago', [$fechaInicio->format('Y-m-d'), $fechaFin->format('Y-m-d')])
+            ->where("estado","ACTIVO")
             ->sum('valor');
 
         return $recaudoMes;
@@ -55,6 +56,7 @@ class Gastos extends Model
             ->leftJoin("categorias","categorias.id","gastos.categoria")
             ->whereBetween('fecha_pago', [$fechaInicio->format('Y-m-d'), $fechaFin->format('Y-m-d')])
             ->select("gastos.*","categorias.descripcion AS ncategoria")
+            ->where("gastos.estado","ACTIVO")
             ->get();
 
         return $recaudoMes;
