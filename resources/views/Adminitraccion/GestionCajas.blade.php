@@ -158,7 +158,7 @@
         {{--  Modal detalle caja  --}}
         <div class="modal fade text-left" id="modaldetCaja" tabindex="-1" role="dialog"
             aria-labelledby="myModalLabel1" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title text-bold-600" id="tituloCaja"></h4>
@@ -192,24 +192,24 @@
                                 <table class="table mb-0">
                                     <tbody>
                                         <tr>
-                                            <td style="width: 55%">Saldo anterior</td>
+                                            <td style="width: 70%">Saldo anterior</td>
                                             <td></td>
                                             <td></td>
-                                            <td id="infSaldoAnterior">$ 0,00</td>
+                                            <td style="text-align:right;" id="infSaldoAnterior">$ 0,00</td>
                                         </tr>
                                         <tr>
-                                            <td style="width: 55%">Abono inicial</td>
+                                            <td style="width: 70%">Abono inicial</td>
                                             <td></td>
                                             <td></td>
-                                            <td id="infAbonoInicial">$ 0,00</td>
+                                            <td style="text-align:right;" id="infAbonoInicial">$ 0,00</td>
                                         </tr>
                                     </tbody>
                                     <tfoot class="bg-teal bg-lighten-4 height-50">
                                         <tr>
-                                            <th style="width: 55%">Saldo inicial total</th>
+                                            <th style="width: 70%">Saldo inicial total</th>
                                             <th></th>
                                             <th></th>
-                                            <th id="infSaldoInicial">$ 0,00</th>
+                                            <th style="text-align:right;" id="infSaldoInicial">$ 0,00</th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -221,10 +221,10 @@
                                     </tbody>
                                     <tfoot class="bg-teal bg-lighten-4 height-50">
                                         <tr>
-                                            <th style="width: 55%">Recaudos</th>
+                                            <th style="width: 70%">Recaudos</th>
                                             <th></th>
                                             <th></th>
-                                            <th id="totalMedioPago">$ 0,00</th>
+                                            <th style="text-align:right;" id="totalMedioPago">$ 0,00</th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -236,10 +236,10 @@
                                     </tbody>
                                     <tfoot class="bg-teal bg-lighten-4 height-50">
                                         <tr>
-                                            <th style="width: 55%">Consignaciones</th>
+                                            <th style="width: 70%">Consignaciones</th>
                                             <th></th>
                                             <th></th>
-                                            <th id="totalConsignacion">$ 0,00</th>
+                                            <th style="text-align:right;" id="totalConsignacion">$ 0,00</th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -248,34 +248,34 @@
                                 <table class="table mb-0">
                                     <tbody>
                                         <tr>
-                                            <td style="width: 55%">Gastos Efectivo (-)</td>
+                                            <td style="width: 70%">Gastos Efectivo (-)</td>
                                             <td></td>
                                             <td></td>
-                                            <td id="infGastos">$ 0,00</td>
+                                            <td style="text-align:right;" id="infGastos">$ 0,00</td>
                                         </tr>
                                         <tr>
-                                            <td style="width: 55%">Gastos Transferencia (-)</td>
+                                            <td style="width: 70%">Gastos Transferencia (-)</td>
                                             <td></td>
                                             <td></td>
-                                            <td id="infGastosT">$ 0,00</td>
+                                            <td style="text-align:right;" id="infGastosT">$ 0,00</td>
                                         </tr>
 
                                     </tbody>
                                     <tfoot class="bg-teal bg-lighten-4 height-50">
                                         <tr>
-                                            <th style="width: 55%">Total caja efectivo (saldo inicial + recaudado -
-                                                gastos):
+                                            <th style="width: 70%">Total caja efectivo (saldo inicial + recaudado -
+                                                gastos - consignaciones):
                                             </th>
                                             <th></th>
                                             <th></th>
-                                            <th id="infTotalCaja">$ 0,00</th>
+                                            <th style="text-align:right;" id="infTotalCaja">$ 0,00</th>
                                         </tr>
                                         <tr>
-                                            <th style="width: 55%">Total caja Transferencia (recaudado - gastos):
+                                            <th style="width: 70%">Total caja Transferencia (recaudado - gastos):
                                             </th>
                                             <th></th>
                                             <th></th>
-                                            <th id="infTotalCajaT">$ 0,00</th>
+                                            <th style="text-align:right;" id="infTotalCajaT">$ 0,00</th>
                                         </tr>
                                     </tfoot>
 
@@ -286,11 +286,11 @@
                                     <tfoot id="div-saldoCierre" style="display: none;"
                                         class="bg-teal bg-lighten-4 height-50">
                                         <tr>
-                                            <th style="width: 55%">Saldo cierre::
+                                            <th style="width: 70%">Saldo cierre::
                                             </th>
                                             <th></th>
                                             <th></th>
-                                            <th id="infSaldoCierre">$ 0,00</th>
+                                            <th style="text-align:right;" id="infSaldoCierre">$ 0,00</th>
                                         </tr>
                                     </tfoot>
 
@@ -304,7 +304,7 @@
                                     <thead class="border-bottom border-dark">
                                         <tr>
                                             <th>No.</th>
-                                            <th>Paciente</th>
+                                            <th style="width: 70%;">Paciente</th>
                                             <th>Fecha de pago</th>
                                             <th>Medio de Pago</th>
                                             <th>Referencia</th>
@@ -326,14 +326,14 @@
                                     </tfoot>
                                 </table>
                             </div>
-                            <hr>
+                           
                             <h4>Detalle de gastos</h4>
                             <div class="table-responsive" style="height: 350px;">
                                 <table class="table mb-0">
                                     <thead class="border-bottom border-dark">
                                         <tr>
                                             <th>No.</th>
-                                            <th>Descripción</th>
+                                            <th style="width: 70%;">Descripción</th>
                                             <th>Fecha de pago</th>
                                             <th>Medio de pago</th>
                                             <th>Referencia</th>
@@ -351,6 +351,34 @@
                                             <th></th>
                                             <th></th>
                                             <th id="infTotalGastos">$ 0,00</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <hr>
+                            <h4>Detalle de consignaciones</h4>
+                            <div class="table-responsive" style="height: 350px;">
+                                <table class="table mb-0">
+                                    <thead class="border-bottom border-dark">
+                                        <tr>
+                                            <th>No.</th>
+                                            <th style="width: 70%;">Descripción</th>
+                                            <th>Fecha de pago</th>
+                                            <th># Consignación</th>
+                                            <th>Valor</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tr_detaConsinaciones">
+
+                                    </tbody>
+                                    <tfoot class="bg-teal bg-lighten-4 height-50">
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th style="width: 55%">Total</th>
+                                            <th></th>
+                                         
+                                            <th id="infTotalConsignacion">$ 0,00</th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -648,11 +676,11 @@
                             console.log(totals);
                             for (var medioPagoNombre in totals) {
                                 mediosPago += '<tr>' +
-                                    '<td style="width: 55%">' + medioPagoNombre + ' (' +
+                                    '<td style="width: 70%">' + medioPagoNombre + ' (' +
                                     totals[medioPagoNombre].count + ')</td>' +
                                     '<td></td>' +
                                     '<td></td>' +
-                                    '<td>' + formatCurrency(totals[medioPagoNombre].total,
+                                    '<td style="text-align: right;">' + formatCurrency(totals[medioPagoNombre].total,
                                         'es-CO', 'COP') + '</td>' +
                                     '</tr>';
 
@@ -685,6 +713,30 @@
                                 }
                             });
 
+                               ////MOSTRAR  CONSIGNACIONES
+                               let totalConsig = 0;
+                               let trConsognaciones = '';
+
+                               respuesta.consig.forEach(item => {
+                                trConsognaciones +='<tr>' +
+                                    '<td>' + agregarCeros(item.id, 5) +
+                                    '</td>' +
+                                    '<td>' + item.descripcion +
+                                    '</td>' +
+                                    '<td>' + $.convertirFormato(item.fecha) +
+                                    '</td>' +
+                                    '<td>' + item.nconsignacion + '</td>' +
+                                    '<td>' + formatCurrency(item.valor, 'es-CO',
+                                        'COP') + '</td>' +
+                                    '</tr>';
+                                   totalConsig += parseFloat(item.valor);
+                               });
+
+                               $('#tr_detaConsinaciones').html(trConsognaciones);
+                            $('#infTotalConsignacion').html(formatCurrency(totalConsig,
+                                'es-CO', 'COP'));
+   
+
 
                             //informacion gastos
                             $("#infGastos").html(formatCurrency(totalEfectivo, 'es-CO',
@@ -704,7 +756,7 @@
 
 
 
-                            totalCaja = totalCaja - parseInt(totalEfectivo);
+                            totalCaja = totalCaja - parseInt(totalEfectivo) - parseInt(totalConsig);
 
                             $("#valorMontoCierre").val(totalCaja);
                             $("#valorVisMontoCierre").val(formatCurrency(totalCaja, 'es-CO',
@@ -748,7 +800,7 @@
                                     '<td>' + referencia + '</td>' +
                                     '<td>' + formatCurrency(item.valor, 'es-CO',
                                         'COP') + '</td>' +
-                                    '</tr>'
+                                    '</tr>';
 
                                 totalRecaudosDet += parseInt(item.valor);
 
@@ -758,13 +810,7 @@
                             $('#infTotalRecaudos').html(formatCurrency(totalRecaudosDet,
                                 'es-CO', 'COP'));
 
-                            ////MOSTRAR  CONSIGNACIONES
-                            let totalConsig = 0;
-
-                            respuesta.consig.forEach(item => {
-                                totalConsig += parseFloat(item.valor);
-                            });
-
+                         
                             $('#totalConsignacion').html(formatCurrency(totalConsig,
                                 'es-CO', 'COP'));
 
@@ -1118,7 +1164,7 @@
                     // total caja
                     let totalCaja = parseInt(respuestaGlobal.caja.saldo_inicial) + parseInt(
                         totalMedioPago);
-                    totalCaja = totalCaja - parseInt(totalEfectivo);
+                    totalCaja = totalCaja - parseInt(totalEfectivo) - parseInt(totalConsig);
 
                     let totalCajaT = totalMedioPagoT - totalTransferencia;
 
@@ -1134,10 +1180,6 @@
                         colorCaja = "#16D39A";
 
                     }
-
-
-
-
 
 
                     var docDefinition = {
@@ -1396,7 +1438,7 @@
                                     widths: ['75%', '25%'],
                                     body: [
                                         [{
-                                            text: 'Total caja efectivo(saldo inicial + recaudado - gastos): ',
+                                            text: 'Total caja efectivo(saldo inicial + recaudado - gastos - consignaciones): ',
                                             fillColor: '#D7D7DB'
                                         }, {
                                             text: formatCurrency(totalCaja, 'es-CO',
@@ -1492,6 +1534,7 @@
                                 fontSize: 9,
                                 color: '#333', // Color del texto de la tabla
                                 alignment: 'center',
+                                width: '100%',
                                 fillColor: '#F2F2F2', // Color de fondo para las filas normales
                             },
 
@@ -1501,6 +1544,7 @@
                                 color: '#333', // Color del texto del encabezado
                                 fillColor: '#D7D7DB', // Color de fondo del encabezado
                                 alignment: 'center',
+                                width: '100%',
                                 margin: [0, 5, 0, 7], // Ajusta los márgenes según tus necesidades
                             }
                         }
@@ -1719,6 +1763,83 @@
 
                     gastosTable.table.body.push(totalRowGast);
                     docDefinition.content.push(gastosTable);
+
+
+                      ///imprimir consignaciones
+                      docDefinition.content.push({
+                        text: 'Detalle de consignaciones',
+                        style: 'title2'
+                    });
+
+                    var consigTable = {
+
+                        table: {
+                            headerRows: 0,
+                            widths: ['auto', 'auto', 'auto', 'auto', 'auto'
+                            ], // ajusta según tus necesidades
+                            body: [
+                                [{
+                                        text: 'No.',
+                                        style: 'headerStyle'
+                                    },
+                                    {
+                                        text: 'Descripción',
+                                        style: 'headerStyle'
+                                    },
+                                    {
+                                        text: 'Fecha de pago',
+                                        style: 'headerStyle'
+                                    },
+                                    {
+                                        text: '# Consignación',
+                                        style: 'headerStyle'
+                                    },
+                                    {
+                                        text: 'Valor',
+                                        style: 'headerStyle'
+                                    }
+                                ],
+                                // ... puedes agregar más filas según la cantidad de detalles de recaudos
+                                // Ejemplo con los datos proporcionados:
+                                ...respuestaGlobal.consig.map(cons => [
+                                    agregarCeros(cons.id, 5),
+                                    cons.descripcion = cons.descripcion !== null ?
+                                    cons.descripcion : "---",
+                                    $.convertirFormato(cons.fecha),
+                                    cons.nconsignacion = cons.nconsignacion !== null ?
+                                    cons.nconsignacion : "---",
+                                    formatCurrency(cons.valor, 'es-CO', 'COP')
+                                ])
+                            ]
+                        },
+                        style: 'tableStyle', // Aplica el estilo a las filas normales
+                        layout: {
+                            hLineWidth: function(i, node) {
+                                return (i === 0 || i === node.table.body.length) ? 1 : 0;
+                            },
+                            vLineWidth: function(i, node) {
+                                return 0;
+                            },
+                        }
+                    };
+
+                    var totalRowConsig = [{
+                            text: 'Total:',
+                            colSpan: 4,
+                            style: 'total2'
+                        },
+                        {},
+                        {},
+                        {},
+                        {
+                            text: formatCurrency(totalConsig, 'es-CO', 'COP'),
+                            style: 'total2'
+                        },
+
+                    ];
+
+                    consigTable.table.body.push(totalRowConsig);
+                    docDefinition.content.push(consigTable);
 
                     // Generar el PDF y descargarlo
                     pdfMake.createPdf(docDefinition).download('InformeCaja.pdf');
