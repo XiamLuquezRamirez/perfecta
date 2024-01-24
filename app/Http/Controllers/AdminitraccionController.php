@@ -12,6 +12,7 @@ use App\Models\Servicios;
 use App\Models\Tratamientos;
 use App\Models\Usuario;
 use App\Models\Consignacion;
+use App\Models\Promociones;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -264,7 +265,7 @@ class AdminitraccionController extends Controller
                 ->table('promociones')
                 ->where('estado', 'ACTIVO');
             if ($search) {
-                $promociones->where('descripcion', 'LIKE', '%' . $search . '%');
+                $promociones->where('titulo', 'LIKE', '%' . $search . '%');
             }
 
             $ListPromociones = $promociones->paginate($perPage, ['*'], 'page', $page);
@@ -277,10 +278,13 @@ class AdminitraccionController extends Controller
                 if (!is_null($item)) {
                     $tdTable .= '<tr>
                 <td><span class="invoice-date">' . $j . '</span></td>
-                <td><span class="invoice-date">' . $item->descripcion . '</span></td>
+                <td><span class="invoice-date">' . $item->titulo . '</span></td>
                <td>
                     <div class="invoice-action">
 
+                    <a onclick="$.mostPacientes(' . $item->id . ');" title="Enviar" class="invoice-action-edit cursor-pointer mr-1">
+                        <i class="feather icon-mail"></i>
+                    </a>
                     <a onclick="$.editar(' . $item->id . ');" title="Editar" class="invoice-action-edit cursor-pointer mr-1">
                         <i class="feather icon-edit-1"></i>
                     </a>
@@ -636,13 +640,29 @@ class AdminitraccionController extends Controller
         }
     }
 
+    public function BuscarPromocion()
+    {
+        if (Auth::check()) {
+            $idProm = request()->get('idProm');
+            $promociones = Promociones::BuscarPromocion($idProm);
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'promociones' => $promociones,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
     public function BuscarUsuario()
     {
         if (Auth::check()) {
             $idUsu = request()->get('Usu');
             $usuario = Usuario::BuscarUsuario($idUsu);
 
-            if ($usuario) {
+        if ($usuario) {
                 $existe = "si";
             }
 
@@ -882,6 +902,70 @@ class AdminitraccionController extends Controller
         }
     }
 
+    public function GuardarPromocion()
+    {
+        if (Auth::check()) {
+            $data = request()->all();
+           
+            $idPromocion = $data['idPromocion'];
+
+            if ($data['accion'] == "agregar") {
+                if (isset($data['archivoProm'])) {
+
+                    $archivo = $data['archivoProm'];
+                    $nombreOriginal = $archivo->getClientOriginalName();
+                    $tipoMime = $archivo->getClientMimeType();
+
+                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                    $nombreArchivo = self::sanear_string($prefijo . '_' . $nombreOriginal);
+                    $archivo->move(public_path() . '/app-assets/promociones/', $nombreArchivo);
+                    $data['archi'] = $nombreArchivo;
+                } else {
+                    $data['archi'] = "no";
+                }
+
+                $respuesta = Promociones::guardar($data);
+                $idPromocion = $respuesta;
+            } else {
+                if (isset($data['archivoProm'])) {
+
+                    $archivo = $data['archivoProm'];
+                    $nombreOriginal = $archivo->getClientOriginalName();
+                    $tipoMime = $archivo->getClientMimeType();
+
+                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                    $nombreArchivo = self::sanear_string($prefijo . '_' . $nombreOriginal);
+                    $archivo->move(public_path() . '/app-assets/promociones/', $nombreArchivo);
+                    $data['archi'] = $nombreArchivo;
+                } else {
+                    if($data['archiCarg'] == 'no'){
+                        $data['archi'] = "no";
+                    }else{
+                        $data['archi'] = $data['archiCarg'];
+                    }
+                    
+                }
+
+                $respuesta = Promociones::editar($data);
+            }
+
+            if ($respuesta) {
+                $estado = "ok";
+            } else {
+                $estado = "fail";
+            }
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => $estado,
+                    'id' => $idPromocion,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
     public function EliminarProfesional()
     {
         if (Auth::check()) {
@@ -901,6 +985,20 @@ class AdminitraccionController extends Controller
         if (Auth::check()) {
             $idServ = request()->get('idServ');
             $servicios = Servicios::Eliminar($idServ);
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => "ok",
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+    public function EliminarPromocion()
+    {
+        if (Auth::check()) {
+            $idProm = request()->get('idProm');
+            $promocion = Promociones::Eliminar($idProm);
             if (request()->ajax()) {
                 return response()->json([
                     'estado' => "ok",
@@ -968,4 +1066,64 @@ class AdminitraccionController extends Controller
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
+
+    public function sanear_string($string)
+    {
+
+        $string = trim($string);
+
+        $string = str_replace(
+            array('á', 'à', 'ä', 'â', 'ª', 'Á', 'À', 'Â', 'Ä'),
+            array('a', 'a', 'a', 'a', 'a', 'A', 'A', 'A', 'A'),
+            $string
+        );
+
+        $string = str_replace(
+            array('é', 'è', 'ë', 'ê', 'É', 'È', 'Ê', 'Ë'),
+            array('e', 'e', 'e', 'e', 'E', 'E', 'E', 'E'),
+            $string
+        );
+
+        $string = str_replace(
+            array('í', 'ì', 'ï', 'î', 'Í', 'Ì', 'Ï', 'Î'),
+            array('i', 'i', 'i', 'i', 'I', 'I', 'I', 'I'),
+            $string
+        );
+
+        $string = str_replace(
+            array('ó', 'ò', 'ö', 'ô', 'Ó', 'Ò', 'Ö', 'Ô'),
+            array('o', 'o', 'o', 'o', 'O', 'O', 'O', 'O'),
+            $string
+        );
+
+        $string = str_replace(
+            array('ú', 'ù', 'ü', 'û', 'Ú', 'Ù', 'Û', 'Ü'),
+            array('u', 'u', 'u', 'u', 'U', 'U', 'U', 'U'),
+            $string
+        );
+
+        $string = str_replace(
+            array('ñ', 'Ñ', 'ç', 'Ç'),
+            array('n', 'N', 'c', 'C'),
+            $string
+        );
+
+        //Esta parte se encarga de eliminar cualquier caracter extraño
+        $string = str_replace(
+            array(
+                "¨", "º", "-", "~", "", "@", "|", "!",
+                "·", "$", "%", "&", "/",
+                "(", ")", "?", "'", " h¡",
+                "¿", "[", "^", "<code>", "]",
+                "+", "}", "{", "¨", "´",
+                ">", "< ", ";", ",", ":",
+                " ",
+            ),
+            '',
+            $string
+        );
+
+        return $string;
+    }
+
 }

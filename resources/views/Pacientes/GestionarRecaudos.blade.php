@@ -1398,8 +1398,8 @@
 
                 },
                 generarPDF: function(arrayTratamientosOrganizados) {
-                
-                let miH4 = document.getElementById('titTrataPac');  
+
+                let miH4 = document.getElementById('titTrataPac');
 
                 let npaciente = miH4.textContent || miH4.innerText;
 

@@ -129,3 +129,6 @@ Route::post('/AdminPacientes/envioComprobante', [PacientesController::class,'env
 Route::get('/Administracion/Promociones', [AdminitraccionController::class,'Promociones']);
 Route::post('/Administracion/CargarPromociones', [AdminitraccionController::class,'CargarPromociones']);
 Route::post('/Administracion/CargarPacientes', [AdminitraccionController::class,'CargarPacientes']);
+Route::post('/Administracion/GuardarPromocion', [AdminitraccionController::class,'GuardarPromocion']);
+Route::post('/Administracion/BuscarPromocion', [AdminitraccionController::class,'BuscarPromocion']);
+Route::post('/Administracion/EliminarPromocion', [AdminitraccionController::class,'EliminarPromocion']);
