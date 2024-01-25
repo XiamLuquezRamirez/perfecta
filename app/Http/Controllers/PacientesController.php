@@ -69,6 +69,104 @@ class PacientesController extends Controller
         }
     }
 
+    public function ImprimirTratPlan(){
+        if(Auth::check()) {
+            $pdf = app('dompdf.wrapper');
+            $tratamiento = request()->get('trata');
+            $logo = public_path('app-assets/images/logo/logo_perfecta.png');
+
+            $html = "<head>
+            <style>
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                th, td {
+                    border: 1px solid black;
+                    padding: 8px;
+                }
+                th {
+                    background-color: #EAEBF4;
+                }
+                tr:nth-child(even) {
+                    background-color: #f2f2f2;
+                }
+    
+                .percentile-line {
+                    width: 100%;
+                    height: 2px;
+                    background-color: #EAEBF4;
+                    position: relative;
+                  }
+              
+                  .percentile-marker {
+                    width: 1px;
+                    height: 8px;
+                    background-color: #000;
+                    position: absolute;
+                    top: -4px;
+                  }
+              
+                  .percentile-point {
+                    width: 8px;
+                    height: 8px;
+                    background-color: #02C804;
+                    position: absolute;
+                    top: -2px;
+                    border-radius: 50%;
+                    transform: translateX(-50%);
+                  }
+              
+                  .percentile-value {
+                    font-size: 8px;
+                    color: black;
+                    text-align: center;
+                    position: absolute;
+                    top: 8px;
+                    left: 5px;
+                    transform: translateX(-50%);
+                  }
+                  .no-border-right {
+                    border-right: none;
+                    text-align: center;
+                }
+                  .no-border-left {
+                    border-left: none;
+                }
+            </style>
+        </head>";
+        $html .= '<div style="page-break-after: always;">';
+        $html .= '<table style="width:100%">';
+        $html .= '<tr><td class="no-border-right" style="justify-content: center;"><img src="' . $logo . '" style="width: 80px;height: 80px; align-items: center;"></td><td  class="no-border-left"><h4 style="text-align: center;">REPORTE DE RESULTADO DE ESTUDIANTES <br/></h4></td></tr>';
+        $html .= '</table>';
+        $html .= '<table style="width:100%">';
+        $html .= '<tr><th colspan="2" style="background: #EBEBF5">PERFECTA S.A.S</th></tr>';
+        $html .= '<tr><td>Fecha de Aplicación:</td><td></td></tr>';
+        $html .= '<tr><td>Fecha de Impresión:</td><td></td></tr>';
+        $html .= '<tr><td>Nombre Alumno:</td><td>Nombre</td></tr>';
+        $html .= '<tr><td>Prueba:</td><td> Saber </td></tr>';
+        $html .= '</table>';
+
+        
+
+        $pdf->loadHTML($html);
+
+        $pdfContent = $pdf->output();
+
+         // Establecer los encabezados de respuesta
+         $headers = [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="Resultado Individual.pdf"'
+        ];
+
+        // Devolver el contenido del PDF como una respuesta HTTP con los encabezados
+        return response($pdfContent, 200, $headers);
+
+        }else{
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
     public function envioComprobante(){
   if(Auth::check()){
     $mail = new PHPMailer(true);

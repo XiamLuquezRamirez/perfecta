@@ -631,7 +631,7 @@
                                 </div>
 
                                 <!-- contacts view -->
-                                <div class="card-body border-top-blue-grey border-top-lighten-5">
+                                <div id="estadoTratamientos" class="card-body border-top-blue-grey border-top-lighten-5">
                                     <div class="list-group">
                                         <a id="lisTodos" class="list-group-item tagEstados active" data-id="1"
                                             onclick="$.mostrarTratamientos(this);">Todos</a>
@@ -639,6 +639,16 @@
                                             onclick="$.mostrarTratamientos(this);">Activos</a>
                                         <a id="lisOtros" class="list-group-item tagEstados" data-id="3"
                                             onclick="$.mostrarTratamientos(this );">Otros</a>
+                                    </div>
+                                </div>
+                                <div id="opcionesTratamientos" style="display: none;" class="card-body border-top-blue-grey border-top-lighten-5">
+                                    <div class="dropdown-menu" style="display: block; position: static; width: 100%; margin-top: 0; float: none;">
+                                        <h6  class="dropdown-header"></i> <i class="fa fa-print float-right font-medium-1"></i> Imprimir Tratamiento</h6>
+                                        <a class="dropdown-item" onclick="$.imprimirTratamiento(1);"><i class="fa fa-circle warning small"></i> Plan de tratamiento</a>
+                                        <a class="dropdown-item" onclick="$.imprimirTratamiento(2);"><i class="fa fa-circle success small"></i> Presupuesto de Tratamiento</a>
+                                        <h6 class="dropdown-header highlight"></i> <i class="fa fa-envelope-o float-right font-medium-1"></i> Enviar Tratamiento</h6>
+                                        <a class="dropdown-item" onclick="$.enviarTratamiento(1);"><i class="fa fa-circle warning small"></i> Plan de tratamiento</a>
+                                        <a class="dropdown-item" onclick="$.enviarTratamiento(2);"><i class="fa fa-circle success small"></i> Presupuesto de Tratamiento</a>
                                     </div>
                                 </div>
 
@@ -806,6 +816,10 @@
         <!-- Tus campos del formulario aquí -->
     </form>
     <form action="{{ url('/AdminPacientes/DeleteEvolucion') }}" id="formEliminarEvolucion" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/AdminPacientes/ImprimirTratPlan') }}" id="FormImprimirTratPlan" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
@@ -1016,6 +1030,10 @@
                     $("#btn-addTratamientos").hide();
                     $("#btn-atrasTratamiento").show();
 
+                    $("#estadoTratamientos").hide();
+                    $("#opcionesTratamientos").show();
+
+
                     var form = $("#formCargarSeccionesTratamientos");
                     $("#tratSecc").remove();
                     form.append("<input type='hidden' id='tratSecc' name='tratSecc'  value='" + trat +
@@ -1151,6 +1169,9 @@
                     $("#listTratamientos").show();
                     $("#btn-addTratamientos").show();
                     $("#btn-atrasTratamiento").hide();
+
+                    $("#estadoTratamientos").show();
+                    $("#opcionesTratamientos").hide();
                 },
                 cargarProfesionales: function() {
 
@@ -3025,6 +3046,44 @@
 
                     return nuevoFormato;
                 },
+                imprimirTratamiento: function (opc){
+                    let tratamiento = $("#idTratamiento").val();
+                    if(opc == 1){
+                        $.imprimirPlan(tratamiento);
+                    }else{
+                        $.imprimirPresupuesto(tratamiento); 
+                    }
+                },
+                imprimirPlan: function (tratamiento){
+                    var form = $("#FormImprimirTratPlan");
+                    $("#trata").remove();
+                    form.append("<input type='hidden' name='trata' id='trata' value='" +
+                    tratamiento + "'>");
+                 
+
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+                    var mensaje = "";
+
+                    $.ajax({
+                        url: url,
+                        method: 'POST',
+                        data: datos,
+                        xhrFields: {
+                            responseType: 'blob'
+                        },
+                        success: function(data) {
+                            Swal.close(); 
+                            // Crear un enlace de descarga para el PDF
+                            var a = document.createElement('a');
+                            var url = window.URL.createObjectURL(data);
+                            a.href = url;
+                            a.download = 'ResultadoIndividual.pdf';
+                            a.click();
+                            window.URL.revokeObjectURL(url);
+                        }
+                    });
+                }
 
             });
 

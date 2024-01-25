@@ -496,46 +496,38 @@
                     form.append("<input type='hidden' id='idPro' name='idPro'  value='" + idPro +
                     "'>");
 
-                  
-                    for (var j = 0; j < dataIds.length; j++) {
-                        form.append('dataIds[]', dataIds[j]);
-                    }
-
+                    var datos = form.serialize() + '&dataIds=' + JSON.stringify(dataIds);
+                 
+                    
                     $.ajax({
                         type: "POST",
                         url: url,
-                        data: new FormData($('#formEnviarPromo')[0]),
-                        processData: false,
-                        contentType: false,
+                        data: datos,
                         success: function(respuesta) {
                             if (respuesta) {
+                               if(respuesta.enviar == "ok"){
                                 Swal.fire({
                                     type: "success",
                                     title: "",
-                                    text: "Operación realizada exitosamente",
+                                    text: "El correo fue enviado exitosamente.",
                                     confirmButtonClass: "btn btn-primary",
                                     timer: 1500,
                                     buttonsStyling: false
                                 });
-                                $("#trServicioSeccion" + idSeccion).html('');
-
-                                $.verTratamiento($("#idTratamiento").val());
-                                $.salirEvolucion();
-                                $.verEvoluciones();
-
-                                var loader = document.getElementById('loader');
+                               }else{
+                                Swal.fire({
+                                    type: "warning",
+                                    title: "Oops...",
+                                    text: "El correo no pudo ser enviado.",
+                                    confirmButtonClass: "btn btn-primary",
+                                    timer: 1700,
+                                    buttonsStyling: false
+                                });
+                               }
+                               
+                                
                                 loader.style.display = 'none';
                             }
-                        },
-                        error: function() {
-                            Swal.fire({
-                                type: "errot",
-                                title: "Opsss...",
-                                text: "Ha ocurrido un error",
-                                confirmButtonClass: "btn btn-primary",
-                                timer: 1500,
-                                buttonsStyling: false
-                            });
                         }
                     });
 

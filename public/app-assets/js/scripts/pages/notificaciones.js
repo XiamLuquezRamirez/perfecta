@@ -22,7 +22,7 @@ $(document).ready(function () {
                     +'<div class="media">'
                     +'    <div class="media-left align-self-center"><i class="feather icon-user-check icon-bg-circle bg-cyan"></i></div>'
                     +'    <div class="media-body">'
-                    +'        <h6 style="text-transform: capitalize;" class="media-heading" id="nPAcienteNotif">Servicios Termiando: '+npaciente+'</h6>'
+                    +'        <h6 style="text-transform: capitalize;" class="media-heading" id="nPAcienteNotif">Servicio Terminado: '+npaciente+'</h6>'
                     +'        <p class="notification-text font-small-3 text-muted">Revisar Recaudo</p>'
                     +'    </div>'
                     +'</div>'

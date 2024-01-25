@@ -115,6 +115,7 @@ Route::post('/AdminPacientes/DeleteTransaccion', [PacientesController::class,'De
 Route::post('/AdminPacientes/updateServiciosTerminados', [PacientesController::class,'updateServiciosTerminados']);
 Route::post('/AdminPacientes/DeleteArchivoEvolucion', [PacientesController::class,'DeleteArchivoEvolucion']);
 Route::post('/AdminPacientes/DeleteEvolucion', [PacientesController::class,'DeleteEvolucion']);
+Route::post('/AdminPacientes/ImprimirTratPlan', [PacientesController::class,'ImprimirTratPlan']);
 
 
 // GESTIONAR RECAUDOS

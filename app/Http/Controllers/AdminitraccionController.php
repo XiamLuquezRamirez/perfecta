@@ -15,6 +15,8 @@ use App\Models\Consignacion;
 use App\Models\Promociones;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 class AdminitraccionController extends Controller
 {
@@ -513,7 +515,7 @@ class AdminitraccionController extends Controller
                     $numero_formateado = number_format($item->valor, 2, ',', '.');
                     $fecha_pago = date('d/m/Y', strtotime($item->fecha));
                     $descripcion = $item->descripcion !== null ? $item->descripcion : "---";
-                    
+
                     $tdTable .= '<tr>
                 <td><span class="invoice-date">' . $j . '</span></td>
                 <td><span class="invoice-date">' . $descripcion . '</span></td>
@@ -578,7 +580,7 @@ class AdminitraccionController extends Controller
             //gastos
             $gastos = Gastos::GastosCajaDet($caja->fecha_apertura);
             $consig = Consignacion::consigCaja($caja->fecha_apertura);
-            
+
             if (request()->ajax()) {
                 return response()->json([
                     'caja' => $caja,
@@ -660,9 +662,341 @@ class AdminitraccionController extends Controller
     {
         if (Auth::check()) {
             $data = request()->all();
-            dd($data);
+            $promocion = Promociones::BuscarPromocion($data['idPro']);
+            $dataIdsJson = $data['dataIds'];
+            $dataIdsArray = json_decode($dataIdsJson, true);
+            $destinatarios = array();
+
+            foreach ($dataIdsArray as $dataId) {
+                $paciente = Pacientes::BuscarPaciente($dataId);
+                if ($paciente) {
+                    // Agrega el correo y nombre del paciente al array de destinatarios
+                    $destinatarios[$paciente->email] = $paciente->nombre . ' ' . $paciente->apellido;
+                }
+            }
+
+            $enviar = self::enviarPromocion($destinatarios, $promocion);
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'enviar' => $enviar,
+                ]);
+            }
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+    public function enviarPromocion($destinatarios, $promocion)
+    {
+        $mail = new PHPMailer(true);
+
+
+        $mensaje = $promocion->contenido;
+        $asunto = $promocion->titulo;
+
+
+        $contenido = "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+        <html xmlns='http://www.w3.org/1999/xhtml'>
+        <head>
+        <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <title>Narrative Invitation Email</title>
+        <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'>
+        <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js'></script>
+        <script src='https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js'></script>
+        <style type='text/css'>
+
+        /* Take care of image borders and formatting */
+
+        img {
+            max-width: 600px;
+            outline: none;
+            text-decoration: none;
+            -ms-interpolation-mode: bicubic;
+        }
+
+        a {
+            border: 0;
+            outline: none;
+        }
+
+        a img {
+            border: none;
+        }
+
+        /* General styling */
+
+        td, h1, h2, h3  {
+            font-family: Helvetica, Arial, sans-serif;
+            font-weight: 400;
+        }
+
+        td {
+            font-size: 13px;
+            line-height: 19px;
+            text-align: left;
+        }
+
+        body {
+            -webkit-font-smoothing:antialiased;
+            -webkit-text-size-adjust:none;
+            width: 100%;
+            height: 100%;
+            color: #37302d;
+            background: #ffffff;
+        }
+
+        table {
+            border-collapse: collapse !important;
+        }
+
+
+        h1, h2, h3, h4 {
+            padding: 0;
+            margin: 0;
+            color: #444444;
+            font-weight: 400;
+            line-height: 110%;
+        }
+
+        h1 {
+            font-size: 35px;
+        }
+
+        h2 {
+            font-size: 30px;
+        }
+
+        h3 {
+            font-size: 24px;
+        }
+
+        h4 {
+            font-size: 18px;
+            font-weight: normal;
+        }
+
+        .important-font {
+            color: #21BEB4;
+            font-weight: bold;
+        }
+
+        .hide {
+            display: none !important;
+        }
+
+        .force-full-width {
+            width: 100% !important;
+        }
+
+        .rps_16ec table#x_main-wrapper {
+            border-collapse: collapse;
+            border-spacing: 0;
+            border: none;
+            margin: 0 auto;
+            width: 100%;
+          }
+
+          .rps_16ec #x_greeting {
+            text-align: center;
+          }
+
+          .rps_16ec table.x_appt-data {
+            width: auto;
+            margin: 0 auto;
+          }
+
+          .rps_16ec .x_data-row {
+            margin: 0 auto;
+            width: auto;
+          }
+
+          .rps_16ec .x_appt-data tr:first-child td {
+            padding-top: 12px;
+          }
+
+          .rps_16ec .x_data-row .x_label {
+            width: 25%;
+            font-weight: bold;
+            color: #0097cc;
+            text-align: right;
+          }
+
+          .rps_16ec .x_header td {
+            background: #0097cc;
+            padding: 3px;
+            color: #fafafa;
+            text-align: center;
+          }
+
+          .rps_16ec #x_initial-text {
+            padding: 18px 0;
+            line-height: 1.4em;
+          }
+
+          .rps_16ec .x_appt-data tr:first-child td {
+            padding-top: 12px;
+          }
+          .rps_16ec .x_data-row .x_label, .rps_16ec .x_data-row .x_data {
+            padding: 4px;
+              padding-top: 4px;
+          }
+
+        </style>
+
+        <style type='text/css' media='screen'>
+            @media screen {
+                @import url(http://fonts.googleapis.com/css?family=Open+Sans:400);
+
+                /* Thanks Outlook 2013! */
+                td, h1, h2, h3 {
+                font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif !important;
+                }
+            }
+        </style>
+
+        <style type='text/css' media='only screen and (max-width: 600px)'>
+            /* Mobile styles */
+            @media only screen and (max-width: 600px) {
+
+            table[class='w320'] {
+                width: 320px !important;
+            }
+
+            table[class='w300'] {
+                width: 300px !important;
+            }
+
+            table[class='w290'] {
+                width: 290px !important;
+            }
+
+            td[class='w320'] {
+                width: 320px !important;
+            }
+
+            td[class~='mobile-padding'] {
+                padding-left: 14px !important;
+                padding-right: 14px !important;
+            }
+
+            td[class*='mobile-padding-left'] {
+                padding-left: 14px !important;
+            }
+
+            td[class*='mobile-padding-right'] {
+                padding-right: 14px !important;
+            }
+
+            td[class*='mobile-padding-left-only'] {
+                padding-left: 14px !important;
+                padding-right: 0 !important;
+            }
+
+            td[class*='mobile-padding-right-only'] {
+                padding-right: 14px !important;
+                padding-left: 0 !important;
+            }
+
+            td[class*='mobile-block'] {
+                display: block !important;
+                width: 100% !important;
+                text-align: left !important;
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+                padding-bottom: 15px !important;
+            }
+
+            td[class*='mobile-no-padding-bottom'] {
+                padding-bottom: 0 !important;
+            }
+
+            td[class~='mobile-center'] {
+                text-align: center !important;
+            }
+
+            table[class*='mobile-center-block'] {
+                float: none !important;
+                margin: 0 auto !important;
+            }
+
+            *[class*='mobile-hide'] {
+                display: none !important;
+                width: 0 !important;
+                height: 0 !important;
+                line-height: 0 !important;
+                font-size: 0 !important;
+            }
+
+            td[class*='mobile-border'] {
+                border: 0 !important;
+            }
+            }
+        </style>
+        </head>
+        <body class='body' style='padding:0; margin:0; display:block; background:#ffffff; -webkit-text-size-adjust:none' bgcolor='#ffffff'>
+        <div class='rps_16ec'>
+        <div>
+        <table id='x_main-wrapper'>
+        <thead id='x_logo'>
+        <tr>
+        <th>
+        <img data-imagetype='External' src='https://perfectaestetica.com/app-assets/images/logo/logo_perfecta.png' width = '200px'  alt='PERFECTA' class='x_responsive'> 
+        </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td id='x_greeting'>
+        Estimad@ <strong style='text-transform: capitalize;'> Cliente,</strong>
+        </td>
+        </tr>
+        <tr>
+        <td  id='x_initial-text'>
+        " . $mensaje . "
+        </td>
+        </tr>
+        <div>
+        </body>
+        </html>";
+
+        try {
+            // Configuración del servidor SMTP
+            require base_path("vendor/autoload.php");
+            $mail->isSMTP();
+            $mail->CharSet = 'UTF-8';
+            $mail->Host = 'mail.perfectaestetica.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = 'notificaciones@perfectaestetica.com';
+            $mail->Password = 'Mairen_2024';
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // O PHPMailer::ENCRYPTION_SMTPS si es necesario
+            $mail->Port = 587;
+
+            // Configuración del remitente y destinatario
+            $mail->setFrom('notificaciones@perfectaestetica.com', 'PERFECTA');
+
+            foreach ($destinatarios as $correo => $nombre) {
+                $mail->addAddress($correo, $nombre);
+            }
+
+
+            // Contenido del correo
+            $mail->isHTML(true);
+            $mail->Subject = $asunto;
+            $mail->Body = $contenido;
+             if ($promocion->archivo !== "") {
+                $url = public_path('app-assets/promociones/'.$promocion->archivo);
+                 $mail->addAttachment($url);
+             }
+
+            // Envío del correo
+            $mail->send();
+
+            return 'ok';
+        } catch (Exception $e) {
+            return "Error;".$mail->ErrorInfo;
         }
     }
 
@@ -672,7 +1006,7 @@ class AdminitraccionController extends Controller
             $idUsu = request()->get('Usu');
             $usuario = Usuario::BuscarUsuario($idUsu);
 
-        if ($usuario) {
+            if ($usuario) {
                 $existe = "si";
             }
 
@@ -916,7 +1250,7 @@ class AdminitraccionController extends Controller
     {
         if (Auth::check()) {
             $data = request()->all();
-           
+
             $idPromocion = $data['idPromocion'];
 
             if ($data['accion'] == "agregar") {
@@ -948,12 +1282,11 @@ class AdminitraccionController extends Controller
                     $archivo->move(public_path() . '/app-assets/promociones/', $nombreArchivo);
                     $data['archi'] = $nombreArchivo;
                 } else {
-                    if($data['archiCarg'] == 'no'){
+                    if ($data['archiCarg'] == 'no') {
                         $data['archi'] = "no";
-                    }else{
+                    } else {
                         $data['archi'] = $data['archiCarg'];
                     }
-                    
                 }
 
                 $respuesta = Promociones::editar($data);
@@ -1135,5 +1468,4 @@ class AdminitraccionController extends Controller
 
         return $string;
     }
-
 }

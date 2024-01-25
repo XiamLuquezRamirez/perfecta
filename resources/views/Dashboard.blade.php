@@ -59,7 +59,6 @@
                                         <p class="sub-heading">Recaudo Mes</p>
                                     </div>
                                     <span class="inc-dec-percentage" id="porRecaudoMes">
-                                       
                                     </span>
                                 </div>
                             </div>
@@ -77,14 +76,13 @@
                             <div class="card-header">
                                 <h4 class="card-title">Agenda</h4>
                                 <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
-                               
                             </div>
                             <div class="card-content collapse show">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="card-body">
-                                                <div id='fc-agenda-views' style=" width: 100%;  height: 400px;"></div>
+                                                <div id='fc-agenda-views' style="width: 100%; height: 100vh;"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -874,8 +872,7 @@
                 eventLimit: true, // allow "more" link when too many events
                 firstDay: 1, // 1 for Monday, 0 for Sunday
                 allDaySlot: false,
-                height: 'auto',
-
+                height: '100%',
                 slotLabelFormat: {
                     hour: "2-digit",
                     minute: "2-digit",
@@ -2178,6 +2175,10 @@
 
             return edad;
         }
+
+        $(window).resize(function () {
+            $('#fc-agenda-views').fullCalendar('option', 'height', '100%');
+        });
 
         function agregarCeros(numero, longitud) {
             return numero.toString().padStart(longitud, '0');
