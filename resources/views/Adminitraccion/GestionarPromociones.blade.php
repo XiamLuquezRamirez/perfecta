@@ -176,10 +176,10 @@
                         </div>
 
                         <div class="row">
-                            <div id="infPacientes" style="display: none;" class="col-12">
+                            <div id="infPacientes"  class="col-12">
                                 <div id="cargaPacientes">
                                     <div>
-                                        <div class="bug-list-search">
+                                        <div class="bug-list-search m-1">
                                             <div class="bug-list-search-content">
                                                 <div class="sidebar-toggle d-block d-lg-none"><i
                                                         class="feather icon-menu font-large-1"></i>
@@ -217,13 +217,13 @@
                                 </div>
                             </div>
 
-                            <div class="col-12">
+                            <div class="col-12 mt-1" style="text-align: right;">
                                 <div class="form-actions right">
                                     <button type="button" id="btnSalir" onclick="$.salirPaciente();"
                                         class="btn btn-warning mr-1">
                                         <i class="fa fa-reply"></i> Salir
                                     </button>
-                                    <button type="button" id="btnEnviar" 
+                                    <button type="button" id="btnEnviar"
                                         onclick="$.enviarPromocion()" class="btn btn-primary">
                                         <i class="fa fa-location-arrow"></i> Enviar
                                     </button>
@@ -263,6 +263,10 @@
         <!-- Tus campos del formulario aquí -->
     </form>
     <form action="{{ url('/AdminPacientes/updateServiciosTerminados') }}" id="formServTerminados" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/Administracion/EnviarPromo') }}" id="formEnviarPromo" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
@@ -457,18 +461,16 @@
                 },
                 enviarPromocion: function() {
 
-                    for (var instanceName in CKEDITOR.instances) {
-                        CKEDITOR.instances[instanceName].updateElement();
-                    }
-
-                    var checkServ = document.getElementsByClassName('icheck-activity-det');
+                
+                    var checkServ = document.getElementsByClassName('classPaciente');
                     var selServ = false;
                     var dataIds = [];
+                    console.log(checkServ);
 
                     for (var i = 0; i < checkServ.length; i++) {
                         if (checkServ[i].checked) {
                             selServ = true;
-                            var dataIdValue = checkboxes[i].getAttribute('data-id');
+                            var dataIdValue = checkServ[i].getAttribute('data-id');
                             dataIds.push(dataIdValue);
                         }
                     }
@@ -488,13 +490,13 @@
                     var loader = document.getElementById('loader');
                     loader.style.display = 'block';
 
-                    var form = $("#formGuardar");
+                    var form = $("#formEnviarPromo");
                     var url = form.attr("action");
-                    var token = $("#token").val();
+                    var idPro = $("#idPromocion").val();
+                    form.append("<input type='hidden' id='idPro' name='idPro'  value='" + idPro +
+                    "'>");
 
-                    $("#idtoken").remove();
-                    form.append("<input type='hidden' id='idtoken' name='_token'  value='" + token +
-                        "'>");
+                  
                     for (var j = 0; j < dataIds.length; j++) {
                         form.append('dataIds[]', dataIds[j]);
                     }
@@ -502,7 +504,7 @@
                     $.ajax({
                         type: "POST",
                         url: url,
-                        data: new FormData($('#formGuardarEvolucion')[0]),
+                        data: new FormData($('#formEnviarPromo')[0]),
                         processData: false,
                         contentType: false,
                         success: function(respuesta) {
@@ -538,14 +540,21 @@
                     });
 
                 },
-                enviar: function() {
+                mostPacientes: function(idProm) {
 
                     var loader = document.getElementById('loader');
                     loader.style.display = 'block';
 
+                    $("#modalPromocionPacientes").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+
                      $("#titEnvioCorreo").html('<i class="fa fa-list-alt"></i> Seleccionar clientes');
 
                     let pacientes = '';
+
+                    $("#idPromocion").val(idProm);
 
                     var form = $("#formargarPacientes");
                     var url = form.attr("action");

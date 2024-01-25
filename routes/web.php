@@ -132,3 +132,4 @@ Route::post('/Administracion/CargarPacientes', [AdminitraccionController::class,
 Route::post('/Administracion/GuardarPromocion', [AdminitraccionController::class,'GuardarPromocion']);
 Route::post('/Administracion/BuscarPromocion', [AdminitraccionController::class,'BuscarPromocion']);
 Route::post('/Administracion/EliminarPromocion', [AdminitraccionController::class,'EliminarPromocion']);
+Route::post('/Administracion/EnviarPromo', [AdminitraccionController::class,'EnviarPromo']);

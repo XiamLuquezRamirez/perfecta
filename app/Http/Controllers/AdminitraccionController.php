@@ -656,6 +656,16 @@ class AdminitraccionController extends Controller
         }
     }
 
+    public function EnviarPromo()
+    {
+        if (Auth::check()) {
+            $data = request()->all();
+            dd($data);
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
     public function BuscarUsuario()
     {
         if (Auth::check()) {
