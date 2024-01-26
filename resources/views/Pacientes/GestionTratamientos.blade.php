@@ -644,11 +644,11 @@
                                 <div id="opcionesTratamientos" style="display: none;" class="card-body border-top-blue-grey border-top-lighten-5">
                                     <div class="dropdown-menu" style="display: block; position: static; width: 100%; margin-top: 0; float: none;">
                                         <h6  class="dropdown-header"></i> <i class="fa fa-print float-right font-medium-1"></i> Imprimir Tratamiento</h6>
-                                        <a class="dropdown-item" onclick="$.imprimirTratamiento(1);"><i class="fa fa-circle warning small"></i> Plan de tratamiento</a>
-                                        <a class="dropdown-item" onclick="$.imprimirTratamiento(2);"><i class="fa fa-circle success small"></i> Presupuesto de Tratamiento</a>
+                                        {{--  <a class="dropdown-item" onclick="$.imprimirTratamiento(1);"><i class="fa fa-circle warning small"></i> Plan de tratamiento</a>  --}}
+                                        <a class="dropdown-item" onclick="$.pdfTratamiento(1);"><i class="fa fa-circle success small"></i> Presupuesto de Tratamiento</a>
                                         <h6 class="dropdown-header highlight"></i> <i class="fa fa-envelope-o float-right font-medium-1"></i> Enviar Tratamiento</h6>
-                                        <a class="dropdown-item" onclick="$.enviarTratamiento(1);"><i class="fa fa-circle warning small"></i> Plan de tratamiento</a>
-                                        <a class="dropdown-item" onclick="$.enviarTratamiento(2);"><i class="fa fa-circle success small"></i> Presupuesto de Tratamiento</a>
+                                        {{--  <a class="dropdown-item" onclick="$.enviarTratamiento(1);"><i class="fa fa-circle warning small"></i> Plan de tratamiento</a>  --}}
+                                        <a class="dropdown-item" onclick="$.pdfTratamiento(2);"><i class="fa fa-circle success small"></i> Presupuesto de Tratamiento</a>
                                     </div>
                                 </div>
 
@@ -3046,19 +3046,15 @@
 
                     return nuevoFormato;
                 },
-                imprimirTratamiento: function (opc){
+                pdfTratamiento: function (opc){
                     let tratamiento = $("#idTratamiento").val();
-                    if(opc == 1){
-                        $.imprimirPlan(tratamiento);
-                    }else{
-                        $.imprimirPresupuesto(tratamiento); 
-                    }
-                },
-                imprimirPlan: function (tratamiento){
                     var form = $("#FormImprimirTratPlan");
                     $("#trata").remove();
+                    $("#opc").remove();
                     form.append("<input type='hidden' name='trata' id='trata' value='" +
                     tratamiento + "'>");
+                    form.append("<input type='hidden' name='opc' id='opc' value='" +
+                    opc + "'>");
                  
 
                     var url = form.attr("action");

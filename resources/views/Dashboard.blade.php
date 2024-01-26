@@ -24,6 +24,8 @@
                                     </div>
                                 </div>
                             </div>
+
+
                             <div class="col-lg-6 col-xl-3 col-sm-6 col-12">
                                 <div
                                     class="d-flex align-items-start mb-sm-1 mb-xl-0 border-right-blue-grey border-right-lighten-5">
@@ -82,7 +84,7 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="card-body">
-                                                <div id='fc-agenda-views' style="width: 100%; height: 100vh;"></div>
+                                                <div id='fc-agenda-views' style="width: 100%; height: 100vh; overflow: hidden;"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -154,8 +156,10 @@
                                                                 name="duracionCita" aria-invalid="false">
                                                                 <option value="15">15 minutos</option>
                                                                 <option value="30">30 minutos</option>
+                                                                <option value="45">45 minutos</option>
                                                                 <option value="60">1 hora</option>
                                                                 <option value="120">2 horas</option>
+                                                                <option value="150">2 horas y 30 min.</option>
                                                                 <option value="180">3 horas</option>
                                                                 <option value="240">4 horas</option>
                                                             </select>
@@ -872,7 +876,7 @@
                 eventLimit: true, // allow "more" link when too many events
                 firstDay: 1, // 1 for Monday, 0 for Sunday
                 allDaySlot: false,
-                height: '100%',
+                contentHeight: 'auto',
                 slotLabelFormat: {
                     hour: "2-digit",
                     minute: "2-digit",
@@ -2177,12 +2181,15 @@
         }
 
         $(window).resize(function () {
-            $('#fc-agenda-views').fullCalendar('option', 'height', '100%');
+            $('#fc-agenda-views').FullCalendar('option', 'contentHeight', 'auto');
         });
+
+    
 
         function agregarCeros(numero, longitud) {
             return numero.toString().padStart(longitud, '0');
         }
+
     </script>
 
 

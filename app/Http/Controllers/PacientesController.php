@@ -73,6 +73,7 @@ class PacientesController extends Controller
         if(Auth::check()) {
             $pdf = app('dompdf.wrapper');
             $tratamiento = request()->get('trata');
+            $opc = request()->get('opc');
             $logo = public_path('app-assets/images/logo/logo_perfecta.png');
 
             $html = "<head>
@@ -133,19 +134,67 @@ class PacientesController extends Controller
                   .no-border-left {
                     border-left: none;
                 }
+
+                .no-border {
+                    border: none;
+                    text-align: center;
+                }
             </style>
         </head>";
         $html .= '<div style="page-break-after: always;">';
-        $html .= '<table style="width:100%">';
-        $html .= '<tr><td class="no-border-right" style="justify-content: center;"><img src="' . $logo . '" style="width: 80px;height: 80px; align-items: center;"></td><td  class="no-border-left"><h4 style="text-align: center;">REPORTE DE RESULTADO DE ESTUDIANTES <br/></h4></td></tr>';
+        $html .= '<table style="width:100%; border-collapse: collapse; background-color: transparent;">';
+        $html .= '<tr>';
+        $html .= '<td class="no-border" style="width: 150px; padding: 0;"><img src="' . $logo . '" style="width: 100%; height: auto;"></td>'; // Ancho fijo para la celda del logo
+        $html .= '<td class="no-border" style="padding: 0; vertical-align: top;">'; // Agregado vertical-align: top;
+        $html .= '<p style="margin: 0;">PERFECTA S.A.S</p>';
+        $html .= '<p style="margin: 0;">CENTRO DE REHABILITACIÓN ESTETICA</p>';
+        $html .= '<p style="margin: 0;">CRA 11 No 11-04 SAN JOAQUIN</p>';
+        $html .= '<p style="margin: 0;">Teléfono 312 8817962</p>';
+        $html .= '</td>';
+        $html .= '</tr>';
+        $html .= '<tr>';
+$html .= '<td class="no-border" colspan="2" style="padding: 0; vertical-align: top; text-align: left;">'; // Colspan para ocupar ambas celdas
+$html .= '<p style="margin: 0;">Nombre de Tratamiento: [NombreTratamiento]</p>';
+$html .= '<p style="margin: 0;">Profesional: [Profesional]</p>';
+$html .= '<p style="margin: 0;">Especialidad: [Especialidad]</p>';
+$html .= '<p style="margin: 0;">Identificación: [Identificacion]</p>';
+$html .= '<p style="margin: 0;">Nombre del Paciente: [NombrePaciente]</p>';
+$html .= '</td>';
+$html .= '</tr>';
         $html .= '</table>';
-        $html .= '<table style="width:100%">';
-        $html .= '<tr><th colspan="2" style="background: #EBEBF5">PERFECTA S.A.S</th></tr>';
-        $html .= '<tr><td>Fecha de Aplicación:</td><td></td></tr>';
-        $html .= '<tr><td>Fecha de Impresión:</td><td></td></tr>';
-        $html .= '<tr><td>Nombre Alumno:</td><td>Nombre</td></tr>';
-        $html .= '<tr><td>Prueba:</td><td> Saber </td></tr>';
-        $html .= '</table>';
+        
+// Agregar subtítulo y tabla de items de tratamientos
+$html .= '<h2>Items de Tratamientos</h2>';
+$html .= '<table style="width:100%; border-collapse: collapse; background-color: transparent;">';
+// Agregar encabezados de la tabla de tratamientos
+$html .= '<tr>';
+$html .= '<th>Nombre de Servicio</th>';
+$html .= '<th>Valor</th>';
+$html .= '</tr>';
+
+// Agregar datos de la tabla de tratamientos (reemplazar con tus datos reales)
+$html .= '<tr>';
+$html .= '<td>Tratamiento 1</td>';
+$html .= '<td>$100.00</td>';
+$html .= '</tr>';
+$html .= '<tr>';
+$html .= '<td>Tratamiento 2</td>';
+$html .= '<td>$150.00</td>';
+$html .= '</tr>';
+// ... Puedes agregar más filas según sea necesario
+
+// Agregar la fila de total
+$html .= '<tr>';
+$html .= '<td style="text-align: right;">Total:</td>';
+$html .= '<td>$250.00</td>';
+$html .= '</tr>';
+
+$html .= '</table>';
+        $html .= '</div>';
+        
+        
+        
+        
 
         
 
