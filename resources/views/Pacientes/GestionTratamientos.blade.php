@@ -306,7 +306,8 @@
                                                                                         class="feather icon-corner-up-left"></i>
                                                                                     Salir
                                                                                 </button>
-                                                                                <button type="button" style="display: none;" id="btnNuevo"
+                                                                                <button type="button"
+                                                                                    style="display: none;" id="btnNuevo"
                                                                                     onclick="$.nuevoServicio()"
                                                                                     class="btn btn-success">
                                                                                     <i class="fa fa-plus"></i>
@@ -641,14 +642,22 @@
                                             onclick="$.mostrarTratamientos(this );">Otros</a>
                                     </div>
                                 </div>
-                                <div id="opcionesTratamientos" style="display: none;" class="card-body border-top-blue-grey border-top-lighten-5">
-                                    <div class="dropdown-menu" style="display: block; position: static; width: 100%; margin-top: 0; float: none;">
-                                        <h6  class="dropdown-header"></i> <i class="fa fa-print float-right font-medium-1"></i> Imprimir Tratamiento</h6>
+                                <div id="opcionesTratamientos" style="display: none;"
+                                    class="card-body border-top-blue-grey border-top-lighten-5">
+                                    <div class="dropdown-menu"
+                                        style="display: block; position: static; width: 100%; margin-top: 0; float: none;">
+                                        <h6 class="dropdown-header"></i> <i
+                                                class="fa fa-print float-right font-medium-1"></i> Imprimir Tratamiento
+                                        </h6>
                                         {{--  <a class="dropdown-item" onclick="$.imprimirTratamiento(1);"><i class="fa fa-circle warning small"></i> Plan de tratamiento</a>  --}}
-                                        <a class="dropdown-item" onclick="$.pdfTratamiento(1);"><i class="fa fa-circle success small"></i> Presupuesto de Tratamiento</a>
-                                        <h6 class="dropdown-header highlight"></i> <i class="fa fa-envelope-o float-right font-medium-1"></i> Enviar Tratamiento</h6>
+                                        <a class="dropdown-item" onclick="$.pdfTratamiento(1);"><i
+                                                class="fa fa-circle success small"></i> Presupuesto de Tratamiento</a>
+                                        <h6 class="dropdown-header highlight"></i> <i
+                                                class="fa fa-envelope-o float-right font-medium-1"></i> Enviar Tratamiento
+                                        </h6>
                                         {{--  <a class="dropdown-item" onclick="$.enviarTratamiento(1);"><i class="fa fa-circle warning small"></i> Plan de tratamiento</a>  --}}
-                                        <a class="dropdown-item" onclick="$.pdfTratamiento(2);"><i class="fa fa-circle success small"></i> Presupuesto de Tratamiento</a>
+                                        <a class="dropdown-item" onclick="$.pdfTratamiento(2);"><i
+                                                class="fa fa-circle success small"></i> Presupuesto de Tratamiento</a>
                                     </div>
                                 </div>
 
@@ -1915,8 +1924,8 @@
                     $("#tituloUnidad").html('Editar sección');
                     $("#accion").val('editar');
                     $("#idSeccion").val(id);
-                    document.getElementById("btnGuardarSeccion").disabled = false;                   
-                 
+                    document.getElementById("btnGuardarSeccion").disabled = false;
+
 
                     var form = $("#formEditarSeccion");
                     $("#idSecc").remove();
@@ -2013,7 +2022,8 @@
                                         .seccion.nombre);
                                 }
 
-                                document.getElementById("btnGuardarSeccion").disabled = true; 
+                                document.getElementById("btnGuardarSeccion").disabled =
+                                true;
                                 var loader = document.getElementById('loader');
                                 loader.style.display = 'none';
                             }
@@ -2144,14 +2154,14 @@
                 salirServicio: function() {
                     $('#modalServicios').modal('toggle');
                     document.getElementById("btnGuardar").disabled = false;
-                  
+
                 },
                 nuevoServicio: function() {
                     $("#btnGuardar").show();
                     $("#btnNuevo").hide();
 
                     $('#servicioTrat').val("")
-                    .trigger('change.select2');
+                        .trigger('change.select2');
 
                     $("#valorVis").val("");
                     $("#valor").val("");
@@ -2940,7 +2950,8 @@
                                     '</div>' +
                                     '</div>';
                                 $("#div-trata-act").append(tratAct);
-                                updatePercentageTratamientos(Math.round(porcentajeTerminado),
+                                updatePercentageTratamientos(Math.round(
+                                        porcentajeTerminado),
                                     consTrata);
                                 consTrata++;
                             });
@@ -3018,7 +3029,8 @@
                                     '</div>' +
                                     '</div>';
                                 $("#div-trata-otr").append(tratOtr);
-                                updatePercentageTratamientos(Math.round(porcentajeTerminado2),consTrataOtro);
+                                updatePercentageTratamientos(Math.round(
+                                    porcentajeTerminado2), consTrataOtro);
                                 consTrataOtro++;
                             });
                         }
@@ -3046,16 +3058,18 @@
 
                     return nuevoFormato;
                 },
-                pdfTratamiento: function (opc){
+                pdfTratamiento: function(opc) {
                     let tratamiento = $("#idTratamiento").val();
                     var form = $("#FormImprimirTratPlan");
                     $("#trata").remove();
                     $("#opc").remove();
                     form.append("<input type='hidden' name='trata' id='trata' value='" +
-                    tratamiento + "'>");
+                        tratamiento + "'>");
                     form.append("<input type='hidden' name='opc' id='opc' value='" +
-                    opc + "'>");
-                 
+                        opc + "'>");
+
+                    var loader = document.getElementById('loader');
+                    loader.style.display = 'block';
 
                     var url = form.attr("action");
                     var datos = form.serialize();
@@ -3069,14 +3083,41 @@
                             responseType: 'blob'
                         },
                         success: function(data) {
-                            Swal.close(); 
-                            // Crear un enlace de descarga para el PDF
-                            var a = document.createElement('a');
-                            var url = window.URL.createObjectURL(data);
-                            a.href = url;
-                            a.download = 'ResultadoIndividual.pdf';
-                            a.click();
-                            window.URL.revokeObjectURL(url);
+                            var loader = document.getElementById('loader');
+                            loader.style.display = 'none';
+                            
+                           
+                            if (data == "ok") {
+                                Swal.fire({
+                                    type: "success",
+                                    title: "",
+                                    text: "Correo enviado exitosamente",
+                                    confirmButtonClass: "btn btn-primary",
+                                    timer: 1500,
+                                    buttonsStyling: false
+                                });
+                            } else if (data == "error") {
+                                Swal.fire({
+                                    type: "warning",
+                                    title: "Oops...",
+                                    text: "el correo no pudo ser enviado",
+                                    confirmButtonClass: "btn btn-primary",
+                                    timer: 1500,
+                                    buttonsStyling: false
+                                });
+                                return;
+                            }
+
+                            if (opc == 1) {
+                                // Crear un enlace de descarga para el PDF
+                                var a = document.createElement('a');
+                                var url = window.URL.createObjectURL(data);
+                                a.href = url;
+                                a.download = 'ResultadoIndividual.pdf';
+                                a.click();
+                                window.URL.revokeObjectURL(url);
+                            }
+
                         }
                     });
                 }

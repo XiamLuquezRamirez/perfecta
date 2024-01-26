@@ -264,7 +264,8 @@ class Tratamientos extends Model
         $respuestaTra = DB::connection('mysql')->table('tratamientos')
             ->leftJoin("profesionales", "profesionales.id", "tratamientos.profesional")
             ->leftJoin("pacientes", "pacientes.id", "tratamientos.paciente")
-            ->select("tratamientos.*", "profesionales.nombre AS nprofe", "pacientes.nombre AS npaciente", "pacientes.apellido", "pacientes.identificacion")
+            ->leftJoin("especialidades", "especialidades.id", "tratamientos.especialidad")
+            ->select("tratamientos.*", "profesionales.nombre AS nprofe", "pacientes.nombre AS npaciente", "pacientes.apellido", "pacientes.identificacion", "especialidades.nombre AS nespecialidad", "pacientes.email")
             ->where("tratamientos.id", $trata)
             ->first();
         return $respuestaTra;
