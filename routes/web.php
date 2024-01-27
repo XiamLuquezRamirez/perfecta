@@ -88,6 +88,7 @@ Route::post('/AdminCitas/InformacionCita', [CitasController::class,'InformacionC
 Route::post('/AdminCitas/GuardarComentario', [CitasController::class,'GuardarComentario']);
 Route::post('/AdminCitas/cargarComentario', [CitasController::class,'cargarComentario']);
 Route::post('/AdminCitas/notificaccionCita', [CitasController::class,'notificaccionCita']);
+Route::post('/AdminCitas/imprimircitas', [CitasController::class,'imprimircitas']);
 
 
 

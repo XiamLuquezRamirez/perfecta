@@ -337,9 +337,7 @@
             $("#MenAdmin").addClass("active");
             $("#MenAdminGasto").addClass("active");
 
-            localStorage.clear();
-
-          
+            localStorage.clear();         
 
             $.extend({
                 cargar: function(page, searchTerm = '') {

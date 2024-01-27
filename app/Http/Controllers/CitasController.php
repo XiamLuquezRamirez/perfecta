@@ -9,6 +9,7 @@ use App\Models\Pacientes;
 use App\Models\Tratamientos;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use Dompdf\Dompdf;
 
 
 class CitasController extends Controller
@@ -39,6 +40,83 @@ class CitasController extends Controller
                     'disponibilidad' => $disponibilidad
                 ]);
             }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+    public function imprimircitas() {
+        if (Auth::check()) {
+            $pdf = new Dompdf();
+            $finicial = request()->get('finicial');
+            $ffinal = request()->get('ffinal');
+            $citas = Citas::imprimirCitas($finicial, $ffinal);
+            dd($citas);
+            $citasAgrupadas = $citas->groupBy(function ($cita) {
+                return [
+                    'dia' => date('l', strtotime($cita->inicio)),
+                    'hora' => date('H:i', strtotime($cita->inicio)),
+                ];
+            });
+        
+            // Inicializa el HTML
+            $html = '<!DOCTYPE html>
+            <html lang="es">
+            <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Días de la Semana en 5 Columnas</title>
+              <style>
+                /* Estilos opcionales para mejorar la presentación */
+                body {
+                  font-family: Arial, sans-serif;
+                }
+                table {
+                  border-collapse: collapse;
+                  width: 100%;
+                }
+                th, td {
+                  border: 1px solid #dddddd;
+                  text-align: center;
+                  padding: 8px;
+                }
+              </style>
+            </head>
+            <body>
+            
+              <h1>Días de la Semana en 5 Columnas</h1>
+            
+              <table>
+                <tr>
+                  <th>Lunes</th>
+                  <th>Martes</th>
+                  <th>Miércoles</th>
+                  <th>Jueves</th>
+                  <th>Viernes</th>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </table>
+            
+            </body>
+            </html>
+            ';
+        
+            $pdf->loadHtml($html);
+            $pdf->setPaper('A4', 'portrait');
+            $pdf->render();
+            $pdfContent = $pdf->output();
+            $headers = [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="Resultado Individual.pdf"'
+            ];
+
+            return response($pdfContent, 200, $headers);
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }

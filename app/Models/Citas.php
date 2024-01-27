@@ -37,6 +37,21 @@ class Citas extends Model
             ->first();
     }
 
+    public static function imprimirCitas($fechaInicio, $fechaFin) {
+        $fechaInicioFormatoDB = date('Y-m-d', strtotime(str_replace('/', '-', $fechaInicio))) . 'T00:00:00';
+        $fechaFinFormatoDB = date('Y-m-d', strtotime(str_replace('/', '-', $fechaFin))) . 'T23:59:59';
+
+        
+        $citas = DB::connection('mysql')->table('citas')
+            ->where('citas.estado', '!=', 'Anulada')
+            ->whereBetween('citas.inicio', [$fechaInicioFormatoDB, $fechaFinFormatoDB])
+            ->get();
+
+            return $citas;
+
+       
+    }
+
     public static function AllCitas()
     {
         return DB::connection('mysql')->table('citas')

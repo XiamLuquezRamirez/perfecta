@@ -84,7 +84,8 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="card-body">
-                                                <div id='fc-agenda-views' style="width: 100%; height: 100vh; overflow: hidden;"></div>
+                                                <div id='fc-agenda-views'
+                                                    style="width: 100%; height: 100vh; overflow: hidden;"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -112,8 +113,7 @@
                         <div class="card-body">
                             <form class="form" method="post" id="formGuardarCita"
                                 action="{{ url('/') }}/AdminCitas/GuardarCita">
-                                <input type="hidden" name="accionCita" id="accionCita"
-                                value="">
+                                <input type="hidden" name="accionCita" id="accionCita" value="">
                                 <div class="row">
                                     <div class="col-4">
                                         <div class="form-body">
@@ -504,7 +504,8 @@
                                         src="../../../app-assets/images/FotosPacientes/avatar-s-1.png" alt="avatar"
                                         id="previewImageDetCita"><i></i></span></div>
                             <div class="media-body media-middle">
-                                <h5 id="npacientedetCita" style="text-transform: capitalize;" class="media-heading text-bold-600">77097205 - Xiamir Luquez Ramirez</h5>
+                                <h5 id="npacientedetCita" style="text-transform: capitalize;"
+                                    class="media-heading text-bold-600">77097205 - Xiamir Luquez Ramirez</h5>
                                 <p id="edadDetaCita"></p>
                             </div>
                         </div>
@@ -560,7 +561,8 @@
                                                 </tr>
                                                 <tr>
                                                     <td class="text-bold-600">Comentario:</td>
-                                                    <td style="white-space: pre-line;" id="cometarioCita">Sin Comentario</td>
+                                                    <td style="white-space: pre-line;" id="cometarioCita">Sin Comentario
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td class="text-bold-600">Cambiar estado:</td>
@@ -583,10 +585,12 @@
 
                                                     <td colspan="2">
                                                         <div class="form-actions right">
-                                                            <button type="button" onclick="$.notifCPaciente();" class="btn btn-warning mr-1">
+                                                            <button type="button" onclick="$.notifCPaciente();"
+                                                                class="btn btn-warning mr-1">
                                                                 <i class="  feather icon-bell"></i> Notificar al Cliente
                                                             </button>
-                                                            <button type="button" onclick="$.addComentario();" class="btn btn-primary">
+                                                            <button type="button" onclick="$.addComentario();"
+                                                                class="btn btn-primary">
                                                                 <i class="feather icon-message-square"></i> Agregar
                                                                 Comentario
                                                             </button>
@@ -708,7 +712,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title">Comentarios</h4>
-                       
+
                     </div>
                     <div class="modal-body">
                         <div class="card-body">
@@ -722,12 +726,12 @@
                                             <label for="userinput8">Comentario:</label>
                                             <div class="d-flex align-items-start">
                                                 <textarea name="comentarioCitaVal" class="form-control textarea-maxlength" id="comentarioCitaVal"
-                                                placeholder="Ingrese un comentario.." maxlength="250" rows="5"></textarea>
-                                               
+                                                    placeholder="Ingrese un comentario.." maxlength="250" rows="5"></textarea>
+
                                             </div>
                                         </div>
                                     </div>
-               
+
 
                                     <div class="col-12">
                                         <div class="form-actions right">
@@ -746,6 +750,70 @@
                                     </div>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        {{--  Modal imprimir citas  --}}
+        <div class="modal fade text-left" id="modalImpCitas" tabindex="-1" role="dialog"
+            aria-labelledby="myModalLabel1" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Selecciona el rango de fecha </h4>
+
+                    </div>
+                    <div class="modal-body">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="userinput8">Fecha inicial:</label>
+
+                                    <div class="form-group d-flex align-items-center position-relative">
+                                        <!-- date picker -->
+                                        <div class="date-icon mr-50 font-medium-3">
+
+                                            <i class='feather icon-calendar'></i>
+
+                                        </div>
+                                        <div class="date-picker">
+                                            <input type="text" id="fi" name="fi"
+                                                class="pickadate form-control pl-1" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <label for="userinput8">Fecha final:</label>
+
+                                    <div class="form-group d-flex align-items-center position-relative">
+                                        <!-- date picker -->
+                                        <div class="date-icon mr-50 font-medium-3">
+
+                                            <i class='feather icon-calendar'></i>
+
+                                        </div>
+                                        <div class="date-picker">
+                                            <input type="text" id="ff" name="ff"
+                                                class="pickadate form-control pl-1" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12" style="text-align: right;">
+                                    <div class="form-actions right">
+                                        <button type="button" onclick="$.salirPrint();" class="btn btn-warning mr-1">
+                                            <i class="fa fa-reply"></i> Salir
+                                        </button>
+                                        <button type="button" id="btnGuardar" onclick="$.imprimircitas()"
+                                            class="btn btn-success">
+                                            <i class="fa fa-print"></i> Imprimir
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -808,6 +876,10 @@
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
+    <form action="{{ url('/AdminCitas/imprimircitas') }}" id="formImprimir" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
 
 @endsection
 
@@ -859,7 +931,19 @@
                 }
             });
 
-       
+            var picker = $('.pickadate').daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                locale: {
+                    format: 'DD/MM/YYYY',
+                    daysOfWeek: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+                    monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto',
+                        'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+                    ],
+                }
+            });
+
+
 
             var fechaActual = new Date().toISOString().split("T")[0];
             var calendarE3 = document.getElementById("fc-agenda-views");
@@ -894,7 +978,7 @@
                     // Aplicar estilos después de que la vista se haya montado
                     applyStylesAfterViewMount(viewInfo);
                 },
-                
+
                 eventRender: function(info) {
                     // Cambiar el tamaño de fuente de los eventos aquí
                     info.el.style.fontSize = '9px'; // Ajustar el tamaño de fuente según tus necesidades
@@ -959,7 +1043,7 @@
                 slotLabelInterval: "00:15", // Mostrar etiquetas de hora cada una hora
                 minTime: "08:00:00",
                 maxTime: "18:45:00",
-                hiddenDays: [0], 
+                hiddenDays: [0],
                 locale: "es",
                 events: disponibilidadJSON,
 
@@ -1000,7 +1084,7 @@
                 slotLabelInterval: "00:15", // Mostrar etiquetas de hora cada una hora
                 minTime: "08:00:00",
                 maxTime: "18:45:00",
-                hiddenDays: [0], 
+                hiddenDays: [0],
                 locale: "es",
                 dateClick: function(event) {
                     console.log('clicked on the date: ', event);
@@ -1051,7 +1135,8 @@
 
 
                         var select2Element = $('#motivo');
-                        let motivo = document.getElementById('motivo').value + "-" +  select2Element.find('option:selected').text();
+                        let motivo = document.getElementById('motivo').value + "-" + select2Element
+                            .find('option:selected').text();
 
                         var nuevaCita = {
                             title: motivo,
@@ -1059,7 +1144,7 @@
                             end: nuevaCitaEnd,
                         };
 
-                   
+
                         const fechaHora = new Date(nuevaCita.start);
 
                         // Obtiene el día, mes y año
@@ -1130,18 +1215,29 @@
             var iconElement = document.createElement('i');
             iconElement.className = 'fa fa-plus';
 
+            var iconElement2 = document.createElement('i');
+            iconElement2.className = 'fa fa-print';
+
             // Crea un elemento de botón
             var miBoton = document.createElement('button');
             miBoton.textContent = ' Agregar cita';
+            // Crea un elemento de botón
+            var miBotonImp = document.createElement('button');
+            miBotonImp.textContent = ' Imprimir citas';
 
             // Agrega un identificador o clases al botón si es necesario
             miBoton.id = 'agregarCita';
             miBoton.classList.add('fc-today-button', 'fc-button', 'fc-button-primary');
             miBoton.insertBefore(iconElement, miBoton.firstChild);
+            // Agrega un identificador o clases al botón si es necesario
+            miBotonImp.id = 'imprimirCita';
+            miBotonImp.classList.add('fc-today-button', 'fc-button', 'fc-button-segundary');
+            miBotonImp.insertBefore(iconElement2, miBotonImp.firstChild);
 
             // Agrega el botón al div 'fc-left'
 
             fcLeftDiv.appendChild(miBoton);
+            fcLeftDiv.appendChild(miBotonImp);
 
             miBoton.addEventListener('click', function() {
                 // Aquí puedes agregar la lógica que deseas ejecutar cuando se hace clic en el botón
@@ -1157,6 +1253,13 @@
                 $.cargarEspecialidades();
                 fcAgendaViews2.removeAllEvents();
                 // Puedes reemplazar la alerta con la acción que desees realizar.
+            });
+
+            miBotonImp.addEventListener('click', function() {
+                $("#modalImpCitas").modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
             });
 
             $.extend({
@@ -1365,7 +1468,7 @@
                 },
                 selecPaciente: function(id) {
                     $("#idPaciente").val(id);
-                   // document.getElementById("div-tratamiento").style = "display: block;";
+                    // document.getElementById("div-tratamiento").style = "display: block;";
                 },
                 guardarCita: function(opc) {
 
@@ -1539,7 +1642,7 @@
                 },
                 guardarComentario: function() {
 
-                   var loader = document.getElementById('loader');
+                    var loader = document.getElementById('loader');
                     loader.style.display = 'block';
 
 
@@ -1573,7 +1676,7 @@
 
                                 var loader = document.getElementById('loader');
                                 loader.style.display = 'none';
-                              
+
                                 $("#cometarioCita").html(respuesta.comentario);
                             }
                         },
@@ -1628,6 +1731,57 @@
                         $.guardarCita(2);
                     };
                 },
+
+                salirPrint: function () {
+                    $('#modalImpCitas').modal('toggle');
+                },
+                imprimircitas: function() {
+                    var loader = document.getElementById('loader');
+                    loader.style.display = 'block';
+                    let ini = $("#fi").val();
+                    let fin = $("#ff").val();
+                    var form = $("#formImprimir");
+                    var url = form.attr("action");
+                    $('#finicial').remove();
+                    $('#ffinal').remove();
+                    form.append("<input type='hidden' id='finicial' name='finicial'  value='" + ini +
+                        "'>");
+                    form.append("<input type='hidden' id='ffinal' name='ffinal'  value='" + fin +
+                        "'>");
+                    var datos = form.serialize();
+
+                    
+                    $.ajax({
+                        url: url,
+                        method: 'POST',
+                        data: datos,
+                        xhrFields: {
+                            responseType: 'blob'
+                        },
+                        success: function(data) {
+                            var loader = document.getElementById('loader');
+                            loader.style.display = 'none';
+                            
+                            Swal.fire({
+                                type: "success",
+                                title: "",
+                                text: "Correo enviado exitosamente",
+                                confirmButtonClass: "btn btn-primary",
+                                timer: 1500,
+                                buttonsStyling: false
+                            });
+
+                             // Crear un enlace de descarga para el PDF
+                             var a = document.createElement('a');
+                             var url = window.URL.createObjectURL(data);
+                             a.href = url;
+                             a.download = 'ResultadoIndividual.pdf';
+                             a.click();
+                             window.URL.revokeObjectURL(url);
+
+                        }
+                    });
+                },
                 validaIdentificacion: function(valida) {
                     var form = $("#formValidarPacientes");
                     var url = form.attr("action");
@@ -1670,7 +1824,7 @@
                     var idCita = $("#idCita").val();
                     var form = $("#formCargarComentarios");
                     var url = form.attr("action");
-                    
+
                     form.append("<input type='hidden' id='idCit' name='idCit'  value='" + idCita +
                         "'>");
                     var datos = form.serialize();
@@ -1764,7 +1918,8 @@
                             $.each(response.tratamientos, function(i, item) {
 
                                 trTratamientos += ' <tr>' +
-                                    '<td class="text-truncate">' + parseInt(i + 1) + '</td>' +
+                                    '<td class="text-truncate">' + parseInt(i + 1) +
+                                    '</td>' +
                                     '<td class="text-truncate"><a style="color: #009c9f;text-decoration: none; background-color: transparent;" onclick="$.verTratmiento(' +
                                     item.id + ',' + item.paciente + ')">' +
                                     agregarCeros(item.id, 5) + '</a></td>' +
@@ -1944,7 +2099,7 @@
                         }
                     });
 
-                    
+
                 },
 
                 procederCambiarEstado: function(estado) {
@@ -2013,7 +2168,7 @@
                                 }
                             }, 3000);  --}}
 
-                            
+
                         }
                     });
                 },
@@ -2044,7 +2199,7 @@
                                     timer: 1500,
                                     buttonsStyling: false
                                 });
-                            }else if (respuesta.envioCorreo == "noCorreo"){
+                            } else if (respuesta.envioCorreo == "noCorreo") {
                                 Swal.fire({
                                     type: "errot",
                                     title: "Opsss...",
@@ -2053,7 +2208,7 @@
                                     timer: 1500,
                                     buttonsStyling: false
                                 });
-                            }else{
+                            } else {
                                 Swal.fire({
                                     type: "errot",
                                     title: "Opsss...",
@@ -2085,21 +2240,31 @@
                             $('#recaudoMes').html(formatCurrency(respuesta.recaudosMes,
                                 'es-CO', 'COP'));
 
-                                //DIFERENCIA RECAUDO MES
-                                if(respuesta.porcentajeCambioMes >= 0){
-                                    $("#porRecaudoMes").html('<small class="success" ><i class="fa fa-long-arrow-up"></i> '+Math.round(respuesta.porcentajeCambioMes)+'%</small>');
-                                }else{
-                                    let valRes = respuesta.porcentajeCambioMes;
-                                    $("#porRecaudoMes").html('<small class="danger" ><i class="fa fa-long-arrow-down"></i> '+Math.round(valRes)+'%</small>');
-                                }
+                            //DIFERENCIA RECAUDO MES
+                            if (respuesta.porcentajeCambioMes >= 0) {
+                                $("#porRecaudoMes").html(
+                                    '<small class="success" ><i class="fa fa-long-arrow-up"></i> ' +
+                                    Math.round(respuesta.porcentajeCambioMes) +
+                                    '%</small>');
+                            } else {
+                                let valRes = respuesta.porcentajeCambioMes;
+                                $("#porRecaudoMes").html(
+                                    '<small class="danger" ><i class="fa fa-long-arrow-down"></i> ' +
+                                    Math.round(valRes) + '%</small>');
+                            }
 
-                                  //DIFERENCIA RECAUDO DIA
-                                if(respuesta.porcentajeCambioDia >= 0){
-                                    $("#porRecaudoDia").html(' <small class="success" ><i class="fa fa-long-arrow-up"></i> '+ Math.round(respuesta.porcentajeCambioDia)+'%</small>');
-                                }else{
-                                    let valResDia = respuesta.porcentajeCambioDia;
-                                    $("#porRecaudoDia").html('<small class="danger" ><i class="fa fa-long-arrow-down"></i> '+Math.round(valResDia)+'%</small>');
-                                }
+                            //DIFERENCIA RECAUDO DIA
+                            if (respuesta.porcentajeCambioDia >= 0) {
+                                $("#porRecaudoDia").html(
+                                    ' <small class="success" ><i class="fa fa-long-arrow-up"></i> ' +
+                                    Math.round(respuesta.porcentajeCambioDia) +
+                                    '%</small>');
+                            } else {
+                                let valResDia = respuesta.porcentajeCambioDia;
+                                $("#porRecaudoDia").html(
+                                    '<small class="danger" ><i class="fa fa-long-arrow-down"></i> ' +
+                                    Math.round(valResDia) + '%</small>');
+                            }
                         }
                     });
                 }
@@ -2120,7 +2285,7 @@
             return (patron.test(te) || tecla == 9 || tecla == 8 || tecla == 37 || tecla == 39 || tecla == 44);
         }
 
-        function verNotifiPaci(paci){
+        function verNotifiPaci(paci) {
             localStorage.clear();
             localStorage.setItem('idPaciente', paci);
             PEDGITALURL = '{{ url('/AdminPacientes/Recaudos') }}';
@@ -2180,16 +2345,15 @@
             return edad;
         }
 
-        $(window).resize(function () {
+        $(window).resize(function() {
             $('#fc-agenda-views').FullCalendar('option', 'contentHeight', 'auto');
         });
 
-    
+
 
         function agregarCeros(numero, longitud) {
             return numero.toString().padStart(longitud, '0');
         }
-
     </script>
 
 
