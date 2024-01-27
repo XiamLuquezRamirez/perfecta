@@ -759,7 +759,7 @@
         {{--  Modal imprimir citas  --}}
         <div class="modal fade text-left" id="modalImpCitas" tabindex="-1" role="dialog"
             aria-labelledby="myModalLabel1" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title">Selecciona el rango de fecha </h4>
@@ -1775,7 +1775,7 @@
                              var a = document.createElement('a');
                              var url = window.URL.createObjectURL(data);
                              a.href = url;
-                             a.download = 'ResultadoIndividual.pdf';
+                             a.download = 'InformeCitas.pdf';
                              a.click();
                              window.URL.revokeObjectURL(url);
 

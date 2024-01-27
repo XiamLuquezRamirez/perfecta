@@ -23,7 +23,7 @@
                         <div class="bug-list-search-content">
                             <div class="sidebar-toggle d-block d-lg-none"><i class="feather icon-menu font-large-1"></i>
                             </div>
-                            <form action="#">
+                            <form action="#" style="">
                                 <div class="position-relative">
                                     <select class="select2-data-ajax form-control" id="paciente" name="paciente"></select>
                                 </div>

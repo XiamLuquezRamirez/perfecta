@@ -19,37 +19,42 @@ class Citas extends Model
     public static function CitasPaciente($idPac)
     {
         return DB::connection('mysql')->table('citas')
-        ->leftJoin("especialidades","especialidades.id", "citas.motivo")
-        ->join('profesionales', 'citas.profesional', 'profesionales.id')
+            ->leftJoin("especialidades", "especialidades.id", "citas.motivo")
+            ->join('profesionales', 'citas.profesional', 'profesionales.id')
             ->where('paciente', $idPac)
             ->where('citas.estado', '!=', 'Anulada')
-            ->select("citas.*","especialidades.nombre",'profesionales.nombre AS nomprof' )
+            ->select("citas.*", "especialidades.nombre", 'profesionales.nombre AS nomprof')
             ->get();
     }
-    public static function infcitasEmail($idcita){
+    public static function infcitasEmail($idcita)
+    {
         return DB::connection('mysql')->table('citas')
-        ->leftJoin("especialidades","especialidades.id", "citas.motivo")
-        ->leftJoin('profesionales', 'citas.profesional', 'profesionales.id')
-        ->leftJoin('pacientes', 'citas.paciente', 'pacientes.id')
+            ->leftJoin("especialidades", "especialidades.id", "citas.motivo")
+            ->leftJoin('profesionales', 'citas.profesional', 'profesionales.id')
+            ->leftJoin('pacientes', 'citas.paciente', 'pacientes.id')
             ->where('citas.id', $idcita)
             ->where('citas.estado', '!=', 'Anulada')
-            ->select("citas.*","especialidades.nombre",'profesionales.nombre AS nomprof', 'pacientes.nombre AS npaciente', 'pacientes.apellido AS apaciente','pacientes.email')
+            ->select("citas.*", "especialidades.nombre", 'profesionales.nombre AS nomprof', 'pacientes.nombre AS npaciente', 'pacientes.apellido AS apaciente', 'pacientes.email')
             ->first();
     }
 
-    public static function imprimirCitas($fechaInicio, $fechaFin) {
+    public static function imprimirCitas($fechaInicio, $fechaFin)
+    {
         $fechaInicioFormatoDB = date('Y-m-d', strtotime(str_replace('/', '-', $fechaInicio))) . 'T00:00:00';
         $fechaFinFormatoDB = date('Y-m-d', strtotime(str_replace('/', '-', $fechaFin))) . 'T23:59:59';
 
-        
+
         $citas = DB::connection('mysql')->table('citas')
+            ->leftJoin("especialidades", "especialidades.id", "citas.motivo")
+            ->leftJoin('profesionales', 'citas.profesional', 'profesionales.id')
+            ->leftJoin('pacientes', 'citas.paciente', 'pacientes.id')
             ->where('citas.estado', '!=', 'Anulada')
             ->whereBetween('citas.inicio', [$fechaInicioFormatoDB, $fechaFinFormatoDB])
+            ->select("citas.*", "especialidades.nombre", 'profesionales.nombre AS nomprof', 'pacientes.nombre AS npaciente', 'pacientes.apellido AS apaciente')
+            ->orderBy('citas.inicio')
             ->get();
 
-            return $citas;
-
-       
+        return $citas;
     }
 
     public static function AllCitas()
@@ -94,7 +99,6 @@ class Citas extends Model
             'estado' => $estado,
         ]);
         return "ok";
-
     }
 
     public static function GuardarCitas($request)
@@ -113,7 +117,8 @@ class Citas extends Model
         return $respuesta;
     }
 
-    public static function EditarCitas($request){
+    public static function EditarCitas($request)
+    {
         $respuesta = DB::connection('mysql')->table('citas')->where('id', $request['idCitaPac'])->update([
             'profesional' => $request['profesional'],
             'motivo' => $request['motivo'],
@@ -124,7 +129,8 @@ class Citas extends Model
         ]);
         return "ok";
     }
-    public static function GuardarComentario($request){
+    public static function GuardarComentario($request)
+    {
         $respuesta = DB::connection('mysql')->table('citas')->where('id', $request['idCit'])->update([
             'comentario' => $request['comentarioCitaVal'],
         ]);
