@@ -62,10 +62,26 @@ class Citas extends Model
         return DB::connection('mysql')->table('citas')
             ->join('pacientes', 'citas.paciente', '=', 'pacientes.id')
             ->join('profesionales', 'citas.profesional', 'profesionales.id')
-            ->select('citas.*', 'pacientes.nombre', 'pacientes.apellido', 'profesionales.nombre AS nomprof')
+            ->selectRaw('citas.*, pacientes.nombre, pacientes.apellido, profesionales.nombre AS nomprof, "CITAS" AS tblo')
             ->where('citas.estado', '!=', 'Anulada')
             ->get();
     }
+
+    public static function AllBloqueos()
+    {
+        return DB::connection('mysql')->table('bloqueos')
+            ->where('estado', 'Pendiente')
+            ->selectRaw("bloqueos.*, 'BLOQUEO' AS tblo")
+            ->get();
+    }
+    
+    public static function buscaDetBloq($idBloq)
+    {
+        return DB::connection('mysql')->table('bloqueos')
+            ->where('id', $idBloq)
+            ->first();
+    }
+
     public static function AllCitasHoy()
     {
         return DB::connection('mysql')->table('citas')
@@ -112,6 +128,19 @@ class Citas extends Model
             'comentario' => $request['comentario'],
             'duracion' => $request['duracionCita'],
             'estado' => "Por atender"
+        ]);
+
+        return $respuesta;
+    }
+
+    public static function GuardarBloqueo($request)
+    {
+        $respuesta = DB::connection('mysql')->table('bloqueos')->insertGetId([
+            'inicio' => $request['fechaHoraInicioBloq'],
+            'final' => $request['fechaHoraFinalBloq'],
+            'comentario' => $request['comentarioBloq'],
+            'duracion' => $request['duracionBloq'],
+            'estado' => "Pendiente"
         ]);
 
         return $respuesta;

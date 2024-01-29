@@ -79,6 +79,7 @@ Route::post('/Administracion/CierreCaja', [AdminitraccionController::class,'Cier
 
 Route::post('/AdminCitas/CargarDisponibilidad', [CitasController::class,'CargarDisponibilidad']);
 Route::post('/AdminCitas/GuardarCita', [CitasController::class,'GuardarCita']);
+Route::post('/AdminCitas/GuardarBloq', [CitasController::class,'GuardarBloq']);
 Route::post('/AdminCitas/CargarPacientesCita', [PacientesController::class,'CargarPacientesCita']);
 Route::post('/AdminCitas/CargarAllCitas', [CitasController::class,'CargarAllCitas']);
 Route::post('/AdminCitas/VerDetallesCita', [CitasController::class,'VerDetallesCita']);
@@ -89,6 +90,7 @@ Route::post('/AdminCitas/GuardarComentario', [CitasController::class,'GuardarCom
 Route::post('/AdminCitas/cargarComentario', [CitasController::class,'cargarComentario']);
 Route::post('/AdminCitas/notificaccionCita', [CitasController::class,'notificaccionCita']);
 Route::post('/AdminCitas/imprimircitas', [CitasController::class,'imprimircitas']);
+Route::post('/AdminCitas/InfoBloqueo', [CitasController::class,'InfoBloqueo']);
 
 
 

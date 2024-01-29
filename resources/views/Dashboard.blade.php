@@ -114,6 +114,7 @@
                             <form class="form" method="post" id="formGuardarCita"
                                 action="{{ url('/') }}/AdminCitas/GuardarCita">
                                 <input type="hidden" name="accionCita" id="accionCita" value="">
+                                <input type="hidden" name="idBloq" id="idBloq" value="">
                                 <div class="row">
                                     <div class="col-4">
                                         <div class="form-body">
@@ -820,6 +821,83 @@
 
             </div>
         </div>
+        {{--  Modal bloquear  --}}
+        <div class="modal fade text-left" id="modalBloquear" tabindex="-1" role="dialog"
+            aria-labelledby="myModalLabel1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Bloquear espacio </h4>
+
+                    </div>
+                    <div class="modal-body">
+                        <div class="card-body">
+                            <form class="form" method="post" id="formGuardarBloq"
+                            action="{{ url('/') }}/AdminCitas/GuardarBloq">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="userinput8">Duración:</label>
+                                    <select class="form-control" id="duracionBloq"
+                                    name="duracionBloq" onchange="$.cambioDuracionBloq(this.value);" aria-invalid="false">
+                                    <option value="15">15 minutos</option>
+                                    <option value="30">30 minutos</option>
+                                    <option value="45">45 minutos</option>
+                                    <option value="60">1 hora</option>
+                                    <option value="120">2 horas</option>
+                                    <option value="150">2 horas y 30 min.</option>
+                                    <option value="180">3 horas</option>
+                                    <option value="240">4 horas</option>
+                                </select>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <div class="controls">
+                                            <label for="account-username">Bloqueo
+                                                seleccionado para: </label>
+                                            <input type="hidden" class="form-control"
+                                                id="fechaHoraInicioBloq" name="fechaHoraInicioBloq"
+                                                placeholder="Fecha Bloqueo">
+                                            <input type="hidden" class="form-control"
+                                                id="fechaHoraFinalBloq" name="fechaHoraFinalBloq"
+                                                placeholder="Fecha Bloqueo">
+                                            <input disabled type="text" class="form-control"
+                                                id="fechaHoraSelCitaBloq" name="fechaHoraSelCitaBloq"
+                                                placeholder="Fecha Bloqueo">
+                                        </div>
+                                    </div>
+                                    
+                                  
+                                
+                                </div>
+                                <div class="col-12">
+                                    <label for="userinput8">Comentario:</label>
+                                    <div class="d-flex align-items-start">
+                                        <textarea name="comentarioBloq" class="form-control textarea-maxlength" id="comentarioBloq"
+                                            placeholder="Ingrese un comentario.." maxlength="250" rows="5"></textarea>
+
+                                    </div>
+                                </div>
+                                <div class="col-12  mt-1" style="text-align: right;">
+                                    <div class="form-actions right">
+                                        <button type="button" onclick="$.salirBloq();" class="btn btn-warning mr-1">
+                                            <i class="fa fa-reply"></i> Salir
+                                        </button>
+                                        <button type="button" id="btnGuardarBloq" onclick="$.guardarBloq()"
+                                            class="btn btn-success">
+                                            <i class="fa fa-save"></i> Guardar
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
 
     </div>
 
@@ -880,6 +958,10 @@
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
+    <form action="{{ url('/AdminCitas/InfoBloqueo') }}" id="forminfoBloqueo" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
 
 @endsection
 
@@ -901,6 +983,7 @@
                 }
 
             ];
+            var disponibilidadJSONBloq = [];
 
 
             $('#bg-select').select2();
@@ -944,9 +1027,9 @@
             });
 
 
-
             var fechaActual = new Date().toISOString().split("T")[0];
             var calendarE3 = document.getElementById("fc-agenda-views");
+            var clickedEventBloq;
             var fcAgendaViews = new FullCalendar.Calendar(calendarE3, {
                 header: {
                     left: "prev,next today",
@@ -982,52 +1065,60 @@
                 eventRender: function(info) {
                     // Cambiar el tamaño de fuente de los eventos aquí
                     info.el.style.fontSize = '9px'; // Ajustar el tamaño de fuente según tus necesidades
-
+                    console.log(info);
                     // Agregar el campo "prof" al contenido del evento
 
                     var prof = info.event.extendedProps.prof;
                     var estado = info.event.extendedProps.estado;
                     var id = info.event.extendedProps.id;
+                    var bloq = info.event.extendedProps.bloq;
 
-                    if (prof) {
-                        var profElement = document.createElement('div');
-                        profElement.className = 'fc-event-prof';
-                        profElement.textContent = 'Prof: ' + prof;
-                        info.el.appendChild(profElement);
-                    }
-                    if (estado) {
-                        var estadoElement = document.createElement('div');
-                        estadoElement.className = 'fc-event-estado';
-                        estadoElement.textContent = 'Estado: ' + estado;
-                        estadoElement.style.fontSize = '9px';
-                        info.el.appendChild(estadoElement);
-                    }
-
-                    info.el.style.color = '#ffff';
-                    if (estado) {
-                        // ... (código existente)
-
-                        // Cambiar el color de fondo según el estado
-                        switch (estado) {
-                            case 'Por atender':
-                                info.el.style.backgroundColor =
-                                    '#00B5B8'; // Color para estado pendiente
-                                break;
-                            case 'Atendida':
-                                info.el.style.backgroundColor =
-                                    '#2196F3'; // Color para estado confirmado
-                                break;
-                            case 'Confirmada':
-                                info.el.style.backgroundColor =
-                                    '#10C888'; // Color para estado cancelado
-                                break;
-                                // Añade más casos según sea necesario para otros estados
-                            default:
-                                info.el.style.backgroundColor =
-                                    '#2DCEE3'; // Color predeterminado si no hay coincidencia
+                    if(bloq == "CITAS"){
+                        if (prof) {
+                            var profElement = document.createElement('div');
+                            profElement.className = 'fc-event-prof';
+                            profElement.textContent = 'Prof: ' + prof;
+                            info.el.appendChild(profElement);
                         }
+                        if (estado) {
+                            var estadoElement = document.createElement('div');
+                            estadoElement.className = 'fc-event-estado';
+                            estadoElement.textContent = 'Estado: ' + estado;
+                            estadoElement.style.fontSize = '9px';
+                            info.el.appendChild(estadoElement);
+                        }
+    
+                        info.el.style.color = '#ffff';
+                        if (estado) {
+                            // ... (código existente)
+    
+                            // Cambiar el color de fondo según el estado
+                            switch (estado) {
+                                case 'Por atender':
+                                    info.el.style.backgroundColor =
+                                        '#00B5B8'; // Color para estado pendiente
+                                    break;
+                                case 'Atendida':
+                                    info.el.style.backgroundColor =
+                                        '#2196F3'; // Color para estado confirmado
+                                    break;
+                                case 'Confirmada':
+                                    info.el.style.backgroundColor =
+                                        '#10C888'; // Color para estado cancelado
+                                    break;
+                                    // Añade más casos según sea necesario para otros estados
+                                default:
+                                    info.el.style.backgroundColor =
+                                        '#2DCEE3'; // Color predeterminado si no hay coincidencia
+                            }
+    
+                        }
+                    }else{
+                        info.el.style.color = '#ffff';
+                        info.el.style.backgroundColor = '#547A8B';
 
                     }
+                
 
                     applyStyles(info.el);
                 },
@@ -1036,10 +1127,14 @@
 
                     var idCita = info.event.extendedProps.idCita;
                     var estado = info.event.extendedProps.estado;
-                    console.log(estado);
+                    var bloq = info.event.extendedProps.bloq;
 
-                    // Llama a una función y pasa el parámetro "id" específico
-                    $.verCita(idCita);
+                    if(bloq == "CITAS"){
+                        $.verCita(idCita);
+                    }else{
+                        $.verBloq(idCita);     
+                    }                    
+                   
                 },
                 slotDuration: '00:15:00', // Duración de cada intervalo en la vista semanal (aquí es de una hora)
                 slotLabelInterval: "00:15", // Mostrar etiquetas de hora cada una hora
@@ -1048,11 +1143,21 @@
                 hiddenDays: [0],
                 locale: "es",
                 dateClick: function(event) {
-                    console.log('clicked on the date: ', event);
+                    clickedEventBloq = event;
+                    $('#duracionBloq').val("15").trigger('change.select2');
+                   // $("#fechaHoraSelCitaBloq").val("");
+                    $("#comentarioBloq").val("");
+
+                    $("#modalBloquear").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+
+                    var btnGuardar = document.getElementById("btnGuardarBloq");
+                    btnGuardar.disabled = false;
                     
                 },
-                events: disponibilidadJSON,
-
+                events: disponibilidadJSON
 
             });
 
@@ -1103,7 +1208,7 @@
                         var seSuperpone = disponibilidadJSON.some(function(cita) {
                             var citaStart = new Date(cita.start);
                             var citaEnd = new Date(cita.end);
-                            console.log(citaEnd);
+                            
                             return (nuevaCitaStart < citaEnd && nuevaCitaEnd > citaStart);
                         });
 
@@ -1285,21 +1390,115 @@
                         success: function(respuesta) {
                             disponibilidadJSON = respuesta.disponibilidad.map(function(
                                 item) {
-                                return {
-                                    "start": item.inicio,
-                                    "end": item.final,
-                                    "title": item.nombre + " " + item.apellido,
-                                    "prof": item.nomprof,
-                                    "estado": item.estado,
-                                    "idCita": item.id
-                                };
+                                    if(item.tblo == "CITAS"){
+                                        return {
+                                            "start": item.inicio,
+                                            "end": item.final,
+                                            "title": item.nombre + " " + item.apellido,
+                                            "prof": item.nomprof,
+                                            "estado": item.estado,
+                                            "idCita": item.id,
+                                            "bloq": item.tblo
+                                        };
+                                    }else{
+                                        return {
+                                            "start": item.inicio,
+                                            "end": item.final,
+                                            "title": item.comentario,
+                                            "estado": item.estado,
+                                            "idCita": item.id,
+                                            "bloq": item.tblo
+                                        };
+                                    }
+                                
                             });
+
+                            console.log(disponibilidadJSON);
+                            disponibilidadJSONBloq = disponibilidadJSON;
                         }
 
                     });
 
                     fcAgendaViews.removeAllEvents();
                     fcAgendaViews.addEventSource(disponibilidadJSON);
+                },
+                cambioDuracionBloq: function(duracion){
+                    console.log(clickedEventBloq);
+                    var nuevaCitaStart = new Date(clickedEventBloq.date);
+                    var nuevaCitaEnd = new Date(nuevaCitaStart.getTime() + duracion *
+                        60000);
+                        var seSuperpone = disponibilidadJSONBloq.some(function(cita) {
+                            var citaStart = new Date(cita.start);
+                            var citaEnd = new Date(cita.end);
+                            return (nuevaCitaStart < citaEnd && nuevaCitaEnd > citaStart);
+                        });
+
+                        
+                        if (seSuperpone) {
+                            Swal.fire({
+                                type: "warning",
+                                title: "Oops...",
+                                text: "No se puede bloquear el horario seleccionado, ya que no esta disponible...",
+                                confirmButtonClass: "btn btn-primary",
+                                buttonsStyling: false
+                            });
+                            $('#duracionBloq').val("15").trigger('change.select2');
+                            $("#fechaHoraSelCitaBloq").val("");
+                            return;
+                        }
+
+                        var nuevaCita = {
+                            title: 'Horario Bloqueado',
+                            start: nuevaCitaStart,
+                            end: nuevaCitaEnd,
+                        };
+
+
+                        const fechaHora = new Date(nuevaCita.start);
+
+                         // Obtiene el día, mes y año
+                         const dia = fechaHora.getDate().toString().padStart(2,
+                         '0'); // Asegura que el día tenga dos dígitos
+                     const mes = (fechaHora.getMonth() + 1).toString().padStart(2,
+                         '0'); // El mes se indexa desde 0
+                     const año = fechaHora.getFullYear();
+
+                     // Obtiene la hora y los minutos
+                     const hora = fechaHora.getHours().toString().padStart(2,
+                         '0'); // Asegura que la hora tenga dos dígitos
+                     const minutos = fechaHora.getMinutes().toString().padStart(2,
+                         '0'); // Asegura que los minutos tengan dos dígitos
+                     const segundos = fechaHora.getSeconds().toString().padStart(2, '0');
+                     // Combina los componentes para formar la fecha y hora en el formato deseado
+                     fechaHoraSelCita = `${dia}/${mes}/${año} ${hora}:${minutos}`;
+                     fechaHoraInicio = `${año}-${mes}-${dia}T${hora}:${minutos}:${segundos}`;
+
+
+                     const fechaHoraFin = new Date(nuevaCita.end);
+
+                     // Obtiene el día, mes y año
+                     const dia1 = fechaHoraFin.getDate().toString().padStart(2,
+                         '0'); // Asegura que el día tenga dos dígitos
+                     const mes1 = (fechaHoraFin.getMonth() + 1).toString().padStart(2,
+                         '0'); // El mes se indexa desde 0
+                     const año1 = fechaHoraFin.getFullYear();
+
+                     // Obtiene la hora y los minutos
+                     const hora1 = fechaHoraFin.getHours().toString().padStart(2,
+                         '0'); // Asegura que la hora tenga dos dígitos
+                     const minutos1 = fechaHoraFin.getMinutes().toString().padStart(2,
+                         '0'); // Asegura que los minutos tengan dos dígitos
+                     const segundos1 = fechaHoraFin.getSeconds().toString().padStart(2, '0');
+                     // Combina los componentes para formar la fecha y hora en el formato deseado
+
+
+
+                     fechaHoraFinal = `${año1}-${mes1}-${dia1}T${hora1}:${minutos1}:${segundos1}`;
+
+                     document.getElementById('fechaHoraSelCitaBloq').value = fechaHoraSelCita;
+                     document.getElementById('fechaHoraInicioBloq').value = fechaHoraInicio;
+                     document.getElementById('fechaHoraFinalBloq').value = fechaHoraFinal;
+                        
                 },
                 cargarProfesionales: function() {
 
@@ -1646,6 +1845,87 @@
                         }
                     });
                 },
+                guardarBloq: function() {
+
+                    if ($("#fechaHoraSelCitaBloq").val().trim() === "") {
+                        Swal.fire({
+                            type: "warning",
+                            title: "Oops...",
+                            text: "Debes de seleccionar la hora y fecha del bloqueo",
+                            confirmButtonClass: "btn btn-primary",
+                            timer: 1500,
+                            buttonsStyling: false
+                        });
+                        return;
+                    }
+
+                    if ($("#comentarioBloq").val().trim() === "") {
+                        Swal.fire({
+                            type: "warning",
+                            title: "Oops...",
+                            text: "Debes de ingresar un comentario",
+                            confirmButtonClass: "btn btn-primary",
+                            timer: 1500,
+                            buttonsStyling: false
+                        });
+                        return;
+                    }
+
+
+                    var loader = document.getElementById('loader');
+                    loader.style.display = 'block';
+
+                    var form = $("#formGuardarBloq");
+                    var url = form.attr("action");
+                    var token = $("#token").val();
+                    var idPac = $("#idPaciente").val()
+                    $("#idtoken").remove();
+
+                    $("#idpac").remove();
+                    $("#opc").remove();
+                    $("#notCliente").remove();
+                    form.append("<input type='hidden' id='idtoken' name='_token'  value='" + token +
+                        "'>");
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: new FormData($('#formGuardarBloq')[0]),
+                        processData: false,
+                        contentType: false,
+                        success: function(respuesta) {
+                            if (respuesta.estado == "ok") {
+                                Swal.fire({
+                                    type: "success",
+                                    title: "",
+                                    text: "El bloqueo de horario guardado exitosamente",
+                                    confirmButtonClass: "btn btn-primary",
+                                    timer: 1500,
+                                    buttonsStyling: false
+                                });
+                                var loader = document.getElementById('loader');
+                                loader.style.display = 'none';
+                            }
+
+                            var btnGuardar = document.getElementById("btnGuardarBloq");
+                            btnGuardar.disabled = true;
+
+                            $.cargarCita();
+                            $.cargarDatos();
+
+                        },
+                        error: function() {
+                            Swal.fire({
+                                type: "errot",
+                                title: "Opsss...",
+                                text: "Ha ocurrido un error",
+                                confirmButtonClass: "btn btn-primary",
+                                timer: 1500,
+                                buttonsStyling: false
+                            });
+                        }
+                    });
+                },
                 guardarComentario: function() {
 
                     var loader = document.getElementById('loader');
@@ -1740,6 +2020,9 @@
 
                 salirPrint: function () {
                     $('#modalImpCitas').modal('toggle');
+                },
+                salirBloq: function () {
+                    $('#modalBloquear').modal('toggle');
                 },
                 imprimircitas: function() {
                     var loader = document.getElementById('loader');
@@ -1858,6 +2141,42 @@
                     $('#modalComentarios').modal('toggle');
                     var miDiv = document.getElementById("modalCitasDeta");
                     miDiv.style.setProperty("overflow-y", "auto", "important");
+
+                },
+                verBloq: function(idBloq){
+                    console.log(idBloq);
+                    $("#idBloq").val(idBloq);
+                    $("#accionCita").val("agregar");
+
+                    $('#fechaHoraSelCita').val("");
+                    $.cargarProfesionales();
+                    $.cargarEspecialidades();
+                    $("#modalCitas").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+
+                    var form = $("#forminfoBloqueo");
+                    var url = form.attr("action");
+                    $('#idBloq').remove();
+                    form.append("<input type='hidden' id='idBloq' name='idBloq'  value='" + idBloq +
+                        "'>");
+                    var datos = form.serialize();
+                    
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(response) {
+
+                        console.log(response);
+
+
+                        }
+                    });
+
 
                 },
                 verCita: function(idCita) {

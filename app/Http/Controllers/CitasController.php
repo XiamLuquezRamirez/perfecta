@@ -33,8 +33,11 @@ class CitasController extends Controller
     public function CargarAllCitas()
     {
         if (Auth::check()) {
-            $disponibilidad = Citas::AllCitas();
-
+            $citas = Citas::AllCitas();
+            
+            $bloqueados = Citas::AllBloqueos();
+            $disponibilidad = $citas->concat($bloqueados);
+            
             if (request()->ajax()) {
                 return response()->json([
                     'disponibilidad' => $disponibilidad
@@ -688,6 +691,22 @@ class CitasController extends Controller
         }
     }
 
+    public function InfoBloqueo()
+    {
+        if (Auth::check()) {
+            $idBloq = request()->get('idBloq');
+            $BloqPaciente = Citas::buscaDetBloq($idBloq);
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'BloqPaciente' => $BloqPaciente
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
     public function GuardarCita()
     {
         if (Auth::check()) {
@@ -725,6 +744,23 @@ class CitasController extends Controller
                 }
             }
 
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => "ok"
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+    public function GuardarBloq()
+    {
+        if (Auth::check()) {
+            $data = request()->all();          
+          
+                $cita = Citas::GuardarBloqueo($data);
+
+          
             if (request()->ajax()) {
                 return response()->json([
                     'estado' => "ok"
