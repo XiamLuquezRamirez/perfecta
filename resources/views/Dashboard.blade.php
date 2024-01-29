@@ -1035,6 +1035,8 @@
                     // Obtiene el valor del campo "id" del evento clicado
 
                     var idCita = info.event.extendedProps.idCita;
+                    var estado = info.event.extendedProps.estado;
+                    console.log(estado);
 
                     // Llama a una función y pasa el parámetro "id" específico
                     $.verCita(idCita);
@@ -1045,6 +1047,10 @@
                 maxTime: "18:45:00",
                 hiddenDays: [0],
                 locale: "es",
+                dateClick: function(event) {
+                    console.log('clicked on the date: ', event);
+                    
+                },
                 events: disponibilidadJSON,
 
 
