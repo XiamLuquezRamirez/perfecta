@@ -111,9 +111,15 @@ class Citas extends Model
 
     public static function CambioEstadocita($idCita, $estado)
     {
-
         $respuesta = DB::connection('mysql')->table('citas')->where('id', $idCita)->update([
             'estado' => $estado,
+        ]);
+        return "ok";
+    }
+    public static function EliminarBloq($idBloq)
+    {
+        $respuesta = DB::connection('mysql')->table('bloqueos')->where('id', $idBloq)->update([
+            'estado' => 'ELIMINADO',
         ]);
         return "ok";
     }
