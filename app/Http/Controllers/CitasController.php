@@ -18,7 +18,11 @@ class CitasController extends Controller
     {
         if (Auth::check()) {
             $idProf =  request()->get('idProf');
-            $disponibilidad = Citas::CitasProfesional($idProf);
+            $citas = Citas::CitasProfesional($idProf);
+
+            //Hirarios bloqueados
+            $bloqueados = Citas::AllBloqueos();
+            $disponibilidad = $citas->concat($bloqueados);
 
             if (request()->ajax()) {
                 return response()->json([
@@ -711,6 +715,7 @@ class CitasController extends Controller
     {
         if (Auth::check()) {
             $data = request()->all();
+            
 
             if ($data["opc"] == "1") {
                 if (isset($data['fotoPaciente'])) {
@@ -736,6 +741,12 @@ class CitasController extends Controller
             } else {
                 $cita = Citas::EditarCitas($data);
                 self::envioCambioEstadoCita($data['idCitaPac'], 'recordatorio');
+            }
+
+            if (isset($data['idBloqueo'])) {
+            if($data['idBloqueo'] !== null || $data['idBloqueo'] !== ''){
+                $bloq = Citas::EditarBlo($data['idBloqueo']);
+            }
             }
 
 

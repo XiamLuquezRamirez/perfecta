@@ -114,7 +114,7 @@
                             <form class="form" method="post" id="formGuardarCita"
                                 action="{{ url('/') }}/AdminCitas/GuardarCita">
                                 <input type="hidden" name="accionCita" id="accionCita" value="">
-                                <input type="hidden" name="idBloq" id="idBloq" value="">
+                                <input type="hidden" name="idBloqueo" id="idBloqueo" value="">
                                 <div class="row">
                                     <div class="col-4">
                                         <div class="form-body">
@@ -865,9 +865,6 @@
                                                 placeholder="Fecha Bloqueo">
                                         </div>
                                     </div>
-                                    
-                                  
-                                
                                 </div>
                                 <div class="col-12">
                                     <label for="userinput8">Comentario:</label>
@@ -1132,7 +1129,7 @@
                     if(bloq == "CITAS"){
                         $.verCita(idCita);
                     }else{
-                        $.verBloq(idCita);     
+                        $.verBloq(idCita);
                     }                    
                    
                 },
@@ -1190,6 +1187,18 @@
                     week: "Semana",
                     day: "Día",
                     more: "Mas"
+                },
+                eventRender: function(info) {
+                    console.log(info);
+                    info.el.style.fontSize = '9px';
+                    
+                    var bloq = info.event.extendedProps.bloq;
+                   
+                    if(bloq == "BLOQUEO"){
+                        info.el.style.color = '#ffff';
+                        info.el.style.backgroundColor = '#547A8B';
+                    }
+                    applyStyles(info.el);
                 },
                 slotDuration: '00:15:00', // Duración de cada intervalo en la vista semanal (aquí es de una hora)
                 slotLabelInterval: "00:15", // Mostrar etiquetas de hora cada una hora
@@ -1307,7 +1316,8 @@
                         // Cierra el evento clickeado
                         fcAgendaViews2.refetchEvents();
                     }
-                }
+                },
+               
 
             });
 
@@ -1358,6 +1368,7 @@
                 });
 
                 $("#accionCita").val("agregar");
+                $("#idBloqueo").val("");
 
                 $('#fechaHoraSelCita').val("");
                 $.cargarProfesionales();
@@ -1656,12 +1667,24 @@
                         success: function(respuesta) {
                             disponibilidadJSON = respuesta.disponibilidad.map(function(
                                 item) {
-                                return {
-                                    "start": item.inicio,
-                                    "end": item.final,
-                                    "title": item.nombre + " " + item.apellido,
-                                    "id": item.id
-                                };
+                                    if(item.tblo == "CITAS"){
+                                        return {
+                                            "start": item.inicio,
+                                            "end": item.final,
+                                            "title": item.nombre + " " + item.apellido,
+                                            "id": item.id,
+                                            "bloq": item.tblo
+                                        };
+                                    }else{
+                                        return {
+                                            "start": item.inicio,
+                                            "end": item.final,
+                                            "title": item.comentario,
+                                            "id": item.id,
+                                            "bloq": item.tblo
+                                        };
+                                    }
+                             
                             });
                         }
 
@@ -2143,9 +2166,9 @@
                     miDiv.style.setProperty("overflow-y", "auto", "important");
 
                 },
-                verBloq: function(idBloq){
-                    console.log(idBloq);
-                    $("#idBloq").val(idBloq);
+                confirmarCita: function(idBloq){
+                    
+                    $("#idBloqueo").val(idBloq);
                     $("#accionCita").val("agregar");
 
                     $('#fechaHoraSelCita').val("");
@@ -2171,13 +2194,59 @@
                         dataType: "json",
                         success: function(response) {
 
-                        console.log(response);
+                        $('#duracionCita').val(response.BloqPaciente.duracion);
+                        $("#fechaHoraInicio").val(response.BloqPaciente.inicio);
+                        $("#fechaHoraFinal").val(response.BloqPaciente.final);
 
+                        ////
+
+                        const fechaHora = new Date(response.BloqPaciente.inicio);
+
+                        // Obtiene el día, mes y año
+                        const dia = fechaHora.getDate().toString().padStart(2,
+                            '0'); // Asegura que el día tenga dos dígitos
+                        const mes = (fechaHora.getMonth() + 1).toString().padStart(2,
+                            '0'); // El mes se indexa desde 0
+                        const año = fechaHora.getFullYear();
+
+                        // Obtiene la hora y los minutos
+                        const hora = fechaHora.getHours().toString().padStart(2,
+                            '0'); // Asegura que la hora tenga dos dígitos
+                        const minutos = fechaHora.getMinutes().toString().padStart(2,
+                            '0'); // Asegura que los minutos tengan dos dígitos
+                        const segundos = fechaHora.getSeconds().toString().padStart(2, '0');
+                        // Combina los componentes para formar la fecha y hora en el formato deseado
+                        fechaHoraSelCita = `${dia}/${mes}/${año} ${hora}:${minutos}`;
+                        
+                        $('#fechaHoraSelCita').val(fechaHoraSelCita);                        
 
                         }
                     });
 
 
+                },
+                verBloq: function(idBloq){
+
+                    Swal.fire({
+                        title: 'Selecciona una opción',
+                        showCancelButton: true,
+                        confirmButtonText: 'Confirmar citas',
+                        cancelButtonText: 'Cancelar',
+                        showDenyButton: true,
+                        denyButtonText: 'Eliminar',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                           $.confirmarCita(idBloq);
+                        } else if (result.isDenied) {
+                            // Código a ejecutar cuando se elige eliminar
+                            Swal.fire('Cita eliminada', '', 'error');
+                        } else {
+                            // Código a ejecutar cuando se cancela
+                            Swal.fire('Acción cancelada', '', 'info');
+                        }
+                    });
+
+                  
                 },
                 verCita: function(idCita) {
                     $("#modalCitasDeta").modal({

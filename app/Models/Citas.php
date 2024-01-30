@@ -11,10 +11,11 @@ class Citas extends Model
     {
         return DB::connection('mysql')->table('citas')
             ->join('pacientes', 'citas.paciente', '=', 'pacientes.id')
-            ->select('citas.*', 'pacientes.nombre', 'pacientes.apellido')
+            ->selectRaw('citas.*, pacientes.nombre, pacientes.apellido, "CITAS" AS tblo')
             ->where('profesional', $idProf)
             ->where('citas.estado', '!=', 'Anulada')
             ->get();
+
     }
     public static function CitasPaciente($idPac)
     {
@@ -158,10 +159,18 @@ class Citas extends Model
         ]);
         return "ok";
     }
+
     public static function GuardarComentario($request)
     {
         $respuesta = DB::connection('mysql')->table('citas')->where('id', $request['idCit'])->update([
             'comentario' => $request['comentarioCitaVal'],
+        ]);
+        return "ok";
+    }
+    public static function EditarBlo($idBloq)
+    {
+        $respuesta = DB::connection('mysql')->table('bloqueos')->where('id', $idBloq)->update([
+            'estado' => 'Asignada',
         ]);
         return "ok";
     }

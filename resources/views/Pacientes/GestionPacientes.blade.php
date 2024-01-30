@@ -1700,12 +1700,23 @@
                         success: function(respuesta) {
                             disponibilidadJSON = respuesta.disponibilidad.map(function(
                                 item) {
-                                return {
-                                    "start": item.inicio,
-                                    "end": item.final,
-                                    "title": item.nombre + " " + item.apellido,
-                                    "id": item.id
-                                };
+                                    if(item.tblo == "CITAS"){
+                                        return {
+                                            "start": item.inicio,
+                                            "end": item.final,
+                                            "title": item.nombre + " " + item.apellido,
+                                            "id": item.id,
+                                            "bloq": item.tblo
+                                        };
+                                    }else{
+                                        return {
+                                            "start": item.inicio,
+                                            "end": item.final,
+                                            "title": item.comentario,
+                                            "id": item.id,
+                                            "bloq": item.tblo
+                                        };
+                                    }
                             });
                         }
 
