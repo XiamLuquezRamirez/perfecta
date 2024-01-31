@@ -827,7 +827,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header text-center">
-                        <h4 class="modal-title">Selecciona la opción que quiere ejecutar </h4>
+                        <h4 class="modal-title">Selecciona la opción que quiere realizar </h4>
 
                     </div>
                     <div class="modal-body">
@@ -2282,6 +2282,11 @@
                         backdrop: 'static',
                         keyboard: false
                     });
+
+                    $('#modalBloq').modal('toggle');
+                    var miDiv = document.getElementById("modalCitas");
+                    miDiv.style.setProperty("overflow-y", "auto", "important");
+
 
                     var form = $("#forminfoBloqueo");
                     var url = form.attr("action");
