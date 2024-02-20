@@ -91,6 +91,7 @@ Route::post('/AdminCitas/cargarComentario', [CitasController::class,'cargarComen
 Route::post('/AdminCitas/notificaccionCita', [CitasController::class,'notificaccionCita']);
 Route::post('/AdminCitas/imprimircitas', [CitasController::class,'imprimircitas']);
 Route::post('/AdminCitas/InfoBloqueo', [CitasController::class,'InfoBloqueo']);
+Route::post('/AdminCitas/EliminarBloqueo', [CitasController::class,'EliminarBloqueo']);
 
 
 
