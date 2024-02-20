@@ -1724,6 +1724,9 @@
                         formData.append('dataIds[]', dataIds[j]);
                     }
 
+                    var loader = document.getElementById('loader');
+                    loader.style.display = 'block';
+
                     var form = $("#formGuardarPagoTratamiento");
 
                     var url = form.attr("action");
@@ -1748,6 +1751,9 @@
                                     timer: 1500,
                                     buttonsStyling: false
                                 });
+
+                                var loader = document.getElementById('loader');
+                                loader.style.display = 'none';
 
                                 $("#idTransaccion").val(respuesta.transaccion.id);
                                 $("#ncompro").html(agregarCeros(respuesta.transaccion.id,

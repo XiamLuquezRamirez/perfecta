@@ -695,6 +695,23 @@ class CitasController extends Controller
         }
     }
 
+    public function EliminarBloqueo()
+    {
+        if (Auth::check()) {
+            $idBloq = request()->get('idBloq');
+            $bloqPaci = Citas::EliminarBloq($idBloq);
+
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => $bloqPaci
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
     public function InfoBloqueo()
     {
         if (Auth::check()) {

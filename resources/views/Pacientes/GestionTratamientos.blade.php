@@ -1284,7 +1284,7 @@
                         });
                         return;
                     }
-                    if ($("#profesional").val().trim() === "") {
+                    if ($("#especialidad").val().trim() === "") {
                         Swal.fire({
                             type: "warning",
                             title: "Oops...",

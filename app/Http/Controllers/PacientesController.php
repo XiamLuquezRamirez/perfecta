@@ -528,7 +528,7 @@ class PacientesController extends Controller
         <tbody>
         <tr>
         <td id='x_greeting'>
-        Estimad@  <strong style='text-transform: capitalize;'> ".$npaciente.",</strong>
+        Estimad@  <strong style='text-transform: capitalize;'> " . $npaciente . ",</strong>
         </td>
         </tr>
         <tr>
@@ -959,7 +959,11 @@ class PacientesController extends Controller
             $transaccion = Tratamientos::buscTransaccion($idTrasa);
             $delTransaccion = Tratamientos::delTransaccion($transaccion, $motivo);
 
+            $buscServTrata = Tratamientos::buscServ($transaccion->tratamiento);
 
+            if($buscServTrata->count() > 0) {
+                $tratami = Tratamientos::editarEstado($transaccion->tratamiento);
+            }
 
 
             if (request()->ajax()) {
@@ -1336,7 +1340,8 @@ class PacientesController extends Controller
             foreach ($dataIdsArray as $dataId) {
                 //cargar tratamientos
                 $tratamiento = Tratamientos::busTatamiento($dataId);
-
+                $secciones = Secciones::buscSeccServ($tratamiento->id);
+                if ($secciones->count() > 0) {                                                                                                                                                                                                                                                                                                                                                   
                 $detaTrata .= '<tr>' .
                     '<th colspan="6" class="text-truncate">' .
                     '    <div>' .
@@ -1347,21 +1352,23 @@ class PacientesController extends Controller
                     '</tr><input type="hidden" name="tratamientoSel" value="' . $tratamiento->id . '"/><input type="hidden" name="tratamiento" value="' . $tratamiento->id . '"/>';
 
                 //cargar secciones
-                $secciones = Secciones::buscSeccServ($tratamiento->id);
+                }
                 $secc = "";
                 foreach ($secciones as $dataSecc) {
-
-                    $secc = '<tr>' .
-                        '<th colspan="6" class="text-truncate">' .
-                        '    <div>' .
-                        '        <p style="text-transform: capitalize;" class="mb-25 latest-update-item-name" style=" font-style: italic;">' .
-                        $dataSecc->nombre .
-                        '        </p>' .
-                        '    </div></th>' .
-                        '</tr>';
-                    $detaTrata .= $secc;
-                    //cargar servicios
                     $servicios = Secciones::buscServSecc($dataSecc->id);
+                    if ($servicios->count() > 0) {
+                        $secc = '<tr>' .
+                            '<th colspan="6" class="text-truncate">' .
+                            '    <div>' .
+                            '        <p style="text-transform: capitalize;" class="mb-25 latest-update-item-name" style=" font-style: italic;">' .
+                            $dataSecc->nombre .
+                            '        </p>' .
+                            '    </div></th>' .
+                            '</tr>';
+                        $detaTrata .= $secc;
+                    }
+                    //cargar servicios
+
 
                     foreach ($servicios as $dataServ) {
                         $serv = "";
@@ -1764,6 +1771,7 @@ class PacientesController extends Controller
             $servSeccion = Secciones::buscServSecc($idSecc);
 
             $totServ = Secciones::busTotalSeccion($idSecc);
+            $tratami = Tratamientos::editarEstado($idTrata);
 
             if (request()->ajax()) {
                 return response()->json([

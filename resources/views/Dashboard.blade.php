@@ -821,6 +821,45 @@
 
             </div>
         </div>
+        {{--  Modal bloqueo  --}}
+        <div class="modal fade text-left" id="modalBloq" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center">
+                        <h4 class="modal-title">Selecciona la opción que quiere realizar </h4>
+
+                    </div>
+                    <div class="modal-body">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6 text-center">
+                                    <button type="button" id="btnGuardar" onclick="$.confirmarCita()"
+                                        class="btn btn-success">
+                                        <i class="fa fa-check"></i> Confirmar cita
+                                    </button>
+                                </div>
+                                <div class="col-6 text-center">
+                                    <button type="button" id="btnGuardar" onclick="$.eliminarBloqueo()"
+                                        class="btn btn-danger">
+                                        <i class="fa fa-trash"></i> Eliminar bloqueo
+                                    </button>
+                                </div>
+                                <div class="col-12 mt-1" style="text-align: right;">
+                                    <div class="form-actions right">
+                                        <button type="button" onclick="$.salirBloq2();" class="btn btn-warning mr-1">
+                                            <i class="fa fa-reply"></i> Salir
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
         {{--  Modal bloquear  --}}
         <div class="modal fade text-left" id="modalBloquear" tabindex="-1" role="dialog"
             aria-labelledby="myModalLabel1" aria-hidden="true">
@@ -833,60 +872,58 @@
                     <div class="modal-body">
                         <div class="card-body">
                             <form class="form" method="post" id="formGuardarBloq"
-                            action="{{ url('/') }}/AdminCitas/GuardarBloq">
-                            <div class="row">
-                                <div class="col-6">
-                                    <label for="userinput8">Duración:</label>
-                                    <select class="form-control" id="duracionBloq"
-                                    name="duracionBloq" onchange="$.cambioDuracionBloq(this.value);" aria-invalid="false">
-                                    <option value="15">15 minutos</option>
-                                    <option value="30">30 minutos</option>
-                                    <option value="45">45 minutos</option>
-                                    <option value="60">1 hora</option>
-                                    <option value="120">2 horas</option>
-                                    <option value="150">2 horas y 30 min.</option>
-                                    <option value="180">3 horas</option>
-                                    <option value="240">4 horas</option>
-                                </select>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <div class="controls">
-                                            <label for="account-username">Bloqueo
-                                                seleccionado para: </label>
-                                            <input type="hidden" class="form-control"
-                                                id="fechaHoraInicioBloq" name="fechaHoraInicioBloq"
-                                                placeholder="Fecha Bloqueo">
-                                            <input type="hidden" class="form-control"
-                                                id="fechaHoraFinalBloq" name="fechaHoraFinalBloq"
-                                                placeholder="Fecha Bloqueo">
-                                            <input disabled type="text" class="form-control"
-                                                id="fechaHoraSelCitaBloq" name="fechaHoraSelCitaBloq"
-                                                placeholder="Fecha Bloqueo">
+                                action="{{ url('/') }}/AdminCitas/GuardarBloq">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="userinput8">Duración:</label>
+                                        <select class="form-control" id="duracionBloq" name="duracionBloq"
+                                            onchange="$.cambioDuracionBloq(this.value);" aria-invalid="false">
+                                            <option value="15">15 minutos</option>
+                                            <option value="30">30 minutos</option>
+                                            <option value="45">45 minutos</option>
+                                            <option value="60">1 hora</option>
+                                            <option value="120">2 horas</option>
+                                            <option value="150">2 horas y 30 min.</option>
+                                            <option value="180">3 horas</option>
+                                            <option value="240">4 horas</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <div class="controls">
+                                                <label for="account-username">Bloqueo
+                                                    seleccionado para: </label>
+                                                <input type="hidden" class="form-control" id="fechaHoraInicioBloq"
+                                                    name="fechaHoraInicioBloq" placeholder="Fecha Bloqueo">
+                                                <input type="hidden" class="form-control" id="fechaHoraFinalBloq"
+                                                    name="fechaHoraFinalBloq" placeholder="Fecha Bloqueo">
+                                                <input disabled type="text" class="form-control"
+                                                    id="fechaHoraSelCitaBloq" name="fechaHoraSelCitaBloq"
+                                                    placeholder="Fecha Bloqueo">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="userinput8">Comentario:</label>
+                                        <div class="d-flex align-items-start">
+                                            <textarea name="comentarioBloq" class="form-control textarea-maxlength" id="comentarioBloq"
+                                                placeholder="Ingrese un comentario.." maxlength="250" rows="5"></textarea>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-12  mt-1" style="text-align: right;">
+                                        <div class="form-actions right">
+                                            <button type="button" onclick="$.salirBloq();" class="btn btn-warning mr-1">
+                                                <i class="fa fa-reply"></i> Salir
+                                            </button>
+                                            <button type="button" id="btnGuardarBloq" onclick="$.guardarBloq()"
+                                                class="btn btn-success">
+                                                <i class="fa fa-save"></i> Guardar
+                                            </button>
+
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12">
-                                    <label for="userinput8">Comentario:</label>
-                                    <div class="d-flex align-items-start">
-                                        <textarea name="comentarioBloq" class="form-control textarea-maxlength" id="comentarioBloq"
-                                            placeholder="Ingrese un comentario.." maxlength="250" rows="5"></textarea>
-
-                                    </div>
-                                </div>
-                                <div class="col-12  mt-1" style="text-align: right;">
-                                    <div class="form-actions right">
-                                        <button type="button" onclick="$.salirBloq();" class="btn btn-warning mr-1">
-                                            <i class="fa fa-reply"></i> Salir
-                                        </button>
-                                        <button type="button" id="btnGuardarBloq" onclick="$.guardarBloq()"
-                                            class="btn btn-success">
-                                            <i class="fa fa-save"></i> Guardar
-                                        </button>
-
-                                    </div>
-                                </div>
-                            </div>
                             </form>
 
                         </div>
@@ -956,6 +993,10 @@
         <!-- Tus campos del formulario aquí -->
     </form>
     <form action="{{ url('/AdminCitas/InfoBloqueo') }}" id="forminfoBloqueo" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/AdminCitas/EliminarBloqueo') }}" id="formeliminarBloqueo" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
@@ -1070,7 +1111,7 @@
                     var id = info.event.extendedProps.id;
                     var bloq = info.event.extendedProps.bloq;
 
-                    if(bloq == "CITAS"){
+                    if (bloq == "CITAS") {
                         if (prof) {
                             var profElement = document.createElement('div');
                             profElement.className = 'fc-event-prof';
@@ -1084,11 +1125,11 @@
                             estadoElement.style.fontSize = '9px';
                             info.el.appendChild(estadoElement);
                         }
-    
+
                         info.el.style.color = '#ffff';
                         if (estado) {
                             // ... (código existente)
-    
+
                             // Cambiar el color de fondo según el estado
                             switch (estado) {
                                 case 'Por atender':
@@ -1108,14 +1149,14 @@
                                     info.el.style.backgroundColor =
                                         '#2DCEE3'; // Color predeterminado si no hay coincidencia
                             }
-    
+
                         }
-                    }else{
+                    } else {
                         info.el.style.color = '#ffff';
                         info.el.style.backgroundColor = '#547A8B';
 
                     }
-                
+
 
                     applyStyles(info.el);
                 },
@@ -1126,12 +1167,12 @@
                     var estado = info.event.extendedProps.estado;
                     var bloq = info.event.extendedProps.bloq;
 
-                    if(bloq == "CITAS"){
+                    if (bloq == "CITAS") {
                         $.verCita(idCita);
-                    }else{
+                    } else {
                         $.verBloq(idCita);
-                    }                    
-                   
+                    }
+
                 },
                 slotDuration: '00:15:00', // Duración de cada intervalo en la vista semanal (aquí es de una hora)
                 slotLabelInterval: "00:15", // Mostrar etiquetas de hora cada una hora
@@ -1142,7 +1183,7 @@
                 dateClick: function(event) {
                     clickedEventBloq = event;
                     $('#duracionBloq').val("15").trigger('change.select2');
-                   // $("#fechaHoraSelCitaBloq").val("");
+                    // $("#fechaHoraSelCitaBloq").val("");
                     $("#comentarioBloq").val("");
 
                     $("#modalBloquear").modal({
@@ -1152,7 +1193,7 @@
 
                     var btnGuardar = document.getElementById("btnGuardarBloq");
                     btnGuardar.disabled = false;
-                    
+
                 },
                 events: disponibilidadJSON
 
@@ -1191,10 +1232,10 @@
                 eventRender: function(info) {
                     console.log(info);
                     info.el.style.fontSize = '9px';
-                    
+
                     var bloq = info.event.extendedProps.bloq;
-                   
-                    if(bloq == "BLOQUEO"){
+
+                    if (bloq == "BLOQUEO") {
                         info.el.style.color = '#ffff';
                         info.el.style.backgroundColor = '#547A8B';
                     }
@@ -1217,7 +1258,7 @@
                         var seSuperpone = disponibilidadJSON.some(function(cita) {
                             var citaStart = new Date(cita.start);
                             var citaEnd = new Date(cita.end);
-                            
+
                             return (nuevaCitaStart < citaEnd && nuevaCitaEnd > citaStart);
                         });
 
@@ -1317,7 +1358,7 @@
                         fcAgendaViews2.refetchEvents();
                     }
                 },
-               
+
 
             });
 
@@ -1401,27 +1442,27 @@
                         success: function(respuesta) {
                             disponibilidadJSON = respuesta.disponibilidad.map(function(
                                 item) {
-                                    if(item.tblo == "CITAS"){
-                                        return {
-                                            "start": item.inicio,
-                                            "end": item.final,
-                                            "title": item.nombre + " " + item.apellido,
-                                            "prof": item.nomprof,
-                                            "estado": item.estado,
-                                            "idCita": item.id,
-                                            "bloq": item.tblo
-                                        };
-                                    }else{
-                                        return {
-                                            "start": item.inicio,
-                                            "end": item.final,
-                                            "title": item.comentario,
-                                            "estado": item.estado,
-                                            "idCita": item.id,
-                                            "bloq": item.tblo
-                                        };
-                                    }
-                                
+                                if (item.tblo == "CITAS") {
+                                    return {
+                                        "start": item.inicio,
+                                        "end": item.final,
+                                        "title": item.nombre + " " + item.apellido,
+                                        "prof": item.nomprof,
+                                        "estado": item.estado,
+                                        "idCita": item.id,
+                                        "bloq": item.tblo
+                                    };
+                                } else {
+                                    return {
+                                        "start": item.inicio,
+                                        "end": item.final,
+                                        "title": item.comentario,
+                                        "estado": item.estado,
+                                        "idCita": item.id,
+                                        "bloq": item.tblo
+                                    };
+                                }
+
                             });
 
                             console.log(disponibilidadJSON);
@@ -1433,83 +1474,83 @@
                     fcAgendaViews.removeAllEvents();
                     fcAgendaViews.addEventSource(disponibilidadJSON);
                 },
-                cambioDuracionBloq: function(duracion){
+                cambioDuracionBloq: function(duracion) {
                     console.log(clickedEventBloq);
                     var nuevaCitaStart = new Date(clickedEventBloq.date);
                     var nuevaCitaEnd = new Date(nuevaCitaStart.getTime() + duracion *
                         60000);
-                        var seSuperpone = disponibilidadJSONBloq.some(function(cita) {
-                            var citaStart = new Date(cita.start);
-                            var citaEnd = new Date(cita.end);
-                            return (nuevaCitaStart < citaEnd && nuevaCitaEnd > citaStart);
+                    var seSuperpone = disponibilidadJSONBloq.some(function(cita) {
+                        var citaStart = new Date(cita.start);
+                        var citaEnd = new Date(cita.end);
+                        return (nuevaCitaStart < citaEnd && nuevaCitaEnd > citaStart);
+                    });
+
+
+                    if (seSuperpone) {
+                        Swal.fire({
+                            type: "warning",
+                            title: "Oops...",
+                            text: "No se puede bloquear el horario seleccionado, ya que no esta disponible...",
+                            confirmButtonClass: "btn btn-primary",
+                            buttonsStyling: false
                         });
+                        $('#duracionBloq').val("15").trigger('change.select2');
+                        $("#fechaHoraSelCitaBloq").val("");
+                        return;
+                    }
 
-                        
-                        if (seSuperpone) {
-                            Swal.fire({
-                                type: "warning",
-                                title: "Oops...",
-                                text: "No se puede bloquear el horario seleccionado, ya que no esta disponible...",
-                                confirmButtonClass: "btn btn-primary",
-                                buttonsStyling: false
-                            });
-                            $('#duracionBloq').val("15").trigger('change.select2');
-                            $("#fechaHoraSelCitaBloq").val("");
-                            return;
-                        }
-
-                        var nuevaCita = {
-                            title: 'Horario Bloqueado',
-                            start: nuevaCitaStart,
-                            end: nuevaCitaEnd,
-                        };
+                    var nuevaCita = {
+                        title: 'Horario Bloqueado',
+                        start: nuevaCitaStart,
+                        end: nuevaCitaEnd,
+                    };
 
 
-                        const fechaHora = new Date(nuevaCita.start);
+                    const fechaHora = new Date(nuevaCita.start);
 
-                         // Obtiene el día, mes y año
-                         const dia = fechaHora.getDate().toString().padStart(2,
-                         '0'); // Asegura que el día tenga dos dígitos
-                     const mes = (fechaHora.getMonth() + 1).toString().padStart(2,
-                         '0'); // El mes se indexa desde 0
-                     const año = fechaHora.getFullYear();
+                    // Obtiene el día, mes y año
+                    const dia = fechaHora.getDate().toString().padStart(2,
+                        '0'); // Asegura que el día tenga dos dígitos
+                    const mes = (fechaHora.getMonth() + 1).toString().padStart(2,
+                        '0'); // El mes se indexa desde 0
+                    const año = fechaHora.getFullYear();
 
-                     // Obtiene la hora y los minutos
-                     const hora = fechaHora.getHours().toString().padStart(2,
-                         '0'); // Asegura que la hora tenga dos dígitos
-                     const minutos = fechaHora.getMinutes().toString().padStart(2,
-                         '0'); // Asegura que los minutos tengan dos dígitos
-                     const segundos = fechaHora.getSeconds().toString().padStart(2, '0');
-                     // Combina los componentes para formar la fecha y hora en el formato deseado
-                     fechaHoraSelCita = `${dia}/${mes}/${año} ${hora}:${minutos}`;
-                     fechaHoraInicio = `${año}-${mes}-${dia}T${hora}:${minutos}:${segundos}`;
+                    // Obtiene la hora y los minutos
+                    const hora = fechaHora.getHours().toString().padStart(2,
+                        '0'); // Asegura que la hora tenga dos dígitos
+                    const minutos = fechaHora.getMinutes().toString().padStart(2,
+                        '0'); // Asegura que los minutos tengan dos dígitos
+                    const segundos = fechaHora.getSeconds().toString().padStart(2, '0');
+                    // Combina los componentes para formar la fecha y hora en el formato deseado
+                    fechaHoraSelCita = `${dia}/${mes}/${año} ${hora}:${minutos}`;
+                    fechaHoraInicio = `${año}-${mes}-${dia}T${hora}:${minutos}:${segundos}`;
 
 
-                     const fechaHoraFin = new Date(nuevaCita.end);
+                    const fechaHoraFin = new Date(nuevaCita.end);
 
-                     // Obtiene el día, mes y año
-                     const dia1 = fechaHoraFin.getDate().toString().padStart(2,
-                         '0'); // Asegura que el día tenga dos dígitos
-                     const mes1 = (fechaHoraFin.getMonth() + 1).toString().padStart(2,
-                         '0'); // El mes se indexa desde 0
-                     const año1 = fechaHoraFin.getFullYear();
+                    // Obtiene el día, mes y año
+                    const dia1 = fechaHoraFin.getDate().toString().padStart(2,
+                        '0'); // Asegura que el día tenga dos dígitos
+                    const mes1 = (fechaHoraFin.getMonth() + 1).toString().padStart(2,
+                        '0'); // El mes se indexa desde 0
+                    const año1 = fechaHoraFin.getFullYear();
 
-                     // Obtiene la hora y los minutos
-                     const hora1 = fechaHoraFin.getHours().toString().padStart(2,
-                         '0'); // Asegura que la hora tenga dos dígitos
-                     const minutos1 = fechaHoraFin.getMinutes().toString().padStart(2,
-                         '0'); // Asegura que los minutos tengan dos dígitos
-                     const segundos1 = fechaHoraFin.getSeconds().toString().padStart(2, '0');
-                     // Combina los componentes para formar la fecha y hora en el formato deseado
+                    // Obtiene la hora y los minutos
+                    const hora1 = fechaHoraFin.getHours().toString().padStart(2,
+                        '0'); // Asegura que la hora tenga dos dígitos
+                    const minutos1 = fechaHoraFin.getMinutes().toString().padStart(2,
+                        '0'); // Asegura que los minutos tengan dos dígitos
+                    const segundos1 = fechaHoraFin.getSeconds().toString().padStart(2, '0');
+                    // Combina los componentes para formar la fecha y hora en el formato deseado
 
 
 
-                     fechaHoraFinal = `${año1}-${mes1}-${dia1}T${hora1}:${minutos1}:${segundos1}`;
+                    fechaHoraFinal = `${año1}-${mes1}-${dia1}T${hora1}:${minutos1}:${segundos1}`;
 
-                     document.getElementById('fechaHoraSelCitaBloq').value = fechaHoraSelCita;
-                     document.getElementById('fechaHoraInicioBloq').value = fechaHoraInicio;
-                     document.getElementById('fechaHoraFinalBloq').value = fechaHoraFinal;
-                        
+                    document.getElementById('fechaHoraSelCitaBloq').value = fechaHoraSelCita;
+                    document.getElementById('fechaHoraInicioBloq').value = fechaHoraInicio;
+                    document.getElementById('fechaHoraFinalBloq').value = fechaHoraFinal;
+
                 },
                 cargarProfesionales: function() {
 
@@ -1667,24 +1708,24 @@
                         success: function(respuesta) {
                             disponibilidadJSON = respuesta.disponibilidad.map(function(
                                 item) {
-                                    if(item.tblo == "CITAS"){
-                                        return {
-                                            "start": item.inicio,
-                                            "end": item.final,
-                                            "title": item.nombre + " " + item.apellido,
-                                            "id": item.id,
-                                            "bloq": item.tblo
-                                        };
-                                    }else{
-                                        return {
-                                            "start": item.inicio,
-                                            "end": item.final,
-                                            "title": item.comentario,
-                                            "id": item.id,
-                                            "bloq": item.tblo
-                                        };
-                                    }
-                             
+                                if (item.tblo == "CITAS") {
+                                    return {
+                                        "start": item.inicio,
+                                        "end": item.final,
+                                        "title": item.nombre + " " + item.apellido,
+                                        "id": item.id,
+                                        "bloq": item.tblo
+                                    };
+                                } else {
+                                    return {
+                                        "start": item.inicio,
+                                        "end": item.final,
+                                        "title": item.comentario,
+                                        "id": item.id,
+                                        "bloq": item.tblo
+                                    };
+                                }
+
                             });
                         }
 
@@ -2041,11 +2082,14 @@
                     };
                 },
 
-                salirPrint: function () {
+                salirPrint: function() {
                     $('#modalImpCitas').modal('toggle');
                 },
-                salirBloq: function () {
+                salirBloq: function() {
                     $('#modalBloquear').modal('toggle');
+                },
+                salirBloq2: function() {
+                    $('#modalBloq').modal('toggle');
                 },
                 imprimircitas: function() {
                     var loader = document.getElementById('loader');
@@ -2062,7 +2106,6 @@
                         "'>");
                     var datos = form.serialize();
 
-                    
                     $.ajax({
                         url: url,
                         method: 'POST',
@@ -2073,7 +2116,7 @@
                         success: function(data) {
                             var loader = document.getElementById('loader');
                             loader.style.display = 'none';
-                            
+
                             Swal.fire({
                                 type: "success",
                                 title: "",
@@ -2083,13 +2126,13 @@
                                 buttonsStyling: false
                             });
 
-                             // Crear un enlace de descarga para el PDF
-                             var a = document.createElement('a');
-                             var url = window.URL.createObjectURL(data);
-                             a.href = url;
-                             a.download = 'InformeCitas.pdf';
-                             a.click();
-                             window.URL.revokeObjectURL(url);
+                            // Crear un enlace de descarga para el PDF
+                            var a = document.createElement('a');
+                            var url = window.URL.createObjectURL(data);
+                            a.href = url;
+                            a.download = 'InformeCitas.pdf';
+                            a.click();
+                            window.URL.revokeObjectURL(url);
 
                         }
                     });
@@ -2125,6 +2168,69 @@
                         }
                     });
                 },
+                eliminarBloqueo: function() {
+
+                    Swal.fire({
+                        title: "Esta seguro de Eliminar este bloqueo?",
+                        text: "¡No podrás revertir esto!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Si, eliminar!",
+                        cancelButtonText: "Cancelar",
+                        confirmButtonClass: "btn btn-warning",
+                        cancelButtonClass: "btn btn-danger ml-1",
+                        buttonsStyling: false
+                    }).then(function(result) {
+                        if (result.value) {
+                            $.confirmarEliminarBlo();
+
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                            Swal.fire({
+                                title: "Cancelado",
+                                text: "Tu registro está a salvo ;)",
+                                type: "error",
+                                confirmButtonClass: "btn btn-success"
+                            });
+                        }
+                    });
+
+                },
+                confirmarEliminarBlo: function() {
+                    let idBloq = $("#idBloqueo").val();
+
+                    var form = $("#formeliminarBloqueo");
+                    var url = form.attr("action");
+                    $("#idBloq").remove();
+                    form.append("<input type='hidden' id='idBloq' name='idBloq'  value='" + idBloq +
+                        "'>");
+                    var datos = form.serialize();
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                           if(respuesta.estado == "ok"){
+                            Swal.fire({
+                                type: "success",
+                                title: "",
+                                text: "Operación realizada exitosamente",
+                                confirmButtonClass: "btn btn-primary",
+                                timer: 1500,
+                                buttonsStyling: false
+                            });
+                           }
+
+                            $.cargarCita();
+                            $.cargarDatos();
+                        }
+                    });
+
+                },
                 addComentario: function() {
                     $("#modalComentarios").modal({
                         backdrop: 'static',
@@ -2136,7 +2242,7 @@
                     var idCita = $("#idCita").val();
                     var form = $("#formCargarComentarios");
                     var url = form.attr("action");
-
+                    $("#idCit").remove();
                     form.append("<input type='hidden' id='idCit' name='idCit'  value='" + idCita +
                         "'>");
                     var datos = form.serialize();
@@ -2152,8 +2258,6 @@
 
                         }
                     });
-
-
                 },
                 salirComentario: function() {
                     $("#modalCitasDeta").modal({
@@ -2166,9 +2270,9 @@
                     miDiv.style.setProperty("overflow-y", "auto", "important");
 
                 },
-                confirmarCita: function(idBloq){
-                    
-                    $("#idBloqueo").val(idBloq);
+                confirmarCita: function() {
+
+                    let idBloq = $("#idBloqueo").val();
                     $("#accionCita").val("agregar");
 
                     $('#fechaHoraSelCita').val("");
@@ -2179,13 +2283,18 @@
                         keyboard: false
                     });
 
+                    $('#modalBloq').modal('toggle');
+                    var miDiv = document.getElementById("modalCitas");
+                    miDiv.style.setProperty("overflow-y", "auto", "important");
+
+
                     var form = $("#forminfoBloqueo");
                     var url = form.attr("action");
                     $('#idBloq').remove();
                     form.append("<input type='hidden' id='idBloq' name='idBloq'  value='" + idBloq +
                         "'>");
                     var datos = form.serialize();
-                    
+
                     $.ajax({
                         type: "POST",
                         url: url,
@@ -2194,59 +2303,45 @@
                         dataType: "json",
                         success: function(response) {
 
-                        $('#duracionCita').val(response.BloqPaciente.duracion);
-                        $("#fechaHoraInicio").val(response.BloqPaciente.inicio);
-                        $("#fechaHoraFinal").val(response.BloqPaciente.final);
+                            $('#duracionCita').val(response.BloqPaciente.duracion);
+                            $("#fechaHoraInicio").val(response.BloqPaciente.inicio);
+                            $("#fechaHoraFinal").val(response.BloqPaciente.final);
 
-                        ////
+                            ////
 
-                        const fechaHora = new Date(response.BloqPaciente.inicio);
+                            const fechaHora = new Date(response.BloqPaciente.inicio);
 
-                        // Obtiene el día, mes y año
-                        const dia = fechaHora.getDate().toString().padStart(2,
-                            '0'); // Asegura que el día tenga dos dígitos
-                        const mes = (fechaHora.getMonth() + 1).toString().padStart(2,
-                            '0'); // El mes se indexa desde 0
-                        const año = fechaHora.getFullYear();
+                            // Obtiene el día, mes y año
+                            const dia = fechaHora.getDate().toString().padStart(2,
+                                '0'); // Asegura que el día tenga dos dígitos
+                            const mes = (fechaHora.getMonth() + 1).toString().padStart(2,
+                                '0'); // El mes se indexa desde 0
+                            const año = fechaHora.getFullYear();
 
-                        // Obtiene la hora y los minutos
-                        const hora = fechaHora.getHours().toString().padStart(2,
-                            '0'); // Asegura que la hora tenga dos dígitos
-                        const minutos = fechaHora.getMinutes().toString().padStart(2,
-                            '0'); // Asegura que los minutos tengan dos dígitos
-                        const segundos = fechaHora.getSeconds().toString().padStart(2, '0');
-                        // Combina los componentes para formar la fecha y hora en el formato deseado
-                        fechaHoraSelCita = `${dia}/${mes}/${año} ${hora}:${minutos}`;
-                        
-                        $('#fechaHoraSelCita').val(fechaHoraSelCita);                        
+                            // Obtiene la hora y los minutos
+                            const hora = fechaHora.getHours().toString().padStart(2,
+                                '0'); // Asegura que la hora tenga dos dígitos
+                            const minutos = fechaHora.getMinutes().toString().padStart(2,
+                                '0'); // Asegura que los minutos tengan dos dígitos
+                            const segundos = fechaHora.getSeconds().toString().padStart(2,
+                                '0');
+                            // Combina los componentes para formar la fecha y hora en el formato deseado
+                            fechaHoraSelCita = `${dia}/${mes}/${año} ${hora}:${minutos}`;
+
+                            $('#fechaHoraSelCita').val(fechaHoraSelCita);
 
                         }
                     });
 
 
                 },
-                verBloq: function(idBloq){
-
-                    Swal.fire({
-                        title: 'Selecciona una opción',
-                        showCancelButton: true,
-                        confirmButtonText: 'Confirmar citas',
-                        cancelButtonText: 'Cancelar',
-                        showDenyButton: true,
-                        denyButtonText: 'Eliminar',
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                           $.confirmarCita(idBloq);
-                        } else if (result.isDenied) {
-                            // Código a ejecutar cuando se elige eliminar
-                            Swal.fire('Cita eliminada', '', 'error');
-                        } else {
-                            // Código a ejecutar cuando se cancela
-                            Swal.fire('Acción cancelada', '', 'info');
-                        }
+                verBloq: function(idBloq) {
+                    $("#idBloqueo").val(idBloq);
+                    $("#modalBloq").modal({
+                        backdrop: 'static',
+                        keyboard: false
                     });
 
-                  
                 },
                 verCita: function(idCita) {
                     $("#modalCitasDeta").modal({

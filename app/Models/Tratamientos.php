@@ -124,21 +124,32 @@ class Tratamientos extends Model
         ]);
         return "ok";
     }
+
+    public static function editarEstado($trat)
+    {
+        $respuesta = DB::connection('mysql')->table('tratamientos')->where('id', $trat)->update([
+            'estado_pago' => 'pendiente',
+        ]);
+        return "ok";
+    }
+
     public static function delTransaccion($transaccion,$motivo)
     {
 
         $servTratamiento = DB::connection('mysql')->table('pagos_afectados_transaccion')
             ->where('transaccion', $transaccion->id)
             ->get();
+           
 
         foreach ($servTratamiento as $dataServ) {
+           
             $servic = DB::connection('mysql')->table('servicios_tratamiento')
                 ->where('id', $dataServ->servicio)
                 ->first();
 
             $newValor = $servic->pagado - $dataServ->valor;
 
-            if ($dataServ->valor < $servic->valor) {
+            if ($dataServ->valor <= $servic->valor) {
                 $respuesta = DB::connection('mysql')->table('servicios_tratamiento')->where('id', $dataServ->servicio)->update([
                     'pagado' => $newValor,
                     'estado_pago' => 'Pendiente',
@@ -181,6 +192,13 @@ class Tratamientos extends Model
         ->get();
 
         return $consulEstadoServ;
+    }
+
+    public static function buscServ($idTrata){
+        return DB::connection('mysql')->table('servicios_tratamiento')
+        ->where('tratamiento', $idTrata)
+        ->where("estado_pago", "Pendiente")
+        ->get();
     }
 
     public static function updateTrata($idTrata, $aboPrev)
