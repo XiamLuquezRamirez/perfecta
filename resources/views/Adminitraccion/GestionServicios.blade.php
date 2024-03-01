@@ -104,6 +104,7 @@
                                             <input type="text" 
                                             onchange="$.cambioFormato(this.id);"
                                             onkeypress="return validartxtnum(event)"
+                                            onclick="this.select();"
                                             class="form-control" 
                                             id="valorVis"
                                              name="valorVis">

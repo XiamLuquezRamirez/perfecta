@@ -503,6 +503,7 @@
 
                                         <div class="modal fade text-left" id="modalEvolucionesArc" tabindex="-1"
                                             role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+                                            <input type="hidden" id="rutaEvolArc" />
                                             <div class="modal-dialog modal-lg" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -518,7 +519,10 @@
                                                                 class="btn btn-warning mr-1">
                                                                 <i class="fa fa-reply"></i> Atras
                                                             </button>
-
+                                                            <button type="button" onclick="$.descargarArcEvolucion();"
+                                                                class="btn btn-info mr-1">
+                                                                <i class="fa fa-download"></i> Descargar
+                                                            </button>
                                                         </div>
                                                     </div>
 
@@ -2731,7 +2735,7 @@
                     let ruta = $('#Ruta').data("ruta");
                     let archivo = element.getAttribute("data-img");
                     let url = ruta + "/evoluciones/" + archivo;
-
+                    $("#rutaEvolArc").val(url);
                     var modalContent = document.getElementById('modalContent');
                     modalContent.innerHTML =
                         '<div class="mb-1" style="width:100%; height:340px;"><img src="' + url +
@@ -3035,6 +3039,18 @@
                             });
                         }
                     });
+                },
+                descargarArcEvolucion: function(){
+                    var link = document.createElement('a');
+                    link.href = $("#rutaEvolArc").val(); // Reemplaza con la ruta de tu archivo
+                    link.download = 'documetoPaciente'; // Reemplaza con el nombre que deseas para el archivo
+        
+                    // Agrega el enlace al DOM y simula un clic para iniciar la descarga
+                    document.body.appendChild(link);
+                    link.click();
+        
+                    // Limpia el enlace del DOM
+                    document.body.removeChild(link);
                 },
                 convertirFormato: function(fechaHora) {
                     // Crear un objeto Date a partir de la cadena de fecha y hora
