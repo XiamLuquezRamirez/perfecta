@@ -64,7 +64,7 @@
                                     <th>Recaudado</th>
                                     <th>Gastos</th>
                                     <th>Estado</th>
-                                    <th>Detalles</th>
+                                    <th>Opciones</th>
                                 </tr>
                             </thead>
                             <tbody id="trRegistros">
@@ -521,6 +521,10 @@
         <!-- Tus campos del formulario aquí -->
     </form>
     <form action="{{ url('/AdminPacientes/updateServiciosTerminados') }}" id="formServTerminados" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/Administracion/EliminarCaja') }}" id="formEliminarCaja" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
@@ -1089,6 +1093,61 @@
                                 text: "El Registro fue eliminado correctamente.",
                                 confirmButtonClass: "btn btn-success"
                             });
+                        }
+                    });
+
+                },
+                eliminar: function(id) {
+                    Swal.fire({
+                        title: "Esta seguro de Eliminar este registro?",
+                        text: "¡No podrás revertir esto!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Si, eliminar!",
+                        cancelButtonText: "Cancelar",
+                        confirmButtonClass: "btn btn-warning",
+                        cancelButtonClass: "btn btn-danger ml-1",
+                        buttonsStyling: false
+                    }).then(function(result) {
+                        if (result.value) {
+                            $.procederEliminar(id);
+                            $.cargar(1);
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                            Swal.fire({
+                                title: "Cancelado",
+                                text: "Tu registro está a salvo ;)",
+                                type: "error",
+                                confirmButtonClass: "btn btn-success"
+                            });
+                        }
+                    });
+                },
+                procederEliminar: function(id) {
+                    var form = $("#formEliminarCaja");
+
+                    $("#idCajaDel").remove();
+                    form.append("<input type='hidden' id='idCajaDel' name='idCajaDel'  value='" + id +
+                        "'>");
+
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            Swal.fire({
+                                type: "success",
+                                title: "Eliminado!",
+                                text: "El Registro fue eliminado correctamente.",
+                                confirmButtonClass: "btn btn-success"
+                            });
+                            $.cargar(1);
                         }
                     });
 

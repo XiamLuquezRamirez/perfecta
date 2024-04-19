@@ -523,6 +523,7 @@
                                                                 class="btn btn-info mr-1">
                                                                 <i class="fa fa-download"></i> Descargar
                                                             </button>
+
                                                         </div>
                                                     </div>
 

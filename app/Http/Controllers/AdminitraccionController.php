@@ -376,6 +376,10 @@ class AdminitraccionController extends Controller
                         <i class="fa fa-search"></i> Ver detalles
                     </a>
 
+                    <a onclick="$.eliminar(' . $item->id . ');" style="color:#FF7588; title="Editar" class="invoice-action-edit cursor-pointer mr-1">
+                        <i class="fa fa-trash-o"></i> Eliminar
+                    </a>
+
                     </div>
                 </td>
             </tr>';
@@ -1370,6 +1374,20 @@ class AdminitraccionController extends Controller
         if (Auth::check()) {
             $idGast = request()->get('idGast');
             $gastos = Gastos::Eliminar($idGast);
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => "ok",
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+    public function EliminarCaja()
+    {
+        if (Auth::check()) {
+            $idGast = request()->get('idCajaDel');
+            $gastos = Cajas::Eliminar($idGast);
             if (request()->ajax()) {
                 return response()->json([
                     'estado' => "ok",

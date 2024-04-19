@@ -1,78 +1,78 @@
-/*================================================================================
-	Item Name: Stack - Responsive Admin Theme
-	Author: PIXINVENT
-	Author URL: http://www.themeforest.net/user/pixinvent
-================================================================================
-
-NOTE:
-------
-PLACE HERE YOUR OWN SCSS CODES AND IF NEEDED, OVERRIDE THE STYLES FROM THE OTHER STYLESHEETS.
-WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BETTER LIKE THIS.  */
-
-
-.loader-spinner {
-	display: flex;
-	position: fixed;
-	text-align: center;
-	padding-top: 15%;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(255, 255, 255, 0.5);
-	z-index: 9999;
-}
-
-@keyframes parpadeo {
-    0% { opacity: 1; }
-    50% { opacity: 0.5; }
-    100% { opacity: 1; }
-}
-
-/* Aplicar la animación a elementos con la clase 'parpadeo' */
-.parpadeo {
-    animation: parpadeo 1s infinite;
-}
-
-
-.fc-title {
-    font-size: 9px; /* Ajusta el tamaño de fuente según tus necesidades */
-}
-
-/* Cambiar el tamaño de fuente del tiempo del evento */
-.fc-time {
-    font-size: 9px; /* Ajusta el tamaño de fuente según tus necesidades */
-}
-.fc-event-prof {
-    font-size: 9px; /* Ajusta el tamaño de fuente según tus necesidades */
-	color: #FFF;
-	padding: 0 1px;
-	box-sizing: content-box;
-
-}
-
-
-.por-atender {
-    background-color: #00B5B8;
-    color: black; /* Ajusta el color del texto para que sea legible en el fondo */
-}
-
-.atendida {
-    background-color: #2196F3;
-    color: white;
-}
-
-.confirmada {
-    background-color: #10C888;
-    color: white;
-}
-
-.no-confirmada {
-    background-color: #2DCEE3;
-    color: black;
-}
-
-.anulada {
-    background-color: #FF5722;
-    color: white;
+/*================================================================================
+	Item Name: Stack - Responsive Admin Theme
+	Author: PIXINVENT
+	Author URL: http://www.themeforest.net/user/pixinvent
+================================================================================
+
+NOTE:
+------
+PLACE HERE YOUR OWN SCSS CODES AND IF NEEDED, OVERRIDE THE STYLES FROM THE OTHER STYLESHEETS.
+WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BETTER LIKE THIS.  */
+
+
+.loader-spinner {
+	display: flex;
+	position: fixed;
+	text-align: center;
+	padding-top: 15%;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(255, 255, 255, 0.5);
+	z-index: 9999;
+}
+
+@keyframes parpadeo {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+/* Aplicar la animación a elementos con la clase 'parpadeo' */
+.parpadeo {
+    animation: parpadeo 1s infinite;
+}
+
+
+.fc-title {
+    font-size: 9px; /* Ajusta el tamaño de fuente según tus necesidades */
+}
+
+/* Cambiar el tamaño de fuente del tiempo del evento */
+.fc-time {
+    font-size: 9px; /* Ajusta el tamaño de fuente según tus necesidades */
+}
+.fc-event-prof {
+    font-size: 9px; /* Ajusta el tamaño de fuente según tus necesidades */
+	color: #FFF;
+	padding: 0 1px;
+	box-sizing: content-box;
+
+}
+
+
+.por-atender {
+    background-color: #00B5B8;
+    color: black; /* Ajusta el color del texto para que sea legible en el fondo */
+}
+
+.atendida {
+    background-color: #2196F3;
+    color: white;
+}
+
+.confirmada {
+    background-color: #10C888;
+    color: white;
+}
+
+.no-confirmada {
+    background-color: #2DCEE3;
+    color: black;
+}
+
+.anulada {
+    background-color: #FF5722;
+    color: white;
 }

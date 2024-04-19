@@ -73,6 +73,7 @@ Route::post('/Administracion/CargarDatos', [AdminitraccionController::class,'Car
 Route::post('/Administracion/CargarCajas', [AdminitraccionController::class,'CargarCajas']);
 Route::post('/Administracion/ConsultarCaja', [AdminitraccionController::class,'ConsultarCaja']);
 Route::post('/Administracion/CierreCaja', [AdminitraccionController::class,'CierreCaja']);
+Route::post('/Administracion/EliminarCaja', [AdminitraccionController::class,'EliminarCaja']);
 
 
 //GESTIONAR CITAS

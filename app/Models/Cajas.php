@@ -52,4 +52,11 @@ class Cajas extends Model
         return "ok";
 
     }
+
+    public static function Eliminar($id)
+    {
+        return DB::connection('mysql')->table('cajas')->where('id', $id)->update([
+            'estado_reg' => 'ELIMINADO',
+        ]);
+    }
 }
